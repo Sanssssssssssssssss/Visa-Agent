@@ -11,13 +11,19 @@ from .store import write_json
 from .types import CaseEvent, Status, now_utc
 
 
+def dataset_path(root: Path, name: str) -> Path:
+    # Frozen Windows fixtures keep their original bytes; interpret separators portably.
+    path = (root / name.replace("\\", "/")).resolve()
+    if not path.is_relative_to(root.resolve()):
+        raise ValueError("Dataset path escapes dataset directory")
+    return path
+
+
 def verify_dataset(root: Path) -> str:
     frozen = root / "freeze.json"
     manifest = json.loads(frozen.read_text(encoding="utf-8"))
     for name, expected in manifest["files"].items():
-        path = (root / name).resolve()
-        if not path.is_relative_to(root.resolve()):
-            raise ValueError("Dataset path escapes dataset directory")
+        path = dataset_path(root, name)
         if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             raise ValueError(f"Frozen dataset changed: {name}")
     return hashlib.sha256(frozen.read_bytes()).hexdigest()
@@ -34,9 +40,7 @@ def replay(service: VisaService, scenario_path: Path, *, approve_demo=False) -> 
     for index, item in enumerate(scenario["events"]):
         if index >= 8:
             raise ValueError("Scenario exceeds eight customer turns")
-        files = [(root / p).resolve() for p in item.get("attachments", [])]
-        if any(not p.is_relative_to(root.resolve()) for p in files):
-            raise ValueError("Attachment escapes dataset directory")
+        files = [dataset_path(root, p) for p in item.get("attachments", [])]
         event = CaseEvent(case_id=case_id, event_id=f"event_{index}", text=item["text"],
                           attachments=[str(p) for p in files], kind="upload" if files else "message")
         result = service.handle_event(event)
@@ -75,14 +79,14 @@ def replay(service: VisaService, scenario_path: Path, *, approve_demo=False) -> 
         assertions.append({"name": f"field:{key}", "passed": actual == value,
                            "expected": value, "actual": actual})
         if source := expected.get("expected_sources", {}).get(key):
-            source_id = (hashlib.sha256((root / source["attachment"]).read_bytes()).hexdigest()[:20]
+            source_id = (hashlib.sha256(dataset_path(root, source["attachment"]).read_bytes()).hexdigest()[:20]
                          if "attachment" in source else "message:" + source["event_id"])
             assertions.append({"name": f"source:{key}", "passed": any(
                 f.source_id == source_id and f.page == source["page"] and f.value == value for f in evidence.facts(key))})
     if scenario["exercise"] == "duplicate_event" and scenario["events"][-1]["attachments"]:
         version, count = case.version, len(case.documents)
         duplicate_files = CaseEvent(case_id=case.id, event_id="redelivered_files", kind="upload",
-                                    attachments=[str(root / p) for p in scenario["events"][-1]["attachments"]])
+                                    attachments=[str(dataset_path(root, p)) for p in scenario["events"][-1]["attachments"]])
         result = service.handle_event(duplicate_files)
         case = service.store.get(case.id)
         assertions.append({"name": "duplicate_files", "passed": case.version == version and len(case.documents) == count and not result.error})

@@ -54,6 +54,7 @@ pytest 中 `ALLOW_MODEL_REQUESTS=False`，因此离线失败不会隐式改为�
 3. DeepSeek 默认思考模式拒绝 SDK 使用的强制结构化工具选择，返回真实 HTTP 400。按 [官方思考模式参数](https://api-docs.deepseek.com/guides/thinking_mode/) 显式关闭后，普通输出、结构化输出和读取工具检查通过。
 4. GOV.UK 本地网页快照请求遇到 TLS EOF，失败记录保留在 `datasets/sources.json`；通过浏览器研究工具核对官方页面，未宣称下载成功。
 5. 大型 wheel 连续下载缓慢；本地分段获取后逐个核对锁文件 SHA-256，最终 `uv sync --locked --offline` 成功。项目安装配置仍使用正常 uv 流程。
+6. Linux CI 首次运行暴露出冻结 JSON 使用 Windows 路径分隔符。修复集中在数据集路径解析，保留冻结材料与答案的字节和哈希；不是重新生成验收数据。
 
 ## 人工体验和剩余限制
 
