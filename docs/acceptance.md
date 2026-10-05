@@ -7,7 +7,8 @@
 ## 运行证据
 
 - [真实六案完整断言](validation/live.json)，[最初 Visitor 试跑](validation/smoke.json)。
-- [12 场景离线回放](validation/offline.json)，单元/边界测试命令 `uv run pytest -q`：41 passed，24.87 秒。
+- [12 场景离线回放](validation/offline.json)，[Windows 最终测试日志](validation/pytest-windows.txt)：`uv run pytest -q`，41 passed，19.11 秒。
+- [Linux CI 成功记录](https://github.com/Sanssssssssssssssss/Visa-Agent/actions/runs/37342503848)：提交 `ebd33b7`，锁文件安装、Ruff、数据哈希校验、pytest 全部通过。
 - [SDK 兼容性](validation/compatibility.json)，[中英文图片实际 OCR + 模型提取](validation/materials.json)。
 - [完整请求账本与用量](validation/usage.json)，[源码、锁文件与数据哈希](validation/code-and-data-hashes.json)。
 - [可解压的 Visitor 材料包](validation/sample-visitor.zip)。每个 live/smoke 案件的完整运行 JSON 以 `validation/trace-<case_id>.json` 保存，含真实提取和工具记录。`<REPO>` 替换了本机绝对路径。
@@ -64,4 +65,4 @@ pytest 中 `ALLOW_MODEL_REQUESTS=False`，因此离线失败不会隐式改为�
 
 CLI 模拟收件，尚无 WhatsApp/email、顾问 UI、身份鉴权或并发服务。客户回复采用最多三条问题的规则模板。未覆盖的专业分支必须完善规则或转交真实顾问处理，不能通过模型猜测填齐。
 
-CI 结果以仓库 Actions 的最终提交运行记录为准。本地用量和真实 API 结果不等同于 Linux CI 的结果，也不代表生产准确率。
+Linux CI 验证的是上述代码提交；之后的验收记录补充只改文档。本地真实 API 用量独立于 CI，也不代表生产准确率。
