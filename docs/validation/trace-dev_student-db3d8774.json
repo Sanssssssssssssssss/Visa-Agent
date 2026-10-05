@@ -1,0 +1,4365 @@
+[
+  {
+    "run_id": "1ec33613c4334f2386b7d1bb92f6fc71",
+    "case_id": "dev_student-db3d8774",
+    "recorded_at": "2026-10-05T16:27:49.361072+00:00",
+    "input": {
+      "case_id": "dev_student-db3d8774",
+      "event_id": "event_0",
+      "kind": "message",
+      "at": "2026-10-05T16:27:46.402181Z",
+      "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+      "attachments": []
+    },
+    "mode": "live",
+    "rule_version": "2026-10-05-9a48d3a4044e",
+    "before": {
+      "id": "dev_student-db3d8774",
+      "version": 1,
+      "route": null,
+      "status": "WAIT_USER",
+      "rule_version": "",
+      "facts": [],
+      "documents": [],
+      "checks": [],
+      "history": [],
+      "reviews": [],
+      "approval": null,
+      "pack_path": null,
+      "last_contact": "2026-10-05T16:27:36.213705+00:00",
+      "last_reminder": null,
+      "reminder_count": 0,
+      "pending_error": "Incoming event has not completed"
+    },
+    "documents_read": [],
+    "working_context": {
+      "case_id": "dev_student-db3d8774",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "route": null,
+      "facts": [],
+      "blockers": [],
+      "new_message": {
+        "id": "message:event_0",
+        "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true"
+      },
+      "sources": {
+        "visitor": "https://www.gov.uk/government/publications/visitor-visa-guide-to-supporting-documents/guide-to-supporting-documents-visiting-the-uk",
+        "student": "https://www.gov.uk/student-visa/documents-you-must-provide",
+        "student_money": "https://www.gov.uk/student-visa/money",
+        "finance": "https://www.gov.uk/guidance/financial-evidence-for-student-and-child-student-route-applicants",
+        "worker": "https://www.gov.uk/skilled-worker-visa/documents-you-must-provide",
+        "worker_money": "https://www.gov.uk/skilled-worker-visa/how-much-it-costs",
+        "english": "https://www.gov.uk/skilled-worker-visa/knowledge-of-english",
+        "tb": "https://www.gov.uk/tb-test-visa",
+        "scope": "project:adult-outside-uk-material-preparation-v1"
+      },
+      "sop": {
+        "common": "Adult main applicant outside UK, no dependants or refusal explanation. Confirm route, identity, nationality, dates and funding. Non-English/Welsh evidence needs a complete verified translation. Unsupported circumstances go to an adviser. Unknown is never pass.",
+        "visitor": "Routine employed self-funded visitor: travel purpose, dates, return ties and affordable trip supported by identity, work and financial evidence. No universal bank-balance threshold. Adviser judges sufficiency.",
+        "student": "CAS information; tuition plus up to 9 months of maintenance (London GBP 1529/month, elsewhere GBP 1171/month). If financial documents required: 28 consecutive days, period end within 31 days of application. Differential evidence does not remove the financial condition. Conditional TB, ATAS and translations.",
+        "skilled_worker": "CoS information, conditional English evidence (new application B2), TB and translations. Certified sponsor maintenance can replace funds submission; otherwise GBP 1270 held for 28 days ending within 31 days. Occupation other than 2134 and salary/eligibility judgments need adviser review."
+      },
+      "recent_dialogue": [],
+      "new_documents": []
+    },
+    "prompt_version": "extract-v1",
+    "context_chars": 4560,
+    "model": "deepseek-flash",
+    "http_requests": 1,
+    "http_responses": [
+      {
+        "status": 200,
+        "usage": {
+          "prompt_tokens": 1798,
+          "completion_tokens": 562,
+          "total_tokens": 2360,
+          "prompt_tokens_details": {
+            "cached_tokens": 1024
+          },
+          "prompt_cache_hit_tokens": 1024,
+          "prompt_cache_miss_tokens": 774
+        }
+      }
+    ],
+    "usage": {
+      "requests": 1,
+      "input_tokens": 1798,
+      "output_tokens": 562
+    },
+    "proposal": {
+      "facts": [
+        {
+          "key": "route",
+          "value": "student",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "route: student",
+          "confidence": "high"
+        },
+        {
+          "key": "applicant_name",
+          "value": "Mei Example",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "applicant_name: Mei Example",
+          "confidence": "high"
+        },
+        {
+          "key": "nationality",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "nationality: China",
+          "confidence": "high"
+        },
+        {
+          "key": "age",
+          "value": "30",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "age: 30",
+          "confidence": "high"
+        },
+        {
+          "key": "application_location",
+          "value": "outside_uk",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_location: outside_uk",
+          "confidence": "high"
+        },
+        {
+          "key": "application_date",
+          "value": "2026-10-05",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_date: 2026-10-05",
+          "confidence": "high"
+        },
+        {
+          "key": "dependants",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "dependants: false",
+          "confidence": "high"
+        },
+        {
+          "key": "previous_refusal",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "previous_refusal: false",
+          "confidence": "high"
+        },
+        {
+          "key": "funding",
+          "value": "self",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "funding: self",
+          "confidence": "high"
+        },
+        {
+          "key": "travel_start",
+          "value": "2026-11-01",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "travel_start: 2026-11-01",
+          "confidence": "high"
+        },
+        {
+          "key": "residence_country",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_country: China",
+          "confidence": "high"
+        },
+        {
+          "key": "residence_months",
+          "value": "36",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_months: 36",
+          "confidence": "high"
+        },
+        {
+          "key": "stay_months",
+          "value": "12",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "stay_months: 12",
+          "confidence": "high"
+        },
+        {
+          "key": "financial_evidence_requested",
+          "value": "true",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "financial_evidence_requested: true",
+          "confidence": "high"
+        }
+      ],
+      "documents": []
+    },
+    "messages": [
+      {
+        "kind": "request",
+        "parts": [
+          {
+            "content": "{\"case_id\": \"dev_student-db3d8774\", \"rule_version\": \"2026-10-05-9a48d3a4044e\", \"route\": null, \"facts\": [], \"blockers\": [], \"new_message\": {\"id\": \"message:event_0\", \"text\": \"Hello, please help me prepare my UK application.\\nroute: student\\napplicant_name: Mei Example\\nnationality: China\\nage: 30\\napplication_location: outside_uk\\napplication_date: 2026-10-05\\ndependants: false\\nprevious_refusal: false\\nfunding: self\\ntravel_start: 2026-11-01\\nresidence_country: China\\nresidence_months: 36\\nstay_months: 12\\nfinancial_evidence_requested: true\"}, \"sources\": {\"visitor\": \"https://www.gov.uk/government/publications/visitor-visa-guide-to-supporting-documents/guide-to-supporting-documents-visiting-the-uk\", \"student\": \"https://www.gov.uk/student-visa/documents-you-must-provide\", \"student_money\": \"https://www.gov.uk/student-visa/money\", \"finance\": \"https://www.gov.uk/guidance/financial-evidence-for-student-and-child-student-route-applicants\", \"worker\": \"https://www.gov.uk/skilled-worker-visa/documents-you-must-provide\", \"worker_money\": \"https://www.gov.uk/skilled-worker-visa/how-much-it-costs\", \"english\": \"https://www.gov.uk/skilled-worker-visa/knowledge-of-english\", \"tb\": \"https://www.gov.uk/tb-test-visa\", \"scope\": \"project:adult-outside-uk-material-preparation-v1\"}, \"sop\": {\"common\": \"Adult main applicant outside UK, no dependants or refusal explanation. Confirm route, identity, nationality, dates and funding. Non-English/Welsh evidence needs a complete verified translation. Unsupported circumstances go to an adviser. Unknown is never pass.\", \"visitor\": \"Routine employed self-funded visitor: travel purpose, dates, return ties and affordable trip supported by identity, work and financial evidence. No universal bank-balance threshold. Adviser judges sufficiency.\", \"student\": \"CAS information; tuition plus up to 9 months of maintenance (London GBP 1529/month, elsewhere GBP 1171/month). If financial documents required: 28 consecutive days, period end within 31 days of application. Differential evidence does not remove the financial condition. Conditional TB, ATAS and translations.\", \"skilled_worker\": \"CoS information, conditional English evidence (new application B2), TB and translations. Certified sponsor maintenance can replace funds submission; otherwise GBP 1270 held for 28 days ending within 31 days. Occupation other than 2134 and salary/eligibility judgments need adviser review.\"}, \"recent_dialogue\": [], \"new_documents\": []}",
+            "timestamp": "2026-10-05 16:27:46.427264+00:00",
+            "part_kind": "user-prompt"
+          }
+        ]
+      },
+      {
+        "kind": "response",
+        "parts": [
+          {
+            "tool_name": "final_result",
+            "args": "{\"facts\": [{\"key\": \"route\", \"value\": \"student\", \"source_id\": \"message:event_0\", \"quote\": \"route: student\"}, {\"key\": \"applicant_name\", \"value\": \"Mei Example\", \"source_id\": \"message:event_0\", \"quote\": \"applicant_name: Mei Example\"}, {\"key\": \"nationality\", \"value\": \"China\", \"source_id\": \"message:event_0\", \"quote\": \"nationality: China\"}, {\"key\": \"age\", \"value\": \"30\", \"source_id\": \"message:event_0\", \"quote\": \"age: 30\"}, {\"key\": \"application_location\", \"value\": \"outside_uk\", \"source_id\": \"message:event_0\", \"quote\": \"application_location: outside_uk\"}, {\"key\": \"application_date\", \"value\": \"2026-10-05\", \"source_id\": \"message:event_0\", \"quote\": \"application_date: 2026-10-05\"}, {\"key\": \"dependants\", \"value\": \"false\", \"source_id\": \"message:event_0\", \"quote\": \"dependants: false\"}, {\"key\": \"previous_refusal\", \"value\": \"false\", \"source_id\": \"message:event_0\", \"quote\": \"previous_refusal: false\"}, {\"key\": \"funding\", \"value\": \"self\", \"source_id\": \"message:event_0\", \"quote\": \"funding: self\"}, {\"key\": \"travel_start\", \"value\": \"2026-11-01\", \"source_id\": \"message:event_0\", \"quote\": \"travel_start: 2026-11-01\"}, {\"key\": \"residence_country\", \"value\": \"China\", \"source_id\": \"message:event_0\", \"quote\": \"residence_country: China\"}, {\"key\": \"residence_months\", \"value\": \"36\", \"source_id\": \"message:event_0\", \"quote\": \"residence_months: 36\"}, {\"key\": \"stay_months\", \"value\": \"12\", \"source_id\": \"message:event_0\", \"quote\": \"stay_months: 12\"}, {\"key\": \"financial_evidence_requested\", \"value\": \"true\", \"source_id\": \"message:event_0\", \"quote\": \"financial_evidence_requested: true\"}], \"documents\": []}",
+            "tool_call_id": "call_00_cfRBhfRAaJuNebOvj8fN6231",
+            "tool_kind": null,
+            "id": null,
+            "provider_name": null,
+            "provider_details": null,
+            "part_kind": "tool-call"
+          }
+        ]
+      },
+      {
+        "kind": "request",
+        "parts": [
+          {
+            "tool_name": "final_result",
+            "content": "Final result processed.",
+            "tool_call_id": "call_00_cfRBhfRAaJuNebOvj8fN6231",
+            "tool_kind": null,
+            "metadata": null,
+            "timestamp": "2026-10-05 16:27:49.358793+00:00",
+            "outcome": "success",
+            "part_kind": "tool-return"
+          }
+        ]
+      }
+    ],
+    "duration_seconds": 2.953,
+    "usage_incomplete": false,
+    "rejected_candidates": [],
+    "after": {
+      "id": "dev_student-db3d8774",
+      "version": 1,
+      "route": "student",
+      "status": "WAIT_USER",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "facts": [
+        {
+          "key": "route",
+          "value": "student",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "route: student",
+          "confidence": "high",
+          "id": "87940d3d745125278bc0",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "applicant_name",
+          "value": "Mei Example",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "applicant_name: Mei Example",
+          "confidence": "high",
+          "id": "6e06388f301c5b9fd42c",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "nationality",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "nationality: China",
+          "confidence": "high",
+          "id": "a4a8a81053b36ba67bed",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "age",
+          "value": "30",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "age: 30",
+          "confidence": "high",
+          "id": "e29937eb021355c8330a",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_location",
+          "value": "outside_uk",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_location: outside_uk",
+          "confidence": "high",
+          "id": "4c7eedbe5cb73f40f680",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_date",
+          "value": "2026-10-05",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_date: 2026-10-05",
+          "confidence": "high",
+          "id": "1486e38e2ba4297b7699",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "dependants",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "dependants: false",
+          "confidence": "high",
+          "id": "17cd8c96b43fdf60d532",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "previous_refusal",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "previous_refusal: false",
+          "confidence": "high",
+          "id": "3ad8b08d69af59c0bb08",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "funding",
+          "value": "self",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "funding: self",
+          "confidence": "high",
+          "id": "0ed8d8bb5fdead903b07",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "travel_start",
+          "value": "2026-11-01",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "travel_start: 2026-11-01",
+          "confidence": "high",
+          "id": "48bb89503e60d8a6b284",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_country",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_country: China",
+          "confidence": "high",
+          "id": "913327f67d433511be40",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_months",
+          "value": "36",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_months: 36",
+          "confidence": "high",
+          "id": "0767b626a0ebe2bfa512",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "stay_months",
+          "value": "12",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "stay_months: 12",
+          "confidence": "high",
+          "id": "376abf672c3616e7c2d1",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "financial_evidence_requested",
+          "value": "true",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "financial_evidence_requested: true",
+          "confidence": "high",
+          "id": "55242eebb2da262f492f",
+          "active": true,
+          "confirmed_by": null
+        }
+      ],
+      "documents": [],
+      "checks": [
+        {
+          "id": "route",
+          "status": "pass",
+          "message": "请说明来英国的主要目的，以确认签证路线。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "87940d3d745125278bc0"
+          ]
+        },
+        {
+          "id": "applicant_name",
+          "status": "pass",
+          "message": "请提供与身份证件一致的申请人姓名。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "6e06388f301c5b9fd42c"
+          ]
+        },
+        {
+          "id": "application_location",
+          "status": "pass",
+          "message": "请确认在英国境外申请；境内申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "4c7eedbe5cb73f40f680"
+          ]
+        },
+        {
+          "id": "dependants",
+          "status": "pass",
+          "message": "请确认是否有随行家属；家属申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "17cd8c96b43fdf60d532"
+          ]
+        },
+        {
+          "id": "previous_refusal",
+          "status": "pass",
+          "message": "请说明是否有拒签记录；相关解释需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "3ad8b08d69af59c0bb08"
+          ]
+        },
+        {
+          "id": "adult",
+          "status": "pass",
+          "message": "请确认年龄；未成年人材料由顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "e29937eb021355c8330a"
+          ]
+        },
+        {
+          "id": "nationality",
+          "status": "pass",
+          "message": "请提供国籍，以判断材料和豁免条件。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "a4a8a81053b36ba67bed"
+          ]
+        },
+        {
+          "id": "application_date",
+          "status": "pass",
+          "message": "请提供计划申请日期（YYYY-MM-DD），用于材料时效检查。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "1486e38e2ba4297b7699"
+          ]
+        },
+        {
+          "id": "passport_name",
+          "status": "unknown",
+          "message": "请上传有效护照/旅行证件的个人信息页。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "passport_number",
+          "status": "unknown",
+          "message": "证件号码缺失或不可读，请补充。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "passport_valid",
+          "status": "unknown",
+          "message": "请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "funding",
+          "status": "pass",
+          "message": "请说明资金来源：self（本人）或 employer（雇主）。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "0ed8d8bb5fdead903b07"
+          ]
+        },
+        {
+          "id": "cas_reference",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 cas_reference 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "cas_name",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 cas_name 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "tuition_due",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 tuition_due 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "study_months",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 study_months 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "study_location",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 study_location 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "english_confirmed",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 english_confirmed 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "atas_required",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 atas_required 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "financial_evidence_requested",
+          "status": "pass",
+          "message": "UKVI 是否已要求提供财务证明？",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "55242eebb2da262f492f"
+          ]
+        },
+        {
+          "id": "finance",
+          "status": "unknown",
+          "message": "请补充可核对的资金证明。",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "1486e38e2ba4297b7699"
+          ]
+        },
+        {
+          "id": "residence_country",
+          "status": "pass",
+          "message": "请说明近半年的居住国家，用于 TB 条件判断。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": [
+            "913327f67d433511be40"
+          ]
+        },
+        {
+          "id": "tb_name",
+          "status": "unknown",
+          "message": "请提供获认可机构的 TB 证明。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "tb_valid",
+          "status": "unknown",
+          "message": "请核对 TB 结果及有效期。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": []
+        }
+      ],
+      "history": [
+        {
+          "event_id": "event_0",
+          "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "at": "2026-10-05T16:27:46.402181+00:00"
+        }
+      ],
+      "reviews": [],
+      "approval": null,
+      "pack_path": null,
+      "last_contact": "2026-10-05T16:27:46.402181+00:00",
+      "last_reminder": null,
+      "reminder_count": 0,
+      "pending_error": null
+    }
+  },
+  {
+    "run_id": "160e3aa1390647bea593d3e1dd671ea6",
+    "case_id": "dev_student-db3d8774",
+    "recorded_at": "2026-10-05T16:27:51.316576+00:00",
+    "input": {
+      "case_id": "dev_student-db3d8774",
+      "event_id": "event_1",
+      "kind": "upload",
+      "at": "2026-10-05T16:27:49.368760Z",
+      "text": "Here is my identity document.",
+      "attachments": [
+        "<REPO>\\datasets\\materials\\dev_student\\identity.pdf"
+      ]
+    },
+    "mode": "live",
+    "rule_version": "2026-10-05-9a48d3a4044e",
+    "before": {
+      "id": "dev_student-db3d8774",
+      "version": 2,
+      "route": "student",
+      "status": "WAIT_USER",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "facts": [
+        {
+          "key": "route",
+          "value": "student",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "route: student",
+          "confidence": "high",
+          "id": "87940d3d745125278bc0",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "applicant_name",
+          "value": "Mei Example",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "applicant_name: Mei Example",
+          "confidence": "high",
+          "id": "6e06388f301c5b9fd42c",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "nationality",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "nationality: China",
+          "confidence": "high",
+          "id": "a4a8a81053b36ba67bed",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "age",
+          "value": "30",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "age: 30",
+          "confidence": "high",
+          "id": "e29937eb021355c8330a",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_location",
+          "value": "outside_uk",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_location: outside_uk",
+          "confidence": "high",
+          "id": "4c7eedbe5cb73f40f680",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_date",
+          "value": "2026-10-05",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_date: 2026-10-05",
+          "confidence": "high",
+          "id": "1486e38e2ba4297b7699",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "dependants",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "dependants: false",
+          "confidence": "high",
+          "id": "17cd8c96b43fdf60d532",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "previous_refusal",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "previous_refusal: false",
+          "confidence": "high",
+          "id": "3ad8b08d69af59c0bb08",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "funding",
+          "value": "self",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "funding: self",
+          "confidence": "high",
+          "id": "0ed8d8bb5fdead903b07",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "travel_start",
+          "value": "2026-11-01",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "travel_start: 2026-11-01",
+          "confidence": "high",
+          "id": "48bb89503e60d8a6b284",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_country",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_country: China",
+          "confidence": "high",
+          "id": "913327f67d433511be40",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_months",
+          "value": "36",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_months: 36",
+          "confidence": "high",
+          "id": "0767b626a0ebe2bfa512",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "stay_months",
+          "value": "12",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "stay_months: 12",
+          "confidence": "high",
+          "id": "376abf672c3616e7c2d1",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "financial_evidence_requested",
+          "value": "true",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "financial_evidence_requested: true",
+          "confidence": "high",
+          "id": "55242eebb2da262f492f",
+          "active": true,
+          "confirmed_by": null
+        }
+      ],
+      "documents": [],
+      "checks": [
+        {
+          "id": "route",
+          "status": "pass",
+          "message": "请说明来英国的主要目的，以确认签证路线。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "87940d3d745125278bc0"
+          ]
+        },
+        {
+          "id": "applicant_name",
+          "status": "pass",
+          "message": "请提供与身份证件一致的申请人姓名。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "6e06388f301c5b9fd42c"
+          ]
+        },
+        {
+          "id": "application_location",
+          "status": "pass",
+          "message": "请确认在英国境外申请；境内申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "4c7eedbe5cb73f40f680"
+          ]
+        },
+        {
+          "id": "dependants",
+          "status": "pass",
+          "message": "请确认是否有随行家属；家属申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "17cd8c96b43fdf60d532"
+          ]
+        },
+        {
+          "id": "previous_refusal",
+          "status": "pass",
+          "message": "请说明是否有拒签记录；相关解释需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "3ad8b08d69af59c0bb08"
+          ]
+        },
+        {
+          "id": "adult",
+          "status": "pass",
+          "message": "请确认年龄；未成年人材料由顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "e29937eb021355c8330a"
+          ]
+        },
+        {
+          "id": "nationality",
+          "status": "pass",
+          "message": "请提供国籍，以判断材料和豁免条件。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "a4a8a81053b36ba67bed"
+          ]
+        },
+        {
+          "id": "application_date",
+          "status": "pass",
+          "message": "请提供计划申请日期（YYYY-MM-DD），用于材料时效检查。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "1486e38e2ba4297b7699"
+          ]
+        },
+        {
+          "id": "passport_name",
+          "status": "unknown",
+          "message": "请上传有效护照/旅行证件的个人信息页。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "passport_number",
+          "status": "unknown",
+          "message": "证件号码缺失或不可读，请补充。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "passport_valid",
+          "status": "unknown",
+          "message": "请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "funding",
+          "status": "pass",
+          "message": "请说明资金来源：self（本人）或 employer（雇主）。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "0ed8d8bb5fdead903b07"
+          ]
+        },
+        {
+          "id": "cas_reference",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 cas_reference 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "cas_name",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 cas_name 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "tuition_due",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 tuition_due 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "study_months",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 study_months 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "study_location",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 study_location 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "english_confirmed",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 english_confirmed 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "atas_required",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 atas_required 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "financial_evidence_requested",
+          "status": "pass",
+          "message": "UKVI 是否已要求提供财务证明？",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "55242eebb2da262f492f"
+          ]
+        },
+        {
+          "id": "finance",
+          "status": "unknown",
+          "message": "请补充可核对的资金证明。",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "1486e38e2ba4297b7699"
+          ]
+        },
+        {
+          "id": "residence_country",
+          "status": "pass",
+          "message": "请说明近半年的居住国家，用于 TB 条件判断。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": [
+            "913327f67d433511be40"
+          ]
+        },
+        {
+          "id": "tb_name",
+          "status": "unknown",
+          "message": "请提供获认可机构的 TB 证明。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "tb_valid",
+          "status": "unknown",
+          "message": "请核对 TB 结果及有效期。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": []
+        }
+      ],
+      "history": [
+        {
+          "event_id": "event_0",
+          "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "at": "2026-10-05T16:27:46.402181+00:00"
+        }
+      ],
+      "reviews": [],
+      "approval": null,
+      "pack_path": null,
+      "last_contact": "2026-10-05T16:27:46.402181+00:00",
+      "last_reminder": null,
+      "reminder_count": 0,
+      "pending_error": "Incoming event has not completed"
+    },
+    "documents_read": [
+      {
+        "id": "118fc51dec7bdd86d8f7",
+        "name": "identity.pdf",
+        "sha256": "118fc51dec7bdd86d8f70eb6b3bbbb5b9f3d8ad57e0b884d6cf89e11f25d871a",
+        "path": "<REPO>\\data\\files\\118fc51dec7bdd86d8f70eb6b3bbbb5b9f3d8ad57e0b884d6cf89e11f25d871a.pdf",
+        "pages": [
+          {
+            "number": 1,
+            "text": "TEST EVIDENCE / PASSPORT\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: passport\nLANGUAGE: en\npassport_name: Mei Example\npassport_number: TEST-672188\npassport_expiry: 2036-01-01\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+            "method": "pdf_text",
+            "confidence": null
+          }
+        ],
+        "kind": "unknown",
+        "language": "unknown",
+        "problems": [],
+        "rejected": false
+      }
+    ],
+    "working_context": {
+      "case_id": "dev_student-db3d8774",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "route": "student",
+      "facts": [
+        {
+          "key": "route",
+          "value": "student",
+          "source": "message:event_0"
+        },
+        {
+          "key": "applicant_name",
+          "value": "Mei Example",
+          "source": "message:event_0"
+        },
+        {
+          "key": "nationality",
+          "value": "China",
+          "source": "message:event_0"
+        },
+        {
+          "key": "age",
+          "value": "30",
+          "source": "message:event_0"
+        },
+        {
+          "key": "application_location",
+          "value": "outside_uk",
+          "source": "message:event_0"
+        },
+        {
+          "key": "application_date",
+          "value": "2026-10-05",
+          "source": "message:event_0"
+        },
+        {
+          "key": "dependants",
+          "value": "false",
+          "source": "message:event_0"
+        },
+        {
+          "key": "previous_refusal",
+          "value": "false",
+          "source": "message:event_0"
+        },
+        {
+          "key": "funding",
+          "value": "self",
+          "source": "message:event_0"
+        },
+        {
+          "key": "travel_start",
+          "value": "2026-11-01",
+          "source": "message:event_0"
+        },
+        {
+          "key": "residence_country",
+          "value": "China",
+          "source": "message:event_0"
+        },
+        {
+          "key": "residence_months",
+          "value": "36",
+          "source": "message:event_0"
+        },
+        {
+          "key": "stay_months",
+          "value": "12",
+          "source": "message:event_0"
+        },
+        {
+          "key": "financial_evidence_requested",
+          "value": "true",
+          "source": "message:event_0"
+        }
+      ],
+      "blockers": [
+        {
+          "id": "passport_name",
+          "message": "请上传有效护照/旅行证件的个人信息页。"
+        },
+        {
+          "id": "passport_number",
+          "message": "证件号码缺失或不可读，请补充。"
+        },
+        {
+          "id": "passport_valid",
+          "message": "请核对护照有效期及行程日期；证件必须在相应旅行期间有效。"
+        },
+        {
+          "id": "cas_reference",
+          "message": "请补充 CAS/学校材料中的 cas_reference 信息。"
+        },
+        {
+          "id": "cas_name",
+          "message": "请补充 CAS/学校材料中的 cas_name 信息。"
+        },
+        {
+          "id": "tuition_due",
+          "message": "请补充 CAS/学校材料中的 tuition_due 信息。"
+        },
+        {
+          "id": "study_months",
+          "message": "请补充 CAS/学校材料中的 study_months 信息。"
+        },
+        {
+          "id": "study_location",
+          "message": "请补充 CAS/学校材料中的 study_location 信息。"
+        },
+        {
+          "id": "english_confirmed",
+          "message": "请补充 CAS/学校材料中的 english_confirmed 信息。"
+        },
+        {
+          "id": "atas_required",
+          "message": "请补充 CAS/学校材料中的 atas_required 信息。"
+        },
+        {
+          "id": "finance",
+          "message": "请补充可核对的资金证明。"
+        },
+        {
+          "id": "tb_name",
+          "message": "请提供获认可机构的 TB 证明。"
+        },
+        {
+          "id": "tb_valid",
+          "message": "请核对 TB 结果及有效期。"
+        }
+      ],
+      "new_message": {
+        "id": "message:event_1",
+        "text": "Here is my identity document."
+      },
+      "sources": {
+        "visitor": "https://www.gov.uk/government/publications/visitor-visa-guide-to-supporting-documents/guide-to-supporting-documents-visiting-the-uk",
+        "student": "https://www.gov.uk/student-visa/documents-you-must-provide",
+        "student_money": "https://www.gov.uk/student-visa/money",
+        "finance": "https://www.gov.uk/guidance/financial-evidence-for-student-and-child-student-route-applicants",
+        "worker": "https://www.gov.uk/skilled-worker-visa/documents-you-must-provide",
+        "worker_money": "https://www.gov.uk/skilled-worker-visa/how-much-it-costs",
+        "english": "https://www.gov.uk/skilled-worker-visa/knowledge-of-english",
+        "tb": "https://www.gov.uk/tb-test-visa",
+        "scope": "project:adult-outside-uk-material-preparation-v1"
+      },
+      "sop": {
+        "common": "Adult main applicant outside UK, no dependants or refusal explanation. Confirm route, identity, nationality, dates and funding. Non-English/Welsh evidence needs a complete verified translation. Unsupported circumstances go to an adviser. Unknown is never pass.",
+        "student": "CAS information; tuition plus up to 9 months of maintenance (London GBP 1529/month, elsewhere GBP 1171/month). If financial documents required: 28 consecutive days, period end within 31 days of application. Differential evidence does not remove the financial condition. Conditional TB, ATAS and translations."
+      },
+      "recent_dialogue": [
+        {
+          "event_id": "event_0",
+          "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "at": "2026-10-05T16:27:46.402181+00:00"
+        }
+      ],
+      "new_documents": [
+        {
+          "id": "118fc51dec7bdd86d8f7",
+          "name": "identity.pdf",
+          "problems": [],
+          "pages": [
+            {
+              "page": 1,
+              "text": "TEST EVIDENCE / PASSPORT\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: passport\nLANGUAGE: en\npassport_name: Mei Example\npassport_number: TEST-672188\npassport_expiry: 2036-01-01\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n"
+            }
+          ]
+        }
+      ]
+    },
+    "prompt_version": "extract-v1",
+    "context_chars": 6512,
+    "model": "deepseek-flash",
+    "http_requests": 1,
+    "http_responses": [
+      {
+        "status": 200,
+        "usage": {
+          "prompt_tokens": 2587,
+          "completion_tokens": 266,
+          "total_tokens": 2853,
+          "prompt_tokens_details": {
+            "cached_tokens": 1024
+          },
+          "prompt_cache_hit_tokens": 1024,
+          "prompt_cache_miss_tokens": 1563
+        }
+      }
+    ],
+    "usage": {
+      "requests": 1,
+      "input_tokens": 2587,
+      "output_tokens": 266
+    },
+    "proposal": {
+      "facts": [
+        {
+          "key": "passport_name",
+          "value": "Mei Example",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_name: Mei Example",
+          "confidence": "high"
+        },
+        {
+          "key": "passport_number",
+          "value": "TEST-672188",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_number: TEST-672188",
+          "confidence": "high"
+        },
+        {
+          "key": "passport_expiry",
+          "value": "2036-01-01",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_expiry: 2036-01-01",
+          "confidence": "high"
+        }
+      ],
+      "documents": [
+        {
+          "document_id": "118fc51dec7bdd86d8f7",
+          "kind": "passport",
+          "language": "en"
+        }
+      ]
+    },
+    "messages": [
+      {
+        "kind": "request",
+        "parts": [
+          {
+            "content": "{\"case_id\": \"dev_student-db3d8774\", \"rule_version\": \"2026-10-05-9a48d3a4044e\", \"route\": \"student\", \"facts\": [{\"key\": \"route\", \"value\": \"student\", \"source\": \"message:event_0\"}, {\"key\": \"applicant_name\", \"value\": \"Mei Example\", \"source\": \"message:event_0\"}, {\"key\": \"nationality\", \"value\": \"China\", \"source\": \"message:event_0\"}, {\"key\": \"age\", \"value\": \"30\", \"source\": \"message:event_0\"}, {\"key\": \"application_location\", \"value\": \"outside_uk\", \"source\": \"message:event_0\"}, {\"key\": \"application_date\", \"value\": \"2026-10-05\", \"source\": \"message:event_0\"}, {\"key\": \"dependants\", \"value\": \"false\", \"source\": \"message:event_0\"}, {\"key\": \"previous_refusal\", \"value\": \"false\", \"source\": \"message:event_0\"}, {\"key\": \"funding\", \"value\": \"self\", \"source\": \"message:event_0\"}, {\"key\": \"travel_start\", \"value\": \"2026-11-01\", \"source\": \"message:event_0\"}, {\"key\": \"residence_country\", \"value\": \"China\", \"source\": \"message:event_0\"}, {\"key\": \"residence_months\", \"value\": \"36\", \"source\": \"message:event_0\"}, {\"key\": \"stay_months\", \"value\": \"12\", \"source\": \"message:event_0\"}, {\"key\": \"financial_evidence_requested\", \"value\": \"true\", \"source\": \"message:event_0\"}], \"blockers\": [{\"id\": \"passport_name\", \"message\": \"请上传有效护照/旅行证件的个人信息页。\"}, {\"id\": \"passport_number\", \"message\": \"证件号码缺失或不可读，请补充。\"}, {\"id\": \"passport_valid\", \"message\": \"请核对护照有效期及行程日期；证件必须在相应旅行期间有效。\"}, {\"id\": \"cas_reference\", \"message\": \"请补充 CAS/学校材料中的 cas_reference 信息。\"}, {\"id\": \"cas_name\", \"message\": \"请补充 CAS/学校材料中的 cas_name 信息。\"}, {\"id\": \"tuition_due\", \"message\": \"请补充 CAS/学校材料中的 tuition_due 信息。\"}, {\"id\": \"study_months\", \"message\": \"请补充 CAS/学校材料中的 study_months 信息。\"}, {\"id\": \"study_location\", \"message\": \"请补充 CAS/学校材料中的 study_location 信息。\"}, {\"id\": \"english_confirmed\", \"message\": \"请补充 CAS/学校材料中的 english_confirmed 信息。\"}, {\"id\": \"atas_required\", \"message\": \"请补充 CAS/学校材料中的 atas_required 信息。\"}, {\"id\": \"finance\", \"message\": \"请补充可核对的资金证明。\"}, {\"id\": \"tb_name\", \"message\": \"请提供获认可机构的 TB 证明。\"}, {\"id\": \"tb_valid\", \"message\": \"请核对 TB 结果及有效期。\"}], \"new_message\": {\"id\": \"message:event_1\", \"text\": \"Here is my identity document.\"}, \"sources\": {\"visitor\": \"https://www.gov.uk/government/publications/visitor-visa-guide-to-supporting-documents/guide-to-supporting-documents-visiting-the-uk\", \"student\": \"https://www.gov.uk/student-visa/documents-you-must-provide\", \"student_money\": \"https://www.gov.uk/student-visa/money\", \"finance\": \"https://www.gov.uk/guidance/financial-evidence-for-student-and-child-student-route-applicants\", \"worker\": \"https://www.gov.uk/skilled-worker-visa/documents-you-must-provide\", \"worker_money\": \"https://www.gov.uk/skilled-worker-visa/how-much-it-costs\", \"english\": \"https://www.gov.uk/skilled-worker-visa/knowledge-of-english\", \"tb\": \"https://www.gov.uk/tb-test-visa\", \"scope\": \"project:adult-outside-uk-material-preparation-v1\"}, \"sop\": {\"common\": \"Adult main applicant outside UK, no dependants or refusal explanation. Confirm route, identity, nationality, dates and funding. Non-English/Welsh evidence needs a complete verified translation. Unsupported circumstances go to an adviser. Unknown is never pass.\", \"student\": \"CAS information; tuition plus up to 9 months of maintenance (London GBP 1529/month, elsewhere GBP 1171/month). If financial documents required: 28 consecutive days, period end within 31 days of application. Differential evidence does not remove the financial condition. Conditional TB, ATAS and translations.\"}, \"recent_dialogue\": [{\"event_id\": \"event_0\", \"text\": \"Hello, please help me prepare my UK application.\\nroute: student\\napplicant_name: Mei Example\\nnationality: China\\nage: 30\\napplication_location: outside_uk\\napplication_date: 2026-10-05\\ndependants: false\\nprevious_refusal: false\\nfunding: self\\ntravel_start: 2026-11-01\\nresidence_country: China\\nresidence_months: 36\\nstay_months: 12\\nfinancial_evidence_requested: true\", \"reply\": \"我们先补齐以下信息：\\n1. 请上传有效护照/旅行证件的个人信息页。\\n2. 证件号码缺失或不可读，请补充。\\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。\", \"at\": \"2026-10-05T16:27:46.402181+00:00\"}], \"new_documents\": [{\"id\": \"118fc51dec7bdd86d8f7\", \"name\": \"identity.pdf\", \"problems\": [], \"pages\": [{\"page\": 1, \"text\": \"TEST EVIDENCE / PASSPORT\\nSYNTHETIC - fictitious people and institutions - not a valid document\\nDOCUMENT_KIND: passport\\nLANGUAGE: en\\npassport_name: Mei Example\\npassport_number: TEST-672188\\npassport_expiry: 2036-01-01\\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\\n\"}]}]}",
+            "timestamp": "2026-10-05 16:27:49.393920+00:00",
+            "part_kind": "user-prompt"
+          }
+        ]
+      },
+      {
+        "kind": "response",
+        "parts": [
+          {
+            "tool_name": "final_result",
+            "args": "{\"facts\": [{\"key\": \"passport_name\", \"value\": \"Mei Example\", \"source_id\": \"118fc51dec7bdd86d8f7\", \"page\": 1, \"quote\": \"passport_name: Mei Example\", \"confidence\": \"high\"}, {\"key\": \"passport_number\", \"value\": \"TEST-672188\", \"source_id\": \"118fc51dec7bdd86d8f7\", \"page\": 1, \"quote\": \"passport_number: TEST-672188\", \"confidence\": \"high\"}, {\"key\": \"passport_expiry\", \"value\": \"2036-01-01\", \"source_id\": \"118fc51dec7bdd86d8f7\", \"page\": 1, \"quote\": \"passport_expiry: 2036-01-01\", \"confidence\": \"high\"}], \"documents\": [{\"document_id\": \"118fc51dec7bdd86d8f7\", \"kind\": \"passport\", \"language\": \"en\"}]}",
+            "tool_call_id": "call_00_lkITdRJnknSo2UQnuMoB5372",
+            "tool_kind": null,
+            "id": null,
+            "provider_name": null,
+            "provider_details": null,
+            "part_kind": "tool-call"
+          }
+        ]
+      },
+      {
+        "kind": "request",
+        "parts": [
+          {
+            "tool_name": "final_result",
+            "content": "Final result processed.",
+            "tool_call_id": "call_00_lkITdRJnknSo2UQnuMoB5372",
+            "tool_kind": null,
+            "metadata": null,
+            "timestamp": "2026-10-05 16:27:51.313985+00:00",
+            "outcome": "success",
+            "part_kind": "tool-return"
+          }
+        ]
+      }
+    ],
+    "duration_seconds": 1.937,
+    "usage_incomplete": false,
+    "rejected_candidates": [],
+    "after": {
+      "id": "dev_student-db3d8774",
+      "version": 2,
+      "route": "student",
+      "status": "WAIT_USER",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "facts": [
+        {
+          "key": "route",
+          "value": "student",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "route: student",
+          "confidence": "high",
+          "id": "87940d3d745125278bc0",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "applicant_name",
+          "value": "Mei Example",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "applicant_name: Mei Example",
+          "confidence": "high",
+          "id": "6e06388f301c5b9fd42c",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "nationality",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "nationality: China",
+          "confidence": "high",
+          "id": "a4a8a81053b36ba67bed",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "age",
+          "value": "30",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "age: 30",
+          "confidence": "high",
+          "id": "e29937eb021355c8330a",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_location",
+          "value": "outside_uk",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_location: outside_uk",
+          "confidence": "high",
+          "id": "4c7eedbe5cb73f40f680",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_date",
+          "value": "2026-10-05",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_date: 2026-10-05",
+          "confidence": "high",
+          "id": "1486e38e2ba4297b7699",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "dependants",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "dependants: false",
+          "confidence": "high",
+          "id": "17cd8c96b43fdf60d532",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "previous_refusal",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "previous_refusal: false",
+          "confidence": "high",
+          "id": "3ad8b08d69af59c0bb08",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "funding",
+          "value": "self",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "funding: self",
+          "confidence": "high",
+          "id": "0ed8d8bb5fdead903b07",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "travel_start",
+          "value": "2026-11-01",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "travel_start: 2026-11-01",
+          "confidence": "high",
+          "id": "48bb89503e60d8a6b284",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_country",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_country: China",
+          "confidence": "high",
+          "id": "913327f67d433511be40",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_months",
+          "value": "36",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_months: 36",
+          "confidence": "high",
+          "id": "0767b626a0ebe2bfa512",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "stay_months",
+          "value": "12",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "stay_months: 12",
+          "confidence": "high",
+          "id": "376abf672c3616e7c2d1",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "financial_evidence_requested",
+          "value": "true",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "financial_evidence_requested: true",
+          "confidence": "high",
+          "id": "55242eebb2da262f492f",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_name",
+          "value": "Mei Example",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_name: Mei Example",
+          "confidence": "high",
+          "id": "72e243f8aaac497b91d1",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_number",
+          "value": "TEST-672188",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_number: TEST-672188",
+          "confidence": "high",
+          "id": "8cd510bd4e7214d3d768",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_expiry",
+          "value": "2036-01-01",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_expiry: 2036-01-01",
+          "confidence": "high",
+          "id": "a66bee7822fde23c4839",
+          "active": true,
+          "confirmed_by": null
+        }
+      ],
+      "documents": [
+        {
+          "id": "118fc51dec7bdd86d8f7",
+          "name": "identity.pdf",
+          "sha256": "118fc51dec7bdd86d8f70eb6b3bbbb5b9f3d8ad57e0b884d6cf89e11f25d871a",
+          "path": "<REPO>\\data\\files\\118fc51dec7bdd86d8f70eb6b3bbbb5b9f3d8ad57e0b884d6cf89e11f25d871a.pdf",
+          "pages": [
+            {
+              "number": 1,
+              "text": "TEST EVIDENCE / PASSPORT\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: passport\nLANGUAGE: en\npassport_name: Mei Example\npassport_number: TEST-672188\npassport_expiry: 2036-01-01\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+              "method": "pdf_text",
+              "confidence": null
+            }
+          ],
+          "kind": "passport",
+          "language": "en",
+          "problems": [],
+          "rejected": false
+        }
+      ],
+      "checks": [
+        {
+          "id": "route",
+          "status": "pass",
+          "message": "请说明来英国的主要目的，以确认签证路线。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "87940d3d745125278bc0"
+          ]
+        },
+        {
+          "id": "applicant_name",
+          "status": "pass",
+          "message": "请提供与身份证件一致的申请人姓名。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "6e06388f301c5b9fd42c"
+          ]
+        },
+        {
+          "id": "application_location",
+          "status": "pass",
+          "message": "请确认在英国境外申请；境内申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "4c7eedbe5cb73f40f680"
+          ]
+        },
+        {
+          "id": "dependants",
+          "status": "pass",
+          "message": "请确认是否有随行家属；家属申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "17cd8c96b43fdf60d532"
+          ]
+        },
+        {
+          "id": "previous_refusal",
+          "status": "pass",
+          "message": "请说明是否有拒签记录；相关解释需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "3ad8b08d69af59c0bb08"
+          ]
+        },
+        {
+          "id": "adult",
+          "status": "pass",
+          "message": "请确认年龄；未成年人材料由顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "e29937eb021355c8330a"
+          ]
+        },
+        {
+          "id": "nationality",
+          "status": "pass",
+          "message": "请提供国籍，以判断材料和豁免条件。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "a4a8a81053b36ba67bed"
+          ]
+        },
+        {
+          "id": "application_date",
+          "status": "pass",
+          "message": "请提供计划申请日期（YYYY-MM-DD），用于材料时效检查。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "1486e38e2ba4297b7699"
+          ]
+        },
+        {
+          "id": "passport_name",
+          "status": "pass",
+          "message": "请上传有效护照/旅行证件的个人信息页。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1"
+          ]
+        },
+        {
+          "id": "passport_number",
+          "status": "pass",
+          "message": "证件号码缺失或不可读，请补充。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "8cd510bd4e7214d3d768"
+          ]
+        },
+        {
+          "id": "passport_valid",
+          "status": "pass",
+          "message": "请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "a66bee7822fde23c4839"
+          ]
+        },
+        {
+          "id": "name:applicant_name",
+          "status": "pass",
+          "message": "applicant_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1",
+            "6e06388f301c5b9fd42c"
+          ]
+        },
+        {
+          "id": "funding",
+          "status": "pass",
+          "message": "请说明资金来源：self（本人）或 employer（雇主）。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "0ed8d8bb5fdead903b07"
+          ]
+        },
+        {
+          "id": "cas_reference",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 cas_reference 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "cas_name",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 cas_name 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "tuition_due",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 tuition_due 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "study_months",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 study_months 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "study_location",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 study_location 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "english_confirmed",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 english_confirmed 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "atas_required",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 atas_required 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "financial_evidence_requested",
+          "status": "pass",
+          "message": "UKVI 是否已要求提供财务证明？",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "55242eebb2da262f492f"
+          ]
+        },
+        {
+          "id": "finance",
+          "status": "unknown",
+          "message": "请补充可核对的资金证明。",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "1486e38e2ba4297b7699"
+          ]
+        },
+        {
+          "id": "residence_country",
+          "status": "pass",
+          "message": "请说明近半年的居住国家，用于 TB 条件判断。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": [
+            "913327f67d433511be40"
+          ]
+        },
+        {
+          "id": "tb_name",
+          "status": "unknown",
+          "message": "请提供获认可机构的 TB 证明。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "tb_valid",
+          "status": "unknown",
+          "message": "请核对 TB 结果及有效期。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": []
+        }
+      ],
+      "history": [
+        {
+          "event_id": "event_0",
+          "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "at": "2026-10-05T16:27:46.402181+00:00"
+        },
+        {
+          "event_id": "event_1",
+          "text": "Here is my identity document.",
+          "reply": "我们先补齐以下信息：\n1. 请补充 CAS/学校材料中的 cas_reference 信息。\n2. 请补充 CAS/学校材料中的 cas_name 信息。\n3. 请补充 CAS/学校材料中的 tuition_due 信息。",
+          "at": "2026-10-05T16:27:49.368760+00:00"
+        }
+      ],
+      "reviews": [],
+      "approval": null,
+      "pack_path": null,
+      "last_contact": "2026-10-05T16:27:49.368760+00:00",
+      "last_reminder": null,
+      "reminder_count": 0,
+      "pending_error": null
+    }
+  },
+  {
+    "run_id": "7065ddcf3bbb4d2aafa8dcef88f20f00",
+    "case_id": "dev_student-db3d8774",
+    "recorded_at": "2026-10-05T16:27:54.492477+00:00",
+    "input": {
+      "case_id": "dev_student-db3d8774",
+      "event_id": "event_2",
+      "kind": "upload",
+      "at": "2026-10-05T16:27:51.331774Z",
+      "text": "Here are the remaining supporting documents.",
+      "attachments": [
+        "<REPO>\\datasets\\materials\\dev_student\\funds.pdf",
+        "<REPO>\\datasets\\materials\\dev_student\\health.pdf",
+        "<REPO>\\datasets\\materials\\dev_student\\school.pdf"
+      ]
+    },
+    "mode": "live",
+    "rule_version": "2026-10-05-9a48d3a4044e",
+    "before": {
+      "id": "dev_student-db3d8774",
+      "version": 3,
+      "route": "student",
+      "status": "WAIT_USER",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "facts": [
+        {
+          "key": "route",
+          "value": "student",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "route: student",
+          "confidence": "high",
+          "id": "87940d3d745125278bc0",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "applicant_name",
+          "value": "Mei Example",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "applicant_name: Mei Example",
+          "confidence": "high",
+          "id": "6e06388f301c5b9fd42c",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "nationality",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "nationality: China",
+          "confidence": "high",
+          "id": "a4a8a81053b36ba67bed",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "age",
+          "value": "30",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "age: 30",
+          "confidence": "high",
+          "id": "e29937eb021355c8330a",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_location",
+          "value": "outside_uk",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_location: outside_uk",
+          "confidence": "high",
+          "id": "4c7eedbe5cb73f40f680",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_date",
+          "value": "2026-10-05",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_date: 2026-10-05",
+          "confidence": "high",
+          "id": "1486e38e2ba4297b7699",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "dependants",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "dependants: false",
+          "confidence": "high",
+          "id": "17cd8c96b43fdf60d532",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "previous_refusal",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "previous_refusal: false",
+          "confidence": "high",
+          "id": "3ad8b08d69af59c0bb08",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "funding",
+          "value": "self",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "funding: self",
+          "confidence": "high",
+          "id": "0ed8d8bb5fdead903b07",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "travel_start",
+          "value": "2026-11-01",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "travel_start: 2026-11-01",
+          "confidence": "high",
+          "id": "48bb89503e60d8a6b284",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_country",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_country: China",
+          "confidence": "high",
+          "id": "913327f67d433511be40",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_months",
+          "value": "36",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_months: 36",
+          "confidence": "high",
+          "id": "0767b626a0ebe2bfa512",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "stay_months",
+          "value": "12",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "stay_months: 12",
+          "confidence": "high",
+          "id": "376abf672c3616e7c2d1",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "financial_evidence_requested",
+          "value": "true",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "financial_evidence_requested: true",
+          "confidence": "high",
+          "id": "55242eebb2da262f492f",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_name",
+          "value": "Mei Example",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_name: Mei Example",
+          "confidence": "high",
+          "id": "72e243f8aaac497b91d1",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_number",
+          "value": "TEST-672188",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_number: TEST-672188",
+          "confidence": "high",
+          "id": "8cd510bd4e7214d3d768",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_expiry",
+          "value": "2036-01-01",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_expiry: 2036-01-01",
+          "confidence": "high",
+          "id": "a66bee7822fde23c4839",
+          "active": true,
+          "confirmed_by": null
+        }
+      ],
+      "documents": [
+        {
+          "id": "118fc51dec7bdd86d8f7",
+          "name": "identity.pdf",
+          "sha256": "118fc51dec7bdd86d8f70eb6b3bbbb5b9f3d8ad57e0b884d6cf89e11f25d871a",
+          "path": "<REPO>\\data\\files\\118fc51dec7bdd86d8f70eb6b3bbbb5b9f3d8ad57e0b884d6cf89e11f25d871a.pdf",
+          "pages": [
+            {
+              "number": 1,
+              "text": "TEST EVIDENCE / PASSPORT\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: passport\nLANGUAGE: en\npassport_name: Mei Example\npassport_number: TEST-672188\npassport_expiry: 2036-01-01\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+              "method": "pdf_text",
+              "confidence": null
+            }
+          ],
+          "kind": "passport",
+          "language": "en",
+          "problems": [],
+          "rejected": false
+        }
+      ],
+      "checks": [
+        {
+          "id": "route",
+          "status": "pass",
+          "message": "请说明来英国的主要目的，以确认签证路线。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "87940d3d745125278bc0"
+          ]
+        },
+        {
+          "id": "applicant_name",
+          "status": "pass",
+          "message": "请提供与身份证件一致的申请人姓名。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "6e06388f301c5b9fd42c"
+          ]
+        },
+        {
+          "id": "application_location",
+          "status": "pass",
+          "message": "请确认在英国境外申请；境内申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "4c7eedbe5cb73f40f680"
+          ]
+        },
+        {
+          "id": "dependants",
+          "status": "pass",
+          "message": "请确认是否有随行家属；家属申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "17cd8c96b43fdf60d532"
+          ]
+        },
+        {
+          "id": "previous_refusal",
+          "status": "pass",
+          "message": "请说明是否有拒签记录；相关解释需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "3ad8b08d69af59c0bb08"
+          ]
+        },
+        {
+          "id": "adult",
+          "status": "pass",
+          "message": "请确认年龄；未成年人材料由顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "e29937eb021355c8330a"
+          ]
+        },
+        {
+          "id": "nationality",
+          "status": "pass",
+          "message": "请提供国籍，以判断材料和豁免条件。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "a4a8a81053b36ba67bed"
+          ]
+        },
+        {
+          "id": "application_date",
+          "status": "pass",
+          "message": "请提供计划申请日期（YYYY-MM-DD），用于材料时效检查。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "1486e38e2ba4297b7699"
+          ]
+        },
+        {
+          "id": "passport_name",
+          "status": "pass",
+          "message": "请上传有效护照/旅行证件的个人信息页。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1"
+          ]
+        },
+        {
+          "id": "passport_number",
+          "status": "pass",
+          "message": "证件号码缺失或不可读，请补充。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "8cd510bd4e7214d3d768"
+          ]
+        },
+        {
+          "id": "passport_valid",
+          "status": "pass",
+          "message": "请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "a66bee7822fde23c4839"
+          ]
+        },
+        {
+          "id": "name:applicant_name",
+          "status": "pass",
+          "message": "applicant_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1",
+            "6e06388f301c5b9fd42c"
+          ]
+        },
+        {
+          "id": "funding",
+          "status": "pass",
+          "message": "请说明资金来源：self（本人）或 employer（雇主）。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "0ed8d8bb5fdead903b07"
+          ]
+        },
+        {
+          "id": "cas_reference",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 cas_reference 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "cas_name",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 cas_name 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "tuition_due",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 tuition_due 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "study_months",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 study_months 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "study_location",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 study_location 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "english_confirmed",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 english_confirmed 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "atas_required",
+          "status": "unknown",
+          "message": "请补充 CAS/学校材料中的 atas_required 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "financial_evidence_requested",
+          "status": "pass",
+          "message": "UKVI 是否已要求提供财务证明？",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "55242eebb2da262f492f"
+          ]
+        },
+        {
+          "id": "finance",
+          "status": "unknown",
+          "message": "请补充可核对的资金证明。",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "1486e38e2ba4297b7699"
+          ]
+        },
+        {
+          "id": "residence_country",
+          "status": "pass",
+          "message": "请说明近半年的居住国家，用于 TB 条件判断。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": [
+            "913327f67d433511be40"
+          ]
+        },
+        {
+          "id": "tb_name",
+          "status": "unknown",
+          "message": "请提供获认可机构的 TB 证明。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "tb_valid",
+          "status": "unknown",
+          "message": "请核对 TB 结果及有效期。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": []
+        }
+      ],
+      "history": [
+        {
+          "event_id": "event_0",
+          "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "at": "2026-10-05T16:27:46.402181+00:00"
+        },
+        {
+          "event_id": "event_1",
+          "text": "Here is my identity document.",
+          "reply": "我们先补齐以下信息：\n1. 请补充 CAS/学校材料中的 cas_reference 信息。\n2. 请补充 CAS/学校材料中的 cas_name 信息。\n3. 请补充 CAS/学校材料中的 tuition_due 信息。",
+          "at": "2026-10-05T16:27:49.368760+00:00"
+        }
+      ],
+      "reviews": [],
+      "approval": null,
+      "pack_path": null,
+      "last_contact": "2026-10-05T16:27:49.368760+00:00",
+      "last_reminder": null,
+      "reminder_count": 0,
+      "pending_error": "Incoming event has not completed"
+    },
+    "documents_read": [
+      {
+        "id": "4d33d21e79f0dce4bcb7",
+        "name": "funds.pdf",
+        "sha256": "4d33d21e79f0dce4bcb71b72d80b08896a01bac4b9f6c601a5dabf1551c3ac16",
+        "path": "<REPO>\\data\\files\\4d33d21e79f0dce4bcb71b72d80b08896a01bac4b9f6c601a5dabf1551c3ac16.pdf",
+        "pages": [
+          {
+            "number": 1,
+            "text": "TEST EVIDENCE / BANK STATEMENT\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: bank_statement\nLANGUAGE: en\nbank_name: Fictional Example Bank\nbank_holder: Mei Example\nbank_currency: GBP\nbank_minimum: 40000\nbank_start: 2026-08-01\nbank_end: 2026-09-28\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+            "method": "pdf_text",
+            "confidence": null
+          }
+        ],
+        "kind": "unknown",
+        "language": "unknown",
+        "problems": [],
+        "rejected": false
+      },
+      {
+        "id": "00c6abb1007cf65f295c",
+        "name": "health.pdf",
+        "sha256": "00c6abb1007cf65f295c50c3154190809f0c8ed4adaee9bd9ed5b39ccae8a340",
+        "path": "<REPO>\\data\\files\\00c6abb1007cf65f295c50c3154190809f0c8ed4adaee9bd9ed5b39ccae8a340.pdf",
+        "pages": [
+          {
+            "number": 1,
+            "text": "TEST EVIDENCE / TB\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: tb\nLANGUAGE: en\ntb_name: Mei Example\ntb_clear: true\ntb_expiry: 2027-02-01\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+            "method": "pdf_text",
+            "confidence": null
+          }
+        ],
+        "kind": "unknown",
+        "language": "unknown",
+        "problems": [],
+        "rejected": false
+      },
+      {
+        "id": "7bbd017169538c058dd7",
+        "name": "school.pdf",
+        "sha256": "7bbd017169538c058dd7cbff393410c8fdafce5a24dc79c8032fa8e3484fccf2",
+        "path": "<REPO>\\data\\files\\7bbd017169538c058dd7cbff393410c8fdafce5a24dc79c8032fa8e3484fccf2.pdf",
+        "pages": [
+          {
+            "number": 1,
+            "text": "TEST EVIDENCE / CAS\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: cas\nLANGUAGE: en\ncas_name: Mei Example\ncas_reference: TEST-CAS-2026\ntuition_due: 16000\nstudy_months: 12\nstudy_location: outside_london\nenglish_confirmed: true\natas_required: false\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+            "method": "pdf_text",
+            "confidence": null
+          }
+        ],
+        "kind": "unknown",
+        "language": "unknown",
+        "problems": [],
+        "rejected": false
+      }
+    ],
+    "working_context": {
+      "case_id": "dev_student-db3d8774",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "route": "student",
+      "facts": [
+        {
+          "key": "route",
+          "value": "student",
+          "source": "message:event_0"
+        },
+        {
+          "key": "applicant_name",
+          "value": "Mei Example",
+          "source": "message:event_0"
+        },
+        {
+          "key": "nationality",
+          "value": "China",
+          "source": "message:event_0"
+        },
+        {
+          "key": "age",
+          "value": "30",
+          "source": "message:event_0"
+        },
+        {
+          "key": "application_location",
+          "value": "outside_uk",
+          "source": "message:event_0"
+        },
+        {
+          "key": "application_date",
+          "value": "2026-10-05",
+          "source": "message:event_0"
+        },
+        {
+          "key": "dependants",
+          "value": "false",
+          "source": "message:event_0"
+        },
+        {
+          "key": "previous_refusal",
+          "value": "false",
+          "source": "message:event_0"
+        },
+        {
+          "key": "funding",
+          "value": "self",
+          "source": "message:event_0"
+        },
+        {
+          "key": "travel_start",
+          "value": "2026-11-01",
+          "source": "message:event_0"
+        },
+        {
+          "key": "residence_country",
+          "value": "China",
+          "source": "message:event_0"
+        },
+        {
+          "key": "residence_months",
+          "value": "36",
+          "source": "message:event_0"
+        },
+        {
+          "key": "stay_months",
+          "value": "12",
+          "source": "message:event_0"
+        },
+        {
+          "key": "financial_evidence_requested",
+          "value": "true",
+          "source": "message:event_0"
+        },
+        {
+          "key": "passport_name",
+          "value": "Mei Example",
+          "source": "118fc51dec7bdd86d8f7"
+        },
+        {
+          "key": "passport_number",
+          "value": "TEST-672188",
+          "source": "118fc51dec7bdd86d8f7"
+        },
+        {
+          "key": "passport_expiry",
+          "value": "2036-01-01",
+          "source": "118fc51dec7bdd86d8f7"
+        }
+      ],
+      "blockers": [
+        {
+          "id": "cas_reference",
+          "message": "请补充 CAS/学校材料中的 cas_reference 信息。"
+        },
+        {
+          "id": "cas_name",
+          "message": "请补充 CAS/学校材料中的 cas_name 信息。"
+        },
+        {
+          "id": "tuition_due",
+          "message": "请补充 CAS/学校材料中的 tuition_due 信息。"
+        },
+        {
+          "id": "study_months",
+          "message": "请补充 CAS/学校材料中的 study_months 信息。"
+        },
+        {
+          "id": "study_location",
+          "message": "请补充 CAS/学校材料中的 study_location 信息。"
+        },
+        {
+          "id": "english_confirmed",
+          "message": "请补充 CAS/学校材料中的 english_confirmed 信息。"
+        },
+        {
+          "id": "atas_required",
+          "message": "请补充 CAS/学校材料中的 atas_required 信息。"
+        },
+        {
+          "id": "finance",
+          "message": "请补充可核对的资金证明。"
+        },
+        {
+          "id": "tb_name",
+          "message": "请提供获认可机构的 TB 证明。"
+        },
+        {
+          "id": "tb_valid",
+          "message": "请核对 TB 结果及有效期。"
+        }
+      ],
+      "new_message": {
+        "id": "message:event_2",
+        "text": "Here are the remaining supporting documents."
+      },
+      "sources": {
+        "visitor": "https://www.gov.uk/government/publications/visitor-visa-guide-to-supporting-documents/guide-to-supporting-documents-visiting-the-uk",
+        "student": "https://www.gov.uk/student-visa/documents-you-must-provide",
+        "student_money": "https://www.gov.uk/student-visa/money",
+        "finance": "https://www.gov.uk/guidance/financial-evidence-for-student-and-child-student-route-applicants",
+        "worker": "https://www.gov.uk/skilled-worker-visa/documents-you-must-provide",
+        "worker_money": "https://www.gov.uk/skilled-worker-visa/how-much-it-costs",
+        "english": "https://www.gov.uk/skilled-worker-visa/knowledge-of-english",
+        "tb": "https://www.gov.uk/tb-test-visa",
+        "scope": "project:adult-outside-uk-material-preparation-v1"
+      },
+      "sop": {
+        "common": "Adult main applicant outside UK, no dependants or refusal explanation. Confirm route, identity, nationality, dates and funding. Non-English/Welsh evidence needs a complete verified translation. Unsupported circumstances go to an adviser. Unknown is never pass.",
+        "student": "CAS information; tuition plus up to 9 months of maintenance (London GBP 1529/month, elsewhere GBP 1171/month). If financial documents required: 28 consecutive days, period end within 31 days of application. Differential evidence does not remove the financial condition. Conditional TB, ATAS and translations."
+      },
+      "recent_dialogue": [
+        {
+          "event_id": "event_0",
+          "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "at": "2026-10-05T16:27:46.402181+00:00"
+        },
+        {
+          "event_id": "event_1",
+          "text": "Here is my identity document.",
+          "reply": "我们先补齐以下信息：\n1. 请补充 CAS/学校材料中的 cas_reference 信息。\n2. 请补充 CAS/学校材料中的 cas_name 信息。\n3. 请补充 CAS/学校材料中的 tuition_due 信息。",
+          "at": "2026-10-05T16:27:49.368760+00:00"
+        }
+      ],
+      "new_documents": [
+        {
+          "id": "4d33d21e79f0dce4bcb7",
+          "name": "funds.pdf",
+          "problems": [],
+          "pages": [
+            {
+              "page": 1,
+              "text": "TEST EVIDENCE / BANK STATEMENT\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: bank_statement\nLANGUAGE: en\nbank_name: Fictional Example Bank\nbank_holder: Mei Example\nbank_currency: GBP\nbank_minimum: 40000\nbank_start: 2026-08-01\nbank_end: 2026-09-28\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n"
+            }
+          ]
+        },
+        {
+          "id": "00c6abb1007cf65f295c",
+          "name": "health.pdf",
+          "problems": [],
+          "pages": [
+            {
+              "page": 1,
+              "text": "TEST EVIDENCE / TB\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: tb\nLANGUAGE: en\ntb_name: Mei Example\ntb_clear: true\ntb_expiry: 2027-02-01\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n"
+            }
+          ]
+        },
+        {
+          "id": "7bbd017169538c058dd7",
+          "name": "school.pdf",
+          "problems": [],
+          "pages": [
+            {
+              "page": 1,
+              "text": "TEST EVIDENCE / CAS\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: cas\nLANGUAGE: en\ncas_name: Mei Example\ncas_reference: TEST-CAS-2026\ntuition_due: 16000\nstudy_months: 12\nstudy_location: outside_london\nenglish_confirmed: true\natas_required: false\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n"
+            }
+          ]
+        }
+      ]
+    },
+    "prompt_version": "extract-v1",
+    "context_chars": 7763,
+    "model": "deepseek-flash",
+    "http_requests": 1,
+    "http_responses": [
+      {
+        "status": 200,
+        "usage": {
+          "prompt_tokens": 3023,
+          "completion_tokens": 972,
+          "total_tokens": 3995,
+          "prompt_tokens_details": {
+            "cached_tokens": 1408
+          },
+          "prompt_cache_hit_tokens": 1408,
+          "prompt_cache_miss_tokens": 1615
+        }
+      }
+    ],
+    "usage": {
+      "requests": 1,
+      "input_tokens": 3023,
+      "output_tokens": 972
+    },
+    "proposal": {
+      "facts": [
+        {
+          "key": "bank_name",
+          "value": "Fictional Example Bank",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_name: Fictional Example Bank",
+          "confidence": "high"
+        },
+        {
+          "key": "bank_holder",
+          "value": "Mei Example",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_holder: Mei Example",
+          "confidence": "high"
+        },
+        {
+          "key": "bank_currency",
+          "value": "GBP",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_currency: GBP",
+          "confidence": "high"
+        },
+        {
+          "key": "bank_minimum",
+          "value": "40000",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_minimum: 40000",
+          "confidence": "high"
+        },
+        {
+          "key": "bank_start",
+          "value": "2026-08-01",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_start: 2026-08-01",
+          "confidence": "high"
+        },
+        {
+          "key": "bank_end",
+          "value": "2026-09-28",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_end: 2026-09-28",
+          "confidence": "high"
+        },
+        {
+          "key": "tb_name",
+          "value": "Mei Example",
+          "source_id": "00c6abb1007cf65f295c",
+          "page": 1,
+          "quote": "tb_name: Mei Example",
+          "confidence": "high"
+        },
+        {
+          "key": "tb_clear",
+          "value": "true",
+          "source_id": "00c6abb1007cf65f295c",
+          "page": 1,
+          "quote": "tb_clear: true",
+          "confidence": "high"
+        },
+        {
+          "key": "tb_expiry",
+          "value": "2027-02-01",
+          "source_id": "00c6abb1007cf65f295c",
+          "page": 1,
+          "quote": "tb_expiry: 2027-02-01",
+          "confidence": "high"
+        },
+        {
+          "key": "cas_name",
+          "value": "Mei Example",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "cas_name: Mei Example",
+          "confidence": "high"
+        },
+        {
+          "key": "cas_reference",
+          "value": "TEST-CAS-2026",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "cas_reference: TEST-CAS-2026",
+          "confidence": "high"
+        },
+        {
+          "key": "tuition_due",
+          "value": "16000",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "tuition_due: 16000",
+          "confidence": "high"
+        },
+        {
+          "key": "study_months",
+          "value": "12",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "study_months: 12",
+          "confidence": "high"
+        },
+        {
+          "key": "study_location",
+          "value": "outside_london",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "study_location: outside_london",
+          "confidence": "high"
+        },
+        {
+          "key": "english_confirmed",
+          "value": "true",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "english_confirmed: true",
+          "confidence": "high"
+        },
+        {
+          "key": "atas_required",
+          "value": "false",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "atas_required: false",
+          "confidence": "high"
+        }
+      ],
+      "documents": [
+        {
+          "document_id": "4d33d21e79f0dce4bcb7",
+          "kind": "bank_statement",
+          "language": "en"
+        },
+        {
+          "document_id": "00c6abb1007cf65f295c",
+          "kind": "tb",
+          "language": "en"
+        },
+        {
+          "document_id": "7bbd017169538c058dd7",
+          "kind": "cas",
+          "language": "en"
+        }
+      ]
+    },
+    "messages": [
+      {
+        "kind": "request",
+        "parts": [
+          {
+            "content": "{\"case_id\": \"dev_student-db3d8774\", \"rule_version\": \"2026-10-05-9a48d3a4044e\", \"route\": \"student\", \"facts\": [{\"key\": \"route\", \"value\": \"student\", \"source\": \"message:event_0\"}, {\"key\": \"applicant_name\", \"value\": \"Mei Example\", \"source\": \"message:event_0\"}, {\"key\": \"nationality\", \"value\": \"China\", \"source\": \"message:event_0\"}, {\"key\": \"age\", \"value\": \"30\", \"source\": \"message:event_0\"}, {\"key\": \"application_location\", \"value\": \"outside_uk\", \"source\": \"message:event_0\"}, {\"key\": \"application_date\", \"value\": \"2026-10-05\", \"source\": \"message:event_0\"}, {\"key\": \"dependants\", \"value\": \"false\", \"source\": \"message:event_0\"}, {\"key\": \"previous_refusal\", \"value\": \"false\", \"source\": \"message:event_0\"}, {\"key\": \"funding\", \"value\": \"self\", \"source\": \"message:event_0\"}, {\"key\": \"travel_start\", \"value\": \"2026-11-01\", \"source\": \"message:event_0\"}, {\"key\": \"residence_country\", \"value\": \"China\", \"source\": \"message:event_0\"}, {\"key\": \"residence_months\", \"value\": \"36\", \"source\": \"message:event_0\"}, {\"key\": \"stay_months\", \"value\": \"12\", \"source\": \"message:event_0\"}, {\"key\": \"financial_evidence_requested\", \"value\": \"true\", \"source\": \"message:event_0\"}, {\"key\": \"passport_name\", \"value\": \"Mei Example\", \"source\": \"118fc51dec7bdd86d8f7\"}, {\"key\": \"passport_number\", \"value\": \"TEST-672188\", \"source\": \"118fc51dec7bdd86d8f7\"}, {\"key\": \"passport_expiry\", \"value\": \"2036-01-01\", \"source\": \"118fc51dec7bdd86d8f7\"}], \"blockers\": [{\"id\": \"cas_reference\", \"message\": \"请补充 CAS/学校材料中的 cas_reference 信息。\"}, {\"id\": \"cas_name\", \"message\": \"请补充 CAS/学校材料中的 cas_name 信息。\"}, {\"id\": \"tuition_due\", \"message\": \"请补充 CAS/学校材料中的 tuition_due 信息。\"}, {\"id\": \"study_months\", \"message\": \"请补充 CAS/学校材料中的 study_months 信息。\"}, {\"id\": \"study_location\", \"message\": \"请补充 CAS/学校材料中的 study_location 信息。\"}, {\"id\": \"english_confirmed\", \"message\": \"请补充 CAS/学校材料中的 english_confirmed 信息。\"}, {\"id\": \"atas_required\", \"message\": \"请补充 CAS/学校材料中的 atas_required 信息。\"}, {\"id\": \"finance\", \"message\": \"请补充可核对的资金证明。\"}, {\"id\": \"tb_name\", \"message\": \"请提供获认可机构的 TB 证明。\"}, {\"id\": \"tb_valid\", \"message\": \"请核对 TB 结果及有效期。\"}], \"new_message\": {\"id\": \"message:event_2\", \"text\": \"Here are the remaining supporting documents.\"}, \"sources\": {\"visitor\": \"https://www.gov.uk/government/publications/visitor-visa-guide-to-supporting-documents/guide-to-supporting-documents-visiting-the-uk\", \"student\": \"https://www.gov.uk/student-visa/documents-you-must-provide\", \"student_money\": \"https://www.gov.uk/student-visa/money\", \"finance\": \"https://www.gov.uk/guidance/financial-evidence-for-student-and-child-student-route-applicants\", \"worker\": \"https://www.gov.uk/skilled-worker-visa/documents-you-must-provide\", \"worker_money\": \"https://www.gov.uk/skilled-worker-visa/how-much-it-costs\", \"english\": \"https://www.gov.uk/skilled-worker-visa/knowledge-of-english\", \"tb\": \"https://www.gov.uk/tb-test-visa\", \"scope\": \"project:adult-outside-uk-material-preparation-v1\"}, \"sop\": {\"common\": \"Adult main applicant outside UK, no dependants or refusal explanation. Confirm route, identity, nationality, dates and funding. Non-English/Welsh evidence needs a complete verified translation. Unsupported circumstances go to an adviser. Unknown is never pass.\", \"student\": \"CAS information; tuition plus up to 9 months of maintenance (London GBP 1529/month, elsewhere GBP 1171/month). If financial documents required: 28 consecutive days, period end within 31 days of application. Differential evidence does not remove the financial condition. Conditional TB, ATAS and translations.\"}, \"recent_dialogue\": [{\"event_id\": \"event_0\", \"text\": \"Hello, please help me prepare my UK application.\\nroute: student\\napplicant_name: Mei Example\\nnationality: China\\nage: 30\\napplication_location: outside_uk\\napplication_date: 2026-10-05\\ndependants: false\\nprevious_refusal: false\\nfunding: self\\ntravel_start: 2026-11-01\\nresidence_country: China\\nresidence_months: 36\\nstay_months: 12\\nfinancial_evidence_requested: true\", \"reply\": \"我们先补齐以下信息：\\n1. 请上传有效护照/旅行证件的个人信息页。\\n2. 证件号码缺失或不可读，请补充。\\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。\", \"at\": \"2026-10-05T16:27:46.402181+00:00\"}, {\"event_id\": \"event_1\", \"text\": \"Here is my identity document.\", \"reply\": \"我们先补齐以下信息：\\n1. 请补充 CAS/学校材料中的 cas_reference 信息。\\n2. 请补充 CAS/学校材料中的 cas_name 信息。\\n3. 请补充 CAS/学校材料中的 tuition_due 信息。\", \"at\": \"2026-10-05T16:27:49.368760+00:00\"}], \"new_documents\": [{\"id\": \"4d33d21e79f0dce4bcb7\", \"name\": \"funds.pdf\", \"problems\": [], \"pages\": [{\"page\": 1, \"text\": \"TEST EVIDENCE / BANK STATEMENT\\nSYNTHETIC - fictitious people and institutions - not a valid document\\nDOCUMENT_KIND: bank_statement\\nLANGUAGE: en\\nbank_name: Fictional Example Bank\\nbank_holder: Mei Example\\nbank_currency: GBP\\nbank_minimum: 40000\\nbank_start: 2026-08-01\\nbank_end: 2026-09-28\\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\\n\"}]}, {\"id\": \"00c6abb1007cf65f295c\", \"name\": \"health.pdf\", \"problems\": [], \"pages\": [{\"page\": 1, \"text\": \"TEST EVIDENCE / TB\\nSYNTHETIC - fictitious people and institutions - not a valid document\\nDOCUMENT_KIND: tb\\nLANGUAGE: en\\ntb_name: Mei Example\\ntb_clear: true\\ntb_expiry: 2027-02-01\\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\\n\"}]}, {\"id\": \"7bbd017169538c058dd7\", \"name\": \"school.pdf\", \"problems\": [], \"pages\": [{\"page\": 1, \"text\": \"TEST EVIDENCE / CAS\\nSYNTHETIC - fictitious people and institutions - not a valid document\\nDOCUMENT_KIND: cas\\nLANGUAGE: en\\ncas_name: Mei Example\\ncas_reference: TEST-CAS-2026\\ntuition_due: 16000\\nstudy_months: 12\\nstudy_location: outside_london\\nenglish_confirmed: true\\natas_required: false\\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\\n\"}]}]}",
+            "timestamp": "2026-10-05 16:27:51.361231+00:00",
+            "part_kind": "user-prompt"
+          }
+        ]
+      },
+      {
+        "kind": "response",
+        "parts": [
+          {
+            "tool_name": "final_result",
+            "args": "{\"facts\": [{\"key\": \"bank_name\", \"value\": \"Fictional Example Bank\", \"source_id\": \"4d33d21e79f0dce4bcb7\", \"page\": 1, \"quote\": \"bank_name: Fictional Example Bank\"}, {\"key\": \"bank_holder\", \"value\": \"Mei Example\", \"source_id\": \"4d33d21e79f0dce4bcb7\", \"page\": 1, \"quote\": \"bank_holder: Mei Example\"}, {\"key\": \"bank_currency\", \"value\": \"GBP\", \"source_id\": \"4d33d21e79f0dce4bcb7\", \"page\": 1, \"quote\": \"bank_currency: GBP\"}, {\"key\": \"bank_minimum\", \"value\": \"40000\", \"source_id\": \"4d33d21e79f0dce4bcb7\", \"page\": 1, \"quote\": \"bank_minimum: 40000\"}, {\"key\": \"bank_start\", \"value\": \"2026-08-01\", \"source_id\": \"4d33d21e79f0dce4bcb7\", \"page\": 1, \"quote\": \"bank_start: 2026-08-01\"}, {\"key\": \"bank_end\", \"value\": \"2026-09-28\", \"source_id\": \"4d33d21e79f0dce4bcb7\", \"page\": 1, \"quote\": \"bank_end: 2026-09-28\"}, {\"key\": \"tb_name\", \"value\": \"Mei Example\", \"source_id\": \"00c6abb1007cf65f295c\", \"page\": 1, \"quote\": \"tb_name: Mei Example\"}, {\"key\": \"tb_clear\", \"value\": \"true\", \"source_id\": \"00c6abb1007cf65f295c\", \"page\": 1, \"quote\": \"tb_clear: true\"}, {\"key\": \"tb_expiry\", \"value\": \"2027-02-01\", \"source_id\": \"00c6abb1007cf65f295c\", \"page\": 1, \"quote\": \"tb_expiry: 2027-02-01\"}, {\"key\": \"cas_name\", \"value\": \"Mei Example\", \"source_id\": \"7bbd017169538c058dd7\", \"page\": 1, \"quote\": \"cas_name: Mei Example\"}, {\"key\": \"cas_reference\", \"value\": \"TEST-CAS-2026\", \"source_id\": \"7bbd017169538c058dd7\", \"page\": 1, \"quote\": \"cas_reference: TEST-CAS-2026\"}, {\"key\": \"tuition_due\", \"value\": \"16000\", \"source_id\": \"7bbd017169538c058dd7\", \"page\": 1, \"quote\": \"tuition_due: 16000\"}, {\"key\": \"study_months\", \"value\": \"12\", \"source_id\": \"7bbd017169538c058dd7\", \"page\": 1, \"quote\": \"study_months: 12\"}, {\"key\": \"study_location\", \"value\": \"outside_london\", \"source_id\": \"7bbd017169538c058dd7\", \"page\": 1, \"quote\": \"study_location: outside_london\"}, {\"key\": \"english_confirmed\", \"value\": \"true\", \"source_id\": \"7bbd017169538c058dd7\", \"page\": 1, \"quote\": \"english_confirmed: true\"}, {\"key\": \"atas_required\", \"value\": \"false\", \"source_id\": \"7bbd017169538c058dd7\", \"page\": 1, \"quote\": \"atas_required: false\"}], \"documents\": [{\"document_id\": \"4d33d21e79f0dce4bcb7\", \"kind\": \"bank_statement\", \"language\": \"en\"}, {\"document_id\": \"00c6abb1007cf65f295c\", \"kind\": \"tb\", \"language\": \"en\"}, {\"document_id\": \"7bbd017169538c058dd7\", \"kind\": \"cas\", \"language\": \"en\"}]}",
+            "tool_call_id": "call_00_YbJxmeNHwcJCT7w5RzqS4815",
+            "tool_kind": null,
+            "id": null,
+            "provider_name": null,
+            "provider_details": null,
+            "part_kind": "tool-call"
+          }
+        ]
+      },
+      {
+        "kind": "request",
+        "parts": [
+          {
+            "tool_name": "final_result",
+            "content": "Final result processed.",
+            "tool_call_id": "call_00_YbJxmeNHwcJCT7w5RzqS4815",
+            "tool_kind": null,
+            "metadata": null,
+            "timestamp": "2026-10-05 16:27:54.455376+00:00",
+            "outcome": "success",
+            "part_kind": "tool-return"
+          }
+        ]
+      }
+    ],
+    "duration_seconds": 3.11,
+    "usage_incomplete": false,
+    "rejected_candidates": [],
+    "after": {
+      "id": "dev_student-db3d8774",
+      "version": 3,
+      "route": "student",
+      "status": "READY_FOR_REVIEW",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "facts": [
+        {
+          "key": "route",
+          "value": "student",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "route: student",
+          "confidence": "high",
+          "id": "87940d3d745125278bc0",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "applicant_name",
+          "value": "Mei Example",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "applicant_name: Mei Example",
+          "confidence": "high",
+          "id": "6e06388f301c5b9fd42c",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "nationality",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "nationality: China",
+          "confidence": "high",
+          "id": "a4a8a81053b36ba67bed",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "age",
+          "value": "30",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "age: 30",
+          "confidence": "high",
+          "id": "e29937eb021355c8330a",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_location",
+          "value": "outside_uk",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_location: outside_uk",
+          "confidence": "high",
+          "id": "4c7eedbe5cb73f40f680",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_date",
+          "value": "2026-10-05",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_date: 2026-10-05",
+          "confidence": "high",
+          "id": "1486e38e2ba4297b7699",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "dependants",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "dependants: false",
+          "confidence": "high",
+          "id": "17cd8c96b43fdf60d532",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "previous_refusal",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "previous_refusal: false",
+          "confidence": "high",
+          "id": "3ad8b08d69af59c0bb08",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "funding",
+          "value": "self",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "funding: self",
+          "confidence": "high",
+          "id": "0ed8d8bb5fdead903b07",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "travel_start",
+          "value": "2026-11-01",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "travel_start: 2026-11-01",
+          "confidence": "high",
+          "id": "48bb89503e60d8a6b284",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_country",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_country: China",
+          "confidence": "high",
+          "id": "913327f67d433511be40",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_months",
+          "value": "36",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_months: 36",
+          "confidence": "high",
+          "id": "0767b626a0ebe2bfa512",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "stay_months",
+          "value": "12",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "stay_months: 12",
+          "confidence": "high",
+          "id": "376abf672c3616e7c2d1",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "financial_evidence_requested",
+          "value": "true",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "financial_evidence_requested: true",
+          "confidence": "high",
+          "id": "55242eebb2da262f492f",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_name",
+          "value": "Mei Example",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_name: Mei Example",
+          "confidence": "high",
+          "id": "72e243f8aaac497b91d1",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_number",
+          "value": "TEST-672188",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_number: TEST-672188",
+          "confidence": "high",
+          "id": "8cd510bd4e7214d3d768",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_expiry",
+          "value": "2036-01-01",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_expiry: 2036-01-01",
+          "confidence": "high",
+          "id": "a66bee7822fde23c4839",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_name",
+          "value": "Fictional Example Bank",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_name: Fictional Example Bank",
+          "confidence": "high",
+          "id": "82894f8055597736d229",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_holder",
+          "value": "Mei Example",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_holder: Mei Example",
+          "confidence": "high",
+          "id": "e6d34bd42ba2de231f17",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_currency",
+          "value": "GBP",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_currency: GBP",
+          "confidence": "high",
+          "id": "93b934eb8f71a752eb5e",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_minimum",
+          "value": "40000",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_minimum: 40000",
+          "confidence": "high",
+          "id": "76acc3b843a79ddb1e2e",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_start",
+          "value": "2026-08-01",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_start: 2026-08-01",
+          "confidence": "high",
+          "id": "f9c0e84d9dd71edf0347",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_end",
+          "value": "2026-09-28",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_end: 2026-09-28",
+          "confidence": "high",
+          "id": "f88df03b3eab1b74a9d3",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "tb_name",
+          "value": "Mei Example",
+          "source_id": "00c6abb1007cf65f295c",
+          "page": 1,
+          "quote": "tb_name: Mei Example",
+          "confidence": "high",
+          "id": "777235cc751d8e356eac",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "tb_clear",
+          "value": "true",
+          "source_id": "00c6abb1007cf65f295c",
+          "page": 1,
+          "quote": "tb_clear: true",
+          "confidence": "high",
+          "id": "cf85331af15693e69031",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "tb_expiry",
+          "value": "2027-02-01",
+          "source_id": "00c6abb1007cf65f295c",
+          "page": 1,
+          "quote": "tb_expiry: 2027-02-01",
+          "confidence": "high",
+          "id": "48dc5f0bcc710299ba13",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "cas_name",
+          "value": "Mei Example",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "cas_name: Mei Example",
+          "confidence": "high",
+          "id": "a123fc9e11e644917378",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "cas_reference",
+          "value": "TEST-CAS-2026",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "cas_reference: TEST-CAS-2026",
+          "confidence": "high",
+          "id": "96e41f9887ded0e2cc66",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "tuition_due",
+          "value": "16000",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "tuition_due: 16000",
+          "confidence": "high",
+          "id": "597f2fc5d213ead23b65",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "study_months",
+          "value": "12",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "study_months: 12",
+          "confidence": "high",
+          "id": "e2ef0e6bcac691e54da0",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "study_location",
+          "value": "outside_london",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "study_location: outside_london",
+          "confidence": "high",
+          "id": "8a0d15319905a3873e05",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "english_confirmed",
+          "value": "true",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "english_confirmed: true",
+          "confidence": "high",
+          "id": "8dcf64ad98463c821f03",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "atas_required",
+          "value": "false",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "atas_required: false",
+          "confidence": "high",
+          "id": "2c88828d67f77d39d318",
+          "active": true,
+          "confirmed_by": null
+        }
+      ],
+      "documents": [
+        {
+          "id": "118fc51dec7bdd86d8f7",
+          "name": "identity.pdf",
+          "sha256": "118fc51dec7bdd86d8f70eb6b3bbbb5b9f3d8ad57e0b884d6cf89e11f25d871a",
+          "path": "<REPO>\\data\\files\\118fc51dec7bdd86d8f70eb6b3bbbb5b9f3d8ad57e0b884d6cf89e11f25d871a.pdf",
+          "pages": [
+            {
+              "number": 1,
+              "text": "TEST EVIDENCE / PASSPORT\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: passport\nLANGUAGE: en\npassport_name: Mei Example\npassport_number: TEST-672188\npassport_expiry: 2036-01-01\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+              "method": "pdf_text",
+              "confidence": null
+            }
+          ],
+          "kind": "passport",
+          "language": "en",
+          "problems": [],
+          "rejected": false
+        },
+        {
+          "id": "4d33d21e79f0dce4bcb7",
+          "name": "funds.pdf",
+          "sha256": "4d33d21e79f0dce4bcb71b72d80b08896a01bac4b9f6c601a5dabf1551c3ac16",
+          "path": "<REPO>\\data\\files\\4d33d21e79f0dce4bcb71b72d80b08896a01bac4b9f6c601a5dabf1551c3ac16.pdf",
+          "pages": [
+            {
+              "number": 1,
+              "text": "TEST EVIDENCE / BANK STATEMENT\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: bank_statement\nLANGUAGE: en\nbank_name: Fictional Example Bank\nbank_holder: Mei Example\nbank_currency: GBP\nbank_minimum: 40000\nbank_start: 2026-08-01\nbank_end: 2026-09-28\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+              "method": "pdf_text",
+              "confidence": null
+            }
+          ],
+          "kind": "bank_statement",
+          "language": "en",
+          "problems": [],
+          "rejected": false
+        },
+        {
+          "id": "00c6abb1007cf65f295c",
+          "name": "health.pdf",
+          "sha256": "00c6abb1007cf65f295c50c3154190809f0c8ed4adaee9bd9ed5b39ccae8a340",
+          "path": "<REPO>\\data\\files\\00c6abb1007cf65f295c50c3154190809f0c8ed4adaee9bd9ed5b39ccae8a340.pdf",
+          "pages": [
+            {
+              "number": 1,
+              "text": "TEST EVIDENCE / TB\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: tb\nLANGUAGE: en\ntb_name: Mei Example\ntb_clear: true\ntb_expiry: 2027-02-01\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+              "method": "pdf_text",
+              "confidence": null
+            }
+          ],
+          "kind": "tb",
+          "language": "en",
+          "problems": [],
+          "rejected": false
+        },
+        {
+          "id": "7bbd017169538c058dd7",
+          "name": "school.pdf",
+          "sha256": "7bbd017169538c058dd7cbff393410c8fdafce5a24dc79c8032fa8e3484fccf2",
+          "path": "<REPO>\\data\\files\\7bbd017169538c058dd7cbff393410c8fdafce5a24dc79c8032fa8e3484fccf2.pdf",
+          "pages": [
+            {
+              "number": 1,
+              "text": "TEST EVIDENCE / CAS\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: cas\nLANGUAGE: en\ncas_name: Mei Example\ncas_reference: TEST-CAS-2026\ntuition_due: 16000\nstudy_months: 12\nstudy_location: outside_london\nenglish_confirmed: true\natas_required: false\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+              "method": "pdf_text",
+              "confidence": null
+            }
+          ],
+          "kind": "cas",
+          "language": "en",
+          "problems": [],
+          "rejected": false
+        }
+      ],
+      "checks": [
+        {
+          "id": "route",
+          "status": "pass",
+          "message": "请说明来英国的主要目的，以确认签证路线。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "87940d3d745125278bc0"
+          ]
+        },
+        {
+          "id": "applicant_name",
+          "status": "pass",
+          "message": "请提供与身份证件一致的申请人姓名。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "6e06388f301c5b9fd42c"
+          ]
+        },
+        {
+          "id": "application_location",
+          "status": "pass",
+          "message": "请确认在英国境外申请；境内申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "4c7eedbe5cb73f40f680"
+          ]
+        },
+        {
+          "id": "dependants",
+          "status": "pass",
+          "message": "请确认是否有随行家属；家属申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "17cd8c96b43fdf60d532"
+          ]
+        },
+        {
+          "id": "previous_refusal",
+          "status": "pass",
+          "message": "请说明是否有拒签记录；相关解释需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "3ad8b08d69af59c0bb08"
+          ]
+        },
+        {
+          "id": "adult",
+          "status": "pass",
+          "message": "请确认年龄；未成年人材料由顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "e29937eb021355c8330a"
+          ]
+        },
+        {
+          "id": "nationality",
+          "status": "pass",
+          "message": "请提供国籍，以判断材料和豁免条件。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "a4a8a81053b36ba67bed"
+          ]
+        },
+        {
+          "id": "application_date",
+          "status": "pass",
+          "message": "请提供计划申请日期（YYYY-MM-DD），用于材料时效检查。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "1486e38e2ba4297b7699"
+          ]
+        },
+        {
+          "id": "passport_name",
+          "status": "pass",
+          "message": "请上传有效护照/旅行证件的个人信息页。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1"
+          ]
+        },
+        {
+          "id": "passport_number",
+          "status": "pass",
+          "message": "证件号码缺失或不可读，请补充。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "8cd510bd4e7214d3d768"
+          ]
+        },
+        {
+          "id": "passport_valid",
+          "status": "pass",
+          "message": "请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "a66bee7822fde23c4839"
+          ]
+        },
+        {
+          "id": "name:applicant_name",
+          "status": "pass",
+          "message": "applicant_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1",
+            "6e06388f301c5b9fd42c"
+          ]
+        },
+        {
+          "id": "name:bank_holder",
+          "status": "pass",
+          "message": "bank_holder 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1",
+            "e6d34bd42ba2de231f17"
+          ]
+        },
+        {
+          "id": "name:cas_name",
+          "status": "pass",
+          "message": "cas_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1",
+            "a123fc9e11e644917378"
+          ]
+        },
+        {
+          "id": "name:tb_name",
+          "status": "pass",
+          "message": "tb_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1",
+            "777235cc751d8e356eac"
+          ]
+        },
+        {
+          "id": "funding",
+          "status": "pass",
+          "message": "请说明资金来源：self（本人）或 employer（雇主）。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "0ed8d8bb5fdead903b07"
+          ]
+        },
+        {
+          "id": "cas_reference",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 cas_reference 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "96e41f9887ded0e2cc66"
+          ]
+        },
+        {
+          "id": "cas_name",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 cas_name 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "a123fc9e11e644917378"
+          ]
+        },
+        {
+          "id": "tuition_due",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 tuition_due 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "597f2fc5d213ead23b65"
+          ]
+        },
+        {
+          "id": "study_months",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 study_months 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "e2ef0e6bcac691e54da0"
+          ]
+        },
+        {
+          "id": "study_location",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 study_location 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "8a0d15319905a3873e05"
+          ]
+        },
+        {
+          "id": "english_confirmed",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 english_confirmed 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "8dcf64ad98463c821f03"
+          ]
+        },
+        {
+          "id": "atas_required",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 atas_required 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "2c88828d67f77d39d318"
+          ]
+        },
+        {
+          "id": "financial_evidence_requested",
+          "status": "pass",
+          "message": "UKVI 是否已要求提供财务证明？",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "55242eebb2da262f492f"
+          ]
+        },
+        {
+          "id": "finance",
+          "status": "pass",
+          "message": "已核对资金证明字段；所需金额 GBP 26539。",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "82894f8055597736d229",
+            "e6d34bd42ba2de231f17",
+            "93b934eb8f71a752eb5e",
+            "76acc3b843a79ddb1e2e",
+            "f9c0e84d9dd71edf0347",
+            "f88df03b3eab1b74a9d3"
+          ]
+        },
+        {
+          "id": "atas",
+          "status": "not_applicable",
+          "message": "CAS 表示无需 ATAS，顾问复核适用性。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "residence_country",
+          "status": "pass",
+          "message": "请说明近半年的居住国家，用于 TB 条件判断。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": [
+            "913327f67d433511be40"
+          ]
+        },
+        {
+          "id": "tb_name",
+          "status": "pass",
+          "message": "请提供获认可机构的 TB 证明。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": [
+            "777235cc751d8e356eac"
+          ]
+        },
+        {
+          "id": "tb_valid",
+          "status": "pass",
+          "message": "请核对 TB 结果及有效期。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": []
+        }
+      ],
+      "history": [
+        {
+          "event_id": "event_0",
+          "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "at": "2026-10-05T16:27:46.402181+00:00"
+        },
+        {
+          "event_id": "event_1",
+          "text": "Here is my identity document.",
+          "reply": "我们先补齐以下信息：\n1. 请补充 CAS/学校材料中的 cas_reference 信息。\n2. 请补充 CAS/学校材料中的 cas_name 信息。\n3. 请补充 CAS/学校材料中的 tuition_due 信息。",
+          "at": "2026-10-05T16:27:49.368760+00:00"
+        },
+        {
+          "event_id": "event_2",
+          "text": "Here are the remaining supporting documents.",
+          "reply": "已整理当前材料并完成本轮检查，材料包已生成。请顾问核对原件和适用条件后确认。",
+          "at": "2026-10-05T16:27:51.331774+00:00"
+        }
+      ],
+      "reviews": [],
+      "approval": null,
+      "pack_path": "<REPO>\\data\\packs\\dev_student-db3d8774\\v3-4b89fc61ba47.zip",
+      "last_contact": "2026-10-05T16:27:51.331774+00:00",
+      "last_reminder": null,
+      "reminder_count": 0,
+      "pending_error": null
+    }
+  },
+  {
+    "run_id": "4828bbc22dd34afdb86d6c1001d9fe2b",
+    "case_id": "dev_student-db3d8774",
+    "recorded_at": "2026-10-05T16:27:54.550833+00:00",
+    "review": {
+      "decision": "approve",
+      "reviewer": "synthetic-test-adviser",
+      "notes": "Scripted adviser action on synthetic fixtures; not a real professional review.",
+      "target": null,
+      "at": "2026-10-05T16:27:54.508214+00:00",
+      "version": 3
+    },
+    "after": {
+      "id": "dev_student-db3d8774",
+      "version": 3,
+      "route": "student",
+      "status": "COMPLETE",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "facts": [
+        {
+          "key": "route",
+          "value": "student",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "route: student",
+          "confidence": "high",
+          "id": "87940d3d745125278bc0",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "applicant_name",
+          "value": "Mei Example",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "applicant_name: Mei Example",
+          "confidence": "high",
+          "id": "6e06388f301c5b9fd42c",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "nationality",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "nationality: China",
+          "confidence": "high",
+          "id": "a4a8a81053b36ba67bed",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "age",
+          "value": "30",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "age: 30",
+          "confidence": "high",
+          "id": "e29937eb021355c8330a",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_location",
+          "value": "outside_uk",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_location: outside_uk",
+          "confidence": "high",
+          "id": "4c7eedbe5cb73f40f680",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "application_date",
+          "value": "2026-10-05",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "application_date: 2026-10-05",
+          "confidence": "high",
+          "id": "1486e38e2ba4297b7699",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "dependants",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "dependants: false",
+          "confidence": "high",
+          "id": "17cd8c96b43fdf60d532",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "previous_refusal",
+          "value": "false",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "previous_refusal: false",
+          "confidence": "high",
+          "id": "3ad8b08d69af59c0bb08",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "funding",
+          "value": "self",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "funding: self",
+          "confidence": "high",
+          "id": "0ed8d8bb5fdead903b07",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "travel_start",
+          "value": "2026-11-01",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "travel_start: 2026-11-01",
+          "confidence": "high",
+          "id": "48bb89503e60d8a6b284",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_country",
+          "value": "China",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_country: China",
+          "confidence": "high",
+          "id": "913327f67d433511be40",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "residence_months",
+          "value": "36",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "residence_months: 36",
+          "confidence": "high",
+          "id": "0767b626a0ebe2bfa512",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "stay_months",
+          "value": "12",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "stay_months: 12",
+          "confidence": "high",
+          "id": "376abf672c3616e7c2d1",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "financial_evidence_requested",
+          "value": "true",
+          "source_id": "message:event_0",
+          "page": null,
+          "quote": "financial_evidence_requested: true",
+          "confidence": "high",
+          "id": "55242eebb2da262f492f",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_name",
+          "value": "Mei Example",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_name: Mei Example",
+          "confidence": "high",
+          "id": "72e243f8aaac497b91d1",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_number",
+          "value": "TEST-672188",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_number: TEST-672188",
+          "confidence": "high",
+          "id": "8cd510bd4e7214d3d768",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "passport_expiry",
+          "value": "2036-01-01",
+          "source_id": "118fc51dec7bdd86d8f7",
+          "page": 1,
+          "quote": "passport_expiry: 2036-01-01",
+          "confidence": "high",
+          "id": "a66bee7822fde23c4839",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_name",
+          "value": "Fictional Example Bank",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_name: Fictional Example Bank",
+          "confidence": "high",
+          "id": "82894f8055597736d229",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_holder",
+          "value": "Mei Example",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_holder: Mei Example",
+          "confidence": "high",
+          "id": "e6d34bd42ba2de231f17",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_currency",
+          "value": "GBP",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_currency: GBP",
+          "confidence": "high",
+          "id": "93b934eb8f71a752eb5e",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_minimum",
+          "value": "40000",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_minimum: 40000",
+          "confidence": "high",
+          "id": "76acc3b843a79ddb1e2e",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_start",
+          "value": "2026-08-01",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_start: 2026-08-01",
+          "confidence": "high",
+          "id": "f9c0e84d9dd71edf0347",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "bank_end",
+          "value": "2026-09-28",
+          "source_id": "4d33d21e79f0dce4bcb7",
+          "page": 1,
+          "quote": "bank_end: 2026-09-28",
+          "confidence": "high",
+          "id": "f88df03b3eab1b74a9d3",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "tb_name",
+          "value": "Mei Example",
+          "source_id": "00c6abb1007cf65f295c",
+          "page": 1,
+          "quote": "tb_name: Mei Example",
+          "confidence": "high",
+          "id": "777235cc751d8e356eac",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "tb_clear",
+          "value": "true",
+          "source_id": "00c6abb1007cf65f295c",
+          "page": 1,
+          "quote": "tb_clear: true",
+          "confidence": "high",
+          "id": "cf85331af15693e69031",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "tb_expiry",
+          "value": "2027-02-01",
+          "source_id": "00c6abb1007cf65f295c",
+          "page": 1,
+          "quote": "tb_expiry: 2027-02-01",
+          "confidence": "high",
+          "id": "48dc5f0bcc710299ba13",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "cas_name",
+          "value": "Mei Example",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "cas_name: Mei Example",
+          "confidence": "high",
+          "id": "a123fc9e11e644917378",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "cas_reference",
+          "value": "TEST-CAS-2026",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "cas_reference: TEST-CAS-2026",
+          "confidence": "high",
+          "id": "96e41f9887ded0e2cc66",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "tuition_due",
+          "value": "16000",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "tuition_due: 16000",
+          "confidence": "high",
+          "id": "597f2fc5d213ead23b65",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "study_months",
+          "value": "12",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "study_months: 12",
+          "confidence": "high",
+          "id": "e2ef0e6bcac691e54da0",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "study_location",
+          "value": "outside_london",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "study_location: outside_london",
+          "confidence": "high",
+          "id": "8a0d15319905a3873e05",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "english_confirmed",
+          "value": "true",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "english_confirmed: true",
+          "confidence": "high",
+          "id": "8dcf64ad98463c821f03",
+          "active": true,
+          "confirmed_by": null
+        },
+        {
+          "key": "atas_required",
+          "value": "false",
+          "source_id": "7bbd017169538c058dd7",
+          "page": 1,
+          "quote": "atas_required: false",
+          "confidence": "high",
+          "id": "2c88828d67f77d39d318",
+          "active": true,
+          "confirmed_by": null
+        }
+      ],
+      "documents": [
+        {
+          "id": "118fc51dec7bdd86d8f7",
+          "name": "identity.pdf",
+          "sha256": "118fc51dec7bdd86d8f70eb6b3bbbb5b9f3d8ad57e0b884d6cf89e11f25d871a",
+          "path": "<REPO>\\data\\files\\118fc51dec7bdd86d8f70eb6b3bbbb5b9f3d8ad57e0b884d6cf89e11f25d871a.pdf",
+          "pages": [
+            {
+              "number": 1,
+              "text": "TEST EVIDENCE / PASSPORT\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: passport\nLANGUAGE: en\npassport_name: Mei Example\npassport_number: TEST-672188\npassport_expiry: 2036-01-01\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+              "method": "pdf_text",
+              "confidence": null
+            }
+          ],
+          "kind": "passport",
+          "language": "en",
+          "problems": [],
+          "rejected": false
+        },
+        {
+          "id": "4d33d21e79f0dce4bcb7",
+          "name": "funds.pdf",
+          "sha256": "4d33d21e79f0dce4bcb71b72d80b08896a01bac4b9f6c601a5dabf1551c3ac16",
+          "path": "<REPO>\\data\\files\\4d33d21e79f0dce4bcb71b72d80b08896a01bac4b9f6c601a5dabf1551c3ac16.pdf",
+          "pages": [
+            {
+              "number": 1,
+              "text": "TEST EVIDENCE / BANK STATEMENT\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: bank_statement\nLANGUAGE: en\nbank_name: Fictional Example Bank\nbank_holder: Mei Example\nbank_currency: GBP\nbank_minimum: 40000\nbank_start: 2026-08-01\nbank_end: 2026-09-28\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+              "method": "pdf_text",
+              "confidence": null
+            }
+          ],
+          "kind": "bank_statement",
+          "language": "en",
+          "problems": [],
+          "rejected": false
+        },
+        {
+          "id": "00c6abb1007cf65f295c",
+          "name": "health.pdf",
+          "sha256": "00c6abb1007cf65f295c50c3154190809f0c8ed4adaee9bd9ed5b39ccae8a340",
+          "path": "<REPO>\\data\\files\\00c6abb1007cf65f295c50c3154190809f0c8ed4adaee9bd9ed5b39ccae8a340.pdf",
+          "pages": [
+            {
+              "number": 1,
+              "text": "TEST EVIDENCE / TB\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: tb\nLANGUAGE: en\ntb_name: Mei Example\ntb_clear: true\ntb_expiry: 2027-02-01\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+              "method": "pdf_text",
+              "confidence": null
+            }
+          ],
+          "kind": "tb",
+          "language": "en",
+          "problems": [],
+          "rejected": false
+        },
+        {
+          "id": "7bbd017169538c058dd7",
+          "name": "school.pdf",
+          "sha256": "7bbd017169538c058dd7cbff393410c8fdafce5a24dc79c8032fa8e3484fccf2",
+          "path": "<REPO>\\data\\files\\7bbd017169538c058dd7cbff393410c8fdafce5a24dc79c8032fa8e3484fccf2.pdf",
+          "pages": [
+            {
+              "number": 1,
+              "text": "TEST EVIDENCE / CAS\nSYNTHETIC - fictitious people and institutions - not a valid document\nDOCUMENT_KIND: cas\nLANGUAGE: en\ncas_name: Mei Example\ncas_reference: TEST-CAS-2026\ntuition_due: 16000\nstudy_months: 12\nstudy_location: outside_london\nenglish_confirmed: true\natas_required: false\nVisa Agent synthetic fixture | Seed 20261005 | English field labels aid inspection\n",
+              "method": "pdf_text",
+              "confidence": null
+            }
+          ],
+          "kind": "cas",
+          "language": "en",
+          "problems": [],
+          "rejected": false
+        }
+      ],
+      "checks": [
+        {
+          "id": "route",
+          "status": "pass",
+          "message": "请说明来英国的主要目的，以确认签证路线。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "87940d3d745125278bc0"
+          ]
+        },
+        {
+          "id": "applicant_name",
+          "status": "pass",
+          "message": "请提供与身份证件一致的申请人姓名。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "6e06388f301c5b9fd42c"
+          ]
+        },
+        {
+          "id": "application_location",
+          "status": "pass",
+          "message": "请确认在英国境外申请；境内申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "4c7eedbe5cb73f40f680"
+          ]
+        },
+        {
+          "id": "dependants",
+          "status": "pass",
+          "message": "请确认是否有随行家属；家属申请需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "17cd8c96b43fdf60d532"
+          ]
+        },
+        {
+          "id": "previous_refusal",
+          "status": "pass",
+          "message": "请说明是否有拒签记录；相关解释需要顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "3ad8b08d69af59c0bb08"
+          ]
+        },
+        {
+          "id": "adult",
+          "status": "pass",
+          "message": "请确认年龄；未成年人材料由顾问处理。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "e29937eb021355c8330a"
+          ]
+        },
+        {
+          "id": "nationality",
+          "status": "pass",
+          "message": "请提供国籍，以判断材料和豁免条件。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "a4a8a81053b36ba67bed"
+          ]
+        },
+        {
+          "id": "application_date",
+          "status": "pass",
+          "message": "请提供计划申请日期（YYYY-MM-DD），用于材料时效检查。",
+          "source": "project:adult-outside-uk-material-preparation-v1",
+          "human": false,
+          "evidence": [
+            "1486e38e2ba4297b7699"
+          ]
+        },
+        {
+          "id": "passport_name",
+          "status": "pass",
+          "message": "请上传有效护照/旅行证件的个人信息页。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1"
+          ]
+        },
+        {
+          "id": "passport_number",
+          "status": "pass",
+          "message": "证件号码缺失或不可读，请补充。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "8cd510bd4e7214d3d768"
+          ]
+        },
+        {
+          "id": "passport_valid",
+          "status": "pass",
+          "message": "请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "a66bee7822fde23c4839"
+          ]
+        },
+        {
+          "id": "name:applicant_name",
+          "status": "pass",
+          "message": "applicant_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1",
+            "6e06388f301c5b9fd42c"
+          ]
+        },
+        {
+          "id": "name:bank_holder",
+          "status": "pass",
+          "message": "bank_holder 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1",
+            "e6d34bd42ba2de231f17"
+          ]
+        },
+        {
+          "id": "name:cas_name",
+          "status": "pass",
+          "message": "cas_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1",
+            "a123fc9e11e644917378"
+          ]
+        },
+        {
+          "id": "name:tb_name",
+          "status": "pass",
+          "message": "tb_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "72e243f8aaac497b91d1",
+            "777235cc751d8e356eac"
+          ]
+        },
+        {
+          "id": "funding",
+          "status": "pass",
+          "message": "请说明资金来源：self（本人）或 employer（雇主）。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "0ed8d8bb5fdead903b07"
+          ]
+        },
+        {
+          "id": "cas_reference",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 cas_reference 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "96e41f9887ded0e2cc66"
+          ]
+        },
+        {
+          "id": "cas_name",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 cas_name 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "a123fc9e11e644917378"
+          ]
+        },
+        {
+          "id": "tuition_due",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 tuition_due 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "597f2fc5d213ead23b65"
+          ]
+        },
+        {
+          "id": "study_months",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 study_months 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "e2ef0e6bcac691e54da0"
+          ]
+        },
+        {
+          "id": "study_location",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 study_location 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "8a0d15319905a3873e05"
+          ]
+        },
+        {
+          "id": "english_confirmed",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 english_confirmed 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "8dcf64ad98463c821f03"
+          ]
+        },
+        {
+          "id": "atas_required",
+          "status": "pass",
+          "message": "请补充 CAS/学校材料中的 atas_required 信息。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": [
+            "2c88828d67f77d39d318"
+          ]
+        },
+        {
+          "id": "financial_evidence_requested",
+          "status": "pass",
+          "message": "UKVI 是否已要求提供财务证明？",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "55242eebb2da262f492f"
+          ]
+        },
+        {
+          "id": "finance",
+          "status": "pass",
+          "message": "已核对资金证明字段；所需金额 GBP 26539。",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "82894f8055597736d229",
+            "e6d34bd42ba2de231f17",
+            "93b934eb8f71a752eb5e",
+            "76acc3b843a79ddb1e2e",
+            "f9c0e84d9dd71edf0347",
+            "f88df03b3eab1b74a9d3"
+          ]
+        },
+        {
+          "id": "atas",
+          "status": "not_applicable",
+          "message": "CAS 表示无需 ATAS，顾问复核适用性。",
+          "source": "https://www.gov.uk/student-visa/documents-you-must-provide",
+          "human": false,
+          "evidence": []
+        },
+        {
+          "id": "residence_country",
+          "status": "pass",
+          "message": "请说明近半年的居住国家，用于 TB 条件判断。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": [
+            "913327f67d433511be40"
+          ]
+        },
+        {
+          "id": "tb_name",
+          "status": "pass",
+          "message": "请提供获认可机构的 TB 证明。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": [
+            "777235cc751d8e356eac"
+          ]
+        },
+        {
+          "id": "tb_valid",
+          "status": "pass",
+          "message": "请核对 TB 结果及有效期。",
+          "source": "https://www.gov.uk/tb-test-visa",
+          "human": false,
+          "evidence": []
+        }
+      ],
+      "history": [
+        {
+          "event_id": "event_0",
+          "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "at": "2026-10-05T16:27:46.402181+00:00"
+        },
+        {
+          "event_id": "event_1",
+          "text": "Here is my identity document.",
+          "reply": "我们先补齐以下信息：\n1. 请补充 CAS/学校材料中的 cas_reference 信息。\n2. 请补充 CAS/学校材料中的 cas_name 信息。\n3. 请补充 CAS/学校材料中的 tuition_due 信息。",
+          "at": "2026-10-05T16:27:49.368760+00:00"
+        },
+        {
+          "event_id": "event_2",
+          "text": "Here are the remaining supporting documents.",
+          "reply": "已整理当前材料并完成本轮检查，材料包已生成。请顾问核对原件和适用条件后确认。",
+          "at": "2026-10-05T16:27:51.331774+00:00"
+        }
+      ],
+      "reviews": [
+        {
+          "decision": "approve",
+          "reviewer": "synthetic-test-adviser",
+          "notes": "Scripted adviser action on synthetic fixtures; not a real professional review.",
+          "target": null,
+          "at": "2026-10-05T16:27:54.508214+00:00",
+          "version": 3
+        }
+      ],
+      "approval": {
+        "version": 3,
+        "manifest_hash": "4b89fc61ba47c1d8ce89d49d9b32974543d7aae48c0b6326efc6bcec85201454",
+        "reviewer": "synthetic-test-adviser",
+        "notes": "Scripted adviser action on synthetic fixtures; not a real professional review.",
+        "at": "2026-10-05T16:27:54.517627+00:00"
+      },
+      "pack_path": "<REPO>\\data\\packs\\dev_student-db3d8774\\v3-4b89fc61ba47.zip",
+      "last_contact": "2026-10-05T16:27:51.331774+00:00",
+      "last_reminder": null,
+      "reminder_count": 0,
+      "pending_error": null
+    }
+  }
+]

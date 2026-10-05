@@ -1,0 +1,4116 @@
+{
+  "mode": "offline",
+  "at": "2026-10-05T16:29:41.459620+00:00",
+  "requested": [
+    "dev_ambiguous_route",
+    "dev_duplicate_event",
+    "dev_funds_period",
+    "dev_missing_document",
+    "dev_missing_translation",
+    "dev_name_conflict",
+    "dev_restart",
+    "dev_skilled_worker",
+    "dev_stale_approval",
+    "dev_student",
+    "dev_unreadable_image",
+    "dev_visitor"
+  ],
+  "completed": 12,
+  "passed": 12,
+  "reports": [
+    {
+      "scenario": "dev_ambiguous_route",
+      "case_id": "dev_ambiguous_route-858f1d48",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:37.380245+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": false,
+      "final_status": "WAIT_USER",
+      "results": [
+        {
+          "case_id": "dev_ambiguous_route-858f1d48",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请说明来英国的主要目的，以确认签证路线。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认在英国境外申请；境内申请需要顾问处理。",
+          "run_id": "b932696d993244cc9d9babface448355",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER"
+          ],
+          "actual": [
+            "WAIT_USER"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "WAIT_USER",
+          "actual": "WAIT_USER"
+        },
+        {
+          "name": "blocker:route",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 281,
+        "output_tokens": 6,
+        "requests": 1
+      },
+      "http_requests": 0,
+      "pack_path": null,
+      "trace_ids": [
+        "b932696d993244cc9d9babface448355"
+      ]
+    },
+    {
+      "scenario": "dev_duplicate_event",
+      "case_id": "dev_duplicate_event-48d5593d",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:37.584093+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": true,
+      "final_status": "COMPLETE",
+      "results": [
+        {
+          "case_id": "dev_duplicate_event-48d5593d",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "d1c7b85f7180492e86b08683a22f6d48",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_duplicate_event-48d5593d",
+          "version": 2,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 本演示的在职自费访客分支需要工作支持材料；其他情况请顾问处理。\n2. 请补充可核对的资金证明。",
+          "run_id": "d7fb013ac26d418bb7464996f79b7001",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_duplicate_event-48d5593d",
+          "version": 3,
+          "status": "READY_FOR_REVIEW",
+          "reply": "已整理当前材料并完成本轮检查，材料包已生成。请顾问核对原件和适用条件后确认。",
+          "run_id": "e59fadc06c7d41a5a32cf0eae9d96edf",
+          "error": null,
+          "duplicate": false,
+          "pack_path": "<REPO>\\data\\packs\\dev_duplicate_event-48d5593d\\v3-ab11627d5024.zip"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "duplicate_event",
+          "passed": true
+        },
+        {
+          "name": "duplicate_event",
+          "passed": true
+        },
+        {
+          "name": "duplicate_event",
+          "passed": true
+        },
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "READY_FOR_REVIEW",
+          "actual": "READY_FOR_REVIEW"
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "visitor",
+          "actual": "visitor"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "self",
+          "actual": "self"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:purpose",
+          "passed": true,
+          "expected": "tourism",
+          "actual": "tourism"
+        },
+        {
+          "name": "source:purpose",
+          "passed": true
+        },
+        {
+          "name": "field:travel_end",
+          "passed": true,
+          "expected": "2026-11-15",
+          "actual": "2026-11-15"
+        },
+        {
+          "name": "source:travel_end",
+          "passed": true
+        },
+        {
+          "name": "field:return_reason",
+          "passed": true,
+          "expected": "return to my permanent job",
+          "actual": "return to my permanent job"
+        },
+        {
+          "name": "source:return_reason",
+          "passed": true
+        },
+        {
+          "name": "field:trip_budget",
+          "passed": true,
+          "expected": "3000",
+          "actual": "3000"
+        },
+        {
+          "name": "source:trip_budget",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "1",
+          "actual": "1"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:passport_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:passport_name",
+          "passed": true
+        },
+        {
+          "name": "field:passport_number",
+          "passed": true,
+          "expected": "TEST-390274",
+          "actual": "TEST-390274"
+        },
+        {
+          "name": "source:passport_number",
+          "passed": true
+        },
+        {
+          "name": "field:passport_expiry",
+          "passed": true,
+          "expected": "2036-01-01",
+          "actual": "2036-01-01"
+        },
+        {
+          "name": "source:passport_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:bank_name",
+          "passed": true,
+          "expected": "Fictional Example Bank",
+          "actual": "Fictional Example Bank"
+        },
+        {
+          "name": "source:bank_name",
+          "passed": true
+        },
+        {
+          "name": "field:bank_holder",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:bank_holder",
+          "passed": true
+        },
+        {
+          "name": "field:bank_currency",
+          "passed": true,
+          "expected": "GBP",
+          "actual": "GBP"
+        },
+        {
+          "name": "source:bank_currency",
+          "passed": true
+        },
+        {
+          "name": "field:bank_minimum",
+          "passed": true,
+          "expected": "40000",
+          "actual": "40000"
+        },
+        {
+          "name": "source:bank_minimum",
+          "passed": true
+        },
+        {
+          "name": "field:bank_start",
+          "passed": true,
+          "expected": "2026-08-01",
+          "actual": "2026-08-01"
+        },
+        {
+          "name": "source:bank_start",
+          "passed": true
+        },
+        {
+          "name": "field:bank_end",
+          "passed": true,
+          "expected": "2026-09-28",
+          "actual": "2026-09-28"
+        },
+        {
+          "name": "source:bank_end",
+          "passed": true
+        },
+        {
+          "name": "field:employment_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:employment_name",
+          "passed": true
+        },
+        {
+          "name": "field:employer",
+          "passed": true,
+          "expected": "Example Studio Ltd",
+          "actual": "Example Studio Ltd"
+        },
+        {
+          "name": "source:employer",
+          "passed": true
+        },
+        {
+          "name": "field:salary",
+          "passed": true,
+          "expected": "45000",
+          "actual": "45000"
+        },
+        {
+          "name": "source:salary",
+          "passed": true
+        },
+        {
+          "name": "duplicate_files",
+          "passed": true
+        },
+        {
+          "name": "review_and_pack",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 1310,
+        "output_tokens": 513,
+        "requests": 3
+      },
+      "http_requests": 0,
+      "pack_path": "<REPO>\\data\\packs\\dev_duplicate_event-48d5593d\\v3-ab11627d5024.zip",
+      "trace_ids": [
+        "d1c7b85f7180492e86b08683a22f6d48",
+        "d7fb013ac26d418bb7464996f79b7001",
+        "e59fadc06c7d41a5a32cf0eae9d96edf",
+        "b1c65f589acb42099b2c86bd6ecc52e9",
+        "18184c51c1db40c69cf650342f064eea"
+      ]
+    },
+    {
+      "scenario": "dev_funds_period",
+      "case_id": "dev_funds_period-f4c28656",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:37.696109+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": false,
+      "final_status": "WAIT_USER",
+      "results": [
+        {
+          "case_id": "dev_funds_period-f4c28656",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "4bb969a638a24f2ea30936ceccc16ba1",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_funds_period-f4c28656",
+          "version": 2,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请补充 CAS/学校材料中的 cas_reference 信息。\n2. 请补充 CAS/学校材料中的 cas_name 信息。\n3. 请补充 CAS/学校材料中的 tuition_due 信息。",
+          "run_id": "7bf43b7c0b5c44bd80d06286d3ca7a00",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_funds_period-f4c28656",
+          "version": 3,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请补充可核对的资金证明。未覆盖连续 28 天，或期末距申请日超过 31 天",
+          "run_id": "1dc7facf91514f02a5635391fada37f7",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "WAIT_USER"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "WAIT_USER"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "WAIT_USER",
+          "actual": "WAIT_USER"
+        },
+        {
+          "name": "blocker:finance",
+          "passed": true
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "student",
+          "actual": "student"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Mei Example",
+          "actual": "Mei Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "self",
+          "actual": "self"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "12",
+          "actual": "12"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:financial_evidence_requested",
+          "passed": true,
+          "expected": "true",
+          "actual": "true"
+        },
+        {
+          "name": "source:financial_evidence_requested",
+          "passed": true
+        },
+        {
+          "name": "field:passport_name",
+          "passed": true,
+          "expected": "Mei Example",
+          "actual": "Mei Example"
+        },
+        {
+          "name": "source:passport_name",
+          "passed": true
+        },
+        {
+          "name": "field:passport_number",
+          "passed": true,
+          "expected": "TEST-672188",
+          "actual": "TEST-672188"
+        },
+        {
+          "name": "source:passport_number",
+          "passed": true
+        },
+        {
+          "name": "field:passport_expiry",
+          "passed": true,
+          "expected": "2036-01-01",
+          "actual": "2036-01-01"
+        },
+        {
+          "name": "source:passport_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:bank_name",
+          "passed": true,
+          "expected": "Fictional Example Bank",
+          "actual": "Fictional Example Bank"
+        },
+        {
+          "name": "source:bank_name",
+          "passed": true
+        },
+        {
+          "name": "field:bank_holder",
+          "passed": true,
+          "expected": "Mei Example",
+          "actual": "Mei Example"
+        },
+        {
+          "name": "source:bank_holder",
+          "passed": true
+        },
+        {
+          "name": "field:bank_currency",
+          "passed": true,
+          "expected": "GBP",
+          "actual": "GBP"
+        },
+        {
+          "name": "source:bank_currency",
+          "passed": true
+        },
+        {
+          "name": "field:bank_minimum",
+          "passed": true,
+          "expected": "40000",
+          "actual": "40000"
+        },
+        {
+          "name": "source:bank_minimum",
+          "passed": true
+        },
+        {
+          "name": "field:bank_start",
+          "passed": true,
+          "expected": "2026-09-20",
+          "actual": "2026-09-20"
+        },
+        {
+          "name": "source:bank_start",
+          "passed": true
+        },
+        {
+          "name": "field:bank_end",
+          "passed": true,
+          "expected": "2026-09-28",
+          "actual": "2026-09-28"
+        },
+        {
+          "name": "source:bank_end",
+          "passed": true
+        },
+        {
+          "name": "field:tb_name",
+          "passed": true,
+          "expected": "Mei Example",
+          "actual": "Mei Example"
+        },
+        {
+          "name": "source:tb_name",
+          "passed": true
+        },
+        {
+          "name": "field:tb_clear",
+          "passed": true,
+          "expected": "true",
+          "actual": "true"
+        },
+        {
+          "name": "source:tb_clear",
+          "passed": true
+        },
+        {
+          "name": "field:tb_expiry",
+          "passed": true,
+          "expected": "2027-02-01",
+          "actual": "2027-02-01"
+        },
+        {
+          "name": "source:tb_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:cas_name",
+          "passed": true,
+          "expected": "Mei Example",
+          "actual": "Mei Example"
+        },
+        {
+          "name": "source:cas_name",
+          "passed": true
+        },
+        {
+          "name": "field:cas_reference",
+          "passed": true,
+          "expected": "TEST-CAS-2026",
+          "actual": "TEST-CAS-2026"
+        },
+        {
+          "name": "source:cas_reference",
+          "passed": true
+        },
+        {
+          "name": "field:tuition_due",
+          "passed": true,
+          "expected": "16000",
+          "actual": "16000"
+        },
+        {
+          "name": "source:tuition_due",
+          "passed": true
+        },
+        {
+          "name": "field:study_months",
+          "passed": true,
+          "expected": "12",
+          "actual": "12"
+        },
+        {
+          "name": "source:study_months",
+          "passed": true
+        },
+        {
+          "name": "field:study_location",
+          "passed": true,
+          "expected": "outside_london",
+          "actual": "outside_london"
+        },
+        {
+          "name": "source:study_location",
+          "passed": true
+        },
+        {
+          "name": "field:english_confirmed",
+          "passed": true,
+          "expected": "true",
+          "actual": "true"
+        },
+        {
+          "name": "source:english_confirmed",
+          "passed": true
+        },
+        {
+          "name": "field:atas_required",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:atas_required",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 1465,
+        "output_tokens": 568,
+        "requests": 3
+      },
+      "http_requests": 0,
+      "pack_path": null,
+      "trace_ids": [
+        "4bb969a638a24f2ea30936ceccc16ba1",
+        "7bf43b7c0b5c44bd80d06286d3ca7a00",
+        "1dc7facf91514f02a5635391fada37f7"
+      ]
+    },
+    {
+      "scenario": "dev_missing_document",
+      "case_id": "dev_missing_document-1ce45d4a",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:37.797401+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": false,
+      "final_status": "WAIT_USER",
+      "results": [
+        {
+          "case_id": "dev_missing_document-1ce45d4a",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "626b23870b7247c08785c349a62ce570",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_missing_document-1ce45d4a",
+          "version": 2,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 本演示的在职自费访客分支需要工作支持材料；其他情况请顾问处理。\n2. 请补充可核对的资金证明。",
+          "run_id": "85d462ca43cb4576bffd1d96043b45fb",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "WAIT_USER"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "WAIT_USER"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "WAIT_USER",
+          "actual": "WAIT_USER"
+        },
+        {
+          "name": "blocker:finance",
+          "passed": true
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "visitor",
+          "actual": "visitor"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "self",
+          "actual": "self"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:purpose",
+          "passed": true,
+          "expected": "tourism",
+          "actual": "tourism"
+        },
+        {
+          "name": "source:purpose",
+          "passed": true
+        },
+        {
+          "name": "field:travel_end",
+          "passed": true,
+          "expected": "2026-11-15",
+          "actual": "2026-11-15"
+        },
+        {
+          "name": "source:travel_end",
+          "passed": true
+        },
+        {
+          "name": "field:return_reason",
+          "passed": true,
+          "expected": "return to my permanent job",
+          "actual": "return to my permanent job"
+        },
+        {
+          "name": "source:return_reason",
+          "passed": true
+        },
+        {
+          "name": "field:trip_budget",
+          "passed": true,
+          "expected": "3000",
+          "actual": "3000"
+        },
+        {
+          "name": "source:trip_budget",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "1",
+          "actual": "1"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:passport_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:passport_name",
+          "passed": true
+        },
+        {
+          "name": "field:passport_number",
+          "passed": true,
+          "expected": "TEST-390274",
+          "actual": "TEST-390274"
+        },
+        {
+          "name": "source:passport_number",
+          "passed": true
+        },
+        {
+          "name": "field:passport_expiry",
+          "passed": true,
+          "expected": "2036-01-01",
+          "actual": "2036-01-01"
+        },
+        {
+          "name": "source:passport_expiry",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 763,
+        "output_tokens": 346,
+        "requests": 2
+      },
+      "http_requests": 0,
+      "pack_path": null,
+      "trace_ids": [
+        "626b23870b7247c08785c349a62ce570",
+        "85d462ca43cb4576bffd1d96043b45fb"
+      ]
+    },
+    {
+      "scenario": "dev_missing_translation",
+      "case_id": "dev_missing_translation-8713aa09",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:37.903937+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": false,
+      "final_status": "WAIT_USER",
+      "results": [
+        {
+          "case_id": "dev_missing_translation-8713aa09",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "7678aa1be2ae4d78af0978b5f84d44a8",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_missing_translation-8713aa09",
+          "version": 2,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 本演示的在职自费访客分支需要工作支持材料；其他情况请顾问处理。\n2. 请补充可核对的资金证明。",
+          "run_id": "bcc87d34e53846b78aefafeda5179d03",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_missing_translation-8713aa09",
+          "version": 3,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请为 chinese_employment.pdf 提供完整译文及译者声明、日期、签名和联系方式。",
+          "run_id": "0860924c135f41c699ba30b6dab876f3",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "WAIT_USER"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "WAIT_USER"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "WAIT_USER",
+          "actual": "WAIT_USER"
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "visitor",
+          "actual": "visitor"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "self",
+          "actual": "self"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:purpose",
+          "passed": true,
+          "expected": "tourism",
+          "actual": "tourism"
+        },
+        {
+          "name": "source:purpose",
+          "passed": true
+        },
+        {
+          "name": "field:travel_end",
+          "passed": true,
+          "expected": "2026-11-15",
+          "actual": "2026-11-15"
+        },
+        {
+          "name": "source:travel_end",
+          "passed": true
+        },
+        {
+          "name": "field:return_reason",
+          "passed": true,
+          "expected": "return to my permanent job",
+          "actual": "return to my permanent job"
+        },
+        {
+          "name": "source:return_reason",
+          "passed": true
+        },
+        {
+          "name": "field:trip_budget",
+          "passed": true,
+          "expected": "3000",
+          "actual": "3000"
+        },
+        {
+          "name": "source:trip_budget",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "1",
+          "actual": "1"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:passport_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:passport_name",
+          "passed": true
+        },
+        {
+          "name": "field:passport_number",
+          "passed": true,
+          "expected": "TEST-390274",
+          "actual": "TEST-390274"
+        },
+        {
+          "name": "source:passport_number",
+          "passed": true
+        },
+        {
+          "name": "field:passport_expiry",
+          "passed": true,
+          "expected": "2036-01-01",
+          "actual": "2036-01-01"
+        },
+        {
+          "name": "source:passport_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:bank_name",
+          "passed": true,
+          "expected": "Fictional Example Bank",
+          "actual": "Fictional Example Bank"
+        },
+        {
+          "name": "source:bank_name",
+          "passed": true
+        },
+        {
+          "name": "field:bank_holder",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:bank_holder",
+          "passed": true
+        },
+        {
+          "name": "field:bank_currency",
+          "passed": true,
+          "expected": "GBP",
+          "actual": "GBP"
+        },
+        {
+          "name": "source:bank_currency",
+          "passed": true
+        },
+        {
+          "name": "field:bank_minimum",
+          "passed": true,
+          "expected": "40000",
+          "actual": "40000"
+        },
+        {
+          "name": "source:bank_minimum",
+          "passed": true
+        },
+        {
+          "name": "field:bank_start",
+          "passed": true,
+          "expected": "2026-08-01",
+          "actual": "2026-08-01"
+        },
+        {
+          "name": "source:bank_start",
+          "passed": true
+        },
+        {
+          "name": "field:bank_end",
+          "passed": true,
+          "expected": "2026-09-28",
+          "actual": "2026-09-28"
+        },
+        {
+          "name": "source:bank_end",
+          "passed": true
+        },
+        {
+          "name": "field:employment_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:employment_name",
+          "passed": true
+        },
+        {
+          "name": "field:employer",
+          "passed": true,
+          "expected": "Example Studio Ltd",
+          "actual": "Example Studio Ltd"
+        },
+        {
+          "name": "source:employer",
+          "passed": true
+        },
+        {
+          "name": "field:salary",
+          "passed": true,
+          "expected": "45000",
+          "actual": "45000"
+        },
+        {
+          "name": "source:salary",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 1310,
+        "output_tokens": 513,
+        "requests": 3
+      },
+      "http_requests": 0,
+      "pack_path": null,
+      "trace_ids": [
+        "7678aa1be2ae4d78af0978b5f84d44a8",
+        "bcc87d34e53846b78aefafeda5179d03",
+        "0860924c135f41c699ba30b6dab876f3"
+      ]
+    },
+    {
+      "scenario": "dev_name_conflict",
+      "case_id": "dev_name_conflict-2a2a4f83",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:38.010732+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": false,
+      "final_status": "NEEDS_HUMAN",
+      "results": [
+        {
+          "case_id": "dev_name_conflict-2a2a4f83",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "0b82b1e37edc463da7bdf9d7fc79ed0f",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_name_conflict-2a2a4f83",
+          "version": 2,
+          "status": "NEEDS_HUMAN",
+          "reply": "这部分需要顾问核对：\n1. applicant_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。\n2. 本演示的在职自费访客分支需要工作支持材料；其他情况请顾问处理。\n3. 请补充可核对的资金证明。",
+          "run_id": "2f4c6866a48a4944bbe6492e074df875",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_name_conflict-2a2a4f83",
+          "version": 3,
+          "status": "NEEDS_HUMAN",
+          "reply": "这部分需要顾问核对：\n1. applicant_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。\n2. bank_holder 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。\n3. employment_name 与证件姓名不一致时需顾问确认，不能用模糊匹配自动放行。",
+          "run_id": "d54b8191e45447da8b6e9a38179dddd0",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "NEEDS_HUMAN",
+            "NEEDS_HUMAN"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "NEEDS_HUMAN",
+            "NEEDS_HUMAN"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "NEEDS_HUMAN",
+          "actual": "NEEDS_HUMAN"
+        },
+        {
+          "name": "blocker:name:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "visitor",
+          "actual": "visitor"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "self",
+          "actual": "self"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:purpose",
+          "passed": true,
+          "expected": "tourism",
+          "actual": "tourism"
+        },
+        {
+          "name": "source:purpose",
+          "passed": true
+        },
+        {
+          "name": "field:travel_end",
+          "passed": true,
+          "expected": "2026-11-15",
+          "actual": "2026-11-15"
+        },
+        {
+          "name": "source:travel_end",
+          "passed": true
+        },
+        {
+          "name": "field:return_reason",
+          "passed": true,
+          "expected": "return to my permanent job",
+          "actual": "return to my permanent job"
+        },
+        {
+          "name": "source:return_reason",
+          "passed": true
+        },
+        {
+          "name": "field:trip_budget",
+          "passed": true,
+          "expected": "3000",
+          "actual": "3000"
+        },
+        {
+          "name": "source:trip_budget",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "1",
+          "actual": "1"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:passport_name",
+          "passed": true,
+          "expected": "Other Example",
+          "actual": "Other Example"
+        },
+        {
+          "name": "source:passport_name",
+          "passed": true
+        },
+        {
+          "name": "field:passport_number",
+          "passed": true,
+          "expected": "TEST-OTHER",
+          "actual": "TEST-OTHER"
+        },
+        {
+          "name": "source:passport_number",
+          "passed": true
+        },
+        {
+          "name": "field:passport_expiry",
+          "passed": true,
+          "expected": "2036-01-01",
+          "actual": "2036-01-01"
+        },
+        {
+          "name": "source:passport_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:bank_name",
+          "passed": true,
+          "expected": "Fictional Example Bank",
+          "actual": "Fictional Example Bank"
+        },
+        {
+          "name": "source:bank_name",
+          "passed": true
+        },
+        {
+          "name": "field:bank_holder",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:bank_holder",
+          "passed": true
+        },
+        {
+          "name": "field:bank_currency",
+          "passed": true,
+          "expected": "GBP",
+          "actual": "GBP"
+        },
+        {
+          "name": "source:bank_currency",
+          "passed": true
+        },
+        {
+          "name": "field:bank_minimum",
+          "passed": true,
+          "expected": "40000",
+          "actual": "40000"
+        },
+        {
+          "name": "source:bank_minimum",
+          "passed": true
+        },
+        {
+          "name": "field:bank_start",
+          "passed": true,
+          "expected": "2026-08-01",
+          "actual": "2026-08-01"
+        },
+        {
+          "name": "source:bank_start",
+          "passed": true
+        },
+        {
+          "name": "field:bank_end",
+          "passed": true,
+          "expected": "2026-09-28",
+          "actual": "2026-09-28"
+        },
+        {
+          "name": "source:bank_end",
+          "passed": true
+        },
+        {
+          "name": "field:employment_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:employment_name",
+          "passed": true
+        },
+        {
+          "name": "field:employer",
+          "passed": true,
+          "expected": "Example Studio Ltd",
+          "actual": "Example Studio Ltd"
+        },
+        {
+          "name": "source:employer",
+          "passed": true
+        },
+        {
+          "name": "field:salary",
+          "passed": true,
+          "expected": "45000",
+          "actual": "45000"
+        },
+        {
+          "name": "source:salary",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 1320,
+        "output_tokens": 513,
+        "requests": 3
+      },
+      "http_requests": 0,
+      "pack_path": null,
+      "trace_ids": [
+        "0b82b1e37edc463da7bdf9d7fc79ed0f",
+        "2f4c6866a48a4944bbe6492e074df875",
+        "d54b8191e45447da8b6e9a38179dddd0"
+      ]
+    },
+    {
+      "scenario": "dev_restart",
+      "case_id": "dev_restart-60fb85c6",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:38.172557+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": true,
+      "final_status": "COMPLETE",
+      "results": [
+        {
+          "case_id": "dev_restart-60fb85c6",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "e4d857da16ed42b6b638ad42a8eef5ec",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_restart-60fb85c6",
+          "version": 2,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 本演示的在职自费访客分支需要工作支持材料；其他情况请顾问处理。\n2. 请补充可核对的资金证明。",
+          "run_id": "0103a9345de548a686d4154911df7d03",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_restart-60fb85c6",
+          "version": 3,
+          "status": "READY_FOR_REVIEW",
+          "reply": "已整理当前材料并完成本轮检查，材料包已生成。请顾问核对原件和适用条件后确认。",
+          "run_id": "02e664b1fa2b44468e43e0075c4ec0bf",
+          "error": null,
+          "duplicate": false,
+          "pack_path": "<REPO>\\data\\packs\\dev_restart-60fb85c6\\v3-38ca7609a9d9.zip"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "READY_FOR_REVIEW",
+          "actual": "READY_FOR_REVIEW"
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "visitor",
+          "actual": "visitor"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "self",
+          "actual": "self"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:purpose",
+          "passed": true,
+          "expected": "tourism",
+          "actual": "tourism"
+        },
+        {
+          "name": "source:purpose",
+          "passed": true
+        },
+        {
+          "name": "field:travel_end",
+          "passed": true,
+          "expected": "2026-11-15",
+          "actual": "2026-11-15"
+        },
+        {
+          "name": "source:travel_end",
+          "passed": true
+        },
+        {
+          "name": "field:return_reason",
+          "passed": true,
+          "expected": "return to my permanent job",
+          "actual": "return to my permanent job"
+        },
+        {
+          "name": "source:return_reason",
+          "passed": true
+        },
+        {
+          "name": "field:trip_budget",
+          "passed": true,
+          "expected": "3000",
+          "actual": "3000"
+        },
+        {
+          "name": "source:trip_budget",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "1",
+          "actual": "1"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:passport_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:passport_name",
+          "passed": true
+        },
+        {
+          "name": "field:passport_number",
+          "passed": true,
+          "expected": "TEST-390274",
+          "actual": "TEST-390274"
+        },
+        {
+          "name": "source:passport_number",
+          "passed": true
+        },
+        {
+          "name": "field:passport_expiry",
+          "passed": true,
+          "expected": "2036-01-01",
+          "actual": "2036-01-01"
+        },
+        {
+          "name": "source:passport_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:bank_name",
+          "passed": true,
+          "expected": "Fictional Example Bank",
+          "actual": "Fictional Example Bank"
+        },
+        {
+          "name": "source:bank_name",
+          "passed": true
+        },
+        {
+          "name": "field:bank_holder",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:bank_holder",
+          "passed": true
+        },
+        {
+          "name": "field:bank_currency",
+          "passed": true,
+          "expected": "GBP",
+          "actual": "GBP"
+        },
+        {
+          "name": "source:bank_currency",
+          "passed": true
+        },
+        {
+          "name": "field:bank_minimum",
+          "passed": true,
+          "expected": "40000",
+          "actual": "40000"
+        },
+        {
+          "name": "source:bank_minimum",
+          "passed": true
+        },
+        {
+          "name": "field:bank_start",
+          "passed": true,
+          "expected": "2026-08-01",
+          "actual": "2026-08-01"
+        },
+        {
+          "name": "source:bank_start",
+          "passed": true
+        },
+        {
+          "name": "field:bank_end",
+          "passed": true,
+          "expected": "2026-09-28",
+          "actual": "2026-09-28"
+        },
+        {
+          "name": "source:bank_end",
+          "passed": true
+        },
+        {
+          "name": "field:employment_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:employment_name",
+          "passed": true
+        },
+        {
+          "name": "field:employer",
+          "passed": true,
+          "expected": "Example Studio Ltd",
+          "actual": "Example Studio Ltd"
+        },
+        {
+          "name": "source:employer",
+          "passed": true
+        },
+        {
+          "name": "field:salary",
+          "passed": true,
+          "expected": "45000",
+          "actual": "45000"
+        },
+        {
+          "name": "source:salary",
+          "passed": true
+        },
+        {
+          "name": "review_and_pack",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 1310,
+        "output_tokens": 513,
+        "requests": 3
+      },
+      "http_requests": 0,
+      "pack_path": "<REPO>\\data\\packs\\dev_restart-60fb85c6\\v3-38ca7609a9d9.zip",
+      "trace_ids": [
+        "e4d857da16ed42b6b638ad42a8eef5ec",
+        "0103a9345de548a686d4154911df7d03",
+        "02e664b1fa2b44468e43e0075c4ec0bf",
+        "83892fc8dd7f468fa3a1a9e558da2bfd"
+      ]
+    },
+    {
+      "scenario": "dev_skilled_worker",
+      "case_id": "dev_skilled_worker-9ceba40a",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:38.348851+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": true,
+      "final_status": "COMPLETE",
+      "results": [
+        {
+          "case_id": "dev_skilled_worker-9ceba40a",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "28c2061c1e2840e3b8253ae6205db920",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_skilled_worker-9ceba40a",
+          "version": 2,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请补充 CoS/雇主材料中的 cos_reference 信息。\n2. 请补充 CoS/雇主材料中的 cos_name 信息。\n3. 请补充 CoS/雇主材料中的 sponsor_name 信息。",
+          "run_id": "f19c15301eec4022ae7b1257838ba477",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_skilled_worker-9ceba40a",
+          "version": 3,
+          "status": "READY_FOR_REVIEW",
+          "reply": "已整理当前材料并完成本轮检查，材料包已生成。请顾问核对原件和适用条件后确认。",
+          "run_id": "c8a4b35fc65f42788d8c8f1ffdc9c7c5",
+          "error": null,
+          "duplicate": false,
+          "pack_path": "<REPO>\\data\\packs\\dev_skilled_worker-9ceba40a\\v3-9491152456eb.zip"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "READY_FOR_REVIEW",
+          "actual": "READY_FOR_REVIEW"
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "skilled_worker",
+          "actual": "skilled_worker"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Kai Example",
+          "actual": "Kai Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "employer",
+          "actual": "employer"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "24",
+          "actual": "24"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:passport_name",
+          "passed": true,
+          "expected": "Kai Example",
+          "actual": "Kai Example"
+        },
+        {
+          "name": "source:passport_name",
+          "passed": true
+        },
+        {
+          "name": "field:passport_number",
+          "passed": true,
+          "expected": "TEST-410724",
+          "actual": "TEST-410724"
+        },
+        {
+          "name": "source:passport_number",
+          "passed": true
+        },
+        {
+          "name": "field:passport_expiry",
+          "passed": true,
+          "expected": "2036-01-01",
+          "actual": "2036-01-01"
+        },
+        {
+          "name": "source:passport_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:tb_name",
+          "passed": true,
+          "expected": "Kai Example",
+          "actual": "Kai Example"
+        },
+        {
+          "name": "source:tb_name",
+          "passed": true
+        },
+        {
+          "name": "field:tb_clear",
+          "passed": true,
+          "expected": "true",
+          "actual": "true"
+        },
+        {
+          "name": "source:tb_clear",
+          "passed": true
+        },
+        {
+          "name": "field:tb_expiry",
+          "passed": true,
+          "expected": "2027-02-01",
+          "actual": "2027-02-01"
+        },
+        {
+          "name": "source:tb_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:cos_name",
+          "passed": true,
+          "expected": "Kai Example",
+          "actual": "Kai Example"
+        },
+        {
+          "name": "source:cos_name",
+          "passed": true
+        },
+        {
+          "name": "field:cos_reference",
+          "passed": true,
+          "expected": "TEST-COS-2026",
+          "actual": "TEST-COS-2026"
+        },
+        {
+          "name": "source:cos_reference",
+          "passed": true
+        },
+        {
+          "name": "field:sponsor_name",
+          "passed": true,
+          "expected": "Example Software Ltd",
+          "actual": "Example Software Ltd"
+        },
+        {
+          "name": "source:sponsor_name",
+          "passed": true
+        },
+        {
+          "name": "field:sponsor_licence",
+          "passed": true,
+          "expected": "TEST-LICENCE",
+          "actual": "TEST-LICENCE"
+        },
+        {
+          "name": "source:sponsor_licence",
+          "passed": true
+        },
+        {
+          "name": "field:job_title",
+          "passed": true,
+          "expected": "Software Developer",
+          "actual": "Software Developer"
+        },
+        {
+          "name": "source:job_title",
+          "passed": true
+        },
+        {
+          "name": "field:occupation_code",
+          "passed": true,
+          "expected": "2134",
+          "actual": "2134"
+        },
+        {
+          "name": "source:occupation_code",
+          "passed": true
+        },
+        {
+          "name": "field:salary",
+          "passed": true,
+          "expected": "65000",
+          "actual": "65000"
+        },
+        {
+          "name": "source:salary",
+          "passed": true
+        },
+        {
+          "name": "field:maintenance_certified",
+          "passed": true,
+          "expected": "true",
+          "actual": "true"
+        },
+        {
+          "name": "source:maintenance_certified",
+          "passed": true
+        },
+        {
+          "name": "field:english_level",
+          "passed": true,
+          "expected": "B2",
+          "actual": "B2"
+        },
+        {
+          "name": "source:english_level",
+          "passed": true
+        },
+        {
+          "name": "review_and_pack",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 1449,
+        "output_tokens": 492,
+        "requests": 3
+      },
+      "http_requests": 0,
+      "pack_path": "<REPO>\\data\\packs\\dev_skilled_worker-9ceba40a\\v3-9491152456eb.zip",
+      "trace_ids": [
+        "28c2061c1e2840e3b8253ae6205db920",
+        "f19c15301eec4022ae7b1257838ba477",
+        "c8a4b35fc65f42788d8c8f1ffdc9c7c5",
+        "8f02803ccfa54e41b3bfee1a26f1fcb6"
+      ]
+    },
+    {
+      "scenario": "dev_stale_approval",
+      "case_id": "dev_stale_approval-d5fccc55",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:38.548095+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": true,
+      "final_status": "NEEDS_HUMAN",
+      "results": [
+        {
+          "case_id": "dev_stale_approval-d5fccc55",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "accf44d811ed403eb4bcc6cef8552b20",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_stale_approval-d5fccc55",
+          "version": 2,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 本演示的在职自费访客分支需要工作支持材料；其他情况请顾问处理。\n2. 请补充可核对的资金证明。",
+          "run_id": "509f03ff22df45079038c9b9f36f6411",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_stale_approval-d5fccc55",
+          "version": 3,
+          "status": "READY_FOR_REVIEW",
+          "reply": "已整理当前材料并完成本轮检查，材料包已生成。请顾问核对原件和适用条件后确认。",
+          "run_id": "8c13623871f94d199df3810ea92bb37d",
+          "error": null,
+          "duplicate": false,
+          "pack_path": "<REPO>\\data\\packs\\dev_stale_approval-d5fccc55\\v3-5cdeee720a86.zip"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "READY_FOR_REVIEW",
+          "actual": "READY_FOR_REVIEW"
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "visitor",
+          "actual": "visitor"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "self",
+          "actual": "self"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:purpose",
+          "passed": true,
+          "expected": "tourism",
+          "actual": "tourism"
+        },
+        {
+          "name": "source:purpose",
+          "passed": true
+        },
+        {
+          "name": "field:travel_end",
+          "passed": true,
+          "expected": "2026-11-15",
+          "actual": "2026-11-15"
+        },
+        {
+          "name": "source:travel_end",
+          "passed": true
+        },
+        {
+          "name": "field:return_reason",
+          "passed": true,
+          "expected": "return to my permanent job",
+          "actual": "return to my permanent job"
+        },
+        {
+          "name": "source:return_reason",
+          "passed": true
+        },
+        {
+          "name": "field:trip_budget",
+          "passed": true,
+          "expected": "3000",
+          "actual": "3000"
+        },
+        {
+          "name": "source:trip_budget",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "1",
+          "actual": "1"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:passport_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:passport_name",
+          "passed": true
+        },
+        {
+          "name": "field:passport_number",
+          "passed": true,
+          "expected": "TEST-390274",
+          "actual": "TEST-390274"
+        },
+        {
+          "name": "source:passport_number",
+          "passed": true
+        },
+        {
+          "name": "field:passport_expiry",
+          "passed": true,
+          "expected": "2036-01-01",
+          "actual": "2036-01-01"
+        },
+        {
+          "name": "source:passport_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:bank_name",
+          "passed": true,
+          "expected": "Fictional Example Bank",
+          "actual": "Fictional Example Bank"
+        },
+        {
+          "name": "source:bank_name",
+          "passed": true
+        },
+        {
+          "name": "field:bank_holder",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:bank_holder",
+          "passed": true
+        },
+        {
+          "name": "field:bank_currency",
+          "passed": true,
+          "expected": "GBP",
+          "actual": "GBP"
+        },
+        {
+          "name": "source:bank_currency",
+          "passed": true
+        },
+        {
+          "name": "field:bank_minimum",
+          "passed": true,
+          "expected": "40000",
+          "actual": "40000"
+        },
+        {
+          "name": "source:bank_minimum",
+          "passed": true
+        },
+        {
+          "name": "field:bank_start",
+          "passed": true,
+          "expected": "2026-08-01",
+          "actual": "2026-08-01"
+        },
+        {
+          "name": "source:bank_start",
+          "passed": true
+        },
+        {
+          "name": "field:bank_end",
+          "passed": true,
+          "expected": "2026-09-28",
+          "actual": "2026-09-28"
+        },
+        {
+          "name": "source:bank_end",
+          "passed": true
+        },
+        {
+          "name": "field:employment_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:employment_name",
+          "passed": true
+        },
+        {
+          "name": "field:employer",
+          "passed": true,
+          "expected": "Example Studio Ltd",
+          "actual": "Example Studio Ltd"
+        },
+        {
+          "name": "source:employer",
+          "passed": true
+        },
+        {
+          "name": "field:salary",
+          "passed": true,
+          "expected": "45000",
+          "actual": "45000"
+        },
+        {
+          "name": "source:salary",
+          "passed": true
+        },
+        {
+          "name": "review_and_pack",
+          "passed": true
+        },
+        {
+          "name": "stale_approval",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 1840,
+        "output_tokens": 534,
+        "requests": 4
+      },
+      "http_requests": 0,
+      "pack_path": null,
+      "trace_ids": [
+        "accf44d811ed403eb4bcc6cef8552b20",
+        "509f03ff22df45079038c9b9f36f6411",
+        "8c13623871f94d199df3810ea92bb37d",
+        "d7313c7a76b24888881ca1ce810c47bf",
+        "c0b08ca5e7b34a108dab5bc9a6b965ae"
+      ]
+    },
+    {
+      "scenario": "dev_student",
+      "case_id": "dev_student-ecac3446",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:38.713536+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": true,
+      "final_status": "COMPLETE",
+      "results": [
+        {
+          "case_id": "dev_student-ecac3446",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "f18359c49f414c62978d602eb97735c0",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_student-ecac3446",
+          "version": 2,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请补充 CAS/学校材料中的 cas_reference 信息。\n2. 请补充 CAS/学校材料中的 cas_name 信息。\n3. 请补充 CAS/学校材料中的 tuition_due 信息。",
+          "run_id": "3b07d4ef128542ccb14f9e7343ea5499",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_student-ecac3446",
+          "version": 3,
+          "status": "READY_FOR_REVIEW",
+          "reply": "已整理当前材料并完成本轮检查，材料包已生成。请顾问核对原件和适用条件后确认。",
+          "run_id": "63ba63ac45be406d9858b522d2ce1a4a",
+          "error": null,
+          "duplicate": false,
+          "pack_path": "<REPO>\\data\\packs\\dev_student-ecac3446\\v3-242996e246a4.zip"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "READY_FOR_REVIEW",
+          "actual": "READY_FOR_REVIEW"
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "student",
+          "actual": "student"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Mei Example",
+          "actual": "Mei Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "self",
+          "actual": "self"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "12",
+          "actual": "12"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:financial_evidence_requested",
+          "passed": true,
+          "expected": "true",
+          "actual": "true"
+        },
+        {
+          "name": "source:financial_evidence_requested",
+          "passed": true
+        },
+        {
+          "name": "field:passport_name",
+          "passed": true,
+          "expected": "Mei Example",
+          "actual": "Mei Example"
+        },
+        {
+          "name": "source:passport_name",
+          "passed": true
+        },
+        {
+          "name": "field:passport_number",
+          "passed": true,
+          "expected": "TEST-672188",
+          "actual": "TEST-672188"
+        },
+        {
+          "name": "source:passport_number",
+          "passed": true
+        },
+        {
+          "name": "field:passport_expiry",
+          "passed": true,
+          "expected": "2036-01-01",
+          "actual": "2036-01-01"
+        },
+        {
+          "name": "source:passport_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:bank_name",
+          "passed": true,
+          "expected": "Fictional Example Bank",
+          "actual": "Fictional Example Bank"
+        },
+        {
+          "name": "source:bank_name",
+          "passed": true
+        },
+        {
+          "name": "field:bank_holder",
+          "passed": true,
+          "expected": "Mei Example",
+          "actual": "Mei Example"
+        },
+        {
+          "name": "source:bank_holder",
+          "passed": true
+        },
+        {
+          "name": "field:bank_currency",
+          "passed": true,
+          "expected": "GBP",
+          "actual": "GBP"
+        },
+        {
+          "name": "source:bank_currency",
+          "passed": true
+        },
+        {
+          "name": "field:bank_minimum",
+          "passed": true,
+          "expected": "40000",
+          "actual": "40000"
+        },
+        {
+          "name": "source:bank_minimum",
+          "passed": true
+        },
+        {
+          "name": "field:bank_start",
+          "passed": true,
+          "expected": "2026-08-01",
+          "actual": "2026-08-01"
+        },
+        {
+          "name": "source:bank_start",
+          "passed": true
+        },
+        {
+          "name": "field:bank_end",
+          "passed": true,
+          "expected": "2026-09-28",
+          "actual": "2026-09-28"
+        },
+        {
+          "name": "source:bank_end",
+          "passed": true
+        },
+        {
+          "name": "field:tb_name",
+          "passed": true,
+          "expected": "Mei Example",
+          "actual": "Mei Example"
+        },
+        {
+          "name": "source:tb_name",
+          "passed": true
+        },
+        {
+          "name": "field:tb_clear",
+          "passed": true,
+          "expected": "true",
+          "actual": "true"
+        },
+        {
+          "name": "source:tb_clear",
+          "passed": true
+        },
+        {
+          "name": "field:tb_expiry",
+          "passed": true,
+          "expected": "2027-02-01",
+          "actual": "2027-02-01"
+        },
+        {
+          "name": "source:tb_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:cas_name",
+          "passed": true,
+          "expected": "Mei Example",
+          "actual": "Mei Example"
+        },
+        {
+          "name": "source:cas_name",
+          "passed": true
+        },
+        {
+          "name": "field:cas_reference",
+          "passed": true,
+          "expected": "TEST-CAS-2026",
+          "actual": "TEST-CAS-2026"
+        },
+        {
+          "name": "source:cas_reference",
+          "passed": true
+        },
+        {
+          "name": "field:tuition_due",
+          "passed": true,
+          "expected": "16000",
+          "actual": "16000"
+        },
+        {
+          "name": "source:tuition_due",
+          "passed": true
+        },
+        {
+          "name": "field:study_months",
+          "passed": true,
+          "expected": "12",
+          "actual": "12"
+        },
+        {
+          "name": "source:study_months",
+          "passed": true
+        },
+        {
+          "name": "field:study_location",
+          "passed": true,
+          "expected": "outside_london",
+          "actual": "outside_london"
+        },
+        {
+          "name": "source:study_location",
+          "passed": true
+        },
+        {
+          "name": "field:english_confirmed",
+          "passed": true,
+          "expected": "true",
+          "actual": "true"
+        },
+        {
+          "name": "source:english_confirmed",
+          "passed": true
+        },
+        {
+          "name": "field:atas_required",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:atas_required",
+          "passed": true
+        },
+        {
+          "name": "review_and_pack",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 1465,
+        "output_tokens": 568,
+        "requests": 3
+      },
+      "http_requests": 0,
+      "pack_path": "<REPO>\\data\\packs\\dev_student-ecac3446\\v3-242996e246a4.zip",
+      "trace_ids": [
+        "f18359c49f414c62978d602eb97735c0",
+        "3b07d4ef128542ccb14f9e7343ea5499",
+        "63ba63ac45be406d9858b522d2ce1a4a",
+        "92ee68830647433aafd680494b408414"
+      ]
+    },
+    {
+      "scenario": "dev_unreadable_image",
+      "case_id": "dev_unreadable_image-c7318953",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:41.225965+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": false,
+      "final_status": "WAIT_USER",
+      "results": [
+        {
+          "case_id": "dev_unreadable_image-c7318953",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "c7e5743d44d043c28fe5d95214dffe66",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_unreadable_image-c7318953",
+          "version": 2,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. unreadable.jpg 无法可靠读取，请上传清晰完整文件。\n2. 请确认 unreadable.jpg 是什么材料。\n3. 请为 unreadable.jpg 提供完整译文及译者声明、日期、签名和联系方式。",
+          "run_id": "3389836b4c6747e787f7e9a2212027be",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_unreadable_image-c7318953",
+          "version": 3,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. unreadable.jpg 无法可靠读取，请上传清晰完整文件。\n2. 请确认 unreadable.jpg 是什么材料。\n3. 请为 unreadable.jpg 提供完整译文及译者声明、日期、签名和联系方式。",
+          "run_id": "5929267fcea14b54b84ed72f41a12894",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "WAIT_USER"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "WAIT_USER"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "WAIT_USER",
+          "actual": "WAIT_USER"
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "visitor",
+          "actual": "visitor"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "self",
+          "actual": "self"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:purpose",
+          "passed": true,
+          "expected": "tourism",
+          "actual": "tourism"
+        },
+        {
+          "name": "source:purpose",
+          "passed": true
+        },
+        {
+          "name": "field:travel_end",
+          "passed": true,
+          "expected": "2026-11-15",
+          "actual": "2026-11-15"
+        },
+        {
+          "name": "source:travel_end",
+          "passed": true
+        },
+        {
+          "name": "field:return_reason",
+          "passed": true,
+          "expected": "return to my permanent job",
+          "actual": "return to my permanent job"
+        },
+        {
+          "name": "source:return_reason",
+          "passed": true
+        },
+        {
+          "name": "field:trip_budget",
+          "passed": true,
+          "expected": "3000",
+          "actual": "3000"
+        },
+        {
+          "name": "source:trip_budget",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "1",
+          "actual": "1"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:bank_name",
+          "passed": true,
+          "expected": "Fictional Example Bank",
+          "actual": "Fictional Example Bank"
+        },
+        {
+          "name": "source:bank_name",
+          "passed": true
+        },
+        {
+          "name": "field:bank_holder",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:bank_holder",
+          "passed": true
+        },
+        {
+          "name": "field:bank_currency",
+          "passed": true,
+          "expected": "GBP",
+          "actual": "GBP"
+        },
+        {
+          "name": "source:bank_currency",
+          "passed": true
+        },
+        {
+          "name": "field:bank_minimum",
+          "passed": true,
+          "expected": "40000",
+          "actual": "40000"
+        },
+        {
+          "name": "source:bank_minimum",
+          "passed": true
+        },
+        {
+          "name": "field:bank_start",
+          "passed": true,
+          "expected": "2026-08-01",
+          "actual": "2026-08-01"
+        },
+        {
+          "name": "source:bank_start",
+          "passed": true
+        },
+        {
+          "name": "field:bank_end",
+          "passed": true,
+          "expected": "2026-09-28",
+          "actual": "2026-09-28"
+        },
+        {
+          "name": "source:bank_end",
+          "passed": true
+        },
+        {
+          "name": "field:employment_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:employment_name",
+          "passed": true
+        },
+        {
+          "name": "field:employer",
+          "passed": true,
+          "expected": "Example Studio Ltd",
+          "actual": "Example Studio Ltd"
+        },
+        {
+          "name": "source:employer",
+          "passed": true
+        },
+        {
+          "name": "field:salary",
+          "passed": true,
+          "expected": "45000",
+          "actual": "45000"
+        },
+        {
+          "name": "source:salary",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 1318,
+        "output_tokens": 467,
+        "requests": 3
+      },
+      "http_requests": 0,
+      "pack_path": null,
+      "trace_ids": [
+        "c7e5743d44d043c28fe5d95214dffe66",
+        "3389836b4c6747e787f7e9a2212027be",
+        "5929267fcea14b54b84ed72f41a12894"
+      ]
+    },
+    {
+      "scenario": "dev_visitor",
+      "case_id": "dev_visitor-8a967f17",
+      "mode": "offline",
+      "at": "2026-10-05T16:29:41.458619+00:00",
+      "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+      "rule_version": "2026-10-05-9a48d3a4044e",
+      "passed": true,
+      "scripted_review": true,
+      "final_status": "COMPLETE",
+      "results": [
+        {
+          "case_id": "dev_visitor-8a967f17",
+          "version": 1,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 请上传有效护照/旅行证件的个人信息页。\n2. 证件号码缺失或不可读，请补充。\n3. 请核对护照有效期及行程日期；证件必须在相应旅行期间有效。",
+          "run_id": "3378461ee7724951860af7bb623a30af",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_visitor-8a967f17",
+          "version": 2,
+          "status": "WAIT_USER",
+          "reply": "我们先补齐以下信息：\n1. 本演示的在职自费访客分支需要工作支持材料；其他情况请顾问处理。\n2. 请补充可核对的资金证明。",
+          "run_id": "f31182aceef541b19f9d25b5ea0ef5cf",
+          "error": null,
+          "duplicate": false,
+          "pack_path": null
+        },
+        {
+          "case_id": "dev_visitor-8a967f17",
+          "version": 3,
+          "status": "READY_FOR_REVIEW",
+          "reply": "已整理当前材料并完成本轮检查，材料包已生成。请顾问核对原件和适用条件后确认。",
+          "run_id": "5f02db890eca4e7bb77e95f83bb77519",
+          "error": null,
+          "duplicate": false,
+          "pack_path": "<REPO>\\data\\packs\\dev_visitor-8a967f17\\v3-fbdcd5de6996.zip"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "event_states",
+          "passed": true,
+          "expected": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ],
+          "actual": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "READY_FOR_REVIEW"
+          ]
+        },
+        {
+          "name": "status",
+          "passed": true,
+          "expected": "READY_FOR_REVIEW",
+          "actual": "READY_FOR_REVIEW"
+        },
+        {
+          "name": "field:route",
+          "passed": true,
+          "expected": "visitor",
+          "actual": "visitor"
+        },
+        {
+          "name": "source:route",
+          "passed": true
+        },
+        {
+          "name": "field:applicant_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:applicant_name",
+          "passed": true
+        },
+        {
+          "name": "field:nationality",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:nationality",
+          "passed": true
+        },
+        {
+          "name": "field:age",
+          "passed": true,
+          "expected": "30",
+          "actual": "30"
+        },
+        {
+          "name": "source:age",
+          "passed": true
+        },
+        {
+          "name": "field:application_location",
+          "passed": true,
+          "expected": "outside_uk",
+          "actual": "outside_uk"
+        },
+        {
+          "name": "source:application_location",
+          "passed": true
+        },
+        {
+          "name": "field:application_date",
+          "passed": true,
+          "expected": "2026-10-05",
+          "actual": "2026-10-05"
+        },
+        {
+          "name": "source:application_date",
+          "passed": true
+        },
+        {
+          "name": "field:dependants",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:dependants",
+          "passed": true
+        },
+        {
+          "name": "field:previous_refusal",
+          "passed": true,
+          "expected": "false",
+          "actual": "false"
+        },
+        {
+          "name": "source:previous_refusal",
+          "passed": true
+        },
+        {
+          "name": "field:funding",
+          "passed": true,
+          "expected": "self",
+          "actual": "self"
+        },
+        {
+          "name": "source:funding",
+          "passed": true
+        },
+        {
+          "name": "field:travel_start",
+          "passed": true,
+          "expected": "2026-11-01",
+          "actual": "2026-11-01"
+        },
+        {
+          "name": "source:travel_start",
+          "passed": true
+        },
+        {
+          "name": "field:residence_country",
+          "passed": true,
+          "expected": "China",
+          "actual": "China"
+        },
+        {
+          "name": "source:residence_country",
+          "passed": true
+        },
+        {
+          "name": "field:residence_months",
+          "passed": true,
+          "expected": "36",
+          "actual": "36"
+        },
+        {
+          "name": "source:residence_months",
+          "passed": true
+        },
+        {
+          "name": "field:purpose",
+          "passed": true,
+          "expected": "tourism",
+          "actual": "tourism"
+        },
+        {
+          "name": "source:purpose",
+          "passed": true
+        },
+        {
+          "name": "field:travel_end",
+          "passed": true,
+          "expected": "2026-11-15",
+          "actual": "2026-11-15"
+        },
+        {
+          "name": "source:travel_end",
+          "passed": true
+        },
+        {
+          "name": "field:return_reason",
+          "passed": true,
+          "expected": "return to my permanent job",
+          "actual": "return to my permanent job"
+        },
+        {
+          "name": "source:return_reason",
+          "passed": true
+        },
+        {
+          "name": "field:trip_budget",
+          "passed": true,
+          "expected": "3000",
+          "actual": "3000"
+        },
+        {
+          "name": "source:trip_budget",
+          "passed": true
+        },
+        {
+          "name": "field:stay_months",
+          "passed": true,
+          "expected": "1",
+          "actual": "1"
+        },
+        {
+          "name": "source:stay_months",
+          "passed": true
+        },
+        {
+          "name": "field:passport_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:passport_name",
+          "passed": true
+        },
+        {
+          "name": "field:passport_number",
+          "passed": true,
+          "expected": "TEST-390274",
+          "actual": "TEST-390274"
+        },
+        {
+          "name": "source:passport_number",
+          "passed": true
+        },
+        {
+          "name": "field:passport_expiry",
+          "passed": true,
+          "expected": "2036-01-01",
+          "actual": "2036-01-01"
+        },
+        {
+          "name": "source:passport_expiry",
+          "passed": true
+        },
+        {
+          "name": "field:bank_name",
+          "passed": true,
+          "expected": "Fictional Example Bank",
+          "actual": "Fictional Example Bank"
+        },
+        {
+          "name": "source:bank_name",
+          "passed": true
+        },
+        {
+          "name": "field:bank_holder",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:bank_holder",
+          "passed": true
+        },
+        {
+          "name": "field:bank_currency",
+          "passed": true,
+          "expected": "GBP",
+          "actual": "GBP"
+        },
+        {
+          "name": "source:bank_currency",
+          "passed": true
+        },
+        {
+          "name": "field:bank_minimum",
+          "passed": true,
+          "expected": "40000",
+          "actual": "40000"
+        },
+        {
+          "name": "source:bank_minimum",
+          "passed": true
+        },
+        {
+          "name": "field:bank_start",
+          "passed": true,
+          "expected": "2026-08-01",
+          "actual": "2026-08-01"
+        },
+        {
+          "name": "source:bank_start",
+          "passed": true
+        },
+        {
+          "name": "field:bank_end",
+          "passed": true,
+          "expected": "2026-09-28",
+          "actual": "2026-09-28"
+        },
+        {
+          "name": "source:bank_end",
+          "passed": true
+        },
+        {
+          "name": "field:employment_name",
+          "passed": true,
+          "expected": "Lin Example",
+          "actual": "Lin Example"
+        },
+        {
+          "name": "source:employment_name",
+          "passed": true
+        },
+        {
+          "name": "field:employer",
+          "passed": true,
+          "expected": "Example Studio Ltd",
+          "actual": "Example Studio Ltd"
+        },
+        {
+          "name": "source:employer",
+          "passed": true
+        },
+        {
+          "name": "field:salary",
+          "passed": true,
+          "expected": "45000",
+          "actual": "45000"
+        },
+        {
+          "name": "source:salary",
+          "passed": true
+        },
+        {
+          "name": "review_and_pack",
+          "passed": true
+        }
+      ],
+      "usage": {
+        "input_tokens": 1310,
+        "output_tokens": 513,
+        "requests": 3
+      },
+      "http_requests": 0,
+      "pack_path": "<REPO>\\data\\packs\\dev_visitor-8a967f17\\v3-fbdcd5de6996.zip",
+      "trace_ids": [
+        "3378461ee7724951860af7bb623a30af",
+        "f31182aceef541b19f9d25b5ea0ef5cf",
+        "5f02db890eca4e7bb77e95f83bb77519",
+        "b7771cbce59f4c8e8b7f3eba75f19b53"
+      ]
+    }
+  ],
+  "live_budget_used": 32
+}

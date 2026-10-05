@@ -1,0 +1,25 @@
+{
+  "id": "holdout_student",
+  "split": "holdout",
+  "events": [
+    {
+      "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Jia Sample\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-20\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-12-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+      "attachments": []
+    },
+    {
+      "text": "Here is my identity document.",
+      "attachments": [
+        "materials\\holdout_student\\identity.jpg"
+      ]
+    },
+    {
+      "text": "Here are the remaining supporting documents.",
+      "attachments": [
+        "materials\\holdout_student\\funds.pdf",
+        "materials\\holdout_student\\health.pdf",
+        "materials\\holdout_student\\school.pdf"
+      ]
+    }
+  ],
+  "exercise": "normal"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "holdout_skilled_worker",
+  "split": "holdout",
+  "events": [
+    {
+      "text": "Hello, please help me prepare my UK application.\nroute: skilled_worker\napplicant_name: Tao Sample\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-20\ndependants: false\nprevious_refusal: false\nfunding: employer\ntravel_start: 2026-12-01\nresidence_country: China\nresidence_months: 36\nstay_months: 24",
+      "attachments": []
+    },
+    {
+      "text": "Here is my identity document.",
+      "attachments": [
+        "materials\\holdout_skilled_worker\\identity.jpg"
+      ]
+    },
+    {
+      "text": "Here are the remaining supporting documents.",
+      "attachments": [
+        "materials\\holdout_skilled_worker\\health.pdf",
+        "materials\\holdout_skilled_worker\\sponsor.pdf",
+        "materials\\holdout_skilled_worker\\language.pdf"
+      ]
+    },
+    {
+      "text": "My employer has replaced its sponsorship record. Please check the changed maintenance commitment.",
+      "attachments": [
+        "materials\\holdout_skilled_worker\\sponsor_updated.pdf"
+      ],
+      "adviser_after": {
+        "decision": "reject_document",
+        "document_name": "sponsor.pdf",
+        "notes": "Synthetic adviser verifies that the updated CoS supersedes the old CoS."
+      }
+    }
+  ],
+  "exercise": "normal"
+}

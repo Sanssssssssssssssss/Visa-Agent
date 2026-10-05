@@ -1,0 +1,24 @@
+{
+  "id": "dev_visitor",
+  "split": "dev",
+  "events": [
+    {
+      "text": "Hello, please help me prepare my UK application.\nroute: visitor\napplicant_name: Lin Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\npurpose: tourism\ntravel_end: 2026-11-15\nreturn_reason: return to my permanent job\ntrip_budget: 3000\nstay_months: 1",
+      "attachments": []
+    },
+    {
+      "text": "Here is my identity document.",
+      "attachments": [
+        "materials\\dev_visitor\\identity.pdf"
+      ]
+    },
+    {
+      "text": "Here are the remaining supporting documents.",
+      "attachments": [
+        "materials\\dev_visitor\\funds.pdf",
+        "materials\\dev_visitor\\work.pdf"
+      ]
+    }
+  ],
+  "exercise": "normal"
+}

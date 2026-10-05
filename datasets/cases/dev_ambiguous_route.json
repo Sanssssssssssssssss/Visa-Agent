@@ -1,0 +1,11 @@
+{
+  "id": "dev_ambiguous_route",
+  "split": "dev",
+  "events": [
+    {
+      "text": "Hello, I want to travel to the UK. What do you need to know?",
+      "attachments": []
+    }
+  ],
+  "exercise": "ambiguous_route"
+}

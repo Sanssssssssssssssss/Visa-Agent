@@ -1,0 +1,25 @@
+{
+  "id": "dev_skilled_worker",
+  "split": "dev",
+  "events": [
+    {
+      "text": "Hello, please help me prepare my UK application.\nroute: skilled_worker\napplicant_name: Kai Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: employer\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 24",
+      "attachments": []
+    },
+    {
+      "text": "Here is my identity document.",
+      "attachments": [
+        "materials\\dev_skilled_worker\\identity.pdf"
+      ]
+    },
+    {
+      "text": "Here are the remaining supporting documents.",
+      "attachments": [
+        "materials\\dev_skilled_worker\\health.pdf",
+        "materials\\dev_skilled_worker\\sponsor.pdf",
+        "materials\\dev_skilled_worker\\language.pdf"
+      ]
+    }
+  ],
+  "exercise": "normal"
+}

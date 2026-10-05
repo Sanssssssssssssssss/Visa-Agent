@@ -1,0 +1,181 @@
+{
+  "expected_status": "WAIT_USER",
+  "expected_fields": {
+    "route": "student",
+    "applicant_name": "Mei Example",
+    "nationality": "China",
+    "age": "30",
+    "application_location": "outside_uk",
+    "application_date": "2026-10-05",
+    "dependants": "false",
+    "previous_refusal": "false",
+    "funding": "self",
+    "travel_start": "2026-11-01",
+    "residence_country": "China",
+    "residence_months": "36",
+    "stay_months": "12",
+    "financial_evidence_requested": "true",
+    "passport_name": "Mei Example",
+    "passport_number": "TEST-672188",
+    "passport_expiry": "2036-01-01",
+    "bank_name": "Fictional Example Bank",
+    "bank_holder": "Mei Example",
+    "bank_currency": "GBP",
+    "bank_minimum": "40000",
+    "bank_start": "2026-09-20",
+    "bank_end": "2026-09-28",
+    "tb_name": "Mei Example",
+    "tb_clear": "true",
+    "tb_expiry": "2027-02-01",
+    "cas_name": "Mei Example",
+    "cas_reference": "TEST-CAS-2026",
+    "tuition_due": "16000",
+    "study_months": "12",
+    "study_location": "outside_london",
+    "english_confirmed": "true",
+    "atas_required": "false"
+  },
+  "expected_blockers": [
+    "finance"
+  ],
+  "event_states": [
+    "WAIT_USER",
+    "WAIT_USER",
+    "WAIT_USER"
+  ],
+  "max_questions": 3,
+  "expected_sources": {
+    "route": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "applicant_name": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "nationality": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "age": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "application_location": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "application_date": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "dependants": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "previous_refusal": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "funding": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "travel_start": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "residence_country": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "residence_months": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "stay_months": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "financial_evidence_requested": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "passport_name": {
+      "attachment": "materials\\dev_student\\identity.pdf",
+      "page": 1
+    },
+    "passport_number": {
+      "attachment": "materials\\dev_student\\identity.pdf",
+      "page": 1
+    },
+    "passport_expiry": {
+      "attachment": "materials\\dev_student\\identity.pdf",
+      "page": 1
+    },
+    "bank_name": {
+      "attachment": "materials\\variants\\short_period.pdf",
+      "page": 1
+    },
+    "bank_holder": {
+      "attachment": "materials\\variants\\short_period.pdf",
+      "page": 1
+    },
+    "bank_currency": {
+      "attachment": "materials\\variants\\short_period.pdf",
+      "page": 1
+    },
+    "bank_minimum": {
+      "attachment": "materials\\variants\\short_period.pdf",
+      "page": 1
+    },
+    "bank_start": {
+      "attachment": "materials\\variants\\short_period.pdf",
+      "page": 1
+    },
+    "bank_end": {
+      "attachment": "materials\\variants\\short_period.pdf",
+      "page": 1
+    },
+    "tb_name": {
+      "attachment": "materials\\dev_student\\health.pdf",
+      "page": 1
+    },
+    "tb_clear": {
+      "attachment": "materials\\dev_student\\health.pdf",
+      "page": 1
+    },
+    "tb_expiry": {
+      "attachment": "materials\\dev_student\\health.pdf",
+      "page": 1
+    },
+    "cas_name": {
+      "attachment": "materials\\dev_student\\school.pdf",
+      "page": 1
+    },
+    "cas_reference": {
+      "attachment": "materials\\dev_student\\school.pdf",
+      "page": 1
+    },
+    "tuition_due": {
+      "attachment": "materials\\dev_student\\school.pdf",
+      "page": 1
+    },
+    "study_months": {
+      "attachment": "materials\\dev_student\\school.pdf",
+      "page": 1
+    },
+    "study_location": {
+      "attachment": "materials\\dev_student\\school.pdf",
+      "page": 1
+    },
+    "english_confirmed": {
+      "attachment": "materials\\dev_student\\school.pdf",
+      "page": 1
+    },
+    "atas_required": {
+      "attachment": "materials\\dev_student\\school.pdf",
+      "page": 1
+    }
+  }
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "visitor",
+    "url": "https://www.gov.uk/government/publications/visitor-visa-guide-to-supporting-documents/guide-to-supporting-documents-visiting-the-uk",
+    "status": "failed",
+    "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)>"
+  },
+  {
+    "id": "student",
+    "url": "https://www.gov.uk/student-visa/documents-you-must-provide",
+    "status": "failed",
+    "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)>"
+  },
+  {
+    "id": "student_money",
+    "url": "https://www.gov.uk/student-visa/money",
+    "status": "failed",
+    "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)>"
+  },
+  {
+    "id": "finance",
+    "url": "https://www.gov.uk/guidance/financial-evidence-for-student-and-child-student-route-applicants",
+    "status": "failed",
+    "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)>"
+  },
+  {
+    "id": "worker",
+    "url": "https://www.gov.uk/skilled-worker-visa/documents-you-must-provide",
+    "status": "failed",
+    "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)>"
+  },
+  {
+    "id": "worker_money",
+    "url": "https://www.gov.uk/skilled-worker-visa/how-much-it-costs",
+    "status": "failed",
+    "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)>"
+  },
+  {
+    "id": "english",
+    "url": "https://www.gov.uk/skilled-worker-visa/knowledge-of-english",
+    "status": "failed",
+    "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)>"
+  },
+  {
+    "id": "tb",
+    "url": "https://www.gov.uk/tb-test-visa",
+    "status": "failed",
+    "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)>"
+  },
+  {
+    "id": "sussex",
+    "url": "https://student.sussex.ac.uk/international/visas/applying/proof",
+    "purpose": "Bank statement, deposit, bank letter and parental consent examples",
+    "status": "link_only",
+    "licence": "Redistribution not established; not bundled",
+    "sha256": null
+  },
+  {
+    "id": "swansea",
+    "url": "https://www.swansea.ac.uk/media/Guide-to-documents-for-Student-visa-application.pdf",
+    "purpose": "CAS layout reference; policy may be older than current rules",
+    "status": "link_only",
+    "licence": "Redistribution not established; not bundled",
+    "sha256": null
+  },
+  {
+    "id": "passport",
+    "url": "https://www.gov.uk/government/publications/basic-passport-checks",
+    "purpose": "Specimen layout/OCR reference, not a foreign applicant's passport",
+    "status": "link_only",
+    "licence": "Redistribution not established; not bundled",
+    "sha256": null
+  }
+]

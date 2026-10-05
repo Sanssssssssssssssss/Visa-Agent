@@ -1,0 +1,24 @@
+{
+  "case_id": "material-compatibility",
+  "result": {
+    "case_id": "material-compatibility",
+    "version": 1,
+    "status": "WAIT_USER",
+    "reply": "我们先补齐以下信息：\n1. 请说明来英国的主要目的，以确认签证路线。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认在英国境外申请；境内申请需要顾问处理。",
+    "run_id": "1984c3c7cb264b958eadd32f4e56aae3",
+    "error": null,
+    "duplicate": false,
+    "pack_path": null
+  },
+  "expected": {
+    "employment_name": "测试申请人",
+    "employer": "测试公司",
+    "passport_name": "Lin Example"
+  },
+  "actual": {
+    "employment_name": "测试申请人",
+    "employer": "测试公司",
+    "passport_name": "Lin Example"
+  },
+  "passed": true
+}

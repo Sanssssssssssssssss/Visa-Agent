@@ -1,0 +1,12 @@
+{
+  "expected_status": "WAIT_USER",
+  "expected_fields": {},
+  "expected_blockers": [
+    "route"
+  ],
+  "event_states": [
+    "WAIT_USER"
+  ],
+  "max_questions": 3,
+  "expected_sources": {}
+}

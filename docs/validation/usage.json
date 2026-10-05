@@ -1,0 +1,173 @@
+{
+  "reserved_http_requests": 32,
+  "limit": 60,
+  "ledger": [
+    {
+      "id": 1,
+      "at_utc": "2026-10-05 16:19:49",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 2,
+      "at_utc": "2026-10-05 16:20:53",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 3,
+      "at_utc": "2026-10-05 16:20:54",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 4,
+      "at_utc": "2026-10-05 16:22:01",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 5,
+      "at_utc": "2026-10-05 16:22:04",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 6,
+      "at_utc": "2026-10-05 16:22:05",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 7,
+      "at_utc": "2026-10-05 16:22:22",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 8,
+      "at_utc": "2026-10-05 16:22:25",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 9,
+      "at_utc": "2026-10-05 16:22:27",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 10,
+      "at_utc": "2026-10-05 16:27:24",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 11,
+      "at_utc": "2026-10-05 16:27:27",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 12,
+      "at_utc": "2026-10-05 16:27:29",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 13,
+      "at_utc": "2026-10-05 16:27:44",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 14,
+      "at_utc": "2026-10-05 16:27:46",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 15,
+      "at_utc": "2026-10-05 16:27:49",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 16,
+      "at_utc": "2026-10-05 16:27:51",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 17,
+      "at_utc": "2026-10-05 16:27:54",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 18,
+      "at_utc": "2026-10-05 16:27:57",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 19,
+      "at_utc": "2026-10-05 16:27:59",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 20,
+      "at_utc": "2026-10-05 16:28:03",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 21,
+      "at_utc": "2026-10-05 16:28:06",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 22,
+      "at_utc": "2026-10-05 16:28:13",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 23,
+      "at_utc": "2026-10-05 16:28:17",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 24,
+      "at_utc": "2026-10-05 16:28:19",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 25,
+      "at_utc": "2026-10-05 16:28:21",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 26,
+      "at_utc": "2026-10-05 16:28:26",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 27,
+      "at_utc": "2026-10-05 16:28:28",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 28,
+      "at_utc": "2026-10-05 16:28:33",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 29,
+      "at_utc": "2026-10-05 16:28:38",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 30,
+      "at_utc": "2026-10-05 16:28:40",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 31,
+      "at_utc": "2026-10-05 16:28:45",
+      "model": "deepseek-flash"
+    },
+    {
+      "id": 32,
+      "at_utc": "2026-10-05 16:28:46",
+      "model": "deepseek-flash"
+    }
+  ],
+  "formal_six_cases": {
+    "input_tokens": 56530,
+    "output_tokens": 11138,
+    "requests": 22
+  },
+  "cost_usd": null,
+  "note": "Prices not configured. One initial successful plain-reply probe lost token accounting when SDK usage() changed to usage; one 400 response has no usage. All reserved requests remain counted."
+}

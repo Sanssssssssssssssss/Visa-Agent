@@ -1,0 +1,181 @@
+{
+  "expected_status": "WAIT_USER",
+  "expected_fields": {
+    "route": "student",
+    "applicant_name": "Jia Sample",
+    "nationality": "China",
+    "age": "30",
+    "application_location": "outside_uk",
+    "application_date": "2026-10-20",
+    "dependants": "false",
+    "previous_refusal": "false",
+    "funding": "self",
+    "travel_start": "2026-12-01",
+    "residence_country": "China",
+    "residence_months": "36",
+    "stay_months": "12",
+    "financial_evidence_requested": "true",
+    "passport_name": "Jia Sample",
+    "passport_number": "TEST-261998",
+    "passport_expiry": "2037-02-02",
+    "bank_name": "Fictional Example Bank",
+    "bank_holder": "Jia Sample",
+    "bank_currency": "GBP",
+    "bank_minimum": "42000",
+    "bank_start": "2026-10-10",
+    "bank_end": "2026-10-15",
+    "tb_name": "Jia Sample",
+    "tb_clear": "true",
+    "tb_expiry": "2027-02-01",
+    "cas_name": "Jia Sample",
+    "cas_reference": "TEST-CAS-2026",
+    "tuition_due": "17500",
+    "study_months": "12",
+    "study_location": "outside_london",
+    "english_confirmed": "true",
+    "atas_required": "false"
+  },
+  "expected_blockers": [
+    "finance"
+  ],
+  "event_states": [
+    "WAIT_USER",
+    "WAIT_USER",
+    "WAIT_USER"
+  ],
+  "max_questions": 3,
+  "expected_sources": {
+    "route": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "applicant_name": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "nationality": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "age": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "application_location": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "application_date": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "dependants": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "previous_refusal": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "funding": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "travel_start": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "residence_country": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "residence_months": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "stay_months": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "financial_evidence_requested": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "passport_expiry": {
+      "attachment": "materials\\holdout_student\\identity.jpg",
+      "page": 1
+    },
+    "passport_number": {
+      "attachment": "materials\\holdout_student\\identity.jpg",
+      "page": 1
+    },
+    "passport_name": {
+      "attachment": "materials\\holdout_student\\identity.jpg",
+      "page": 1
+    },
+    "bank_end": {
+      "attachment": "materials\\holdout_student\\funds.pdf",
+      "page": 1
+    },
+    "bank_start": {
+      "attachment": "materials\\holdout_student\\funds.pdf",
+      "page": 1
+    },
+    "bank_minimum": {
+      "attachment": "materials\\holdout_student\\funds.pdf",
+      "page": 1
+    },
+    "bank_currency": {
+      "attachment": "materials\\holdout_student\\funds.pdf",
+      "page": 1
+    },
+    "bank_holder": {
+      "attachment": "materials\\holdout_student\\funds.pdf",
+      "page": 1
+    },
+    "bank_name": {
+      "attachment": "materials\\holdout_student\\funds.pdf",
+      "page": 1
+    },
+    "tb_expiry": {
+      "attachment": "materials\\holdout_student\\health.pdf",
+      "page": 1
+    },
+    "tb_clear": {
+      "attachment": "materials\\holdout_student\\health.pdf",
+      "page": 1
+    },
+    "tb_name": {
+      "attachment": "materials\\holdout_student\\health.pdf",
+      "page": 1
+    },
+    "atas_required": {
+      "attachment": "materials\\holdout_student\\school.pdf",
+      "page": 1
+    },
+    "english_confirmed": {
+      "attachment": "materials\\holdout_student\\school.pdf",
+      "page": 1
+    },
+    "study_location": {
+      "attachment": "materials\\holdout_student\\school.pdf",
+      "page": 1
+    },
+    "study_months": {
+      "attachment": "materials\\holdout_student\\school.pdf",
+      "page": 1
+    },
+    "tuition_due": {
+      "attachment": "materials\\holdout_student\\school.pdf",
+      "page": 1
+    },
+    "cas_reference": {
+      "attachment": "materials\\holdout_student\\school.pdf",
+      "page": 1
+    },
+    "cas_name": {
+      "attachment": "materials\\holdout_student\\school.pdf",
+      "page": 1
+    }
+  }
+}

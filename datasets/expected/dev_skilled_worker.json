@@ -1,0 +1,154 @@
+{
+  "expected_status": "READY_FOR_REVIEW",
+  "expected_fields": {
+    "route": "skilled_worker",
+    "applicant_name": "Kai Example",
+    "nationality": "China",
+    "age": "30",
+    "application_location": "outside_uk",
+    "application_date": "2026-10-05",
+    "dependants": "false",
+    "previous_refusal": "false",
+    "funding": "employer",
+    "travel_start": "2026-11-01",
+    "residence_country": "China",
+    "residence_months": "36",
+    "stay_months": "24",
+    "passport_name": "Kai Example",
+    "passport_number": "TEST-410724",
+    "passport_expiry": "2036-01-01",
+    "tb_name": "Kai Example",
+    "tb_clear": "true",
+    "tb_expiry": "2027-02-01",
+    "cos_name": "Kai Example",
+    "cos_reference": "TEST-COS-2026",
+    "sponsor_name": "Example Software Ltd",
+    "sponsor_licence": "TEST-LICENCE",
+    "job_title": "Software Developer",
+    "occupation_code": "2134",
+    "salary": "65000",
+    "maintenance_certified": "true",
+    "english_level": "B2"
+  },
+  "expected_blockers": [],
+  "event_states": [
+    "WAIT_USER",
+    "WAIT_USER",
+    "READY_FOR_REVIEW"
+  ],
+  "max_questions": 3,
+  "expected_sources": {
+    "route": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "applicant_name": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "nationality": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "age": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "application_location": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "application_date": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "dependants": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "previous_refusal": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "funding": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "travel_start": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "residence_country": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "residence_months": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "stay_months": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "passport_name": {
+      "attachment": "materials\\dev_skilled_worker\\identity.pdf",
+      "page": 1
+    },
+    "passport_number": {
+      "attachment": "materials\\dev_skilled_worker\\identity.pdf",
+      "page": 1
+    },
+    "passport_expiry": {
+      "attachment": "materials\\dev_skilled_worker\\identity.pdf",
+      "page": 1
+    },
+    "tb_name": {
+      "attachment": "materials\\dev_skilled_worker\\health.pdf",
+      "page": 1
+    },
+    "tb_clear": {
+      "attachment": "materials\\dev_skilled_worker\\health.pdf",
+      "page": 1
+    },
+    "tb_expiry": {
+      "attachment": "materials\\dev_skilled_worker\\health.pdf",
+      "page": 1
+    },
+    "cos_name": {
+      "attachment": "materials\\dev_skilled_worker\\sponsor.pdf",
+      "page": 1
+    },
+    "cos_reference": {
+      "attachment": "materials\\dev_skilled_worker\\sponsor.pdf",
+      "page": 1
+    },
+    "sponsor_name": {
+      "attachment": "materials\\dev_skilled_worker\\sponsor.pdf",
+      "page": 1
+    },
+    "sponsor_licence": {
+      "attachment": "materials\\dev_skilled_worker\\sponsor.pdf",
+      "page": 1
+    },
+    "job_title": {
+      "attachment": "materials\\dev_skilled_worker\\sponsor.pdf",
+      "page": 1
+    },
+    "occupation_code": {
+      "attachment": "materials\\dev_skilled_worker\\sponsor.pdf",
+      "page": 1
+    },
+    "salary": {
+      "attachment": "materials\\dev_skilled_worker\\sponsor.pdf",
+      "page": 1
+    },
+    "maintenance_certified": {
+      "attachment": "materials\\dev_skilled_worker\\sponsor.pdf",
+      "page": 1
+    },
+    "english_level": {
+      "attachment": "materials\\dev_skilled_worker\\language.pdf",
+      "page": 1
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "expected_status": "READY_FOR_REVIEW",
+  "expected_fields": {
+    "route": "visitor",
+    "applicant_name": "Lin Example",
+    "nationality": "China",
+    "age": "30",
+    "application_location": "outside_uk",
+    "application_date": "2026-10-05",
+    "dependants": "false",
+    "previous_refusal": "false",
+    "funding": "self",
+    "travel_start": "2026-11-01",
+    "residence_country": "China",
+    "residence_months": "36",
+    "purpose": "tourism",
+    "travel_end": "2026-11-15",
+    "return_reason": "return to my permanent job",
+    "trip_budget": "3000",
+    "stay_months": "1",
+    "passport_name": "Lin Example",
+    "passport_number": "TEST-390274",
+    "passport_expiry": "2036-01-01",
+    "bank_name": "Fictional Example Bank",
+    "bank_holder": "Lin Example",
+    "bank_currency": "GBP",
+    "bank_minimum": "40000",
+    "bank_start": "2026-08-01",
+    "bank_end": "2026-09-28",
+    "employment_name": "Lin Example",
+    "employer": "Example Studio Ltd",
+    "salary": "45000"
+  },
+  "expected_blockers": [],
+  "event_states": [
+    "WAIT_USER",
+    "WAIT_USER",
+    "READY_FOR_REVIEW"
+  ],
+  "max_questions": 3,
+  "expected_sources": {
+    "route": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "applicant_name": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "nationality": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "age": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "application_location": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "application_date": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "dependants": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "previous_refusal": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "funding": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "travel_start": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "residence_country": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "residence_months": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "purpose": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "travel_end": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "return_reason": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "trip_budget": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "stay_months": {
+      "event_id": "event_0",
+      "page": null
+    },
+    "passport_name": {
+      "attachment": "materials\\dev_visitor\\identity.pdf",
+      "page": 1
+    },
+    "passport_number": {
+      "attachment": "materials\\dev_visitor\\identity.pdf",
+      "page": 1
+    },
+    "passport_expiry": {
+      "attachment": "materials\\dev_visitor\\identity.pdf",
+      "page": 1
+    },
+    "bank_name": {
+      "attachment": "materials\\dev_visitor\\funds.pdf",
+      "page": 1
+    },
+    "bank_holder": {
+      "attachment": "materials\\dev_visitor\\funds.pdf",
+      "page": 1
+    },
+    "bank_currency": {
+      "attachment": "materials\\dev_visitor\\funds.pdf",
+      "page": 1
+    },
+    "bank_minimum": {
+      "attachment": "materials\\dev_visitor\\funds.pdf",
+      "page": 1
+    },
+    "bank_start": {
+      "attachment": "materials\\dev_visitor\\funds.pdf",
+      "page": 1
+    },
+    "bank_end": {
+      "attachment": "materials\\dev_visitor\\funds.pdf",
+      "page": 1
+    },
+    "employment_name": {
+      "attachment": "materials\\dev_visitor\\work.pdf",
+      "page": 1
+    },
+    "employer": {
+      "attachment": "materials\\dev_visitor\\work.pdf",
+      "page": 1
+    },
+    "salary": {
+      "attachment": "materials\\dev_visitor\\work.pdf",
+      "page": 1
+    }
+  }
+}

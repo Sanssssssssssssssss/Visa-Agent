@@ -1,0 +1,25 @@
+{
+  "id": "dev_funds_period",
+  "split": "dev",
+  "events": [
+    {
+      "text": "Hello, please help me prepare my UK application.\nroute: student\napplicant_name: Mei Example\nnationality: China\nage: 30\napplication_location: outside_uk\napplication_date: 2026-10-05\ndependants: false\nprevious_refusal: false\nfunding: self\ntravel_start: 2026-11-01\nresidence_country: China\nresidence_months: 36\nstay_months: 12\nfinancial_evidence_requested: true",
+      "attachments": []
+    },
+    {
+      "text": "Here is my identity document.",
+      "attachments": [
+        "materials\\dev_student\\identity.pdf"
+      ]
+    },
+    {
+      "text": "Here are the remaining supporting documents.",
+      "attachments": [
+        "materials\\variants\\short_period.pdf",
+        "materials\\dev_student\\health.pdf",
+        "materials\\dev_student\\school.pdf"
+      ]
+    }
+  ],
+  "exercise": "funds_period"
+}
