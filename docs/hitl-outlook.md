@@ -3,7 +3,7 @@
 HITL 可在启动时选择：`--hitl on` 或 `--hitl off`，默认开启。设置保存在新案件中；切换启动参数后，用 `/reset` 或“一键清空”建立新案件。旧案件保留原审核方式。
 
 ```powershell
-# 本地 UI：关闭人工复核，模型决定何时交付
+# 本地 UI：关闭人工复核，清单满足后自动完成收集
 uv run python -m visa_agent.web --hitl off --data data/manual-auto --port 8765
 # 开启人工复核，使用独立数据目录
 uv run python -m visa_agent.web --hitl on --data data/manual-review --port 8766
@@ -13,7 +13,7 @@ uv run python -m visa_agent.web --hitl on --data data/manual-review --port 8766
 
 开启时，顾问可对照原件确认候选字段、处理冲突、拒绝不适用材料、要求补件，并批准**当前版本**的材料包。模型没有人工审批工具。自动检查存在阻塞项时，直接点“批准”也不能完成。
 
-关闭时，所有自动检查满足后，模型返回 `delivery_decision=deliver`，应用生成包并进入 `COMPLETE`。`review.json` 保存自动决定的运行 ID、案件版本和清单哈希，`approval` 保持空值，报告明确标记“未经人工审核”。模型无法跳过缺项、冲突和读取失败。
+关闭时，所有自动检查满足后，应用直接记录材料收集完成、生成本地包并进入 `COMPLETE`，跳过额外的引导/交付模型请求。`review.json` 保存完成该次检查的运行 ID、案件版本、清单哈希和 `basis=checklist`，`approval` 保持空值，报告明确标记“未经人工审核”。模型无法跳过缺项、冲突和读取失败。
 
 本版不做材料真伪鉴定。关闭 HITL 后，无法自动解决的冲突、未实现的业务条件或提取问题进入 `BLOCKED`；不会后台排一个人工审批任务。补件不保证能消除已有争议：目前未实现自动撤销错误材料或裁定冲突，需要调整运行问题后重试，或新建案件重新提供正确资料。
 
@@ -25,19 +25,19 @@ flowchart TD
   B --> C[PDF 转图、OCR、原图与文本提取]
   C --> D[校验字段来源，保存事实与冲突]
   D --> E[确定性材料检查]
-  E --> F[模型选择最多三个下一步问题]
-  F --> G{材料检查满足？}
-  G -- 否 --> H[WAIT_USER / NEEDS_HUMAN / BLOCKED]
+  E --> G{材料检查满足？}
+  G -- 否 --> F[模型选择最多三个下一步问题]
+  F --> H[WAIT_USER / NEEDS_HUMAN / BLOCKED]
   G -- 是 --> I{HITL？}
   I -- 开 --> J[READY_FOR_REVIEW → 人工批准]
-  I -- 关 --> K[模型决定交付]
+  I -- 关 --> K[清单满足后确认收集完成]
   J --> L[COMPLETE + 材料包]
   K --> L
   H --> M[保存回复；等待下一条消息]
   L --> M
 ```
 
-`WAIT_USER` 等待客户回答或补件；`NEEDS_HUMAN` 表示已开启人工复核且需顾问判断；`BLOCKED` 表示关闭人工复核但存在无法自动确认的条件。`READY_FOR_REVIEW` 在关闭模式下表示检查齐备、模型尚未决定交付。`COMPLETE` 的人工/自动来源由单独记录区分。
+`WAIT_USER` 等待客户回答或补件；`NEEDS_HUMAN` 表示已开启人工复核且需顾问判断；`BLOCKED` 表示关闭人工复核但存在无法自动确认的条件。`READY_FOR_REVIEW` 在关闭模式下是本轮检查后的中间状态，随即由代码确认收集完成；旧版本等待模型决定的历史记录仍保留。`COMPLETE` 的人工/自动来源由单独记录区分。
 
 这是 `service.py` 中的直接函数工作流，没有额外引擎。每事件最多四次模型请求；检查后引导与提取共享预算。等待期间不调用模型。最近 20 轮完整对话加入工作上下文；更早历史保存在 SQLite，事实按键、值和来源压缩重建，冲突双方保留。工作上下文过大时先缩减摘录，再移除最旧完整轮；关键事实仍超限则停止。
 

@@ -150,16 +150,22 @@ class VisaService:
                                                      source="project:inbox", message="有未完成输入，须重试或由顾问处置。"))
                         case.status = self.checked_status(case)
                         case.pending_error = None
-                        guidance = guide(case, event, trace, "offline" if self.model_override else self.mode,
-                                         self.budget, model_override=self.guidance_model_override)
-                        if case.status == Status.READY:
-                            if not case.hitl_enabled and guidance.delivery_decision == "deliver":
-                                case.automatic_completion = AutomaticCompletion(version=case.version,
-                                    manifest_hash=digest(manifest(case)), decision_run_id=run_id)
-                                case.status = Status.COMPLETE
+                        if case.status == Status.READY and not case.hitl_enabled:
+                            # Collection ends when the versioned checklist is satisfied.
+                            # A second model decision cannot add evidence or approve a visa.
+                            trace["completion_policy"] = "checked_collection_v1"
+                            trace["guidance_skipped"] = "collection_complete"
+                            case.automatic_completion = AutomaticCompletion(version=case.version,
+                                manifest_hash=digest(manifest(case)), decision_run_id=run_id,
+                                basis="checklist")
+                            case.status = Status.COMPLETE
+                        else:
+                            guidance = guide(case, event, trace, "offline" if self.model_override else self.mode,
+                                             self.budget, model_override=self.guidance_model_override)
                         if case.status in {Status.READY, Status.COMPLETE}:
                             case.pack_path = build_pack(case, self.store.root)
-                    reply = reply_for(case, text=event.text, intent=intent, received_count=len(staged), guidance=guidance)
+                    reply = reply_for(case, text=event.text, intent=intent, received_count=len(staged),
+                                      received_names=[Path(original).name for original, _, _ in staged], guidance=guidance)
                     case.last_contact = max(case.last_contact, event.at.isoformat())
                     case.reminder_count = 0
                     case.last_reminder = None

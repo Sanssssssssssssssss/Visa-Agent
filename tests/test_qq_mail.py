@@ -61,6 +61,7 @@ def test_read_chinese_pdf_then_reply_in_same_thread_after_restart(tmp_path):
     case_id = result["result"]["case_id"]
     case = app.service.store.get(case_id)
     assert len(case.documents) == 1 and case.documents[0].content_role == "sample"
+    assert case.documents[0].name == "护照.pdf"
     adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)
     assert len(conn.sent) == 1 and conn.sent[0][1] == "lin@example.com"
     response = conn.sent[0][0]
@@ -71,6 +72,21 @@ def test_read_chinese_pdf_then_reply_in_same_thread_after_restart(tmp_path):
     next_result = adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)["messages"][0]
     assert next_result["result"]["case_id"] == case_id and len(conn.sent) == 2
     assert adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)["messages"] == []
+
+
+def test_same_named_mail_attachments_keep_original_names_and_distinct_bytes(tmp_path):
+    import hashlib
+    message = mail()
+    root = Path(__file__).resolve().parents[1] / "datasets/materials/dev_visitor"
+    contents = [(root / filename).read_bytes() for filename in ("identity.pdf", "funds.pdf")]
+    for content in contents:
+        message.add_attachment(content, maintype="application", subtype="pdf", filename="材料.pdf")
+    app = adapter(tmp_path, Connection({1: message}))
+    result = app.poll(AT.isoformat())["messages"][0]["result"]
+    docs = app.service.store.get(result["case_id"]).documents
+    assert len(docs) == 2 and {d.name for d in docs} == {"材料.pdf"}
+    assert {Path(d.path).read_bytes() for d in docs} == set(contents)
+    assert {d.sha256 for d in docs} == {hashlib.sha256(content).hexdigest() for content in contents}
 
 
 def test_duplicate_rfc_message_across_new_uidvalidity_does_not_resend(tmp_path):

@@ -190,7 +190,8 @@ class QQInbox:
             return self._send(receipt_id, json.loads(old["result"]), send_replies)
         files = []
         for index, (name, content) in enumerate(mail["files"]):
-            target = self.service.store.root / "qq-files" / receipt_id / f"{index}-{name}"
+            # Use directories for collision isolation, retaining the customer's name.
+            target = self.service.store.root / "qq-files" / receipt_id / str(index) / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(content)
             files.append(target)

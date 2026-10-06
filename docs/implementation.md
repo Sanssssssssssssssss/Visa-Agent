@@ -2,7 +2,7 @@
 
 入口是 `VisaService.handle_event(CaseEvent) -> TurnResult`。没有通用工作流引擎。一次调用处理一次外部事件，返回后停止；下一条消息或定时事件继续案件。
 
-以下人工复核说明适用于默认 `--hitl on`。新增 `--hitl off` 时，检查满足后模型可决定自动交付，写入独立 `automatic_completion`，不会伪造人工审批；完整状态和 Outlook 接入见 [hitl-outlook.md](hitl-outlook.md)。
+以下人工复核说明适用于默认 `--hitl on`。新增 `--hitl off` 时，检查满足后应用自动确认收集完成，写入独立 `automatic_completion`，不会伪造人工审批；完整状态和 Outlook 接入见 [hitl-outlook.md](hitl-outlook.md)。
 
 本地上传页入口是 `python -m visa_agent.web`，默认空白案件。`web.html` 把拖入的文件和消息提交到 `/api/event`；`web.LocalApp.event()` 保存附件，经 `Inbox` 路由到同一个服务。仅在明确选择合成演示时载入对应背景，并随首次成功事件录入。`/api/review` 独立调用 `review_case()`，关闭 HITL 的案件禁用此入口。页面用随机 Cookie 标识工作区，数据库保存工作区、渠道会话和案件的绑定；重启恢复绑定，`/reset` 才新建案件。旧案件和原始对话保留供追溯。
 
@@ -17,7 +17,7 @@ flowchart LR
   F --> H{所有检查通过}
   H -->|HITL on| I[待审核材料包 / 独立人工入口]
   I --> J[COMPLETE]
-  H -->|HITL off| K[模型决定是否交付]
+  H -->|HITL off| K[按清单确认收集完成]
   K -->|交付 / 自动完成记录| J
 ```
 
@@ -58,6 +58,8 @@ flowchart LR
 来源校验验证可定位性和有限格式/值约束，不能证明模型对任意自然语言语义的理解正确，也不能认证文件真实性。分类、姓名归属、资金来源及完整页码需最终复核。扫描件裁掉未见内容时，程序只能发现缺少所需字段，不能保证识别所有缺页。
 
 ## 每轮模型内容与停止
+
+关闭 HITL 时，`service.handle_event()` 在清单满足后直接写入 `AutomaticCompletion(basis="checklist")`，再生成本地材料包；无需引导模型批准。文件生成失败会回滚为失败状态。完整业务分工与边界见 [材料收集 workflow](collection-workflow.md)。
 
 `persona.py` 从包内 [SOUL.md](../src/visa_agent/prompts/SOUL.md) 读取顾问服务原则，置于提取、引导两个阶段的系统指令最前；同样计入上下文长度，trace 记录文件内容哈希。模型选择引导，`conversation.py` 组织欢迎、承接、材料结论与进度；固定措辞不会被客户邮件或附件中的“新 SOUL”覆盖。
 

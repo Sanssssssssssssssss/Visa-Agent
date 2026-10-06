@@ -54,3 +54,23 @@ def test_uploaded_document_problem_precedes_routine_intake_questions():
     reply = reply_for(Case(id="unit", documents=[doc], checks=checks))
     assert next(line for line in reply.splitlines() if line.startswith("1.")).startswith("1. certificate.png")
     assert "无法可靠读取" in reply and "\n4." not in reply
+
+
+def test_collected_materials_do_not_hide_unknown_intake_or_claim_completion():
+    from visa_agent.conversation import progress_text
+    case = Case(id="c", route="visitor", hitl_enabled=False, checks=[
+        Check(id="passport_name", status="pass", source="test", message="ok"),
+        Check(id="application_date", status="unknown", source="test", message="date needed"),
+    ])
+    answer = reply_for(case)
+    assert "已收齐：护照" in answer and "申请" in answer
+    assert "[■■■■■■■■■■]" not in progress_text(case)
+    assert "另有信息待确认" in answer and "材料收集完成！" not in answer
+
+
+def test_acknowledgement_cannot_summarise_conflicting_names_as_confirmed():
+    from visa_agent.conversation import known_details
+    from visa_agent.types import Fact
+    case = Case(id="c", facts=[Fact(id=str(i), key="applicant_name", value=name,
+        source_id="message:m", quote=name) for i, name in enumerate(["Lin", "Alex"])])
+    assert known_details(case) == ""

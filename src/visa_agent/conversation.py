@@ -6,6 +6,7 @@ claims, official links and completion wording; it cannot override a check.
 
 import re
 
+from .evidence import Evidence
 from .types import Status
 
 APPLICATION_GUIDE = "https://www.gov.uk/apply-to-come-to-the-uk"
@@ -70,14 +71,14 @@ def progress_text(case):
     if not p["route_known"]:
         return ("材料进度 " if zh else "Materials ") + bar + (
             " 清单待确认；先了解您的申请情况。" if zh else " Checklist pending; we need your circumstances first.")
-    counts = (f"{p['checked']}/{p['total']} 项已核对" if zh else f"{p['checked']}/{p['total']} categories checked")
-    review = ("人工复核已确认" if zh else "Adviser review confirmed") if p["reviewed"] else (
-        "人工复核待完成" if zh else "Adviser review pending")
-    if not case.hitl_enabled:
-        review = ("自动完成 · 未经人工审核" if zh else "Automatically completed; no human review") if p["automatic"] else (
-            "资料核对中" if zh else "Checking your information")
-    suffix = "清单会随申请情况更新。" if zh else "The checklist may change with your circumstances."
-    return f"{'材料进度' if zh else 'Materials'} {bar} {counts} · {review}\n{suffix}"
+    counts = (f"{p['checked']}/{p['total']} 项已收齐" if zh else f"{p['checked']}/{p['total']} categories collected")
+    unresolved = any(c.status in {"fail", "unknown"} for c in case.checks) or bool(case.pending_error)
+    if unresolved and complete == 10:
+        bar = "[" + "■" * 9 + "□]"
+    suffix = ("另有信息待确认；清单会随申请情况更新。" if zh else
+              "Some details still need clarification; the checklist may change.") if unresolved else (
+              "按当前申请情况统计。" if zh else "Based on your current circumstances.")
+    return f"{'材料进度' if zh else 'Materials'} {bar} {counts}\n{suffix}"
 
 
 def preparation_step(case):
@@ -124,6 +125,9 @@ QUESTIONS = {
 def action_for(check, case):
     zh = case.language == "zh"
     family = check.id.split(":")[0]
+    if check.id == "application_location" and check.status == "fail" and case.hitl_enabled:
+        return check.id, ("本清单覆盖英国境外申请，境内续签或转换需要顾问另行确认。请说明现有签证类型和到期日。" if zh else
+                          "This checklist covers applications from outside the UK. An adviser needs to assess extensions or switching; please tell me your current visa type and expiry date.")
     if family in {"sample", "unrelated", "read", "pagination", "context", "translation", "kind"}:
         affected = [d for d in case.documents if check.id.endswith(":" + d.id)]
         name = affected[0].name if affected else "这个文件" if zh else "this file"
@@ -154,6 +158,15 @@ def action_for(check, case):
             })
         return family, messages[family][0 if zh else 1]
     if not case.hitl_enabled and check.human:
+        unsupported = {
+            "application_location": ("当前清单只覆盖英国境外申请，暂时不能确认境内续签或转换所需材料。", "This checklist covers applications from outside the UK; it cannot confirm extension or switching requirements."),
+            "dependants": ("随行家属的材料清单尚未覆盖，暂时无法确认这类申请已经收齐。", "Dependant checklists are not covered, so I cannot confirm this application is complete."),
+            "previous_refusal": ("有拒签记录时，需要按具体拒签原因准备说明；当前流程无法判断这部分材料是否齐全。", "Previous refusals need an explanation based on the refusal reasons; this workflow cannot confirm that part is complete."),
+            "adult": ("当前清单只覆盖成年申请人，未成年人的监护及同意材料需要另行确认。", "This checklist covers adults; a minor's guardianship and consent documents need separate confirmation."),
+            "country_scope": ("当前清单尚未覆盖您的国籍对应的条件，暂时无法确认所有适用材料。", "This checklist does not cover your nationality's conditions, so I cannot confirm all applicable documents."),
+        }
+        if check.id in unsupported:
+            return check.id, unsupported[check.id][0 if zh else 1]
         if family in {"conflict", "name"}:
             return "conflict", ("现有材料中的信息不一致，暂时不能自动确认。请说明哪份是当前资料并提供清晰来源；本版不会自动裁定冲突。" if zh else
                                 "The evidence contains inconsistent details. Please identify the current information and provide a clear source; this version cannot automatically resolve conflicts.")
@@ -189,78 +202,104 @@ def action_for(check, case):
                      "An adviser needs to check this evidence or eligibility condition. You can continue sending the documents you have.")
 
 
-def reply_for(case, *, text="", intent="continue", received_count=None, guidance=None):
+def known_details(case):
+    """Short acknowledgement from resolved facts; conflicts never become a summary."""
+    zh = case.language == "zh"
+    evidence = Evidence(case)
+    labels = {
+        "applicant_name": ("姓名", "Name"), "nationality": ("国籍", "Nationality"),
+        "application_location": ("申请地点", "Applying from"),
+        "travel_start": ("出发日期", "Travel date"),
+    }
+    items = []
+    route_names = {"visitor": ("英国访问签证", "UK visitor visa"),
+                   "student": ("英国学生签证", "UK Student visa"),
+                   "skilled_worker": ("英国工作签证", "UK Skilled Worker visa")}
+    if case.route in route_names:
+        items.append(route_names[case.route][0 if zh else 1])
+    for key, pair in labels.items():
+        value = evidence.get(key)
+        if value is None:
+            continue
+        if key == "application_location":
+            value = {"outside_uk": "英国境外" if zh else "outside the UK",
+                     "inside_uk": "英国境内" if zh else "inside the UK"}.get(value, value)
+        elif zh and value == "China":
+            value = "中国"
+        items.append(f"{pair[0 if zh else 1]}：{' '.join(str(value).split())[:80]}")
+        if len(items) == 3:
+            break
+    return ("已了解：" if zh else "Noted: ") + ("；" if zh else "; ").join(items) if items else ""
+
+
+def reply_for(case, *, text="", intent="continue", received_count=None, received_names=None, guidance=None):
+    """Receipt, checklist, next action. Completion wording comes only from state."""
     zh = case.language == "zh"
     first = not case.history
     count = len([d for d in case.documents if not d.rejected]) if received_count is None else received_count
-    if first:
-        greeting = ("您好！很高兴帮您准备英国签证材料。我们先了解您的情况，再一步步整理。" if zh else
-                    "Hello! I'd be happy to help you prepare your UK visa documents. Let's start with your circumstances and take it one step at a time.")
+    if case.status == Status.COMPLETE:
+        opening = "材料收集完成！✅ 感谢您配合整理。" if zh else "Document collection complete! ✅ Thanks for working through it with me."
+    elif first:
+        opening = "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。" if zh else "Hello! I'm your visa document assistant 😊 I'll keep track and help you gather what is needed, step by step."
     else:
-        greeting = ("谢谢您发来材料，我们接着一起核对。" if count else "谢谢您的回复，我们继续看下一步。") if zh else (
-            "Thanks for sending your documents. Let's check them together." if count else "Thanks for getting back to me. Let's look at the next step together.")
-    paragraphs = [greeting, preparation_step(case)]
-    if guidance:
-        if guidance.explanation != "continue":
-            intent = guidance.explanation
-        approaches = {
-            "step_by_step": ("不用一下子准备齐所有材料，也不需要先弄懂签证术语。我们一次处理几项就好。", "You don't need every document ready or all the visa terms figured out. We can handle a few things at a time."),
-            "explain_material": ("我会说明每项材料用来核对什么，您可以先提供手头已有的文件。", "I'll explain what each document helps us check. You can start with the files you already have."),
-        }
-        if guidance.approach in approaches:
-            paragraphs.append(approaches[guidance.approach][0 if zh else 1])
+        opening = "收到，谢谢您 😊" if zh else "Thanks, I've received your update 😊"
+    paragraphs = [opening]
     if case.test_mode:
-        paragraphs.append("演示案件：使用测试材料，生成的材料包仅供测试。" if zh else "Demo case: test materials and any resulting pack are for testing only.")
+        paragraphs.append("演示案件：测试材料仅供体验，不用于真实申请。" if zh else "Demo case: these test documents are for practice only.")
     if count:
-        paragraphs.append(f"已收到 {count} 个文件，我会逐项帮您核对。" if zh else f"I've received {count} file(s). I'll help you check them step by step.")
-    # A model may prioritise intake questions. Still disclose why uploaded
-    # examples cannot count as evidence, independently of those three actions.
+        names = received_names if received_names is not None else [d.name for d in case.documents if not d.rejected][-count:]
+        names = [" ".join(name.split())[:80] for name in names[:5]]
+        receipt = (f"📥 本次已收到 {count} 个文件" if zh else f"📥 Received {count} file(s) this time")
+        paragraphs.append(receipt + ("：" + "、".join(names) if names else ""))
+    details = known_details(case)
+    if details:
+        paragraphs.append(details)
+
+    progress = material_progress(case)
+    done = [i["label"] for i in progress["items"] if i["status"] == "checked"]
+    pending = [i["label"] for i in progress["items"] if i["status"] != "checked"]
+    if done:
+        paragraphs.append(("✅ 已收齐：" if zh else "✅ Collected: ") + "、".join(done))
+    if pending:
+        paragraphs.append(("待补齐或确认：" if zh else "Still needed or to clarify: ") + "、".join(pending))
     if count and not case.test_mode:
         samples = [d.name for d in case.documents if not d.rejected and d.content_role == "sample"]
-        if samples:
-            names = ", ".join(samples[:5]) + (" …" if len(samples) > 5 else "")
-            paragraphs.append(f"文件检查：{names} 是样例或测试材料，不能作为您本人的正式申请证据。" if zh else
-                              f"Document check: {names} is sample or test material and cannot count as your application evidence.")
-    process = intent in {"getting_started", "how_to_apply"} or bool(re.search(r"怎么申请|如何申请|how (?:do I|to) apply", text, re.I))
-    materials = intent in {"getting_started", "materials"} or bool(re.search(r"什么材料|哪些材料|what (?:documents|evidence)|what do I need", text, re.I))
-    if process or (first and not count):
-        paragraphs.append(("可以，我们一步步来。通常先确认是否需要签证和申请类型，再准备材料、在线填写申请并支付费用，按申请指引完成身份核验，最后等待决定。" if zh else
-                           "We can take this step by step. First check whether you need a visa and which type, then prepare evidence, apply and pay online, follow the identity-check instructions, and wait for a decision.") +
-                          f"\n{'官方步骤' if zh else 'Official steps'}: {APPLICATION_GUIDE}\n{'签证或 ETA 查询' if zh else 'Visa or ETA checker'}: {VISA_CHECK}")
-    if materials:
-        choices = {
-            "visitor": ("访问签证通常先准备有效护照，并说明旅行目的、费用来源和旅行结束后的安排；银行或工作材料可帮助支持这些说明，具体材料取决于您的情况。",
-                        "For a visit, start with a valid passport and information about your plans, funding and arrangements after the visit. Bank or employment evidence can support these; the exact documents depend on your circumstances."),
-            "student": ("学生申请先准备有效护照和学校发的 CAS 信息，再按情况核对资金、英语、结核检查或 ATAS。CAS 是学校提供的录取确认编号和信息。",
-                        "For study, start with a valid passport and the CAS details from your school. Funding, English, TB and ATAS evidence depend on your circumstances. A CAS is your school's acceptance reference and information."),
-            "skilled_worker": ("技术工作申请先准备有效护照、雇主发的 CoS 工作担保信息及适用的英语证明，再核对资金和结核检查要求。",
-                               "For Skilled Worker applications, start with a valid passport, CoS sponsorship details from your employer and applicable English evidence, then check funding and TB requirements."),
+        action_ids = guidance.actions if guidance else [c.id for c in case.checks if c.status in {"fail", "unknown"}]
+        if samples and not any(key.startswith("sample:") for key in action_ids):
+            names = ", ".join(samples[:5])
+            paragraphs.append(f"{names} 是样例，不能作为您本人的正式申请证据；请换成本人的材料。" if zh else
+                              f"{names} is a sample and cannot count as your application evidence. Please send your own document.")
+
+    if guidance and guidance.explanation != "continue":
+        intent = guidance.explanation
+    process = intent == "how_to_apply" or bool(re.search(r"怎么申请|如何申请|how (?:do I|to) apply", text, re.I))
+    materials = intent == "materials" or bool(re.search(r"什么材料|哪些材料|what (?:documents|evidence)|what do I need", text, re.I))
+    if process:
+        paragraphs.append(("申请顺序：确认类型 → 收集材料 → 在线申请及付款 → 按指引核验身份 → 等待决定。" if zh else
+                           "The steps: choose your visa → collect documents → apply and pay online → follow identity-check instructions → await the decision.") +
+                          f"\n{APPLICATION_GUIDE}")
+    elif materials and case.status != Status.COMPLETE:
+        outlines = {
+            "visitor": ("先准备护照、旅行安排和费用来源说明；工作及资金材料按您的情况补充。", "Start with your passport, travel plans and funding details; work and financial evidence depend on your circumstances."),
+            "student": ("先准备护照和学校的 CAS 录取确认信息，再确认资金、英语及适用的结核检查或 ATAS。", "Start with your passport and school CAS details, then funding, English and any applicable TB or ATAS evidence."),
+            "skilled_worker": ("先准备护照和雇主的 CoS 担保信息，再确认英语、资金及适用的结核检查。", "Start with your passport and employer's CoS details, then English, funding and any applicable TB evidence."),
         }
-        pair = choices.get(case.route, ("先准备护照个人信息页；其余材料要根据来英国的目的、国籍和申请地点确定，不用一次把所有文件都找齐。",
-                                       "Start with your passport's personal details page. The rest depends on your purpose, nationality and where you apply; you do not need to gather everything at once."))
-        paragraphs.append(pair[0 if zh else 1] + (f"\n{ROUTE_GUIDES[case.route]}" if case.route in ROUTE_GUIDES else ""))
-    inside = any(c.id == "application_location" and c.status == "fail" for c in case.checks)
-    if inside:
-        if case.hitl_enabled:
-            paragraphs.append("您是在英国境内申请，需要先由顾问确认现有身份及能否续签或转换。当前自动材料流程覆盖境外申请；请告诉我现有签证类型和到期日。" if zh else
-                              "As you are applying inside the UK, an adviser needs to check whether you can extend or switch. This checklist covers applications from outside the UK. Please tell me your current visa type and expiry date.")
-        else:
-            paragraphs.append("当前自动流程尚未实现英国境内续签或转换，暂时无法自动完成这个申请。" if zh else
-                              "This automated workflow does not yet cover extensions or switching from inside the UK.")
+        pair = outlines.get(case.route, ("先确认来英国的目的和申请地点，再列适用材料；您可以先准备护照个人信息页。", "First tell me your purpose and where you will apply, so I can build the checklist. You can start with your passport details page."))
+        # Existing category + next-action lists already explain what to send.
+        # Keep the source link without repeating that checklist in another paragraph.
+        explanation = ("材料说明：" if zh else "Checklist guidance: ") if progress["items"] else pair[0 if zh else 1] + "\n"
+        paragraphs.append(explanation + ROUTE_GUIDES.get(case.route, VISA_CHECK))
+
     if case.status == Status.COMPLETE:
+        paragraphs.append(("当前清单需要的材料和信息已收齐，暂时不用补充。后续有变化，直接回复这封邮件即可。" if zh else
+                           "The documents and information on the current checklist are collected. Nothing further is needed now; reply to this email if anything changes."))
         if case.hitl_enabled:
-            paragraphs.append("当前版本材料包已由顾问确认，可以进行下一步申请准备。签证决定由英国签证部门作出。" if zh else
-                              "An adviser has confirmed this version of your document pack for the next application step. UKVI makes the visa decision.")
-        else:
-            paragraphs.append("当前版本的自动材料检查已完成，材料包已整理好。此包未经人工审核，签证决定由英国签证部门作出。" if zh else
-                              "The automated checks are complete and your document pack is ready. It has not been reviewed by a person; UKVI makes the visa decision.")
+            paragraphs.append("顾问已确认当前版本材料包。" if zh else "An adviser has confirmed this version of the pack.")
+        paragraphs.append("这里只确认收集完成，不代表签证获批，也未替您提交申请。" if zh else
+                          "This confirms collection only. It is not a visa approval, and no visa application has been submitted for you.")
     elif case.status == Status.READY:
-        if case.hitl_enabled:
-            paragraphs.append("当前材料检查已完成，材料包已生成，接下来需要顾问核对原件和适用条件。" if zh else
-                              "The current material checks are complete and the pack is ready. An adviser still needs to review originals and applicable conditions.")
-        else:
-            paragraphs.append("当前材料检查满足，正在确认是否可以交付材料包。" if zh else
-                              "The current checks are satisfied. We're confirming whether your document pack is ready to release.")
+        paragraphs.append("当前清单材料已齐，等待您选择的顾问复核。" if zh else
+                          "The current checklist is complete and awaits your selected adviser review.")
     else:
         blockers = [c for c in case.checks if c.status in {"fail", "unknown"}]
         ranks = {"sample": 0, "unrelated": 0, "pagination": 1, "read": 2, "context": 2,
@@ -269,10 +308,7 @@ def reply_for(case, *, text="", intent="continue", received_count=None, guidance
         ordered = ([c for key in guidance.actions for c in blockers if c.id == key] if guidance else
                    sorted(blockers, key=lambda c: ranks.get(c.id.split(":")[0], 6 if c.human else 7)))
         for check in ordered:
-            family = check.id.split(":")[0]
-            if inside and check.id == "application_location":
-                continue
-            if family == "read":
+            if check.id.startswith("read:"):
                 doc = next((d for d in case.documents if check.id.endswith(":" + d.id)), None)
                 if doc and all(p.startswith(("Declared pagination", "Model context")) for p in doc.problems):
                     continue
@@ -280,21 +316,25 @@ def reply_for(case, *, text="", intent="continue", received_count=None, guidance
             if key not in seen:
                 actions.append(message)
                 seen.add(key)
-            if len(actions) >= (2 if inside else 3):
+            if len(actions) >= 3:
                 break
         if actions:
-            paragraphs.append(("我们先处理这几项：" if zh else "Let's start with these:") + "\n" +
+            paragraphs.append(("📌 下一步，先补充这几项：" if zh else "📌 Next, please help with:") + "\n" +
                               "\n".join(f"{i}. {a}" for i, a in enumerate(actions, 1)))
-        if case.status == Status.NEEDS_HUMAN and not inside:
-            paragraphs.append("其中有信息需要顾问核对，暂时还不能确认材料齐备。" if zh else "Some details need adviser review, so I cannot yet confirm the pack is complete.")
-        if case.status == Status.BLOCKED:
-            paragraphs.append("目前还有信息无法确认，暂时不能确认材料齐备。需要补充或澄清的地方，我会逐项说明。" if zh else "Some information still needs clarification, so I can't yet confirm your pack is complete. I'll explain what needs to be clarified or supplied.")
-    risk_requested = bool(re.search(r"造假|假材料|改(?:一下)?(?:金额|余额)|伪造|fake|forg(?:e|ed)|fals(?:e|ify)", text, re.I))
-    if first or risk_requested or (guidance and guidance.warn_material_risk):
-        paragraphs.append(("请使用真实、完整的材料并如实说明情况。虚假材料或陈述可能导致拒签、许可被取消，并影响后续申请。这里核对材料的完整性、一致性和字段来源，不进行真伪鉴定。" if zh else
-                           "Please provide genuine, complete documents and accurate information. False documents or statements can lead to refusal, cancellation of permission and consequences for future applications. These checks cover completeness, consistency and field sources; they do not authenticate documents.") + f"\n{SUITABILITY_GUIDE}")
+        if case.status == Status.NEEDS_HUMAN:
+            paragraphs.append("有信息需要顾问核对，目前还不能确认收集完成。" if zh else "Some details need adviser review before collection can be confirmed complete.")
+        elif case.status == Status.BLOCKED:
+            paragraphs.append("还有信息无法确认，已收到的资料会保留，目前还不能确认收集完成。" if zh else "Some details cannot be confirmed yet. Your documents are saved, but collection is not complete.")
+
     paragraphs.append(progress_text(case))
     if case.status == Status.WAIT_USER:
-        paragraphs.append("您可以按方便的顺序回复，或先发来手头已有的材料，我会接着帮您核对。" if zh else
-                          "Feel free to reply in whichever order works for you, or send the documents you already have. I'll help you work through the next steps.")
+        paragraphs.append("直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。" if zh else
+                          "Just reply here. If a document isn't available yet, let me know and we'll start with what you have.")
+    risk_requested = bool(re.search(r"造假|假材料|改(?:一下)?(?:金额|余额)|(?:金额|余额).{0,4}改|伪造|fake|forg(?:e|ed)|fals(?:e|ify)", text, re.I))
+    if risk_requested or (guidance and guidance.warn_material_risk):
+        paragraphs.append(("请勿修改事实或伪造材料，虚假材料或陈述可能导致拒签，并影响后续申请。这里不进行真伪鉴定。" if zh else
+                           "Please do not falsify information or documents. False evidence can lead to refusal and affect future applications. These checks do not authenticate documents.") + f"\n{SUITABILITY_GUIDE}")
+    elif first:
+        paragraphs.append("小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。" if zh else
+                          "Please use genuine, complete documents. This service helps collect them; it does not authenticate them.")
     return "\n\n".join(paragraphs)

@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-07",
+  "scope": "Email UX and checklist-driven collection completion; HITL off",
+  "offline": {
+    "tests": 174,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 124.581,
+    "log": "output/collection-ux/offline-final-174.xml"
+  },
+  "soul_sha256": "785d870ac3d750d270180bd3975c206c39c2613b8f5ebbce647fafa323153d5f",
+  "positive_real_model": {
+    "scenario": "Chinese one-turn, three labelled synthetic PDFs",
+    "state": "COMPLETE",
+    "passed": true,
+    "usage": {
+      "requests": 1,
+      "input_tokens": 6866,
+      "output_tokens": 2045
+    },
+    "completion_basis": "checklist",
+    "requests": 1,
+    "transport": "Actual model/OCR/PDF/storage/export; simulated email input",
+    "pack_verified": true,
+    "human_approval": false,
+    "source_snapshot": "output/collection-ux/live/experiment.json",
+    "note": "Run preceded final reply deduplication and filename changes; completion code unchanged. Final source covered by offline suite and second real email."
+  },
+  "real_mail": [
+    {
+      "run_id": "f059db9eb1a4406f8121e074c95dcf69",
+      "case_id": "case-48a2fe06b926407ba71b9169794cf2f8",
+      "status": "WAIT_USER",
+      "send_status": "sent",
+      "has_pack": false,
+      "hitl_enabled": false,
+      "sample_role": true,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 7301,
+        "output_tokens": 637
+      },
+      "reply_chars": 475,
+      "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 1 个文件：0-identity.pdf\n\n已了解：英国访问签证；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n0-identity.pdf 是样例，不能作为您本人的正式申请证据；请换成本人的材料。\n\n先准备护照、旅行安排和费用来源说明；工作及资金材料按您的情况补充。\nhttps://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. 0-identity.pdf 是样例或测试材料，不能用于您的正式申请。请提供属于您本人的实际材料；我可以继续说明怎么准备。\n2. 请提供姓名，与护照上的拼写一致，方便核对材料是否属于您。\n3. 您准备从哪个国家申请？如果已在英国，请说明现在持有什么签证。\n\n材料进度 [□□□□□□□□□□] 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+      "original_filename": false,
+      "warning_occurrences": 2,
+      "outlook_ui_receipt_verified": true,
+      "error": null
+    },
+    {
+      "run_id": "1153800ff6284c6cbfde8fd56bcbbd37",
+      "case_id": "case-40148a4c500e41128f13b68bfd3e2cee",
+      "status": "WAIT_USER",
+      "send_status": "sent",
+      "has_pack": false,
+      "hitl_enabled": false,
+      "sample_role": true,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 7294,
+        "output_tokens": 636
+      },
+      "reply_chars": 397,
+      "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 1 个文件：identity.pdf\n\n已了解：英国访问签证；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. identity.pdf 是样例或测试材料，不能用于您的正式申请。请提供属于您本人的实际材料；我可以继续说明怎么准备。\n2. 请提供姓名，与护照上的拼写一致，方便核对材料是否属于您。\n3. 您准备从哪个国家申请？如果已在英国，请说明现在持有什么签证。\n\n材料进度 [□□□□□□□□□□] 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+      "original_filename": true,
+      "warning_occurrences": 1,
+      "outlook_ui_receipt_verified": true,
+      "error": null
+    }
+  ],
+  "this_turn_usage": {
+    "requests": 5,
+    "input_tokens": 21461,
+    "output_tokens": 3318
+  },
+  "price_configured": false,
+  "cost": null,
+  "runtime": {
+    "qq_cumulative_used": 20,
+    "qq_request_cap": 24,
+    "separate_completion_test_used": 1,
+    "poll_seconds": 15,
+    "hitl": false
+  },
+  "verified": [
+    "Three routes complete with HITL off even when a further guidance call would fail.",
+    "Pack write failure invalidates completion; missing checks cannot be delivered by model instruction.",
+    "Collected file groups plus unknown intake cannot show a full progress bar.",
+    "Different same-named attachments retain distinct bytes and original names.",
+    "Final real mail shows one sample warning, original filename, emoji, progress and questions; no completion or pack."
+  ],
+  "retained_findings": [
+    "Initial copy revision lost official reference and inside-UK scope details; regressions fixed before final passing suite.",
+    "First actual sample email repeated the warning and exposed a filename prefix; second actual email verifies the repair."
+  ],
+  "limits": [
+    "Synthetic positive case is not an actual visa/customer acceptance.",
+    "No document authenticity detection or legal approval; no full formal material set completed through email.",
+    "Old unusable files/conflicts are not automatically retired or resolved; may need operator intervention or a fresh case.",
+    "QQ cumulative budget is separate from the one-request completion experiment; no production uptime or automatic recovery claim."
+  ]
+}

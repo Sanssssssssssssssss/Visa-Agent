@@ -4,6 +4,7 @@ import zipfile
 
 import pytest
 from pydantic_ai.models.test import TestModel
+from pydantic_ai.models.function import FunctionModel
 
 from visa_agent.delivery import manifest, verify_pack
 from visa_agent.inbox import Inbox, Incoming
@@ -22,6 +23,10 @@ def test_delivery_modes_across_routes(tmp_path, enabled, route):
     service.create_case("case", test_mode=True)
     script = json.loads((DATA / "cases" / f"dev_{route}.json").read_text(encoding="utf-8"))
     for i, item in enumerate(script["events"]):
+        if not enabled and i == len(script["events"]) - 1:
+            def unavailable(messages, info):
+                raise RuntimeError("A completed collection must not need another model decision")
+            service.guidance_model_override = FunctionModel(unavailable)
         result = service.handle_event(CaseEvent(case_id="case", event_id=str(i), text=item["text"],
                     attachments=[str(dataset_path(DATA, p)) for p in item["attachments"]]))
         assert not result.error
@@ -30,6 +35,9 @@ def test_delivery_modes_across_routes(tmp_path, enabled, route):
     assert case.approval is None
     verify_pack(case)
     if not enabled:
+        assert case.automatic_completion.basis == "checklist"
+        assert service.store.traces(case.id)[-1]["guidance_skipped"] == "collection_complete"
+        assert "collection complete" in result.reply.lower() or "材料收集完成" in result.reply
         assert case.automatic_completion.manifest_hash == digest(manifest(case))
         assert case.automatic_completion.version == case.version
         with zipfile.ZipFile(case.pack_path) as archive:
@@ -41,6 +49,21 @@ def test_delivery_modes_across_routes(tmp_path, enabled, route):
         updated = service.handle_event(CaseEvent(case_id="case", event_id="changed", text="applicant_name: Another Name"))
         assert updated.status == Status.BLOCKED and not service.store.get(case.id).automatic_completion
         assert not service.store.get(case.id).pack_path
+
+
+def test_pack_write_failure_cannot_send_collection_complete(tmp_path, monkeypatch):
+    service = VisaService(tmp_path, "offline", hitl=False)
+    service.create_case("case", test_mode=True)
+    script = json.loads((DATA / "cases/dev_visitor.json").read_text(encoding="utf-8"))
+    def disk_error(*args):
+        raise OSError("Test disk failure")
+    monkeypatch.setattr("visa_agent.service.build_pack", disk_error)
+    for i, item in enumerate(script["events"]):
+        result = service.handle_event(CaseEvent(case_id="case", event_id=str(i), text=item["text"],
+            attachments=[str(dataset_path(DATA, p)) for p in item["attachments"]]))
+    assert result.error and result.status == Status.BLOCKED
+    assert not service.store.get("case").automatic_completion and not result.pack_path
+    assert "Document collection complete!" not in result.reply and "材料收集完成！" not in result.reply
 
 
 def test_disabled_hitl_still_rejects_model_attempt_to_deliver_missing_evidence(tmp_path):

@@ -57,7 +57,7 @@ def run():
             raise ValueError("Changed input: " + p)
     frozen = OUT / "experiment.json"
     snapshot = {"spec_hash": sha(SPEC), "source_hashes": {str(p.relative_to(ROOT)): sha(p)
-                for p in (ROOT / "src/visa_agent").glob("*.py")}}
+                for p in (ROOT / "src/visa_agent").rglob("*") if p.suffix in {".py", ".md"}}}
     if frozen.exists() and json.loads(frozen.read_text()) != snapshot:
         raise ValueError("Experiment inputs/code changed; retain prior batch and use a separate output")
     write_json(frozen, snapshot)
@@ -105,8 +105,8 @@ def run():
                 receipt = case.automatic_completion
                 if not receipt or receipt.version != case.version or receipt.manifest_hash != digest(manifest(case)):
                     failures.append("automatic_receipt")
-                if "未经人工审核" not in results[-1]["reply"]:
-                    failures.append("automatic_disclosure")
+                if "材料收集完成" not in results[-1]["reply"] or "不代表签证获批" not in results[-1]["reply"]:
+                    failures.append("collection_disclosure")
         elif case.automatic_completion or case.pack_path:
             failures.append("negative_case_delivered")
         if name == "garbage" and any(not f.source_id.startswith("message:") for f in case.facts):

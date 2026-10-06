@@ -1,8 +1,8 @@
 # Visa Agent
 
-一个可回放、可检查的英国签证材料准备 Agent。支持 Visitor、Student、Skilled Worker 的有限基础分支：接收消息和附件，保存有来源的事实，检查缺项与冲突，等待补件，生成材料包。部署时可选择人工复核或模型决定自动交付。
+一个可回放、可检查的英国签证材料准备 Agent。支持 Visitor、Student、Skilled Worker 的有限基础分支：接收消息和附件，保存有来源的事实，检查缺项与冲突，等待补件，生成材料包。当前邮箱关闭人工材料包审批：清单满足后自动通知材料收集完成。也保留按案件开启人工复核的部署选项。
 
-最新版本支持 **HITL 开关与 QQ 真实邮件接入**，170 项离线测试通过。客户只需发邮件，系统自动建案并邮件回复；同线程继续原案件，无需使用项目页面。[SOUL.md](src/visa_agent/prompts/SOUL.md) 定义热情、耐心的服务原则，并前置于模型系统指令。见 [QQ 操作与实测](docs/qq-mail.md)、[邮件验收记录](docs/validation/qq-mail.json)、[SOUL 更新验证](docs/validation/qq-soul.json)。Outlook Graph 适配器也已实现，但本机尚无应用 Client ID，未验证 Graph 收发。
+最新版本支持 **HITL 开关与 QQ 真实邮件接入**，邮件回复已改为收到、收齐、下一步和进度；验证记录见 [收集体验与稳定性](docs/collection-workflow.md)。客户只需发邮件，系统自动建案并邮件回复；同线程继续原案件，无需使用项目页面。[SOUL.md](src/visa_agent/prompts/SOUL.md) 定义热情、耐心的服务原则，并前置于模型系统指令。见 [QQ 操作与实测](docs/qq-mail.md)、[邮件验收记录](docs/validation/qq-mail.json)、[SOUL 更新验证](docs/validation/qq-soul.json)。Outlook Graph 适配器也已实现，但本机尚无应用 Client ID，未验证 Graph 收发。
 
 此前 HITL 真实模型实验共 25 次请求、5 案中 4 案通过。中文完整输入已自动生成演示材料包；八轮渐进案例漏提取目的，原失败保留。见[开关与工作流](docs/hitl-outlook.md)、[该轮记录](docs/validation/hitl-outlook.json)及[历史验收](docs/acceptance.md)。
 
@@ -26,7 +26,7 @@ uv run pytest -q
 
 想亲手分批上传、查看补件并自行审批，请按 [手动测试指南](docs/manual-testing.md) 操作，内含现成材料索引和真实模型测试步骤。
 
-关闭人工审核：`uv run python -m visa_agent.web --hitl off --data data/web-auto`。所有自动检查满足且模型决定交付后，直接生成材料包，明确标注“未经人工审核”。缺项和冲突仍阻止完成。开关只作用于新建或重置的案件。
+关闭人工审核：`uv run python -m visa_agent.web --hitl off --data data/web-auto`。所有自动检查满足后，直接生成材料包，明确标注“未经人工审核”。缺项和冲突仍阻止完成。开关只作用于新建或重置的案件。
 
 中文分步体验、`/exit`、一键清空、邮箱/WhatsApp 身份隔离及本轮真实结果见 [会话与引导验收](docs/session-guidance.md)。当前保留最近 20 轮，模型在每轮检查后选择最多三个优先问题。普通事件通常消耗两次模型请求。
 

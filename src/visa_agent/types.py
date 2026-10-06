@@ -136,6 +136,8 @@ class AutomaticCompletion(StrictModel):
     version: int
     manifest_hash: str
     decision_run_id: str
+    # Historical records used a model decision; new collection records use checks.
+    basis: Literal["model_guidance", "checklist"] = "model_guidance"
     at: str = Field(default_factory=now_utc)
 
 

@@ -52,7 +52,7 @@ def build_pack(case: Case, root: Path) -> str:
                    f" — {esc(d.sha256)}</li>" for d in case.documents if not d.rejected)
     review = "".join(f"<li>{esc(item)}</li>" for item in FINAL_REVIEW)
     outcome = (case.approval.model_dump_json(indent=2) if case.approval else
-               "自动完成（未经人工审核）\n" + case.automatic_completion.model_dump_json(indent=2) if case.automatic_completion else
+               "材料收集完成（未经人工审核）\n" + case.automatic_completion.model_dump_json(indent=2) if case.automatic_completion else
                "等待当前版本人工确认" if case.hitl_enabled else "尚未自动完成；HITL 已关闭")
     report = f"""<!doctype html><html lang="zh-CN"><meta charset="utf-8">
 <title>材料包 {esc(case.id)}</title><style>
@@ -70,7 +70,7 @@ td,th{{padding:8px;border:1px solid #ccd7dc;text-align:left;overflow-wrap:anywhe
 <h2>原始材料</h2><ul>{docs}</ul><h2>检查结果</h2>
 <table class="checks"><tr><th>检查</th><th>结果</th><th>说明</th><th>依据</th></tr>{rows}</table>
 <h2>事实与来源</h2><table><tr><th>字段</th><th>值</th><th>来源/页码</th><th>原文</th></tr>{facts}</table>
-<h2>顾问复核清单</h2><ul>{review}</ul>
+<h2>{'顾问复核清单' if case.hitl_enabled else '收集范围之外的事项'}</h2><ul>{review}</ul>
 <h2>交付记录</h2><pre>{esc(outcome)}</pre>
 </html>"""
     (directory / "report.html").write_text(report, encoding="utf-8")
