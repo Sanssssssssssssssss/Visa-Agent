@@ -122,13 +122,19 @@
   },
   "outlook": {
     "offline_provider_boundary": "18 tests passed in full suite",
-    "real_oauth": "pending user app registration",
+    "real_oauth": "Not run: no application Client ID; personal Microsoft browser login succeeded, which is not app OAuth authorization",
     "real_receive": "not run",
     "real_send": "not run",
     "windows_encrypted_cache_probe": {
       "encrypted": true,
       "round_trip": true,
       "plaintext_present": false
+    },
+    "app_registration": {
+      "created": false,
+      "observed_error": "PageLoadTimeout at Entra and Azure portal",
+      "user_confirmed": "Personal Outlook only; no existing Azure setup",
+      "next_step": "Choose Azure registration or a simpler IMAP test mailbox"
     }
   },
   "ui": {
@@ -137,5 +143,10 @@
     "approval_hidden": true,
     "mode": "live"
   },
-  "frozen_dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2"
+  "frozen_dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+  "ci": {
+    "commit": "f24bc6eac8644cbdd738ed7f35355db26c86d87d",
+    "conclusion": "success",
+    "url": "https://github.com/Sanssssssssssssssss/Visa-Agent/actions/runs/37481248150"
+  }
 }
