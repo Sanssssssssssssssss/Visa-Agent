@@ -47,11 +47,13 @@
 
 ## 公开版式参考
 
+2026-10-06 已将下列大学原文件下载到本地，并补充 Bournemouth 脱敏流水。可直接拖入的摘页、操作方法及发现的漏读问题见[公开材料检查](public-materials.md)。本轮没有改动原冻结数据或验收答案。
+
 - [Sussex 财务证明样例入口](https://student.sussex.ac.uk/international/visas/applying/proof)：银行流水、银行信和资助形式参考。
 - [Swansea Student visa documents PDF](https://www.swansea.ac.uk/media/Guide-to-documents-for-Student-visa-application.pdf)：CAS 等版式参考，政策数值应以当前 GOV.UK 为准。
 - [GOV.UK basic passport checks](https://www.gov.uk/government/publications/basic-passport-checks)：检查和版式参考，不作为外国申请人的有效护照模板。
 
-再分发许可未确认，上述样例仅保留链接及用途。需要试解析时自行从来源下载到已忽略的 `external-materials/`，再运行 `uv run visa-agent read PATH`。本次自动验收使用的是仓库合成材料，没有声称通过这些第三方 PDF 的解析测试。
+再分发许可未确认，第三方 PDF 保存在已忽略的 `external-materials/`，仓库仅保留链接和检查结论。原自动验收使用的是仓库合成材料；后续公开文件试读发现了缺口，没有声称解析全面通过。
 
 ## 冻结与复现
 
