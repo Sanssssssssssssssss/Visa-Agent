@@ -23,7 +23,7 @@ Camunda's KYC sample inspired waiting for missing documents; DocProof inspired s
 2. `QQInbox.receive()` resolves email references. `Inbox._receive()` binds channel/account/thread/sender to a case; a customer cannot supply someone else's case ID.
 3. `VisaService.handle_event()` persists the event, invalidates stale approval, then reads attachments and extracts proposed facts. A source is a message or a particular document page.
 4. `apply_proposal()` validates source membership, quotes and supported value formats. Conflicts retain both values; assertions in email cannot substitute for file evidence.
-5. `rules.evaluate()` computes applicable requirements and blockers. After checks, `guidance.guide()` chooses up to three next questions from actual unresolved check IDs.
+5. `rules.evaluate()` computes applicable requirements and blockers. After checks, `guidance.guide()` writes the actual customer reply and optionally selects up to three unresolved checks as trace metadata. No intent keyword gate or response catalogue replaces its wording.
 6. The application saves state, facts, checks, reply and trace. On completion, `build_pack()` and `verify_pack()` check the export; `send_prepared_reply()` checks current version/rules before sending.
 
 SQLite currently holds a write transaction across model work, serializing cases. This gives simple recovery semantics at low throughput. A larger deployment should first add durable tasks and per-case leases; adding more autonomous agents does not solve the bottleneck.
@@ -38,7 +38,7 @@ SQLite currently holds a write transaction across model work, serializing cases.
 | Model value lacks a valid source | Reject or retain as unconfirmed; no silent fact write |
 | Contradictory facts | Preserve both sources and a blocker |
 | Document authenticity | Outside automated validation; do not claim forensic verification |
-| Send timeout after SMTP may have accepted | `uncertain`; operator checks before retrying |
+| Send timeout after SMTP may have accepted | `retry`; persisted backoff and stable Message-ID; at-least-once delivery may duplicate |
 
 The initial false-completion bug for self-written field PDFs was reproduced and fixed; its receipt and remaining model-classification limits are in [document-quality.md](document-quality.md). Citation validation proves where text came from, not that the model interpreted every sentence correctly.
 

@@ -57,7 +57,7 @@ flowchart LR
 
 完整中文日期（如 `2026年12月10日`）按原文核对。首次自述的申请/旅行日期只说月日时，模型猜出的年份不会写入事实；`unconfirmed_candidates` 和 `date_year_missing` 诊断记录原因，缺失日期检查继续询问。该处理不用于文件日期，也不用于更改已有日期；错误月日、伪造引用仍会进入提取复核。
 
-首次咨询若只说居住地，模型不能替客户确定申请地点。无明确来源的 `application_location` 自述候选保留为 `application_location_unconfirmed`，由缺项检查继续询问；文件来源或修改已有申请地点时仍严格拒绝。原始候选和未确认原因保留在日志。
+申请地点、路线、肯定/否定由模型理解；居住地不代表申请地点。不再用用户措辞词表拦截路线。模型标为低置信度的申请地点保留为未确认；代码核对来源、枚举格式、日期和数值，不声称能证明语义正确。收件初期、尚无附件时，模型可提出明确的计划更正；只替换当前消息中的路线/目的，旧事实保留为 inactive 并审计，身份和金额冲突不能借此清除。
 
 `Evidence` 忽略被拒绝文件、读取有问题的文件和未确认低置信度字段。多个不同值会返回未知。模型不能静默选择冲突中的一个。顾问 `confirm_fact` 明确选择一个值，旧值仍在历史内。
 
@@ -67,7 +67,7 @@ flowchart LR
 
 关闭 HITL 时，`service.handle_event()` 在清单满足后直接写入 `AutomaticCompletion(basis="checklist")`，再生成本地材料包；无需引导模型批准。文件生成失败会回滚为失败状态。完整业务分工与边界见 [材料收集 workflow](history/collection-workflow.md)。
 
-`persona.py` 从包内 [SOUL.md](../src/visa_agent/prompts/SOUL.md) 读取顾问服务原则，置于提取、引导两个阶段的系统指令最前；同样计入上下文长度，trace 记录文件内容哈希。模型选择引导，`conversation.py` 组织欢迎、承接、材料结论与进度；固定措辞不会被客户邮件或附件中的“新 SOUL”覆盖。
+`persona.py` 从包内 [SOUL.md](../src/visa_agent/prompts/SOUL.md) 读取顾问服务原则，置于提取、引导两个阶段的系统指令最前；同样计入上下文长度，trace 记录文件内容哈希。模型直接写引导正文，`conversation.py` 原样采用 `Guidance.reply` 并追加实际 emoji 进度。已有双语目录用于离线模拟、命令和故障兜底，不用于替换正常模型回复。
 
 `agent.build_context()` 拼接职责、字段词表、带版本 SOP、当前事实、阻塞项、新消息、文件摘录、最近 20 轮完整对话。默认工作内容上限 32,000 字符，先减少文件摘录，再去掉旧对话；关键内容仍超限则停止。完整历史不会因此删除。该值限制应用装配的业务内容，并不等同于供应商最终序列化请求的 token 上限；工具 schema 等额外开销由实际 token 记录呈现。
 
@@ -77,7 +77,7 @@ flowchart LR
 
 PydanticAI 提供 `Proposal` 的结构校验与工具调用；检查后再用 `Guidance` 选择下一轮优先问题。两个阶段共用预算。每事件最多四次请求，结构重试、工具循环、网络重试共用 HTTP 计数；仅瞬时错误允许额外尝试一次，供应商 SDK 自带重试关闭。请求在 SQLite ledger 预记账，重启保留；当前累计不限，只有显式设置 `--request-cap` 才应用累计上限。早期验收的 60 次是当时实验条件。不可达请求也保守占用一次。
 
-`guidance.guide()` 在检查之后，使用当前事实、最近对话及未解决检查项，让模型选最多三个问题、解释主题和引导方式。输出只能引用已有未解决检查 ID；选择不存在、已通过或重复的 ID 会被拒绝。模型没有批准工具。`conversation.reply_for()` 用已核对的双语措辞组织这些选择，状态、进度、风险说明由实际检查决定。日志同时保存 `proposal`、`guidance`、两个阶段的上下文及原始响应。
+`guidance.guide()` 在检查、信息表和 ZIP 生成之后，让模型根据当前事实、材料问题、最近对话和实际附件撰写客户回复。可选检查 ID 只作追踪；模型可以直接回答问题。正常来信和收集完成都走模型回复。回复阶段失败不回滚已提取的事实：记录 reply_error 并发故障说明；提取/工具失败则保留失败事件，剩余预算内尝试让模型解释，模型也不可用时使用简短服务通知。原始调用、工具错误、reply_error 和 customer_reply 均留在 trace。
 
 `agent.run_phase()` 共用四次请求和一次瞬时重试预算；引导失败也保留失败记录。等待期间没有模型轮询。`tick` 间隔至少 24 小时，最多两次提醒。来源校验失败写入 `Case.extraction_issues`，跨消息保留，顾问通过 `dismiss_extraction --target EVENT_ID` 明确处理后才能清除。
 
@@ -89,9 +89,9 @@ PydanticAI 提供 `Proposal` 的结构校验与工具调用；检查后再用 `G
 
 `receive_simulated()` 是本地收件测试。`receive_signed()` 验证内部连接器的原始字节 HMAC 和五分钟时间窗，不是 Twilio/SendGrid 的官方 webhook 签名实现。真实 WhatsApp 尚未接入。
 
-QQ 邮件由 `QQConnection` 从登录的收件箱读取，`parse_mail()` 拆出新正文和附件，`QQInbox.receive()` 校验发件地址、Message-ID 和引用链。新线程创建案件，回复引用入站或出站 Message-ID 时沿用原线程；其他发件人不能接入已绑定线程。随后调用 `Inbox.receive_connector(provider="imap")`，由现有服务写入案件。这里确认的是收件账户及邮件头绑定，不是对客户的身份认证。
+QQ 邮件由 `QQConnection` 从登录的收件箱读取，`parse_mail()` 拆出新正文和附件，`QQInbox.receive()` 校验发件地址、Message-ID 和引用链。新线程创建案件，回复引用入站或出站 Message-ID 时沿用原线程；其他发件人不能接入已绑定线程。随后调用 `Inbox.receive_connector(provider="imap")`，由现有服务写入案件。163 引用分隔符和默认签名会清理。合法信封的格式/大小错误进入 input_issues 并回复客户；身份冲突、自动回信和系统通知仍拒绝，以免串案或邮件循环。这里确认的是收件账户及邮件头绑定，不是对客户的身份认证。
 
-收信游标保存在 `qq_cursor`；引用链在 `qq_threads`；预览及发送状态在 `qq_receipts`。`mail_outbox.send_prepared_reply()` 同时服务 QQ 和 Graph：发送前重新核对案件版本与会话状态，事务占位后调用网络；成功标记 `sent`，网络歧义标记 `uncertain`，不自动重发。新轮询从 SQLite 恢复，空扫描不调用模型。QQ 的配置、限额、停止及真实结果见 [qq-mail.md](qq-mail.md)。
+收信游标保存在 `qq_cursor`；引用链在 `qq_threads`；预览及发送状态在 `qq_receipts`。`mail_outbox.send_prepared_reply()` 同时服务 QQ 和 Graph：发送前重新核对案件版本与会话状态，事务占位后调用网络；成功标记 `sent`；失败/网络歧义标记 `retry`，`mail_attempts` 保存次数和下次时间，15 秒起退避到 300 秒，重启继续。QQ 沿用同一 Message-ID，仍不能保证供应商绝不重复投递。新轮询从 SQLite 恢复，空扫描不调用模型。QQ 的配置、限额、停止及真实结果见 [qq-mail.md](qq-mail.md)。
 
 `/exit` 关闭会话，后续输入不调用模型。`/reset`、`/start` 新建空白案件；原案件关闭、原始审计保留，不进入新上下文。命令本身不耗模型。网页通过服务端随机 cookie 隔离浏览器工作区，重启从 `web_workspaces` 恢复。右侧渠道身份切换是本地测试人员模拟入口，不是面向客户的身份认证。
 

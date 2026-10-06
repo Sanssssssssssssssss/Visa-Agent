@@ -87,12 +87,12 @@ def test_bad_envelopes_rejected_before_model_or_sending(tmp_path, change):
         assert db.execute("SELECT count(*) FROM cases").fetchone()[0] == 0
 
 
-def test_uncertain_send_is_not_retried_and_new_messages_keep_advancing(tmp_path):
+def test_uncertain_send_is_deferred_and_new_messages_keep_advancing(tmp_path):
     graph = Graph([mail()])
     poll = adapter(tmp_path, graph)
     graph.failure = True
-    with pytest.raises(TimeoutError):
-        poll.poll("2026-10-06T00:00:00Z", send_replies=True)
+    result = poll.poll("2026-10-06T00:00:00Z", send_replies=True)
+    assert result["messages"][0]["send_status"] == "retry"
     graph.failure = False
     adapter(tmp_path, graph).poll("2026-10-06T00:00:00Z", send_replies=True)
     assert len(graph.posts) == 1

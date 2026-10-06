@@ -1,5 +1,14 @@
 """Deployment options are operator controlled, never inferred from messages."""
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+
+def load_environment(path=None):
+    """Explicit file > VISA_ENV_FILE > cwd/.env; existing environment wins."""
+    target = Path(path or os.getenv("VISA_ENV_FILE") or Path.cwd() / ".env")
+    return load_dotenv(target, override=False, encoding="utf-8-sig")
 
 
 def resolve_hitl(value=None):

@@ -15,6 +15,10 @@ MESSAGE_ID = re.compile(r"<[^<>\s@]+@[^<>\s@]+>")
 SYSTEM_SENDERS = {"10000@qq.com"}
 
 
+class MailContentError(ValueError):
+    """Valid sender envelope, but content needs a customer-visible correction."""
+
+
 class HTMLText(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
@@ -53,10 +57,15 @@ def new_body(message):
         parser = HTMLText()
         parser.feed(text)
         text = "".join(parser.parts)
+    return clean_body(text)
+
+
+def clean_body(text):
+    """Remove provider quote separators, not natural-language customer intent."""
     lines = []
     for line in text.splitlines():
         if (line.lstrip().startswith(">") or
-            re.match(r"^\s*(?:On .+wrote:|在.+写道[：:]|[-_]{2,}\s*(?:Original Message|原始邮件))", line, re.I) or
+            re.match(r"^\s*(?:On .+wrote:|在.+写道[：:]|[-_]{2,}\s*(?:Original Message|原始邮件|回复的原邮件))", line, re.I) or
             (lines and re.match(r"^\s*(?:From:|发件人[：:])", line, re.I))):
             break
         lines.append(line)
@@ -66,8 +75,11 @@ def new_body(message):
     while lines and (not lines[-1].strip() or re.fullmatch(r"[-_]{5,}", lines[-1].strip())):
         lines.pop()
     result = "\n".join(lines).strip()
+    # NetEase's default plain-text signature table, anchored at the end. An
+    # email address in ordinary message text is deliberately left intact.
+    result = re.sub(r"\n\s*\|\s*\|\s*\n[^\n]+\n(?:\s*\|\s*\n)+\s*邮箱[：:][^\n]+\n\s*\|\s*$", "", result).strip()
     if len(result) > 12000:
-        raise ValueError("Email text exceeds 12000 characters; split the message")
+        raise MailContentError("Email text exceeds 12000 characters; split the message")
     return result
 
 
@@ -78,7 +90,7 @@ def addresses(message, key):
     return [normalize_sender("email", address) for _, address in getaddresses([str(v) for v in values])]
 
 
-def parse_mail(raw, mailbox, allowed, *, require_tag=True):
+def parse_mail(raw, mailbox, allowed, *, require_tag=True, envelope_only=False):
     if len(raw) > MAX_MAIL_BYTES:
         raise ValueError("Email exceeds 25 MB")
     message = BytesParser(policy=policy.default).parsebytes(raw)
@@ -103,28 +115,31 @@ def parse_mail(raw, mailbox, allowed, *, require_tag=True):
     references = MESSAGE_ID.findall(str(message.get("References", "")) + " " + str(message.get("In-Reply-To", "")))
     if len(references) > 100:
         raise ValueError("Email reference chain is too long")
+    if envelope_only:
+        return {"message_id": message_id, "sender": sender, "subject": subject,
+                "references": references, "text": "", "files": []}
     files = []
     for part in message.walk():
         if part.get_content_disposition() == "inline":
             continue  # Signature logos are not evidence; photos must be attached as files.
         if part.get_content_type() == "message/rfc822":
-            raise ValueError("Attached emails are unsupported; send original PDF or images")
+            raise MailContentError("Attached emails are unsupported; send original PDF or images")
         if part.get_content_disposition() == "attachment" or part.get_filename():
             name = part.get_filename() or "unnamed"
             if part.is_multipart() or part.get_content_type() == "message/rfc822":
-                raise ValueError("Attached emails are unsupported; send original PDF or images")
+                raise MailContentError("Attached emails are unsupported; send original PDF or images")
             if any(c in name for c in '/\\<>:"|?*') or any(ord(c) < 32 for c in name) or len(name) > 180:
-                raise ValueError("Unsafe attachment filename")
+                raise MailContentError("Unsafe attachment filename; rename the file and send it again")
             if Path(name).suffix.lower() not in {".pdf", ".png", ".jpg", ".jpeg", ".xlsx"}:
-                raise ValueError("Unsupported attachment type")
+                raise MailContentError("Unsupported attachment type; send PDF, PNG, JPEG or the XLSX worksheet")
             content = part.get_payload(decode=True)
             if content is None or len(content) > MAX_BYTES or part.defects:
-                raise ValueError("Unreadable or oversized attachment")
+                raise MailContentError("Unreadable or oversized attachment; maximum 10 MB per file")
             files.append((name, content))
     if len(files) > 5:
-        raise ValueError("Too many attachments; split the email")
+        raise MailContentError("Too many attachments; send at most five per email")
     text = new_body(message)
     if not text and not files:
-        raise ValueError("No new text or supported attachment found")
+        raise MailContentError("No new text or supported attachment found; reply with your question or attach a file")
     return {"message_id": message_id, "sender": sender, "subject": subject,
             "references": references, "text": text, "files": files}

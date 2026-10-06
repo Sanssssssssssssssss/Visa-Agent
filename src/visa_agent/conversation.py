@@ -261,6 +261,10 @@ def known_details(case):
 def reply_for(case, *, text="", intent="continue", received_count=None, received_names=None, guidance=None):
     """Receipt, checklist, next action. Completion wording comes only from state."""
     zh = case.language == "zh"
+    if guidance and guidance.reply.strip():
+        # Normal live traffic uses the model's own wording unchanged. The small
+        # status footer is computed from persisted checks, not a second script.
+        return guidance.reply.strip() + "\n\n" + progress_text(case)
     first = not case.history
     count = len([d for d in case.documents if not d.rejected]) if received_count is None else received_count
     if case.status == Status.COMPLETE:

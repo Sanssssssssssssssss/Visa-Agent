@@ -37,7 +37,7 @@ def main():
     for route, text in starts.items():
         if args.only and route not in args.only:
             continue
-        base = (args.materials or ROOT / "datasets/formatted-materials") / route if args.formatted else ROOT / "datasets/materials" / f"dev_{route}"
+        base = (args.materials or ROOT / "datasets/formatted-materials-v2") / route if args.formatted else ROOT / "datasets/materials" / f"dev_{route}"
         identity = base / ("identity.jpg" if args.formatted else "identity.pdf")
         remainder = ([base / name for name in {"visitor":["funds-scan.pdf", "work.jpg"],
                      "student":["funds-scan.pdf", "health.jpg", "school.jpg"],

@@ -18,7 +18,7 @@ uv run pytest -q
 
 ## 2. 配置模型
 
-应用读取环境变量，**不会自动加载 `.env`**。[.env.example](../.env.example) 是字段参考。PowerShell 可隐藏输入密钥：
+将 [.env.example](../.env.example) 复制为 `.env` 并在本机填写。各入口通过 [python-dotenv](https://bbc2.github.io/python-dotenv/) 自动加载，已设置的环境变量优先；`VISA_ENV_FILE` 可指定其他文件。更改模型或密钥后重启 worker。也可在 PowerShell 隐藏输入密钥：
 
 ```powershell
 $env:VISA_MODEL = 'deepseek-flash'
@@ -52,7 +52,7 @@ uv run python scripts/mail_service.py start --hitl off
 uv run python scripts/mail_service.py status
 ```
 
-Windows 也可双击 `scripts/mail-start.cmd`、`mail-status.cmd`、`mail-stop.cmd`，以及 `sample-debug-on.cmd` / `sample-debug-off.cmd`。首次启动应在配置好模型环境的终端执行；双击只会继承系统/用户已有的环境变量。
+Windows 也可双击 `scripts/mail-start.cmd`、`mail-status.cmd`、`mail-stop.cmd`，以及 `sample-debug-on.cmd` / `sample-debug-off.cmd`。启动脚本自动加载项目 `.env`；模型与凭证配置好后可直接双击。
 
 `running: true` 表示持有进程锁，`last_poll.at` 是最近一次轮询。默认每 15 秒扫描一次；处理附件和等待模型时，时间戳暂不刷新，不能把一次变旧立即认定为掉线。没有新邮件时不调用模型。当前事件完成后才响应停止。
 
@@ -100,7 +100,7 @@ cd /opt/visa-agent
 |---|---|
 | 没有回信 | `status`、本地 `worker.stdout.log` / `worker.stderr.log`；检查收件箱、发件白名单、配置时间和垃圾箱 |
 | 模型或材料失败 | `visa-agent --data data/qq-test inspect <case_id>` / `trace <case_id>`，沿来源、字段、规则检查 |
-| 已处理但发信不明 | SQLite `qq_receipts.send_status=uncertain`；先核对邮箱，不直接重发 |
+| 已处理但发信不明 | SQLite `qq_receipts.send_status=retry`；按持久化退避重试，相同 Message-ID 仍可能产生重复投递 |
 | 未完成 | 查看缺项和冲突；样例开关不能跳过信息、来源或可读性要求 |
 | ZIP 太大 | 大于 18 MB 时不会作为附件发出，邮件说明本地已保存；当前无自动下载链接服务 |
 

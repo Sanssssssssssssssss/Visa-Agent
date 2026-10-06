@@ -16,7 +16,7 @@ uv run pytest -q
 
 RapidOCR includes Chinese/English models in the locked wheel. GPU and Tesseract are not required. CI checks Windows and Linux offline; real QQ delivery was verified on Windows.
 
-The application reads environment variables; it **does not load `.env` automatically**. See [.env.example](../.env.example). In PowerShell:
+Copy [.env.example](../.env.example) to `.env` and fill it locally. Entry points load it automatically with [python-dotenv](https://bbc2.github.io/python-dotenv/); existing shell variables take precedence. `VISA_ENV_FILE` selects another file. Keep credentials out of Git. Alternatively, in PowerShell:
 
 ```powershell
 $env:VISA_MODEL = 'deepseek-flash'
@@ -27,7 +27,7 @@ $env:VISA_API_KEY = [System.Net.NetworkCredential]::new('', $credential).Passwor
 uv run python scripts/check_environment.py
 ```
 
-The compatibility script calls the real model for plain replies, structured output and tools, and incurs usage. Run the separate image acceptance check in [TESTING](../TESTING.md) for document reading when changing providers. The current DeepSeek adapter disables thinking mode for forced structured tool output. A background process inherits its launching terminal's environment; a new terminal or reboot needs the variables again.
+The compatibility script calls the real model for plain replies, structured output and tools, and incurs usage. Run the separate image acceptance check in [TESTING](../TESTING.md) for document reading when changing providers. The current DeepSeek adapter disables thinking mode for forced structured tool output. The background worker loads the project `.env`; shell overrides are inherited when it starts. Restart after changing model/credential settings.
 
 Enable IMAP/SMTP in your QQ account and generate its dedicated authorization code using [QQ's official instructions](https://help.mail.qq.com/detail/106/985). Then:
 
@@ -49,7 +49,7 @@ uv run python scripts/mail_service.py status
 uv run python scripts/mail_service.py stop
 ```
 
-Windows shortcuts live in `scripts/mail-{start,status,stop}.cmd` and `sample-debug-{on,off}.cmd`. Start from a configured terminal initially; double-click shortcuts only inherit existing system/user environment variables.
+Windows shortcuts live in `scripts/mail-{start,status,stop}.cmd` and `sample-debug-{on,off}.cmd`. The shortcuts also load the project `.env`, so configured deployments can start by double-clicking.
 
 `running: true` means the OS lock is held. `last_poll.at` records the last completed poll; document/model processing can delay its update. Polling defaults to 15 seconds. Idle polls do not call the model. Stop waits for the current event; confirm `running: false` before upgrading.
 
@@ -93,7 +93,7 @@ To inspect foreground operation: `python -m visa_agent.qq_mail watch --send-repl
 |---|---|
 | No reply | Worker status/logs, INBOX, sender policy, start timestamp and spam folder |
 | Model/material failure | `visa-agent --data data/qq-test inspect <case_id>` and `trace <case_id>` |
-| Unknown delivery | `qq_receipts.send_status=uncertain`; check the mailbox before resending |
+| Unknown delivery | `qq_receipts.send_status=retry`; persisted backoff retries with the same Message-ID (duplicates remain possible) |
 | Incomplete case | Missing facts, conflicts or unreadable documents; sample mode does not bypass these |
 | Oversized ZIP | Above 18 MB the reply explains it was saved locally, not emailed; no hosted download link exists |
 

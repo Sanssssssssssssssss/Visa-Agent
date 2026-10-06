@@ -31,6 +31,7 @@ class Route(StrEnum):
 
 
 class CaseEvent(StrictModel):
+    input_issues: list[str] = Field(default_factory=list, max_length=10)
     case_id: str
     event_id: str
     kind: Literal["message", "upload", "tick"] = "message"
@@ -105,6 +106,7 @@ class Proposal(StrictModel):
     facts: list[Candidate] = Field(default_factory=list, max_length=100)
     documents: list[DocumentTag] = Field(default_factory=list, max_length=30)
     intent: Literal["getting_started", "how_to_apply", "materials", "status", "continue", "other"] = "continue"
+    replace_plan: bool = Field(default=False, description="Customer explicitly corrects their own current route/purpose; not an example or inference")
 
 
 class Check(StrictModel):
@@ -117,6 +119,7 @@ class Check(StrictModel):
 
 
 class Guidance(StrictModel):
+    reply: str = Field(default="", max_length=6000, description="Your natural customer-facing response in their language")
     actions: list[str] = Field(default_factory=list, max_length=3,
                               description="Existing unresolved check IDs, in priority order")
     explanation: Literal["continue", "how_to_apply", "materials"] = "continue"

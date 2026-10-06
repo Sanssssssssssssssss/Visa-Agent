@@ -18,7 +18,7 @@ def test_model_controls_order_but_cannot_select_passed_or_invented_check():
     answer = reply_for(case, guidance=plan)
     assert answer.index("今年多大") < answer.index("哪个国家的护照")
     before = case.model_dump()
-    for ids in (["approve"], ["passport"], [], ["adult", "adult"]):
+    for ids in (["approve"], ["passport"], ["adult", "adult"]):
         bad = TestModel(call_tools=[], custom_output_args={"actions": ids})
         with pytest.raises(Exception, match="retries"):
             guide(case, event, {}, "offline", None, model_override=bad)
@@ -116,12 +116,12 @@ def test_partial_date_exception_cannot_bypass_documents_mismatch_or_existing_dat
         assert not pending and len(case.facts) == (1 if previous else 0)
 
 
-def test_initial_application_location_guessed_from_residence_remains_a_question(tmp_path):
+def test_uncertain_application_location_remains_a_question(tmp_path):
     from visa_agent.service import VisaService
     from visa_agent.evidence import Evidence
     model = TestModel(call_tools=[], custom_output_args={"facts": [
         {"key": "residence_country", "value": "China", "source_id": "message:first", "quote": "住在中国"},
-        {"key": "application_location", "value": "outside_uk", "source_id": "message:first", "quote": "住在中国"},
+        {"key": "application_location", "value": "outside_uk", "source_id": "message:first", "quote": "住在中国", "confidence": "low"},
     ]})
     app = VisaService(tmp_path, "offline", hitl=False, model_override=model)
     app.create_case("c")
@@ -135,7 +135,7 @@ def test_initial_application_location_guessed_from_residence_remains_a_question(
     assert any(d["next_action"] == "confirm_application_location" for d in trace["diagnostics"])
 
 
-def test_location_question_exception_cannot_override_previous_answer_or_document():
+def test_uncertain_location_cannot_override_previous_answer_or_document():
     from visa_agent.evidence import apply_proposal
     from visa_agent.types import Candidate, Document, Page, Proposal
     for source in ("message:m", "file"):
@@ -145,10 +145,10 @@ def test_location_question_exception_cannot_override_previous_answer_or_document
             case.facts.append(Fact(id="old", key="application_location", value="inside_uk",
                                    source_id="message:old", quote="英国境内"))
         proposal = Proposal(facts=[Candidate(key="application_location", value="outside_uk", source_id=source,
-                                             page=1 if source == "file" else None, quote="住在中国")])
+                                             page=1 if source == "file" else None, quote="住在中国", confidence="low")])
         pending = []
-        assert apply_proposal(case, proposal, {"message:m": "住在中国"}, unconfirmed=pending)
-        assert not pending and not any(f.value == "outside_uk" for f in case.facts)
+        assert not apply_proposal(case, proposal, {"message:m": "住在中国"}, unconfirmed=pending)
+        assert pending and not any(f.value == "outside_uk" for f in case.facts)
 
 
 @pytest.mark.parametrize("language", ["zh", "en"])

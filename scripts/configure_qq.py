@@ -9,16 +9,20 @@ from msal_extensions import build_encrypted_persistence
 
 from visa_agent.inbox import normalize_sender
 from visa_agent.store import write_json
+from visa_agent.config import load_environment
 
 ROOT = Path(__file__).resolve().parents[1] / "data/qq-test"
 
 
 def main():
+    load_environment()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, default=ROOT)
     parser.add_argument("--from-env", action="store_true", help="Read VISA_QQ_MAILBOX/AUTH_CODE/ALLOWED_SENDERS; store no credential")
-    parser.add_argument("--accept-all", action="store_true", help="With --from-env, allow any sender")
-    parser.add_argument("--allow-samples", action="store_true", help="Enable synthetic demo documents for new cases")
+    parser.add_argument("--accept-all", action=argparse.BooleanOptionalAction,
+                        default=os.getenv("VISA_QQ_ACCEPT_ALL", "0") == "1", help="With --from-env, allow any sender")
+    parser.add_argument("--allow-samples", action=argparse.BooleanOptionalAction,
+                        default=os.getenv("VISA_QQ_ALLOW_SAMPLES", "0") == "1", help="Enable synthetic demo documents for new cases")
     args = parser.parse_args()
     if (args.data / "qq-config.json").exists():
         raise ValueError("Configuration already exists. Edit it locally; setup will not reset the intake timestamp or sender policy.")

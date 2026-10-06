@@ -11,7 +11,7 @@ from pathlib import Path
 import uuid
 
 from .agent import HISTORY_TURNS, LiveBudget, extract
-from .config import resolve_hitl
+from .config import load_environment, resolve_hitl
 from .guidance import guide
 from .delivery import build_pack, manifest, verify_pack
 from .conversation import language_for, material_progress, progress_text
@@ -26,6 +26,7 @@ from .types import Approval, AutomaticCompletion, CaseEvent, Check, Route, Statu
 
 class VisaService:
     def __init__(self, root="data", mode="live", *, model_override=None, guidance_model_override=None, budget=None, hitl=None, application_forms=False):
+        load_environment()
         if mode not in {"live", "offline"}:
             raise ValueError("mode must be live or offline")
         self.store = Store(root)
@@ -120,7 +121,7 @@ class VisaService:
                         case.documents.append(doc)
                         new_docs.append(doc)
                     trace["documents_read"] = [d.model_dump() for d in new_docs]
-                    if event.text.strip() or new_docs:
+                    if event.text.strip() or new_docs or event.input_issues:
                         proposal = extract(case, event, [d for d in new_docs if d.kind != "intake"], trace, self.mode, self.budget,
                                            self.model_override)
                         intent = proposal.intent
@@ -144,7 +145,8 @@ class VisaService:
                         sources[f"message:{event.event_id}"] = event.text
                         trace["unconfirmed_candidates"] = []
                         rejected = apply_proposal(case, proposal, sources,
-                                                  unconfirmed=trace["unconfirmed_candidates"])
+                                                  unconfirmed=trace["unconfirmed_candidates"],
+                                                  current_source=f"message:{event.event_id}")
                         trace["rejected_candidates"] = rejected
                         if rejected:
                             case.extraction_issues[event.event_id] = rejected
@@ -160,6 +162,9 @@ class VisaService:
                         case.automatic_completion = None
                         case.rule_version = RULE_VERSION
                         case.checks = evaluate(case)
+                        for index, issue in enumerate(event.input_issues):
+                            case.checks.append(Check(id=f"input:{index}", status="fail", source="project:mail-parser",
+                                                     message=issue))
                         others = db.execute("SELECT event_id FROM events WHERE case_id=? AND event_id<>? "
                                             "AND status IN ('pending','failed')", (case.id, event.event_id)).fetchall()
                         if others:
@@ -171,20 +176,28 @@ class VisaService:
                             # Collection ends when the versioned checklist is satisfied.
                             # A second model decision cannot add evidence or approve a visa.
                             trace["completion_policy"] = "checked_collection_v1"
-                            trace["guidance_skipped"] = "collection_complete"
                             case.automatic_completion = AutomaticCompletion(version=case.version,
                                 manifest_hash=digest(manifest(case)), decision_run_id=run_id,
                                 basis="checklist")
                             case.status = Status.COMPLETE
-                        else:
-                            guidance = guide(case, event, trace, "offline" if self.model_override else self.mode,
-                                             self.budget, model_override=self.guidance_model_override)
                         if case.status in {Status.READY, Status.COMPLETE}:
                             case.pack_path = build_pack(case, self.store.root)
                         case.form_path = None
                         if (case.application_forms and case.route and case.status not in {Status.COMPLETE, Status.READY}
                                 and any(c.id.startswith(("info:", "form:")) and c.status in {"unknown", "fail"} for c in case.checks)):
                             case.form_path = write_form(case, self.store.root / "forms" / case.id / f"v{case.version}" / "application-information.xlsx")
+                        try:
+                            guidance = guide(case, event, trace, "offline" if self.model_override else self.mode,
+                                             self.budget, model_override=self.guidance_model_override)
+                        except Exception as exc:
+                            # A wording failure must not roll back successfully read
+                            # evidence. Still send a truthful service notice.
+                            trace["reply_error"] = type(exc).__name__
+                            from .types import Guidance
+                            guidance = Guidance(reply=(
+                                "抱歉，我已保存这次的信息，但暂时没能整理好详细回复。下方是当前进度；您可以继续回复这封邮件。"
+                                if case.language == "zh" else
+                                "Sorry, your update is saved, but I couldn't prepare the detailed reply just now. Your current progress is below; you can continue in this email thread."))
                     reply = reply_for(case, text=event.text, intent=intent, received_count=len(staged),
                                       received_names=[Path(original).name for original, _, _ in staged], guidance=guidance)
                     case.last_contact = max(case.last_contact, event.at.isoformat())
@@ -201,6 +214,7 @@ class VisaService:
                            (result.model_dump_json(), case.id, event.event_id))
                 trace["after"] = case.model_dump()
                 trace["diagnostics"] = turn_diagnostics(case, trace)
+                trace["customer_reply"] = reply
                 trace["material_progress"] = material_progress(case)
                 self.store.record_run(case.id, run_id, trace, db)
                 return result
@@ -209,6 +223,7 @@ class VisaService:
             for name in ("VISA_API_KEY", "DEEPSEEK_API_KEY"):
                 if os.getenv(name):
                     error = error.replace(os.environ[name], "[REDACTED]")
+            fallback = None
             with self.store.transaction() as db:
                 case = self.store.get(event.case_id, db)
                 case.language = language_for(event.text, case.language)
@@ -221,10 +236,20 @@ class VisaService:
                 trace["error"] = error
                 trace["after"] = case.model_dump()
                 trace["diagnostics"] = turn_diagnostics(case, trace)
+            if self.mode == "live" and not self.model_override and trace.get("http_requests", 0) < 4:
+                try:
+                    fallback = guide(case, event, trace, self.mode, self.budget)
+                except Exception as reply_exc:
+                    trace["reply_error"] = type(reply_exc).__name__
+            reply = reply_for(case, guidance=fallback) if fallback and fallback.reply.strip() else (
+                "抱歉，这次没能完成检查，原始输入已经保存。您暂时不用重复上传，可以继续回复这封邮件；这次检查仍未完成。"
+                if case.language == "zh" else
+                "Sorry, this check could not be completed. Your original input is saved; you don't need to upload it again yet. You can continue replying here. This check is still incomplete.") + "\n\n" + progress_text(case)
+            trace["customer_reply"] = reply
+            with self.store.transaction() as db:
                 self.store.record_run(case.id, run_id, trace, db)
             return TurnResult(case_id=case.id, version=case.version, status=case.status, run_id=run_id,
-                              reply=("抱歉，这次没能完成检查，原始输入已经保存。运行问题解决后可重试，您暂时不用重复上传。" if case.language == "zh" else
-                                     "Sorry, this check could not be completed. Your original input is saved. It can be retried once the runtime issue is resolved; you do not need to upload it again yet.") + "\n\n" + progress_text(case), error=error)
+                              reply=reply, error=error)
 
     @staticmethod
     def _tick(case, event):

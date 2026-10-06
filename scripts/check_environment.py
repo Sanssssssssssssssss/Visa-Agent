@@ -16,6 +16,7 @@ from pydantic_ai.usage import UsageLimits
 
 from visa_agent.agent import LiveBudget
 from visa_agent.store import write_json
+from visa_agent.config import load_environment
 
 
 class Receipt(BaseModel):
@@ -23,6 +24,7 @@ class Receipt(BaseModel):
 
 
 async def main():
+    load_environment()
     model_name = os.getenv("VISA_MODEL", "deepseek-flash")
     key = os.getenv("VISA_API_KEY") or os.environ["DEEPSEEK_API_KEY"]
     budget = LiveBudget(Path(os.getenv("VISA_DATA_DIR", "data")) / "live-budget.sqlite3")

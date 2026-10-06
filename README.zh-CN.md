@@ -50,6 +50,8 @@ uv run visa-agent --mode offline replay datasets/cases/dev_visitor.json --approv
 
 ## Agent 与 workflow
 
+正常客户回复和最终交付说明由模型直接撰写。将 [.env.example](.env.example) 复制为 `.env` 即可配置启动。[最新对话与异常恢复测试](docs/conversation-repair.md)。
+
 ```mermaid
 flowchart LR
     A[邮件与附件] --> B[保存 / 身份绑定 / 去重]
@@ -63,9 +65,9 @@ flowchart LR
     H --> I[核对 ZIP / 发送申请指引]
 ```
 
-**为什么这样选框架？** 业务更需要持久化案件和明确停止点。PydanticAI 负责结构化调用，Python 函数负责材料判断和状态变更，SQLite 保存案件、收件和发件记录。等待客户时不调用模型。
+**为什么这样选框架？** 业务更需要持久化案件和明确停止点。PydanticAI 负责语义理解、工具调用和直接撰写客户回复，Python 函数负责材料判断和状态变更，SQLite 保存案件、收件和发件记录。等待客户时不调用模型。
 
-**怎么保证交付稳定性？** 提取值必须有来源；未知检查不能通过；冲突保留双方证据；模型没有批准工具。每事件共用四次请求预算和有限重试。上下文从 Case 和最近最多 20 轮重建。发送前核对当前版本；SMTP 结果不明时记录待查，避免盲目重发。[架构与取舍](docs/architecture.zh-CN.md) · [按函数阅读实现](docs/implementation.md)。
+**怎么保证交付稳定性？** 提取值必须有来源；未知检查不能通过；冲突保留双方证据；模型没有批准工具。每事件共用四次请求预算和有限重试。上下文从 Case 和最近最多 20 轮重建。发送前核对当前版本；发件失败或结果不明时进入持久化重试队列，SMTP 仍可能重复投递。[架构与取舍](docs/architecture.zh-CN.md) · [按函数阅读实现](docs/implementation.md)。
 
 ## 已验证范围
 

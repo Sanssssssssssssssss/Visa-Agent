@@ -15,7 +15,7 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from .documents import MAX_BYTES
 from .inbox import Inbox, Incoming, normalize_sender
-from .mail_outbox import send_prepared_reply
+from .mail_outbox import pending_replies, send_prepared_reply
 from .service import VisaService
 from .store import digest, write_json
 
@@ -71,9 +71,7 @@ class OutlookInbox:
         account = "outlook:" + profile["id"]
         results = []
         if send_replies:
-            with self.service.store.connect() as db:
-                pending = db.execute("SELECT * FROM outlook_receipts WHERE account=? AND send_status='prepared' ORDER BY rowid LIMIT ?",
-                                     (account, max_messages)).fetchall()
+            pending = pending_replies(self.service.store, "outlook_receipts", account, max_messages)
             for row in pending:
                 results.append(self._send(row["id"], row["message_id"], json.loads(row["result"]), True))
         if len(results) >= max_messages:
@@ -164,7 +162,7 @@ class OutlookInbox:
                             at=datetime.fromisoformat(message["receivedDateTime"].replace("Z", "+00:00")))
         result = Inbox(self.service).receive_connector(incoming, files)
         result["mail_sender"] = sender
-        status = "failed" if result.get("error") else "prepared"
+        status = "prepared"
         with self.service.store.transaction() as db:
             db.execute("INSERT OR IGNORE INTO outlook_receipts VALUES (?,?,?,?,?,NULL)",
                        (receipt_id, account, message_id, json.dumps(result, ensure_ascii=False), status))
@@ -181,6 +179,8 @@ class OutlookInbox:
 
 
 def main():
+    from .config import load_environment
+    load_environment()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["login", "poll"])
     parser.add_argument("--data", default="data/outlook-test")

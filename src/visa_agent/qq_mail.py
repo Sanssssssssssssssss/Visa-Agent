@@ -20,8 +20,9 @@ from msal_extensions import build_encrypted_persistence
 
 from .agent import LiveBudget
 from .inbox import Inbox, Incoming, normalize_sender
-from .mail_outbox import send_prepared_reply
-from .mime_mail import MAX_MAIL_BYTES, SYSTEM_SENDERS, addresses, parse_mail
+from .mail_outbox import pending_replies, send_prepared_reply
+from .mime_mail import MAX_MAIL_BYTES, SYSTEM_SENDERS, MailContentError, addresses, new_body, parse_mail
+from .config import load_environment
 from .service import VisaService
 from .store import digest, write_json
 from .worker import mail_worker_lock, worker_status
@@ -138,9 +139,7 @@ class QQInbox:
             raise ValueError("since needs a timezone; max_messages must be 1-10")
         rows = []
         if send_replies:
-            with self.service.store.connect() as db:
-                pending = db.execute("SELECT * FROM qq_receipts WHERE account=? AND send_status='prepared' ORDER BY rowid LIMIT ?",
-                                     (self.account, max_messages)).fetchall()
+            pending = pending_replies(self.service.store, "qq_receipts", self.account, max_messages)
             rows.extend(self._send(r["id"], json.loads(r["result"]), True) for r in pending)
         with self.service.store.connect() as db:
             cursor = db.execute("SELECT uid FROM qq_cursor WHERE account=? AND validity=?",
@@ -159,8 +158,10 @@ class QQInbox:
                     senders = set(addresses(header, "From"))
                     if not senders & (SYSTEM_SENDERS | {self.mailbox}) and (self.allowed is None or senders & self.allowed):
                         if size > MAX_MAIL_BYTES:
-                            raise ValueError("Email exceeds 25 MB")
-                        rows.append(self.receive(self.connection.body(uid), at, send_replies=send_replies))
+                            rows.append(self.receive(raw_header, at, send_replies=send_replies,
+                                                     content_issue="Email exceeds 25 MB; split it into smaller emails"))
+                        else:
+                            rows.append(self.receive(self.connection.body(uid), at, send_replies=send_replies))
                 except ValueError as exc:
                     rejection = {"uid": uid, "send_status": "rejected", "error": str(exc)}
                     key = digest([self.account, self.connection.uidvalidity, uid])
@@ -170,10 +171,25 @@ class QQInbox:
                 db.execute("INSERT OR REPLACE INTO qq_cursor VALUES (?,?,?)", (self.account, self.connection.uidvalidity, uid))
         return {"messages": rows, "scanned": scanned, "limit_reached": scanned < len(uids) or len(uids) == 100}
 
-    def receive(self, raw, at, *, send_replies=False):
-        mail = parse_mail(raw, self.mailbox, self.allowed, require_tag=self.require_tag)
+    def receive(self, raw, at, *, send_replies=False, content_issue=None):
+        issues = []
+        try:
+            if content_issue:
+                raise MailContentError(content_issue)
+            mail = parse_mail(raw, self.mailbox, self.allowed, require_tag=self.require_tag)
+        except MailContentError as exc:
+            # Envelope checks still run: never auto-reply to forged routing,
+            # mailing lists or another autoresponder. Content failures get help.
+            mail = parse_mail(raw, self.mailbox, self.allowed, require_tag=self.require_tag, envelope_only=True)
+            issues = [str(exc)]
+            try:
+                mail["text"] = new_body(BytesParser(policy=policy.default).parsebytes(raw))
+            except MailContentError:
+                mail["text"] = ""
         identity = {k: v for k, v in mail.items() if k != "files"}
         identity["files"] = [(name, hashlib.sha256(data).hexdigest()) for name, data in mail["files"]]
+        if issues:
+            identity["rejected_content_hash"] = hashlib.sha256(raw).hexdigest()
         fingerprint = digest(identity)
         receipt_id = digest([self.account, mail["message_id"]])
         with self.service.store.transaction() as db:
@@ -202,7 +218,7 @@ class QQInbox:
             target.write_bytes(content)
             files.append(target)
         incoming = Incoming(channel="email", account=self.account, thread=thread, sender=mail["sender"],
-                            message_id=receipt_id, text=mail["text"], at=at)
+                            message_id=receipt_id, text=mail["text"], at=at, input_issues=issues)
         result = Inbox(self.service).receive_connector(incoming, files, provider="imap", test_mode=self.allow_samples)
         result.update(mail_sender=mail["sender"], mail_subject=mail["subject"], mail_parent=mail["message_id"],
                       mail_reply_id=f"<visa-{receipt_id}@{self.mailbox.split('@')[1]}>", mail_thread=thread)
@@ -272,15 +288,16 @@ def receive_once(args, config, secret, budget):
 
 
 def main():
+    load_environment()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["probe", "poll", "watch", "stop", "samples", "status"])
-    parser.add_argument("--data", type=Path, default=Path("data/qq-test"))
-    parser.add_argument("--hitl", choices=["on", "off"], default="off")
+    parser.add_argument("--data", type=Path, default=Path(os.getenv("VISA_QQ_DATA_DIR", "data/qq-test")))
+    parser.add_argument("--hitl", choices=["on", "off"], default=os.getenv("VISA_HITL", "off"))
     parser.add_argument("--since")
     parser.add_argument("--max-messages", type=int, default=5)
     parser.add_argument("--request-cap", type=int, default=None, help="Optional batch cap; unset means no cumulative limit")
     parser.add_argument("--send-replies", action="store_true")
-    parser.add_argument("--interval", type=int, default=15, help="Polling interval for watch, minimum 10 seconds")
+    parser.add_argument("--interval", type=int, default=int(os.getenv("VISA_MAIL_INTERVAL", "15")), help="Polling interval for watch, minimum 10 seconds")
     parser.add_argument("--allow-samples", choices=["on", "off"], help="Local sample policy for new or reset cases")
     args = parser.parse_args()
     if args.interval < 10 or (args.request_cap is not None and args.request_cap < 1):
@@ -349,7 +366,7 @@ def main():
         # No traceback/provider error payload can expose authorization credentials.
         print(json.dumps({"error_type": type(exc).__name__, "stage": stage,
                           "smtp_code": getattr(exc, "smtp_code", None),
-                          "error": "QQ operation failed; check local configuration, authorization and network. Sending is never retried automatically."}))
+                           "error": "QQ operation failed; check local configuration, authorization and network. Unconfirmed sends stay in the persistent outbox."}))
         raise SystemExit(1)
     finally:
         worker_scope.close()

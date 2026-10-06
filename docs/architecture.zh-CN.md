@@ -23,7 +23,7 @@ Camunda KYC 参考异步补件，DocProof 参考提取与检查分层，LangChai
 2. `QQInbox.receive()` 解析引用链，`Inbox._receive()` 绑定渠道、账号、线程、发件人与 Case；客户不能指定其他人的 case ID。
 3. `VisaService.handle_event()` 保存事件、使旧批准失效，再读取附件、让模型提出候选事实。来源是消息或具体文件页。
 4. `apply_proposal()` 核对来源归属、原文和值格式；冲突保留双方，邮件自述不能代替需要文件的证据。
-5. `rules.evaluate()` 计算适用性和缺项，之后 `guidance.guide()` 从真实未解决检查项选择最多三个问题。
+5. `rules.evaluate()` 计算适用性和缺项，之后 `guidance.guide()` 直接撰写客户回复，可选最多三个未解决检查 ID 用于追踪；意图词表和固定客服话术不再覆盖模型输出。
 6. 保存状态、事实、检查、回复和 trace。完成后 `build_pack()` / `verify_pack()` 核对导出，`send_prepared_reply()` 再检查当前案件和规则版本后发送。
 
 当前 SQLite 写事务包含模型调用，所有案串行。这使恢复语义易读，但不支持高吞吐。扩容应先拆成持久任务和按案租约；增加多 Agent 不能自动解决这一瓶颈。
@@ -38,7 +38,7 @@ Camunda KYC 参考异步补件，DocProof 参考提取与检查分层，LangChai
 | 候选字段没有可靠原文 | 拒绝或保留待确认，不静默写入 |
 | 两份材料冲突 | 保留双方来源及阻塞项 |
 | 文件真伪 | 超出自动检查范围，不能声称已鉴定 |
-| SMTP 超时但可能已送达 | `uncertain`，人工核对后再决定重发 |
+| SMTP 超时但可能已送达 | `retry`，持久化退避、沿用 Message-ID；至少一次投递可能产生重复邮件 |
 
 曾出现自写字段 PDF 被误判完整的真实失败，已复现修复，保留在[材料质量报告](document-quality.md)。原文可定位只能证明出处，不能证明每个自然语言句子的语义都被正确理解。
 

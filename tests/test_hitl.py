@@ -36,8 +36,8 @@ def test_delivery_modes_across_routes(tmp_path, enabled, route):
     verify_pack(case)
     if not enabled:
         assert case.automatic_completion.basis == "checklist"
-        assert service.store.traces(case.id)[-1]["guidance_skipped"] == "collection_complete"
-        assert "collection complete" in result.reply.lower() or "材料收集完成" in result.reply
+        assert service.store.traces(case.id)[-1]["reply_error"] == "RuntimeError"
+        assert result.reply and result.pack_path
         assert case.automatic_completion.manifest_hash == digest(manifest(case))
         assert case.automatic_completion.version == case.version
         with zipfile.ZipFile(case.pack_path) as archive:
@@ -71,7 +71,8 @@ def test_disabled_hitl_still_rejects_model_attempt_to_deliver_missing_evidence(t
     service = VisaService(tmp_path, "offline", hitl=False, guidance_model_override=bad)
     service.create_case("case")
     result = service.handle_event(CaseEvent(case_id="case", event_id="e", text="age: 30"))
-    assert result.error and result.status == Status.BLOCKED
+    assert result.status == Status.WAIT_USER and not result.pack_path
+    assert service.store.traces("case")[-1]["reply_error"]
     assert service.store.get("case").automatic_completion is None
 
 

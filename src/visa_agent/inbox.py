@@ -30,6 +30,7 @@ class Incoming(StrictModel):
     sender: str = Field(min_length=1, max_length=254)
     message_id: str = Field(min_length=1, max_length=200)
     text: str = Field(default="", max_length=12000)
+    input_issues: list[str] = Field(default_factory=list, max_length=10)
     at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     @field_validator("account", "thread", "sender", "message_id")
@@ -168,7 +169,8 @@ class Inbox:
                 return result
         # The business inbox is independently idempotent, so a crash here is safe to retry.
         event = CaseEvent(case_id=case_id, event_id=delivery_id, text=incoming.text, at=incoming.at,
-                          kind="upload" if attachments else "message", attachments=[str(p) for p in attachments])
+                          kind="upload" if attachments else "message", attachments=[str(p) for p in attachments],
+                          input_issues=incoming.input_issues)
         turn = self.service.handle_event(event)
         result = {**turn.model_dump(mode="json"), "session_id": sid, "session_state": self.session(sid)["state"],
                   "proof": proof, "command": None}

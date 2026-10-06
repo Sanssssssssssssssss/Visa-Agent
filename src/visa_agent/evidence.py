@@ -20,12 +20,33 @@ def comparable_value(key: str, value: str) -> str:
     return value
 
 
-def validate_value(key: str, value: str, quote: str) -> str:
+def validate_value(key: str, value: str, quote: str, *, semantic=False) -> str:
     value = value.strip()
     if key not in FIELDS or not value or value.lower() in {"unknown", "null", "none", "n/a"}:
         raise ValueError(f"Unsupported or empty field: {key}")
     if re.search(r"\*{2,}|\b[xX]{3,}\b|\b(?:your|name|number|date)\b.*\bhere\b", value, re.I):
         raise ValueError(f"Placeholder is not an applicant fact: {key}")
+    # Meaning and negation belong to the model. The caller has already checked
+    # the exact source quote. Validate the output contract, not customer wording.
+    semantic_enums = {
+        "route": {"visitor", "student", "skilled_worker"},
+        "application_location": {"inside_uk", "outside_uk"},
+        "study_location": {"london", "outside_london"},
+        "employment_status": {"employed", "self_employed", "student", "unemployed", "retired"},
+    }
+    if key == "route" or (semantic and key in semantic_enums):
+        if value not in semantic_enums[key]:
+            raise ValueError(f"Unsupported value: {key}")
+        return value
+    if semantic and key in BOOL_FIELDS:
+        value = {"0": "false", "1": "true", "no": "false", "yes": "true"}.get(value.lower(), value)
+        if value not in {"true", "false"}:
+            raise ValueError(f"Boolean must be true/false: {key}")
+        return value
+    if semantic and key == "funding":
+        if key == "funding" and value.casefold() in {"own money", "own funds"}:
+            return "self"
+        return value
     # Normalize only explicit equivalent phrases; do not geocode an address or infer a region.
     countries = {
         "India": ["India", "Indian"], "China": ["China", "Chinese", "中国"],
@@ -50,6 +71,13 @@ def validate_value(key: str, value: str, quote: str) -> str:
                           "CNY": ["CNY", "RMB", "人民币"],
                           "USD": ["USD", "US dollars"], "EUR": ["EUR", "€"]},
     }
+    if semantic and key in {"nationality", "residence_country", "bank_currency"}:
+        # Canonicalise the model's value for storage; never scan customer prose
+        # for intent. The schema also permits explicitly named other countries.
+        for canonical, aliases in enums[key].items():
+            if any(normalized(value) == normalized(alias) for alias in aliases):
+                return canonical
+        return value
     if key in enums:
         for canonical, aliases in enums[key].items():
             if any(normalized(value) == normalized(alias) for alias in aliases):
@@ -111,13 +139,6 @@ def validate_value(key: str, value: str, quote: str) -> str:
         positive = bool(re.search(r"\b(true|yes|required|confirmed)\b|是|需要", quote, re.I))
         if (value == "true" and (not positive or negative)) or (value == "false" and not negative):
             raise ValueError(f"Boolean not grounded in quote: {key}")
-    elif key == "route":
-        aliases = {"visitor": ["visitor", "tourism", "旅游", "访问"],
-                   "student": ["student", "study", "学生", "留学"],
-                   "skilled_worker": ["skilled_worker", "skilled worker", "技术工作"]}
-        if value not in aliases or not any(normalized(a) in normalized(quote)
-                                           for a in aliases[value]):
-            raise ValueError("Route not supported by the quoted intent")
     elif normalized(value) not in normalized(quote):
         aliases = {
             "outside_uk": ["outside UK", "outside the UK", "英国境外"],
@@ -130,7 +151,7 @@ def validate_value(key: str, value: str, quote: str) -> str:
     return value
 
 
-def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, str], *, unconfirmed=None) -> list[str]:
+def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, str], *, unconfirmed=None, current_source=None) -> list[str]:
     docs = {d.id: d for d in case.documents}
     for tag in proposal.documents:
         if tag.document_id not in docs:
@@ -171,18 +192,12 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
                     raise ValueError("Incomplete statement cannot establish the full-period minimum")
             if not text or normalized(candidate.quote) not in normalized(text):
                 raise ValueError("Supporting quote not found in source")
-            # Where someone lives does not establish where they will apply.
-            # For an initial self-report, ask instead of storing that inference.
-            # Updates to an existing answer and document extraction stay strict.
-            if (candidate.source_id.startswith("message:") and candidate.key == "application_location"
-                and candidate.value in {"inside_uk", "outside_uk"}
-                and not any(f.active and f.key == candidate.key for f in case.facts)):
-                try:
-                    validate_value(candidate.key, candidate.value, candidate.quote)
-                except ValueError:
-                    if unconfirmed is not None:
-                        unconfirmed.append({**candidate.model_dump(), "reason": "application_location_unconfirmed"})
-                    continue
+            if candidate.key == "route" and not candidate.source_id.startswith("message:"):
+                raise ValueError("Route needs the customer's own message, not a document instruction")
+            if candidate.confidence == "low" and candidate.key == "application_location":
+                if unconfirmed is not None:
+                    unconfirmed.append({**candidate.model_dump(), "reason": f"{candidate.key}_unconfirmed"})
+                continue
             # An initial customer date without a year is a missing answer, not
             # document evidence. Ignore an invented year and ask through the
             # existing missing-date check. Changes to an existing date still
@@ -210,12 +225,27 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
                 if (signature and normalized(candidate.value) not in normalized(text[:signature.start()])
                         and normalized(candidate.value) in normalized(text[signature.start():])):
                     raise ValueError("Signatory is not an applicant identity")
-            candidate.value = validate_value(candidate.key, candidate.value, candidate.quote)
+            candidate.value = validate_value(candidate.key, candidate.value, candidate.quote, semantic=True)
             fact_id = digest(candidate.model_dump())[:20]
             if not any(f.id == fact_id for f in case.facts):
                 case.facts.append(Fact(id=fact_id, **candidate.model_dump()))
         except ValueError as exc:
             rejected.append(f"{candidate.key}: {exc}")
+    if proposal.replace_plan and current_source and not case.documents:
+        # An explicit change of plans during intake is not an identity or bank
+        # discrepancy. Retain superseded statements for audit, never rewrite them.
+        current = [f for f in case.facts if f.active and f.source_id == current_source
+                   and f.key in {"route", "purpose"} and f.confidence == "high"]
+        changed = []
+        for fact in case.facts:
+            if (fact.active and fact.key in {f.key for f in current}
+                    and fact.source_id.startswith("message:") and fact.source_id != current_source
+                    and not fact.confirmed_by):
+                fact.active = False
+                changed.append(fact.id)
+        if changed:
+            case.reviews.append({"decision": "customer_plan_update", "source": current_source,
+                                 "superseded_fact_ids": changed, "version": case.version})
     return rejected
 
 

@@ -8,15 +8,17 @@ import sys
 import time
 
 from visa_agent.worker import worker_status
+from visa_agent.config import load_environment
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    load_environment(os.getenv("VISA_ENV_FILE") or ROOT / ".env")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["start", "stop", "status"])
-    parser.add_argument("--data", type=Path, default=ROOT / "data/qq-test")
-    parser.add_argument("--hitl", choices=["on", "off"], default="off")
+    parser.add_argument("--data", type=Path, default=Path(os.getenv("VISA_QQ_DATA_DIR", str(ROOT / "data/qq-test"))))
+    parser.add_argument("--hitl", choices=["on", "off"], default=os.getenv("VISA_HITL", "off"))
     parser.add_argument("--wait", type=int, default=0, help="With stop, wait up to this many seconds for the worker lock")
     args = parser.parse_args()
     data = args.data.resolve()

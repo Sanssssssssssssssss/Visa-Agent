@@ -11,6 +11,7 @@ Code tour: [implementation.md](implementation.md). Test commands and evidence: [
 
 ## Evidence / 验收与材料
 
+- [Model-written replies, .env and persistent mail retries](conversation-repair.md), [new real-model replies](validation/conversation-reply.json).
 - [Three routes through real email](full-delivery.md), [actual customer replies](full-delivery-transcripts.md), [downloadable ZIPs](../examples/packs/).
 - [Self-written material regression and image cases](document-quality.md), [sample switch ON/OFF](sample-switch.md).
 - [Bilingual application information](application-information.md), [frozen dataset](dataset.md), [public image sources](public-images.md).

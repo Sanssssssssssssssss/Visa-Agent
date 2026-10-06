@@ -16,6 +16,8 @@ from .types import CaseEvent, Status
 
 
 def main():
+    from .config import load_environment
+    load_environment()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="Inspect and prepare a visa material case")

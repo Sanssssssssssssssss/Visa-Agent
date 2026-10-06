@@ -16,7 +16,7 @@ uv run pytest -q
 uv run python scripts/check_docs.py
 ```
 
-`tests/conftest.py` disables real model requests. CI runs these checks on Windows and Linux. The current submission results are in [submission-checks.md](docs/submission-checks.md); historical counts belong to their recorded revisions.
+`tests/conftest.py` disables real model requests and local `.env` loading. CI runs these checks on Windows and Linux. Latest model replies, fault delivery and configuration results: [conversation-repair.md](docs/conversation-repair.md). Earlier submission results are in [submission-checks.md](docs/submission-checks.md); counts belong to their recorded revisions.
 
 | Area / 能力 | Protection / 检查 | Test file |
 |---|---|---|

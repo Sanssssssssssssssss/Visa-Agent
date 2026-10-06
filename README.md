@@ -50,6 +50,8 @@ For sample testing: `uv run python -m visa_agent.qq_mail samples --allow-samples
 
 ## Agent and workflow
 
+Customer replies are written by the model, including the final handover. Configuration loads from [.env.example](.env.example) copied to `.env`. [Latest conversation and failure-recovery tests](docs/conversation-repair.md).
+
 ```mermaid
 flowchart LR
     A[Email + attachments] --> B[Persist / identify / deduplicate]
@@ -63,9 +65,9 @@ flowchart LR
     H --> I[Verified ZIP + submission guide]
 ```
 
-**Why a small harness?** This task needs a durable case more than an agent running continuously. PydanticAI handles structured calls; Python owns evidence checks and transitions; SQLite retains the case, inbox and outbox. Waiting for a customer costs no model requests.
+**Why a small harness?** This task needs a durable case more than an agent running continuously. PydanticAI handles semantic interpretation, tools and model-written customer replies; Python owns evidence checks and transitions; SQLite retains the case, inbox and outbox. Waiting for a customer costs no model requests.
 
-**How is delivery kept stable?** Extracted facts need sources; unknown checks cannot pass; conflicts remain visible; the model cannot approve a case. Each event shares a four-request budget and bounded retries. Context is rebuilt from the case plus up to 20 recent turns. Sending checks the current version; ambiguous SMTP sends are held for inspection. [Architecture and tradeoffs](docs/architecture.md) · [Function walkthrough (中文)](docs/implementation.md).
+**How is delivery kept stable?** Extracted facts need sources; unknown checks cannot pass; conflicts remain visible; the model cannot approve a case. Each event shares a four-request budget and bounded retries. Context is rebuilt from the case plus up to 20 recent turns. Sending checks the current version; failed or ambiguous sends are retried from the persistent outbox; SMTP can deliver duplicates. [Architecture and tradeoffs](docs/architecture.md) · [Function walkthrough (中文)](docs/implementation.md).
 
 ## Coverage and limits
 

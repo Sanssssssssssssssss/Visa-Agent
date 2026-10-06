@@ -31,6 +31,12 @@ Customer messages ARE a source of self-reported facts (route, circumstances, dat
 Route and purpose are separate fields. When a visitor explicitly says what they will do
 (e.g. tourism), extract BOTH the route and their stated purpose, quoting the original words.
 Do not infer a purpose from a route alone, or from an example or another person's plans.
+Understand the customer's meaning in their own words, including colloquial language.
+Only identify their own affirmative current plan. Negated, hypothetical, third-party or
+undecided options are not a selected route. A short visit with a short course is not
+automatically a Student application; ask for the missing context when uncertain.
+When they explicitly correct their earlier route/purpose, set replace_plan=true and quote
+the new plan. Never use this flag for identity, money, document conflicts or mere examples.
 When the customer states their own name, including 'my passport name is' / '我的护照姓名是',
 extract applicant_name. A self-reported passport_name alone does not populate applicant_name
 and cannot satisfy the separate document-backed passport check.
@@ -149,6 +155,7 @@ def build_context(case: Case, event: CaseEvent, new_docs: list[Document], limit=
         "blockers": [{"id": c.id, "message": c.message} for c in case.checks
                      if c.status in {"fail", "unknown"}],
         "new_message": {"id": f"message:{event.event_id}", "text": event.text},
+        "input_issues": event.input_issues,
         "sources": SOURCES,
         "sop": {key: value for key, value in SOP_CONTEXT.items()
                 if key == "common" or case.route is None or key == case.route},
@@ -156,7 +163,16 @@ def build_context(case: Case, event: CaseEvent, new_docs: list[Document], limit=
     essential = len(INSTRUCTIONS) + len(json.dumps(core, ensure_ascii=False))
     if essential > limit - 1000:
         raise BudgetExceeded("Critical case context exceeds working-set limit; adviser review needed")
-    core["recent_dialogue"] = case.history[-HISTORY_TURNS:]
+    core["recent_dialogue"] = []
+    for turn in case.history[-HISTORY_TURNS:]:
+        item = dict(turn)
+        # The status footer is UI output, already represented by current checks.
+        # Do not feed old footer values back as prose for the model to imitate.
+        reply = item.get("reply", "")
+        for label in ("材料进度 ", "Materials "):
+            reply = reply.split("\n\n" + label, 1)[0]
+        item["reply"] = reply
+        core["recent_dialogue"].append(item)
     core["new_documents"] = []
     for doc in new_docs:
         core["new_documents"].append({"id": doc.id, "name": doc.name, "problems": doc.problems,

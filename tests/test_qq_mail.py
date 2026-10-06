@@ -111,14 +111,21 @@ def test_reference_hijack_is_rejected_and_other_sender_gets_separate_case(tmp_pa
     assert rows[1]["result"]["case_id"] != first["case_id"]
 
 
-def test_uncertain_smtp_delivery_is_not_retried(tmp_path):
+def test_uncertain_smtp_delivery_retries_after_restart_with_same_message_id(tmp_path):
     conn = Connection({1: mail()})
     conn.failure = True
-    with pytest.raises(TimeoutError):
-        adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)
+    app = adapter(tmp_path, conn)
+    first = app.poll(AT.isoformat(), send_replies=True)["messages"][0]
+    assert first["send_status"] == "retry" and first["retry_after_seconds"] == 15
     conn.failure = False
+    assert not adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)["messages"]
+    assert len(conn.sent) == 1
+    with app.service.store.transaction() as db:
+        db.execute("UPDATE mail_attempts SET next_attempt=0")
     rows = adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)["messages"]
-    assert rows[0]["send_status"] == "uncertain" and len(conn.sent) == 1
+    assert rows[0]["send_status"] == "sent" and len(conn.sent) == 2
+    assert conn.sent[0][0]["Message-ID"] == conn.sent[1][0]["Message-ID"]
+    assert not adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)["messages"]
 
 
 @pytest.mark.parametrize("text,explanation", [("我想申请签证", "抱歉"), ("I want to apply for a visa", "Sorry")])
@@ -141,6 +148,37 @@ def test_failed_model_check_emails_explanation_without_claiming_success_or_resen
     assert service.store.get(result["case_id"]).status == Status.BLOCKED
     assert service.store.events(result["case_id"])[0]["status"] == "failed"
     assert not inbox.poll(AT.isoformat(), send_replies=True)["messages"]
+    assert len(conn.sent) == 1
+
+
+def test_unsupported_attachment_gets_reply_and_does_not_count_as_evidence(tmp_path):
+    message = mail(text="这是我的材料，请看看")
+    message.add_attachment(b"not a supported file", maintype="application", subtype="octet-stream", filename="example.exe")
+    conn = Connection({1: message})
+    app = adapter(tmp_path, conn)
+    row = app.poll(AT.isoformat(), send_replies=True)["messages"][0]
+    assert row["send_status"] == "sent" and row["result"]["reply"]
+    case = app.service.store.get(row["result"]["case_id"])
+    assert not case.documents and not case.pack_path
+    assert any(c.id.startswith("input:") and c.status == "fail" for c in case.checks)
+    assert not app.poll(AT.isoformat(), send_replies=True)["messages"]
+
+
+@pytest.mark.parametrize("args", [{"document_id": "another-cases-file", "page": 1},
+                                  {"document_id": "missing", "page": "not-a-page"}])
+def test_tool_failures_still_send_a_reply_without_internal_details(tmp_path, args):
+    from pydantic_ai.messages import ModelResponse, ToolCallPart
+    from pydantic_ai.models.function import FunctionModel
+    def broken_tool(messages, info):
+        return ModelResponse(parts=[ToolCallPart("read_evidence", args)])
+    conn = Connection({1: mail(text="我上传的材料看到了吗？")})
+    app = QQInbox(VisaService(tmp_path, "offline", hitl=False, model_override=FunctionModel(broken_tool)),
+                  conn, "12345@qq.com", ["lin@example.com"])
+    row = app.poll(AT.isoformat(), send_replies=True)["messages"][0]
+    assert row["send_status"] == "sent" and row["result"]["error"]
+    assert row["result"]["status"] == "BLOCKED" and not row["result"]["pack_path"]
+    assert "another-cases-file" not in conn.sent[0][0].get_content()
+    assert "not-a-page" not in conn.sent[0][0].get_content()
     assert len(conn.sent) == 1
 
 
@@ -219,7 +257,8 @@ def test_oversized_mail_is_not_downloaded(tmp_path):
     conn = Connection({1: mail()})
     raw, _, at = conn.header(1)
     conn.header = lambda uid: (raw, MAX_MAIL_BYTES + 1, at)
-    assert adapter(tmp_path, conn).poll(AT.isoformat())["messages"][0]["send_status"] == "rejected"
+    row = adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)["messages"][0]
+    assert row["send_status"] == "sent" and row["result"]["reply"]
     assert not conn.downloads
 
 
