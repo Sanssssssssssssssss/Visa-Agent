@@ -111,11 +111,14 @@ class QQConnection:
 
 
 class QQInbox:
-    def __init__(self, service, connection, mailbox, allowed_senders=None, *, require_tag=True):
+    def __init__(self, service, connection, mailbox, allowed_senders=None, *, require_tag=True, allow_samples=False):
         self.service, self.connection = service, connection
         self.mailbox = normalize_sender("email", mailbox)
         self.allowed = None if allowed_senders is None else {normalize_sender("email", s) for s in allowed_senders}
         self.require_tag = require_tag
+        if type(allow_samples) is not bool:
+            raise ValueError("allow_samples must be a boolean")
+        self.allow_samples = allow_samples
         if self.allowed is not None and (not self.allowed or self.mailbox in self.allowed):
             raise ValueError("Configure a separate allowed test sender")
         self.account = "qq:" + digest(self.mailbox)[:32]
@@ -197,7 +200,7 @@ class QQInbox:
             files.append(target)
         incoming = Incoming(channel="email", account=self.account, thread=thread, sender=mail["sender"],
                             message_id=receipt_id, text=mail["text"], at=at)
-        result = Inbox(self.service).receive_connector(incoming, files, provider="imap")
+        result = Inbox(self.service).receive_connector(incoming, files, provider="imap", test_mode=self.allow_samples)
         result.update(mail_sender=mail["sender"], mail_subject=mail["subject"], mail_parent=mail["message_id"],
                       mail_reply_id=f"<visa-{receipt_id}@{self.mailbox.split('@')[1]}>", mail_thread=thread)
         # A failed check still has a safe customer explanation from VisaService.
@@ -258,15 +261,16 @@ def receive_once(args, config, secret, budget):
         service = VisaService(args.data, "live", hitl=args.hitl, budget=budget, application_forms=True)
         allowed = None if config.get("accept_all") else config["allowed_senders"]
         result = QQInbox(service, connection, config["mailbox"], allowed,
-                         require_tag=config.get("require_tag", True)).poll(
+                         require_tag=config.get("require_tag", True), allow_samples=config.get("allow_samples", False)).poll(
             args.since or config["since"], max_messages=args.max_messages, send_replies=args.send_replies)
         result["model_requests"] = budget.count()
+        result["allow_samples_for_new_cases"] = config.get("allow_samples", False)
         return result
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=["probe", "poll", "watch", "stop"])
+    parser.add_argument("action", choices=["probe", "poll", "watch", "stop", "samples"])
     parser.add_argument("--data", type=Path, default=Path("data/qq-test"))
     parser.add_argument("--hitl", choices=["on", "off"], default="off")
     parser.add_argument("--since")
@@ -274,6 +278,7 @@ def main():
     parser.add_argument("--request-cap", type=int, default=None, help="Optional batch cap; unset means no cumulative limit")
     parser.add_argument("--send-replies", action="store_true")
     parser.add_argument("--interval", type=int, default=15, help="Polling interval for watch, minimum 10 seconds")
+    parser.add_argument("--allow-samples", choices=["on", "off"], help="Local sample policy for new or reset cases")
     args = parser.parse_args()
     if args.interval < 10 or (args.request_cap is not None and args.request_cap < 1):
         parser.error("interval must be >=10 seconds and request-cap must be positive")
@@ -285,6 +290,16 @@ def main():
             print("Stop requested; current event may finish before the worker exits")
             return
         config = json.loads((args.data / "qq-config.json").read_text(encoding="utf-8"))
+        if args.action == "samples":
+            if args.allow_samples is None:
+                parser.error("samples requires --allow-samples on or off")
+            config["allow_samples"] = args.allow_samples == "on"
+            write_json(args.data / "qq-config.json", config)
+            print(json.dumps({"allow_samples": config["allow_samples"], "applies_to": "new_cases_or_reset",
+                              "existing_cases": "unchanged", "reload": "next_poll"}))
+            return
+        if args.allow_samples is not None:
+            parser.error("Use the samples action to persist this setting")
         secret = build_encrypted_persistence(str(args.data / "qq-auth.bin")).load()
         budget = LiveBudget(args.data / "live-budget.sqlite3", args.request_cap)
         failures = 0
@@ -301,6 +316,8 @@ def main():
                 break
             stage = "mail_connection_or_processing"
             try:
+                # Local operator changes are picked up without restarting the worker.
+                config = json.loads((args.data / "qq-config.json").read_text(encoding="utf-8"))
                 result = receive_once(args, config, secret, budget)
                 failures = 0
             except (OSError, imaplib.IMAP4.abort) as exc:

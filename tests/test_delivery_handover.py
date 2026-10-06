@@ -28,7 +28,7 @@ def test_partial_then_complete_pack_delivered_to_same_sender(tmp_path, route):
 
     service = VisaService(tmp_path, "offline", hitl=False, application_forms=True)
     conn = Connection()
-    inbox = QQInbox(service, conn, "12345@qq.com", require_tag=False)
+    inbox = QQInbox(service, conn, "12345@qq.com", require_tag=False, allow_samples=True)
 
     def send(index, text, files=()):
         mail = EmailMessage()
@@ -43,11 +43,7 @@ def test_partial_then_complete_pack_delivered_to_same_sender(tmp_path, route):
 
     first = send(1, f"route: {route}")
     case_id = first["result"]["case_id"]
-    # Trusted test harness only. Email content cannot enable demo acceptance.
-    with service.store.transaction() as db:
-        case = service.store.get(case_id, db)
-        case.test_mode = True
-        service.store.save(case, db)
+    assert service.store.get(case_id).test_mode
     docs = sorted((DATA / "materials" / f"dev_{route}").glob("*.pdf"))
     second = send(2, "表填好了，先发这些。", [DATA / "intake" / f"{route}-example-TEST-ONLY.xlsx", docs[0]])
     assert second["result"]["status"] != "COMPLETE"

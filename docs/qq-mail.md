@@ -14,6 +14,21 @@ uv run python -m visa_agent.qq_mail watch --hitl off --send-replies
 
 配置时，允许的发件邮箱留空表示开放收件；填一个地址则仅接收该测试邮箱。授权码在终端隐藏输入。`probe` 只检查 IMAP/SMTP 登录，不发邮件。
 
+## 样例调试开关
+
+Windows 直接双击 [sample-debug-on.cmd](../scripts/sample-debug-on.cmd) 开启，双击 [sample-debug-off.cmd](../scripts/sample-debug-off.cmd) 恢复正常材料检查；也可以执行：
+
+```powershell
+uv run python -m visa_agent.qq_mail samples --allow-samples on
+uv run python -m visa_agent.qq_mail samples --allow-samples off
+```
+
+配置写入本地 `qq-config.json`，当前版本 worker 每轮读取，无需重启或前端。默认关闭。**作用于下一轮轮询创建的新邮件案件和 `/reset` 后的新案件**；已有案件保留创建时模式，回复、日志、ZIP 标注其演示属性。切换后用新邮件线程测试，或先在旧线程仅发送 `/reset`，等回复后再发附件。
+
+开启只允许明确标记的 sample 参与材料检查；信息缺项、冲突、模糊/损坏、来源无法定位仍不能通过。普通垃圾文件不会因为开关而自动变成有效材料。它与 HITL 开关独立，客户邮件内容不能改本机配置。材料真伪鉴定不在本服务范围。
+
+完整 Visitor 样例可用 `datasets/intake/visitor-example-TEST-ONLY.xlsx` 加 `datasets/formatted-materials-v2/visitor/` 中的 `identity.jpg`、`funds-scan.pdf`、`work.jpg`。四个附件一起发，正文说明要去英国旅游。本机已把这四个文件放到 `external-materials/sample-debug/visitor/`，便于全选附加。开关实测见 [sample-switch.md](sample-switch.md)。
+
 本次按用户要求启用**开放收件、任意主题、关闭 HITL、自动回信**。每个新邮件线程建一个案件，同线程回复继续处理。当前进程每 15 秒轮询一次；关机后需要重新启动命令。首轮真实验证用了 12 次模型请求，随后将累计上限调至 24 次供用户亲测，计数跨重启保留；SOUL 更新复验又用了 4 次，当时累计 16/24。最新用量见本机 `qq-watch-last.json`。需要更多测试时由操作者明确修改 `--request-cap`，历史使用量不清零。
 
 ```powershell
@@ -40,7 +55,7 @@ uv run python -m visa_agent.qq_mail stop
 4. 换另一个发件邮箱或发起全新邮件线程，预期创建新案件；引用其他发件人的案件线程会被拒绝。
 5. 正文仅写 `/exit`、`/start`、`/reset` 或 `/status`，去掉签名。命令不调用模型；`/reset` 新建空白案件，保留旧案以便追溯。
 
-不要期待合成样例在普通邮箱案件中走到完成。自动完成只代表本版材料检查满足，报告标记“未经人工审核”；它不鉴定真伪，也不承诺签证结果。人工开关和五种案件状态见 [hitl-outlook.md](hitl-outlook.md)。
+正常检查模式不会把合成样例当正式材料；开启上述样例调试后，新案件可用配套样例走到演示完成。自动完成只代表本版材料检查满足，报告标记“未经人工审核”；它不鉴定真伪，也不承诺签证结果。人工开关和五种案件状态见 [hitl-outlook.md](hitl-outlook.md)。
 
 ## 实现与失败处理
 

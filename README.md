@@ -24,6 +24,8 @@ uv run pytest -q
 
 ## 两分钟体验
 
+**用 sample 调试**：Windows 双击 [开启样例调试](scripts/sample-debug-on.cmd)，随后发新邮件或 `/reset` 再交样例；双击 [恢复正常检查](scripts/sample-debug-off.cmd) 关闭。模式影响新建案件，旧案件保留原模式；不改变 HITL，也不放过缺项、冲突或读取失败。[详细使用方式](docs/qq-mail.md#样例调试开关)。
+
 按 [QQ 接入说明](docs/qq-mail.md) 配置 Agent 邮箱并运行收件进程。客户直接发邮件咨询，在原邮件中回复信息并附文件；系统自动建案、补件和回复，不需要前端。关闭 HITL 时仍必须通过材料及信息检查，才能发送材料 ZIP。
 
 现成反例在 [datasets/document-quality](datasets/document-quality/README.md)，公开银行扫描件的获取方式见[来源说明](docs/public-images.md)。这些文件适合检查能否正确要求补件；不能用于正式申请。三路线合成图片仅用于[演示与 OCR 回放](datasets/formatted-materials-v2/README.md)。

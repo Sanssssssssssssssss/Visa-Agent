@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-07",
+  "model": "deepseek-flash",
+  "transport": "Outlook UI -> QQ IMAP/SMTP -> Outlook UI",
+  "passed": 2,
+  "cases": 2,
+  "same_input_bytes": true,
+  "hitl": false,
+  "price_configured": false,
+  "results": [
+    {
+      "case_id": "case-4fb26236553a4015a6ed4ab10168b083",
+      "subject": "Sample switch 1007 ON",
+      "state": "COMPLETE",
+      "sent": "sent",
+      "error": null,
+      "test_mode": true,
+      "hitl": false,
+      "reply": "材料收集完成！✅ 感谢您配合整理。\n\n演示案件：测试材料仅供体验，不用于真实申请。\n\n📥 本次已收到 4 个文件：visitor-example-TEST-ONLY.xlsx、identity.jpg、funds-scan.pdf、work.jpg\n\n已了解：英国访问签证；姓名：Lin Example；国籍：中国\n\n✅ 已收齐：护照、资金证明、工作证明\n\n当前清单的材料和信息已收齐，材料包也整理好了。里面有原始文件、填好的信息表和申请指引，解压后先打开 START-HERE.html。后续信息有变化，直接回复即可。\n\n这里只确认收集完成，不代表签证获批，也未替您提交申请。\n\n📌 接下来，您可以这样提交申请：\n1. 解压材料包，先打开 START-HERE.html。核对信息表和原始材料；信息表用于准备答案，不是官方申请表。\n2. 打开本路线的 GOV.UK 页面，从页面中的申请入口开始，填写在线表格：\nhttps://www.gov.uk/standard-visitor/apply-standard-visitor-visa\n   核对行程、费用来源和离境安排。访问签证没有统一的最低银行余额；是否足够取决于您的具体情况。\n3. 确认答案后，按账户提示提交并支付申请费及适用的移民医疗附加费。保存申请编号、回执和官方材料清单。\n4. 按申请账户提示完成身份核验。访问签证需要预约签证申请中心采集指纹和照片。需要预约时，从申请账户进入预约网站，选择中心和可用时间（slot），保存确认函。中心查询：\nhttps://www.gov.uk/find-a-visa-application-centre\n5. 按官方清单和上传期限逐份上传解压后的文件，勿将整个 ZIP 或我们的内部检查报告当作申请证据上传。需要到场时，携带护照及预约确认函要求的材料，按时出席。之后在申请账户或通知邮件中查看进展。\n预约名额、费用和最终材料要求以官方账户为准；我们尚未替您提交申请或预约。\n\n材料进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 3/3 项已收齐\n按当前申请情况统计。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+      "attachments": [
+        "visa-materials.zip"
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 6813,
+        "output_tokens": 1407
+      },
+      "pack_sha256": "92963aa10306ba5fce587b81ba9abf6e0c62625cfd09c839ddd88ebfb9f951bb",
+      "smtp_attachment_matches_pack": true,
+      "outlook_body_verified": true,
+      "input_hashes": {
+        "visitor-example-TEST-ONLY.xlsx": "0f9e4eb78812701a61f5116d59730e7aa9a73b2d61a2f2c8e9b196d500b72a1c",
+        "identity.jpg": "502bff7b798d2bd8e38befdfd8aa4b52178a4be91e52046ce02cc158272fed33",
+        "funds-scan.pdf": "227bc7eaaea7f18a2c4c8cd90e3df7c32f88c5b08437a9c12f18a9751f5103c9",
+        "work.jpg": "759c202b3102790fc315dff0d5d3e040527a4780b3d1b0a2e9ad1bd3a4fc6968"
+      },
+      "zip_download_and_demo_label_verified": true
+    },
+    {
+      "case_id": "case-b8241e3eec9944ebaab15b88631f2e83",
+      "subject": "Sample switch 1007 OFF",
+      "state": "WAIT_USER",
+      "sent": "sent",
+      "error": null,
+      "test_mode": false,
+      "hitl": false,
+      "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：visitor-example-TEST-ONLY.xlsx、identity.jpg、funds-scan.pdf、work.jpg\n\n已了解：英国访问签证；姓名：Lin Example；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. identity.jpg、funds-scan.pdf、work.jpg 是样例或测试材料，不能用于您的正式申请。请提供属于您本人的实际材料；我可以继续说明怎么准备。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+      "attachments": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 10715,
+        "output_tokens": 558
+      },
+      "outlook_body_verified": true,
+      "input_hashes": {
+        "visitor-example-TEST-ONLY.xlsx": "0f9e4eb78812701a61f5116d59730e7aa9a73b2d61a2f2c8e9b196d500b72a1c",
+        "identity.jpg": "502bff7b798d2bd8e38befdfd8aa4b52178a4be91e52046ce02cc158272fed33",
+        "funds-scan.pdf": "227bc7eaaea7f18a2c4c8cd90e3df7c32f88c5b08437a9c12f18a9751f5103c9",
+        "work.jpg": "759c202b3102790fc315dff0d5d3e040527a4780b3d1b0a2e9ad1bd3a4fc6968"
+      }
+    }
+  ],
+  "usage": {
+    "requests": 3,
+    "input_tokens": 17528,
+    "output_tokens": 1965
+  },
+  "offline": {
+    "relevant_tests": 55,
+    "seconds": 67.49,
+    "ruff": "passed"
+  },
+  "policy": "Local operator flag; new cases or reset; old cases retain mode; unknown/missing/conflicting evidence still blocks.",
+  "source_hashes": {
+    "src\\visa_agent\\agent.py": "a8c358742b0b1a0aa683e96fc34828eb0429d7a732f4bc129d58e09ec75da5db",
+    "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+    "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+    "src\\visa_agent\\conversation.py": "1df99d65ff39066f6c071528ae016e18a503ae61075615394c8175ad155591ac",
+    "src\\visa_agent\\delivery.py": "77730b2a93d1d22fd3a31e96bbd92b924fef7b92f144a7fb0b60445396e534b8",
+    "src\\visa_agent\\diagnostics.py": "3ff75e0456e818afebcec8ac289cb4b1a671ac841589f46e5ade46f86b8f1682",
+    "src\\visa_agent\\documents.py": "29e85e6a7e7230fac457bbfe04dfd1dfd561847574601fc1c2e71a7447760593",
+    "src\\visa_agent\\evidence.py": "1b3ebd51676147cda9a0b1508d763278d72dd6d7cd4075bfc07090142c40addf",
+    "src\\visa_agent\\guidance.py": "d2c2a4ed92d432d84e5e83f6c83148855e76827ee748bda47e10a3a780904890",
+    "src\\visa_agent\\inbox.py": "f2f4d09d45598fc1b475adbd4e055bb4da6f5f0a8125e0e94c1680cd6fe30466",
+    "src\\visa_agent\\intake.py": "3392d7384332cdbf6ce533c08545759d8ba88887941497ceb686dea6f907b39b",
+    "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+    "src\\visa_agent\\mail_outbox.py": "8b8c2517c54ca89f0fbf1cc9e3ceb623b20c79c535091ea8a185b3379cde878f",
+    "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+    "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+    "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+    "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+    "src\\visa_agent\\qq_mail.py": "4ec704c96d838cc012e89c03196bb5deb648b9390bcb3e4feb5563f77934a0bd",
+    "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+    "src\\visa_agent\\rules.py": "34760ba62fc4f8a55783dad492b200b20383c8ff26787cd0a462ab63505554c8",
+    "src\\visa_agent\\service.py": "9c64f02b5e917cf6bf136cb5bb53ed91cef759ab85c8bc1342a3daa3e101a427",
+    "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+    "src\\visa_agent\\submission.py": "397490637554ff2e32222b8459a32fe4d23fd3eb53cb9f3595effb85f3ad8494",
+    "src\\visa_agent\\types.py": "f85c39a3e9c7cba2e9261bea45333c835491d39bbbea4c4c277ddeb62a92cfd5",
+    "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+    "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+    "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+    "src\\visa_agent\\prompts\\SOUL.md": "a2f6d98e5acc9a0d7506f9f4f59f14a4be480dc4d41c9554b30e2770fede5ada"
+  },
+  "local_setting_after_test": "allow_samples=true"
+}
