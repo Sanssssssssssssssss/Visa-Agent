@@ -285,6 +285,48 @@ def reply_for(case: Case) -> str:
     if case.status == Status.READY:
         return "已整理当前材料并完成本轮检查，材料包已生成。请顾问核对原件和适用条件后确认。"
     blockers = [c for c in case.checks if c.status in {"fail", "unknown"}]
-    priority = sorted(blockers, key=lambda c: (not c.human, c.id != "route"))[:3]
+    document_families = {"pagination", "context", "read", "translation", "kind"}
+
+    def priority(check):
+        if check.id == "route":
+            return 0
+        if check.human:
+            return 1
+        if check.id.split(":")[0] in document_families:
+            return 2
+        return 3
+
+    actions, seen = [], set()
+    for check in sorted(blockers, key=priority):
+        family = check.id.split(":")[0]
+        if family in {"pagination", "context", "read"}:
+            if family in seen:
+                continue
+            seen.add(family)
+            related = [c for c in blockers if c.id.startswith(family + ":")]
+            if family == "pagination":
+                message = (f"有 {len(related)} 个文件带有多页页码，页面完整性和归属待核对。"
+                           "请将同一份文件的完整页面按顺序合并为 PDF，或请顾问核对这些页面。")
+            elif family == "context":
+                message = "部分材料未能完整阅读，需要顾问核对全文；相关内容暂不能用于确认材料齐备。"
+            else:
+                # Pagination/capacity already has an actionable message. Keep an
+                # additional reading request only for genuine OCR/file problems.
+                sources = {c.id.split(":", 1)[1] for c in related}
+                unreadable = [d for d in case.documents if d.id in sources and any(
+                    not p.startswith(("Declared pagination incomplete", "Model context capacity exceeded"))
+                    for p in d.problems)]
+                if not unreadable:
+                    continue
+                names = "、".join(d.name for d in unreadable[:3])
+                message = f"{names} 的部分内容无法可靠读取。请上传清晰完整版本，或请顾问对照原件确认。"
+        else:
+            message = check.message
+        if message not in actions:
+            actions.append(message)
+        if len(actions) == 3:
+            break
+    documents = [d for d in case.documents if not d.rejected]
+    receipt = f"已收到 {len(documents)} 个文件，材料检查尚未完成。\n" if documents else ""
     intro = "这部分需要顾问核对：" if case.status == Status.NEEDS_HUMAN else "我们先补齐以下信息："
-    return intro + "\n" + "\n".join(f"{i + 1}. {c.message}" for i, c in enumerate(priority))
+    return receipt + intro + "\n" + "\n".join(f"{i + 1}. {message}" for i, message in enumerate(actions))

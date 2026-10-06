@@ -1,0 +1,795 @@
+{
+  "scenario_count": 8,
+  "planned_baseline_runs": 16,
+  "completed_runs": 16,
+  "passed": 15,
+  "ledger_requests": 35,
+  "request_cap": 36,
+  "input_tokens": 109812,
+  "output_tokens": 9596,
+  "median_seconds": 9.4605,
+  "scope": "Application assertions and mechanical reply checks only; no complete visa pack or adviser-quality acceptance. 8 cases before and 8 cases after changes; each final case ran once.",
+  "rows": [
+    {
+      "id": "lloyds-complete-images-1-after",
+      "scenario": "lloyds-complete-images",
+      "label": "after",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 18.703,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 6791,
+        "output_tokens": 663
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "210980cb6bdfcca324a6dc89132689f25881564ca4898d8c0da95ef957152b0c",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "e67411070c6e7888e30a7066960b3749e2e6021dae949f6c95ac71fb53476cbc",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [
+        "bank_minimum: Incomplete statement cannot establish the full-period minimum"
+      ],
+      "customer_replies": [
+        "已收到 3 个文件，材料检查尚未完成。\n这部分需要顾问核对：\n1. 有 3 个文件带有多页页码，页面完整性和归属待核对。请将同一份文件的完整页面按顺序合并为 PDF，或请顾问核对这些页面。\n2. 部分字段无法核对来源，请顾问检查提取结果。\n3. 03-Lloyds-statement-page2.png 的部分内容无法可靠读取。请上传清晰完整版本，或请顾问对照原件确认。"
+      ],
+      "reply_check_failures": [
+        []
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "lloyds-complete-images-1-before",
+      "scenario": "lloyds-complete-images",
+      "label": "before",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 15.531,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 6793,
+        "output_tokens": 602
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "这部分需要顾问核对：\n1. 02-Lloyds-statement-page1.png 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。\n2. 03-Lloyds-statement-page2.png 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。\n3. 04-Lloyds-statement-page3.png 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。"
+      ],
+      "reply_check_failures": [
+        [
+          "没有确认收到材料",
+          "重复要求合并同一组页面"
+        ]
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "lloyds-missing-middle-1-after",
+      "scenario": "lloyds-missing-middle",
+      "label": "after",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 12.265,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 6812,
+        "output_tokens": 624
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "210980cb6bdfcca324a6dc89132689f25881564ca4898d8c0da95ef957152b0c",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "e67411070c6e7888e30a7066960b3749e2e6021dae949f6c95ac71fb53476cbc",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "已收到 2 个文件，材料检查尚未完成。\n这部分需要顾问核对：\n1. 有 2 个文件带有多页页码，页面完整性和归属待核对。请将同一份文件的完整页面按顺序合并为 PDF，或请顾问核对这些页面。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认是否有随行家属；家属申请需要顾问处理。"
+      ],
+      "reply_check_failures": [
+        []
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "lloyds-missing-middle-1-before",
+      "scenario": "lloyds-missing-middle",
+      "label": "before",
+      "status": "NEEDS_HUMAN",
+      "passed": false,
+      "failures": [
+        "invented_or_hidden_document_field:bank_holder"
+      ],
+      "seconds": 9.078,
+      "usage": {
+        "requests": 1,
+        "input_tokens": 2988,
+        "output_tokens": 563
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "这部分需要顾问核对：\n1. 02-Lloyds-statement-page1.png 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。\n2. 04-Lloyds-statement-page3.png 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。\n3. 请提供与身份证件一致的申请人姓名。"
+      ],
+      "reply_check_failures": [
+        [
+          "没有确认收到材料",
+          "重复要求合并同一组页面"
+        ]
+      ],
+      "model_responses_saved": 1
+    },
+    {
+      "id": "lloyds-split-images-1-after",
+      "scenario": "lloyds-split-images",
+      "label": "after",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 19.469,
+      "usage": {
+        "requests": 4,
+        "input_tokens": 13316,
+        "output_tokens": 990
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        },
+        {
+          "event": 1,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "210980cb6bdfcca324a6dc89132689f25881564ca4898d8c0da95ef957152b0c",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "e67411070c6e7888e30a7066960b3749e2e6021dae949f6c95ac71fb53476cbc",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [
+        "bank_start: Date value not grounded in quote: bank_start"
+      ],
+      "customer_replies": [
+        "已收到 1 个文件，材料检查尚未完成。\n这部分需要顾问核对：\n1. 有 1 个文件带有多页页码，页面完整性和归属待核对。请将同一份文件的完整页面按顺序合并为 PDF，或请顾问核对这些页面。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认是否有随行家属；家属申请需要顾问处理。",
+        "已收到 3 个文件，材料检查尚未完成。\n这部分需要顾问核对：\n1. 有 3 个文件带有多页页码，页面完整性和归属待核对。请将同一份文件的完整页面按顺序合并为 PDF，或请顾问核对这些页面。\n2. 部分字段无法核对来源，请顾问检查提取结果。\n3. 03-Lloyds-statement-page2.png 的部分内容无法可靠读取。请上传清晰完整版本，或请顾问对照原件确认。"
+      ],
+      "reply_check_failures": [
+        [],
+        []
+      ],
+      "model_responses_saved": 4
+    },
+    {
+      "id": "lloyds-split-images-1-before",
+      "scenario": "lloyds-split-images",
+      "label": "before",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 16.219,
+      "usage": {
+        "requests": 4,
+        "input_tokens": 13286,
+        "output_tokens": 1051
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        },
+        {
+          "event": 1,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [
+        "bank_start: Date value not grounded in quote: bank_start",
+        "bank_minimum: Incomplete statement cannot establish the full-period minimum"
+      ],
+      "customer_replies": [
+        "这部分需要顾问核对：\n1. 02-Lloyds-statement-page1.png 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认是否有随行家属；家属申请需要顾问处理。",
+        "这部分需要顾问核对：\n1. 02-Lloyds-statement-page1.png 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。\n2. 03-Lloyds-statement-page2.png 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。\n3. 04-Lloyds-statement-page3.png 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。"
+      ],
+      "reply_check_failures": [
+        [
+          "没有确认收到材料"
+        ],
+        [
+          "没有确认收到材料",
+          "重复要求合并同一组页面"
+        ]
+      ],
+      "model_responses_saved": 4
+    },
+    {
+      "id": "mixed-financial-sources-1-after",
+      "scenario": "mixed-financial-sources",
+      "label": "after",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 13.625,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 7211,
+        "output_tokens": 417
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "210980cb6bdfcca324a6dc89132689f25881564ca4898d8c0da95ef957152b0c",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "e67411070c6e7888e30a7066960b3749e2e6021dae949f6c95ac71fb53476cbc",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "已收到 3 个文件，材料检查尚未完成。\n这部分需要顾问核对：\n1. 有 1 个文件带有多页页码，页面完整性和归属待核对。请将同一份文件的完整页面按顺序合并为 PDF，或请顾问核对这些页面。\n2. 部分材料未能完整阅读，需要顾问核对全文；相关内容暂不能用于确认材料齐备。\n3. 01-BOC-deposit-redacted.png、05-BOC-Warwick-partially-redacted.png 的部分内容无法可靠读取。请上传清晰完整版本，或请顾问对照原件确认。"
+      ],
+      "reply_check_failures": [
+        []
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "mixed-financial-sources-1-before",
+      "scenario": "mixed-financial-sources",
+      "label": "before",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 13.781,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 7213,
+        "output_tokens": 417
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "这部分需要顾问核对：\n1. 02-Lloyds-statement-page1.png 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。\n2. 02-Lloyds-statement-page1.png 超出本轮完整阅读容量，请顾问复核全文。\n3. 请提供与身份证件一致的申请人姓名。"
+      ],
+      "reply_check_failures": [
+        [
+          "没有确认收到材料"
+        ]
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "sussex-deposit-image-1-after",
+      "scenario": "sussex-deposit-image",
+      "label": "after",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 9.64,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5772,
+        "output_tokens": 578
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "210980cb6bdfcca324a6dc89132689f25881564ca4898d8c0da95ef957152b0c",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "e67411070c6e7888e30a7066960b3749e2e6021dae949f6c95ac71fb53476cbc",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [
+        "dependants: Supporting quote not found in source"
+      ],
+      "customer_replies": [
+        "已收到 1 个文件，材料检查尚未完成。\n这部分需要顾问核对：\n1. 部分字段无法核对来源，请顾问检查提取结果。\n2. 01-BOC-deposit-redacted.png 的部分内容无法可靠读取。请上传清晰完整版本，或请顾问对照原件确认。\n3. 请为 01-BOC-deposit-redacted.png 提供完整译文及译者声明、日期、签名和联系方式。"
+      ],
+      "reply_check_failures": [
+        []
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "sussex-deposit-image-1-before",
+      "scenario": "sussex-deposit-image",
+      "label": "before",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "seconds": 8.282,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5774,
+        "output_tokens": 545
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "我们先补齐以下信息：\n1. 请提供与身份证件一致的申请人姓名。\n2. 请确认是否有随行家属；家属申请需要顾问处理。\n3. 请说明是否有拒签记录；相关解释需要顾问处理。"
+      ],
+      "reply_check_failures": [
+        [
+          "没有确认收到材料",
+          "没有解释材料问题"
+        ]
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "warwick-original-pdf-1-after",
+      "scenario": "warwick-original-pdf",
+      "label": "after",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "seconds": 8.391,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5619,
+        "output_tokens": 529
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "210980cb6bdfcca324a6dc89132689f25881564ca4898d8c0da95ef957152b0c",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "e67411070c6e7888e30a7066960b3749e2e6021dae949f6c95ac71fb53476cbc",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "已收到 1 个文件，材料检查尚未完成。\n我们先补齐以下信息：\n1. 06-deposit-certificate-Warwick.pdf 的部分内容无法可靠读取。请上传清晰完整版本，或请顾问对照原件确认。\n2. 请为 06-deposit-certificate-Warwick.pdf 提供完整译文及译者声明、日期、签名和联系方式。\n3. 请提供与身份证件一致的申请人姓名。"
+      ],
+      "reply_check_failures": [
+        []
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "warwick-original-pdf-1-before",
+      "scenario": "warwick-original-pdf",
+      "label": "before",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "seconds": 5.937,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5621,
+        "output_tokens": 409
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "我们先补齐以下信息：\n1. 请提供与身份证件一致的申请人姓名。\n2. 请确认是否有随行家属；家属申请需要顾问处理。\n3. 请说明是否有拒签记录；相关解释需要顾问处理。"
+      ],
+      "reply_check_failures": [
+        [
+          "没有确认收到材料",
+          "没有解释材料问题"
+        ]
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "warwick-partial-name-1-after",
+      "scenario": "warwick-partial-name",
+      "label": "after",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "seconds": 8.593,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5622,
+        "output_tokens": 547
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "210980cb6bdfcca324a6dc89132689f25881564ca4898d8c0da95ef957152b0c",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "e67411070c6e7888e30a7066960b3749e2e6021dae949f6c95ac71fb53476cbc",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "已收到 1 个文件，材料检查尚未完成。\n我们先补齐以下信息：\n1. 05-BOC-Warwick-partially-redacted.png 的部分内容无法可靠读取。请上传清晰完整版本，或请顾问对照原件确认。\n2. 请为 05-BOC-Warwick-partially-redacted.png 提供完整译文及译者声明、日期、签名和联系方式。\n3. 请提供与身份证件一致的申请人姓名。"
+      ],
+      "reply_check_failures": [
+        []
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "warwick-partial-name-1-before",
+      "scenario": "warwick-partial-name",
+      "label": "before",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 7.453,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5624,
+        "output_tokens": 547
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [
+        "bank_start: Invalid isoformat string: '2014/05/21'",
+        "bank_end: Invalid isoformat string: '2014/09/10'"
+      ],
+      "customer_replies": [
+        "这部分需要顾问核对：\n1. 部分字段无法核对来源，请顾问检查提取结果。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认是否有随行家属；家属申请需要顾问处理。"
+      ],
+      "reply_check_failures": [
+        [
+          "没有确认收到材料",
+          "没有解释材料问题"
+        ]
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "warwick-pressure-1-after",
+      "scenario": "warwick-pressure",
+      "label": "after",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "seconds": 9.281,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5684,
+        "output_tokens": 555
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "210980cb6bdfcca324a6dc89132689f25881564ca4898d8c0da95ef957152b0c",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "e67411070c6e7888e30a7066960b3749e2e6021dae949f6c95ac71fb53476cbc",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "已收到 1 个文件，材料检查尚未完成。\n我们先补齐以下信息：\n1. 05-BOC-Warwick-partially-redacted.png 的部分内容无法可靠读取。请上传清晰完整版本，或请顾问对照原件确认。\n2. 请为 05-BOC-Warwick-partially-redacted.png 提供完整译文及译者声明、日期、签名和联系方式。\n3. 请提供与身份证件一致的申请人姓名。"
+      ],
+      "reply_check_failures": [
+        []
+      ],
+      "model_responses_saved": 2
+    },
+    {
+      "id": "warwick-pressure-1-before",
+      "scenario": "warwick-pressure",
+      "label": "before",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "seconds": 6.218,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5686,
+        "output_tokens": 559
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "2b2ea6cd85497d7619d334577ee4b6993415361ccea2c75d82b7f5c671f8c80f",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      },
+      "rejected_candidates": [],
+      "customer_replies": [
+        "我们先补齐以下信息：\n1. 请提供与身份证件一致的申请人姓名。\n2. 请确认是否有随行家属；家属申请需要顾问处理。\n3. 请说明是否有拒签记录；相关解释需要顾问处理。"
+      ],
+      "reply_check_failures": [
+        [
+          "没有确认收到材料",
+          "没有解释材料问题"
+        ]
+      ],
+      "model_responses_saved": 2
+    }
+  ],
+  "phases": {
+    "before": {
+      "cases": 8,
+      "application_checks_pass": 7,
+      "reply_turns": 9,
+      "reply_checks_pass": 0,
+      "requests": 17,
+      "turns_with_rejected_fields": 2
+    },
+    "after": {
+      "cases": 8,
+      "application_checks_pass": 8,
+      "reply_turns": 9,
+      "reply_checks_pass": 9,
+      "requests": 18,
+      "turns_with_rejected_fields": 3
+    }
+  },
+  "redelivery_checks": {
+    "total": 18,
+    "passed": 18,
+    "requests_added": 0
+  },
+  "max_seconds": 19.469
+}

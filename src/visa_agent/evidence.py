@@ -62,6 +62,9 @@ def validate_value(key: str, value: str, quote: str) -> str:
             if re.search(pattern, quote, re.I):
                 return matches[0]
     if key in DATE_FIELDS:
+        # A four-digit leading year makes this slash format unambiguous.
+        if re.fullmatch(r"\d{4}/\d{2}/\d{2}", value):
+            value = value.replace("/", "-")
         parsed = date.fromisoformat(value)
         formats = [parsed.isoformat(), parsed.strftime("%d/%m/%Y"),
                    parsed.strftime("%d %B %Y"), parsed.strftime("%Y/%m/%d")]
@@ -133,6 +136,11 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
             if not text or normalized(candidate.quote) not in normalized(text):
                 raise ValueError("Supporting quote not found in source")
             if candidate.key in {"applicant_name", "passport_name", "employment_name", "bank_holder", "cas_name", "cos_name", "tb_name"}:
+                if candidate.key == "bank_holder" and re.fullmatch(
+                    r"(?:e?savings|current|checking|business|deposit|term|joint)\s+account|account\s+(?:holder|name|type)",
+                    candidate.value.strip(), re.I,
+                ):
+                    raise ValueError("Account type or field label is not an account holder")
                 if re.search(r"\b(?:university|college|ltd|limited|plc|inc)\b|^bank\s+of\b", candidate.value, re.I):
                     raise ValueError("Organisation is not a personal applicant name; review the subject")
                 signature = re.search(r"\b(?:yours sincerely|yours faithfully|signed by|authorised signatory)\b", text, re.I)
