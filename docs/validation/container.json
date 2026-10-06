@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-07",
+  "revision": "f287706e1f5e6fdc7a0b78ec279ceb9801af0253",
+  "container_ci": "https://github.com/Sanssssssssssssssss/Visa-Agent/actions/runs/37533230312",
+  "native_ci": "https://github.com/Sanssssssssssssssss/Visa-Agent/actions/runs/37533230372",
+  "platform": "linux/amd64",
+  "runtime_image_id": "sha256:d0d52569b37c3562b99014b0a7fed853e5076702f3f2e7598c5b5d368e09a9c4",
+  "test_image_id": "sha256:33ef4dd4a2a0ef8dbeb10bea2f5f6dfaf99d28bfa2b198df5f86cceed4d4107d",
+  "container_tests": 250,
+  "local_tests": 250,
+  "smoke": {
+    "uid": 10001,
+    "model_requests": 0,
+    "mail_sends": 0,
+    "routes": {
+      "visitor": "reviewed_and_automatic_zip_verified",
+      "student": "reviewed_and_automatic_zip_verified",
+      "skilled_worker": "reviewed_and_automatic_zip_verified"
+    },
+    "packages": {
+      "rapidocr": "3.9.2",
+      "pypdf": "6.19.0",
+      "pypdfium2": "5.14.0",
+      "pydantic-ai-slim": "2.54.0"
+    },
+    "identity.jpg": {
+      "pages": 1,
+      "method": "ocr"
+    },
+    "funds-scan.pdf": {
+      "pages": 1,
+      "method": "ocr"
+    },
+    "backup_restore": "persisted_case_restored",
+    "repeated_setup": "cursor_start_unchanged",
+    "sigterm": "graceful_exit"
+  },
+  "compose": {
+    "secret_files_loaded": true,
+    "named_volume_case_restored": true,
+    "restored_case_route": "visitor",
+    "restored_case_version": 1,
+    "configuration_sha256_before": "17b5a963f2ed6fd9bba33e8667bd76e1ccf9ae81be9fd3df58a4776b2415502c",
+    "configuration_sha256_after": "17b5a963f2ed6fd9bba33e8667bd76e1ccf9ae81be9fd3df58a4776b2415502c",
+    "health_after_restart": true
+  },
+  "retained_failure": "https://github.com/Sanssssssssssssssss/Visa-Agent/actions/runs/37531396397",
+  "limits": [
+    "The CI mail transport is explicitly replaced; no live QQ or paid model calls.",
+    "The Windows mailbox remains live outside Docker; no real account was started twice.",
+    "Only Linux amd64 was built and run. Cross-platform absolute path migration is not implemented.",
+    "GHCR publication is provided as a manual workflow; no registry image was published by this run."
+  ]
+}
