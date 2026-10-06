@@ -11,7 +11,7 @@ import re
 import sqlite3
 import time
 
-from pydantic_ai import Agent, RunContext
+from pydantic_ai import Agent, ModelRetry, RunContext
 from pydantic_ai.messages import ModelResponse, ToolCallPart
 from pydantic_ai.models.function import FunctionModel
 from pydantic_ai.usage import UsageLimits
@@ -133,6 +133,7 @@ class ReadContext:
     trace: dict
     remaining_chars: int
     seen: set[tuple] = field(default_factory=set)
+    known_fields: dict[str, set[str]] = field(default_factory=dict)
 
 
 def build_context(case: Case, event: CaseEvent, new_docs: list[Document], limit=CONTEXT_CHARS):
@@ -206,6 +207,35 @@ def make_agent(model) -> Agent:
         settings["extra_body"] = {"thinking": {"type": "disabled"}}
     agent = Agent(model, output_type=Proposal, deps_type=ReadContext,
                   instructions=INSTRUCTIONS, retries=1, model_settings=settings)
+
+    @agent.output_validator
+    def recheck_bank_fields(ctx: RunContext[ReadContext], output: Proposal):
+        # One SDK retry for an omitted field, using saved pages. The second
+        # proposal may still be partial: never force an invented value.
+        required = {"bank_name", "bank_holder", "bank_currency", "bank_minimum", "bank_start", "bank_end"}
+        tags = {tag.document_id: tag for tag in output.documents}
+        missing = {}
+        demo = ctx.deps.trace.get("working_context", {}).get("test_mode", False)
+        for doc in ctx.deps.documents.values():
+            tag = tags.get(doc.id)
+            kind = tag.kind if tag else doc.kind
+            role = doc.content_role if doc.content_role in {"sample", "self_report"} else (tag.content_role if tag else doc.content_role)
+            if (kind not in {"bank_statement", "bank_letter"} or doc.problems or doc.rejected
+                    or role not in ({"evidence", "sample"} if demo else {"evidence"})):
+                continue
+            supplied = {f.key for f in output.facts if f.source_id == doc.id and f.confidence == "high"}
+            gap = required - supplied - ctx.deps.known_fields.get(doc.id, set())
+            if gap:
+                missing[doc.id] = sorted(gap)
+        if "bank_extraction_recheck" in ctx.deps.trace:
+            ctx.deps.trace["bank_extraction_recheck"]["remaining_after"] = missing
+        elif missing:
+            ctx.deps.trace["bank_extraction_recheck"] = {"missing_before": missing}
+            raise ModelRetry("Some bank fields were omitted: " + json.dumps(missing) +
+                             ". Re-read the supplied text/images or use read_evidence; bank names may be in the heading. "
+                             "Return all visible fields with exact quotes. If a field is genuinely absent, ambiguous or masked, "
+                             "leave it unknown and explain in visual_observation. Never invent a value to satisfy this check.")
+        return output
 
     @agent.tool
     def read_evidence(ctx: RunContext[ReadContext], document_id: str, page: int) -> str:
@@ -286,6 +316,8 @@ def extract(case: Case, event: CaseEvent, new_docs: list[Document], trace: dict,
     trace["soul_sha256"] = SOUL_HASH
     trace["context_chars"] = len(prompt) + len(INSTRUCTIONS)
     ctx = ReadContext({d.id: d for d in case.documents}, trace, remaining)
+    ctx.known_fields = {d.id: {f.key for f in case.facts if f.source_id == d.id and f.active
+                             and (f.confidence == "high" or f.confirmed_by)} for d in case.documents}
     return run_phase(prompt, ctx, trace, mode, budget, model_override=model_override,
                      factory=make_agent, phase="proposal", new_docs=new_docs)
 

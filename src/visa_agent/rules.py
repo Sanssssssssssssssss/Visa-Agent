@@ -252,41 +252,64 @@ def evaluate(case: Case) -> list[Check]:
 def _finance(e: Evidence, checks: list[Check], required: Decimal | None, *, period: bool, source: str):
     kinds = {"bank_statement", "bank_letter"}
     keys = ("bank_name", "bank_holder", "bank_currency", "bank_minimum", "bank_start", "bank_end")
+    labels = dict(zip(keys, ("银行名称", "持有人", "币种", "最低余额", "开始日期", "结束日期")))
     # All required fields must come from ONE admissible document. Substitution cannot
     # bypass field checks or assemble a fictitious complete statement from unrelated files.
     documents = [d for d in e.case.documents if d.kind in kinds and e.admissible(d)]
     reasons = []
+    readable, waiting = [], []
     for doc in documents:
         values = {key: {f.value for f in e.facts(key, kinds) if f.source_id == doc.id} for key in keys}
         if not all(len(v) == 1 for v in values.values()):
-            reasons.append("证明缺少银行、持有人、币种、最低余额或覆盖日期")
+            missing = "、".join(labels[key] for key, values_for_key in values.items() if len(values_for_key) != 1)
+            reasons.append(f"{doc.name} 中尚未唯一确认：{missing}；其他已读取字段保留")
             continue
         data = {k: next(iter(v)) for k, v in values.items()}
+        readable.append(doc.id)
         if data["bank_currency"] != "GBP":
             reasons.append("外币转换未自动实现，需要顾问确认")
             continue
-        if required is None:
-            reasons.append("尚缺所需资金金额的计算条件")
+        start, end = date.fromisoformat(data["bank_start"]), date.fromisoformat(data["bank_end"])
+        application = e.day("application_date")
+        if end < start:
+            reasons.append("资金证明结束日期早于开始日期")
+            continue
+        if period and (end - start).days + 1 < 28:
+            reasons.append("未覆盖连续 28 天，或期末距申请日超过 31 天")
+            continue
+        if application and (end > application or (period and (application - end).days > 31)):
+            reasons.append("证明日期晚于申请日期，或期末距申请日超过 31 天")
+            continue
+        if required is None or application is None:
+            waiting.append(doc.id)
             continue
         if Decimal(data["bank_minimum"]) < required:
             reasons.append(f"覆盖期间最低余额低于所需 GBP {required}")
-            continue
-        start, end = date.fromisoformat(data["bank_start"]), date.fromisoformat(data["bank_end"])
-        application = e.day("application_date")
-        if end < start or not application or end > application:
-            reasons.append("证明日期或申请日期不完整/不合理")
-            continue
-        if period and ((end - start).days + 1 < 28 or (application - end).days > 31):
-            reasons.append("未覆盖连续 28 天，或期末距申请日超过 31 天")
             continue
         checks.append(Check(id="finance", status="pass", source=SOURCES[source],
                             message=f"已核对资金证明字段；所需金额 GBP {required}。",
                             evidence=[f.id for k in keys for f in e.facts(k, kinds)
                                       if f.source_id == doc.id]))
         return
+    if readable:
+        checks.append(Check(id="finance_document", status="pass", source=SOURCES[source],
+                            message="资金文件已收到，银行、持有人、币种、余额和日期字段已读取；金额与时效另行核对。",
+                            evidence=[f.id for key in keys for f in e.facts(key, kinds) if f.source_id in readable]))
+    if waiting:
+        dependency = "CAS 中的学费、课程月数和学习地点" if source == "student_money" and required is None else (
+            "旅行预算" if required is None else "计划申请日期")
+        purpose = "计算所需金额" if required is None else "核对资金时效"
+        if required is None and e.day("application_date") is None:
+            dependency += "及计划申请日期"
+            purpose += "及核对时效"
+        checks.append(Check(id="finance", status="unknown", source=SOURCES[source],
+                            message=f"资金证明已收到且字段可读；等待{dependency}，才能{purpose}。现有资金文件保留，无需因这些信息缺失而重传。",
+                            evidence=[f.id for key in keys for f in e.facts(key, kinds) if f.source_id in waiting]))
+        return
+    saved = any(d.kind in kinds and not d.rejected for d in e.case.documents)
     checks.append(Check(id="finance", status="fail" if documents else "unknown",
                         source=SOURCES[source], human=any("外币" in r for r in reasons),
-                        message="请补充可核对的资金证明。" + "；".join(sorted(set(reasons))),
+                        message=("资金文件已保存，核对尚未完成。" if saved else "请提供可核对的资金证明。") + "；".join(sorted(set(reasons))),
                         evidence=[f.id for key in (*keys, "application_date", "trip_budget", "tuition_due", "study_months", "study_location")
                                   for f in e.facts(key)]))
 

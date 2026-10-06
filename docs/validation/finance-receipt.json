@@ -1,0 +1,153 @@
+{
+  "date": "2026-10-07",
+  "model": "deepseek-flash",
+  "offline_tests": 245,
+  "usage_all_attempts": {
+    "requests": 36,
+    "input_tokens": 230871,
+    "output_tokens": 18820
+  },
+  "price_configured": false,
+  "final_replay": {
+    "passed": 3,
+    "turns": 3,
+    "usage": {
+      "requests": 8,
+      "input_tokens": 50875,
+      "output_tokens": 4527
+    },
+    "results": [
+      {
+        "turn": 0,
+        "input": "我要办学生签证，填好的信息表、护照、资金证明和结核检查都附上了，请看看还差什么。",
+        "files": [
+          "student-example-TEST-ONLY.xlsx",
+          "identity.jpg",
+          "funds-scan.pdf",
+          "health.jpg"
+        ],
+        "status": "WAIT_USER",
+        "received": 3,
+        "checked": 2,
+        "total": 4,
+        "finance": {
+          "id": "finance",
+          "status": "unknown",
+          "message": "资金证明已收到且字段可读；等待CAS 中的学费、课程月数和学习地点，才能计算所需金额。现有资金文件保留，无需因这些信息缺失而重传。",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "b27ae871987ef9739be4",
+            "9ade552b9495dcdc8297",
+            "def5c4eb65922419d4b1",
+            "8830b167684d83a0381f",
+            "379dd564a2a4396ec26d",
+            "a10c6512f8ea4cc176a8"
+          ]
+        },
+        "reply": "您好，材料都收到了，谢谢您一次发齐 🙂 我这边先跟您对一下进度：\n\n**已经收到并核对过的：**\n- 护照（identity.jpg）——姓名、护照号、有效期都读到了，和您填的信息一致 ✅\n- 结核检查（health.jpg）——结果正常，有效期到 2027-02-01 ✅\n- 资金证明（funds-scan.pdf）——已收到，账户名、币种、日期区间和最低余额都能读清楚，文件本身没问题，先保留着，不用重传 ✅\n- 信息表（student-example-TEST-ONLY.xlsx）——已收到 ✅\n\n**现在唯一还缺的一块：学校材料（CAS）。**\n资金这块之所以还没算完，不是您银行文件的问题，而是需要 CAS 上的几个信息才能算：学费金额、课程月数、以及学习地点（伦敦内还是伦敦外，生活费标准不一样）。所以下一步请您把 CAS 或学校发的录取/确认邮件发给我，里面通常会有：\n\n1. CAS 编号和 CAS 上的姓名\n2. 需要缴纳的学费金额\n3. 课程起止时间（用来算课程月数）\n4. 上课地点 / 校区所在城市\n5. 学校对英语能力的确认，以及是否需要 ATAS\n\n您先把手头有的那份发过来就行，不用等全部凑齐，我们一步一步来。另外提醒一句：所有材料请提供真实、完整的信息，这样后面官方审核会顺利很多。\n\n收到 CAS 后，我会把资金够不够、还差什么一次性算给您，然后把整理好的材料交还给您，再带您走官方在线申请和预约那一步。\n\n材料进度 🟩🟩🟩🟩🟩⬜⬜⬜⬜⬜\n📥 已收到 3/4 类；✅ 已核对 2/4 类\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 31/31",
+        "error": null,
+        "usage": {
+          "requests": 2,
+          "input_tokens": 11731,
+          "output_tokens": 1667
+        },
+        "passed": true
+      },
+      {
+        "turn": 1,
+        "input": "我明明给了三份材料，为什么只算两份？资金证明的PDF我已经发了呀。",
+        "files": [],
+        "status": "WAIT_USER",
+        "received": 3,
+        "checked": 2,
+        "total": 4,
+        "finance": {
+          "id": "finance",
+          "status": "unknown",
+          "message": "资金证明已收到且字段可读；等待CAS 中的学费、课程月数和学习地点，才能计算所需金额。现有资金文件保留，无需因这些信息缺失而重传。",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "b27ae871987ef9739be4",
+            "9ade552b9495dcdc8297",
+            "def5c4eb65922419d4b1",
+            "8830b167684d83a0381f",
+            "379dd564a2a4396ec26d",
+            "a10c6512f8ea4cc176a8"
+          ]
+        },
+        "reply": "您好，抱歉让您误会了 🙏 资金证明我们确实收到了，就是那份 funds-scan.pdf，账户名、币种、日期区间和最低余额都读得很清楚，文件本身没问题，不用重传。\n\n之所以看起来像\"只算了两份\"，是因为进度里\"已核对完成\"的是护照和结核检查这两项；资金证明的状态是\"已收到、待计算\"——不是没收到，也不是被退回了。它卡住的原因不在您这份银行文件，而是还缺 CAS 上的三个信息才能算金额：\n\n1. 学费金额（tuition due）\n2. 课程月数\n3. 学习地点（伦敦内还是伦敦外，生活费标准不同）\n\n所以下一步就一件事：把 CAS 或学校发的录取确认邮件发给我，里面通常有 CAS 编号、CAS 上的姓名、学费、课程起止时间、上课城市，以及学校对英语的确认和是否需要 ATAS。您先发手头有的那份就行，不用等凑齐，我们一步一步来。\n\n收到后我会把资金够不够、还差什么一次性算给您。另外提醒一句：材料请提供真实、完整的信息，后面官方审核会顺利很多。\n\n材料进度 🟩🟩🟩🟩🟩⬜⬜⬜⬜⬜\n📥 已收到 3/4 类；✅ 已核对 2/4 类\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 31/31",
+        "error": null,
+        "usage": {
+          "requests": 2,
+          "input_tokens": 11285,
+          "output_tokens": 405
+        },
+        "passed": true
+      },
+      {
+        "turn": 2,
+        "input": "学校的CAS也补上了，请帮我整理最后的材料包。",
+        "files": [
+          "school.jpg"
+        ],
+        "status": "COMPLETE",
+        "received": 4,
+        "checked": 4,
+        "total": 4,
+        "finance": {
+          "id": "finance",
+          "status": "pass",
+          "message": "已核对资金证明字段；所需金额 GBP 26539。",
+          "source": "https://www.gov.uk/student-visa/money",
+          "human": false,
+          "evidence": [
+            "b27ae871987ef9739be4",
+            "9ade552b9495dcdc8297",
+            "def5c4eb65922419d4b1",
+            "8830b167684d83a0381f",
+            "379dd564a2a4396ec26d",
+            "a10c6512f8ea4cc176a8"
+          ]
+        },
+        "reply": "您好，CAS 收到了，谢谢您补上 🙂 我这边把四块材料都核对完了，现在给您整理成材料包。\n\n**核对结果：**\n- 护照（identity.jpg）——姓名、护照号、有效期都读到了，和您填的信息一致 ✅\n- 学校材料（school.jpg）——CAS 编号、CAS 上的姓名、学费 16,000 英镑、课程 12 个月、上课地点在伦敦以外、英语已确认、不需要 ATAS，都读清楚了 ✅\n- 资金证明（funds-scan.pdf）——账户名、币种、日期区间和最低余额都能读清楚，文件本身没问题 ✅\n- 结核检查（health.jpg）——结果正常，有效期到 2027-02-01 ✅\n\n**资金这块现在可以算了：** 学费 16,000 英镑，加上伦敦以外 12 个月的生活费（按每月 1,171 英镑、最多 9 个月计），您这份资金证明的最低余额是够的。另外提醒一下，资金证明需要满足连续 28 天、且区间结束日在申请日 31 天以内的要求，您这份的日期区间是符合的。\n\n**材料包已经整理好，随这封邮件发给您：visa-materials.zip。** 解压后先打开里面的 START-HERE.html，它会带您核对信息表和原始材料。信息表是用来帮您准备答案的，不是官方申请表。\n\n**接下来这样走：**\n1. 打开 GOV.UK 学生签证页面，从页面里的申请入口开始填在线表格：https://www.gov.uk/student-visa/apply-online\n2. 填的时候对照 CAS 上的学费、课程时间和地点，以及适用的 TB 检查要求。\n3. 确认答案后，按账户提示提交并支付申请费和移民医疗附加费，保存好申请编号和回执。\n4. 按申请账户的提示完成身份核验。如果指定用 UK Immigration: ID Check App，就按 App 指引操作；只有被要求去签证申请中心时才需要预约（预约入口在申请账户里，中心查询：https://www.gov.uk/find-a-visa-application-centre）。\n5. 按官方清单逐份上传解压后的文件——请不要把整个 ZIP 或我们的内部检查报告当作申请证据上传。\n\n预约名额、费用和最终材料要求都以官方账户为准，我们还没有替您提交申请或预约。有哪一步卡住了，随时告诉我，我们一步一步来 😊\n\n材料进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩\n📥 已收到 4/4 类；✅ 已核对 4/4 类\n按当前申请情况统计。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 31/31",
+        "error": null,
+        "usage": {
+          "requests": 4,
+          "input_tokens": 27859,
+          "output_tokens": 2455
+        },
+        "passed": true
+      }
+    ]
+  },
+  "saved_file_recovery": {
+    "passed": true,
+    "status": "COMPLETE",
+    "bank_name": "Fictional Example Bank",
+    "recheck": null,
+    "usage": {
+      "requests": 4,
+      "input_tokens": 25885,
+      "output_tokens": 1591
+    },
+    "reply": "抱歉，是我前面看漏了，让您重复解释 🙏 我重新核了一遍：资金证明（funds-scan.pdf）确实收到了，而且这次能读清楚了——开户银行是 Fictional Example Bank（就在页眉上）、账户持有人 Mei Example、币种 GBP、最低余额 40,000、覆盖 2026-08-01 至 2026-09-28，这几项都对得上 ✅ 不用再传一次了。\n\n这样一来，四份材料全部核对通过：\n- 护照 ✅\n- 资金证明 ✅\n- 学校材料（CAS）✅\n- 结核检查 ✅\n\n材料包已经整理好了，就是 visa-materials.zip。解压后先打开里面的 START-HERE.html，按它核对信息表和原始材料——信息表是帮您准备答案用的，不是官方申请表。\n\n接下来走官方流程：\n1. 打开 https://www.gov.uk/student-visa/apply-online ，从页面里的申请入口开始填在线表格，对照 CAS、学费、生活费以及适用的 TB/ATAS 逐项确认。\n2. 确认无误后提交，支付申请费和适用的移民医疗附加费，保存好申请编号和回执。\n3. 按申请账户的提示做身份核验：如果指定用 UK Immigration: ID Check App，就按 App 指引操作；只有被要求去签证申请中心时才需要预约（预约入口在申请账户里，中心查询：https://www.gov.uk/find-a-visa-application-centre）。\n4. 按官方清单和上传期限逐份上传解压后的文件，不要把整个 ZIP 或我们的内部检查报告当申请证据上传。\n\n预约名额、费用和最终材料要求都以官方账户为准；我们还没有替您提交申请或预约。有哪一步卡住了随时说，我们一步一步来 😊\n\n材料进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩\n📥 已收到 4/4 类；✅ 已核对 4/4 类\n按当前申请情况统计。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 31/31",
+    "error": null
+  },
+  "retained_failure": {
+    "cause": "Model omitted bank_name in a readable statement heading",
+    "turns_attempted": 3,
+    "final_state": "WAIT_USER",
+    "pack_generated": false,
+    "validator_script_bug": "verify_pack called before a pack existed; fixed to inspect actual state first"
+  },
+  "corrective_mail": {
+    "received": 4,
+    "checked": 4,
+    "total": 4,
+    "send_status": "sent",
+    "zip_attached": true,
+    "customer_read_receipt": false
+  }
+}

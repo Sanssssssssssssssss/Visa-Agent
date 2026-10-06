@@ -26,6 +26,7 @@ uv run python scripts/check_docs.py
 | Application information / 填表 | Missing dates, formulas, invalid values and contradictions | [intake](tests/test_intake.py) |
 | Customer guidance / 引导 | Valid question IDs, language, progress and failure wording | [guidance](tests/test_guidance.py), [replies](tests/test_reply_regressions.py), [service](tests/test_customer_service.py) |
 | Behavioral drift / 行为漂移 | Stage contracts, first divergence, unsupported completion claims and reset questions | [behavior tests](tests/test_behavior_regression.py), [real model report](docs/behavior-regression.md) |
+| Receipt and prerequisites / 接收与条件 | Three files received, CAS dependency, missing bank field recovery, genuine finance failures | [finance dependency tests](tests/test_finance_dependencies.py), [record](docs/finance-receipt.md) |
 | Channels / 渠道 | MIME, reference chains, deduplication, stale/ambiguous sending | [QQ](tests/test_qq_mail.py), [Graph](tests/test_outlook.py) |
 | Persistence / 隔离与恢复 | 4 interleaved sender/account identities × 30 logical days × 3 repetitions × HITL on/off | [inbox](tests/test_inbox.py) |
 | Worker / 后台 | OS lock across processes, abrupt exit, 5 network failures then recovery, headless credentials | [worker](tests/test_worker.py) |

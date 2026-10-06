@@ -1,8 +1,4 @@
-"""Customer language and progress, built from checked state rather than model claims.
-
-The model selects priorities after checks. This response catalogue owns factual
-claims, official links and completion wording; it cannot override a check.
-"""
+"""Language/progress helpers; live customer prose comes from the model."""
 
 import re
 
@@ -39,7 +35,7 @@ def material_progress(case):
     checks = {c.id: c for c in case.checks}
     groups = {
         "identity": ("护照", "Passport", ["passport_name", "passport_number", "passport_valid", "name:applicant_name"]),
-        "funds": ("资金证明", "Funding evidence", ["finance", "finance_submission", "funding_scope", "name:bank_holder"]),
+        "funds": ("资金证明", "Funding evidence", ["finance", "finance_document", "finance_submission", "funding_scope", "name:bank_holder"]),
         "work": ("工作证明", "Employment", ["employer", "name:employment_name"]),
         "school": ("学校材料", "School evidence", ["cas_reference", "cas_name", "tuition_due", "study_months",
                                               "study_location", "english_confirmed", "atas_required", "student_english", "name:cas_name"]),
@@ -50,15 +46,24 @@ def material_progress(case):
         "atas": ("学术技术审核", "ATAS", ["atas_reference", "atas"]),
         "translation": ("翻译件", "Translations", [k for k in checks if k.startswith("translation:")]),
     }
+    kinds = {"identity": {"passport"}, "funds": {"bank_statement", "bank_letter"},
+             "work": {"employment"}, "school": {"cas"}, "sponsor": {"cos"},
+             "english": {"english"}, "tb": {"tb"}, "atas": {"atas"}, "translation": {"translation"}}
     items = []
     for group, (zh, en, keys) in groups.items():
         rows = [checks[k] for k in keys if k in checks]
         if not rows or all(c.status == "not_applicable" for c in rows):
             continue
         ok = all(c.status in {"pass", "not_applicable"} for c in rows) and not case.pending_error
+        files = [d.name for d in case.documents if not d.rejected and d.kind in kinds[group]]
         items.append({"id": group, "label": zh if case.language == "zh" else en,
-                      "status": "checked" if ok else "pending"})
+                      "status": "checked" if ok else "received" if files else "pending",
+                      "received": bool(files), "files": files,
+                      "checks": [{"id": c.id, "status": c.status, "reason": c.message}
+                                 for c in rows if c.status in {"fail", "unknown"}]})
     return {"checked": sum(i["status"] == "checked" for i in items), "total": len(items),
+            "received": sum(i["received"] for i in items),
+            "file_count": sum(not d.rejected for d in case.documents),
             "items": items, "provisional": True, "reviewed": case.approval is not None,
             "automatic": case.automatic_completion is not None, "hitl_enabled": case.hitl_enabled,
             "route_known": case.route is not None, "turn_failed": bool(case.pending_error)}
@@ -72,14 +77,15 @@ def progress_text(case):
     if not p["route_known"]:
         return ("材料进度 " if zh else "Materials ") + bar + (
             " 清单待确认；先了解您的申请情况。" if zh else " Checklist pending; we need your circumstances first.")
-    counts = (f"{p['checked']}/{p['total']} 项已收齐" if zh else f"{p['checked']}/{p['total']} categories collected")
+    counts = (f"📥 已收到 {p['received']}/{p['total']} 类；✅ 已核对 {p['checked']}/{p['total']} 类" if zh else
+              f"📥 Received {p['received']}/{p['total']} categories; ✅ Checked {p['checked']}/{p['total']}")
     unresolved = any(c.status in {"fail", "unknown"} for c in case.checks) or bool(case.pending_error)
     if unresolved and complete == 10:
         bar = "🟩" * 9 + "⬜"
     suffix = ("另有信息待确认；清单会随申请情况更新。" if zh else
               "Some details still need clarification; the checklist may change.") if unresolved else (
               "按当前申请情况统计。" if zh else "Based on your current circumstances.")
-    result = f"{'材料进度' if zh else 'Materials'} {bar} {counts}\n{suffix}"
+    result = f"{'材料进度' if zh else 'Materials'} {bar}\n{counts}\n{suffix}"
     if case.application_forms:
         info = [c for c in case.checks if c.id.startswith("info:") and c.status != "not_applicable"]
         done = sum(c.status == "pass" for c in info)

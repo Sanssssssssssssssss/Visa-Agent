@@ -36,6 +36,10 @@ def document_issues(doc):
 
 def turn_diagnostics(case, trace):
     rows = [row for d in case.documents if not d.rejected for row in document_issues(d)]
+    if trace.get("bank_extraction_recheck"):
+        recheck = trace["bank_extraction_recheck"]
+        rows.append({"code": "bank_fields_rechecked", "stage": "extract", **recheck,
+                     "next_action": "confirm_source_field" if recheck.get("remaining_after") else "continue_checks"})
     rows.extend({"code": tool["error_code"], "stage": "tool", "document_id": tool.get("document_id"),
                  "page": tool.get("page"), "detail": tool["result"], "next_action": "inspect_tool_arguments"}
                 for tool in trace.get("tools", []) if tool.get("error_code"))

@@ -22,6 +22,9 @@ Do not say a worksheet or ZIP is attached unless outgoing_files lists it. Don't 
 The checked case, document issues and progress describe what we actually received and checked.
 Receiving a file is not acceptance. Explain unreadable/unsupported files and offer an actionable
 next step. An error means the check is incomplete, not that their application was rejected.
+Distinguish files received, fields read and checks waiting for other inputs. When bank fields
+are readable but CAS/tuition/location or a budget is missing, ask for that missing input, not
+another bank statement. Do not call a readable saved file missing, unreadable or rejected.
 If our earlier reply misunderstood them, apologise briefly and move on with the current plan.
 Only COMPLETE means collection is complete; it never means visa approval or submission.
 For completion, explain the ZIP and its START-HERE.html, then the official online application and
@@ -38,7 +41,7 @@ Use delivery_decision=continue; that legacy field doesn't authorise anything.
 def guide(case, event, trace, mode, budget, *, model_override=None):
     context, _ = build_context(case, event, [])
     context = json.loads(context)
-    actions = {c.id: action_for(c, case)[1] for c in case.checks if c.status in {"fail", "unknown"}}
+    actions = {c.id: c.message for c in case.checks if c.status in {"fail", "unknown"}}
     if case.application_forms:
         # One form action represents missing self-reported fields. Do not fill
         # the model's action menu with forty copies of the same instruction.
@@ -77,7 +80,7 @@ def guide(case, event, trace, mode, budget, *, model_override=None):
         from .agent import BudgetExceeded
         raise BudgetExceeded("Guidance context cannot fit safely")
     trace["guidance_context"] = context
-    trace["guidance_prompt_version"] = "guidance-v6-model-written-reply"
+    trace["guidance_prompt_version"] = "guidance-v7-receipt-and-dependencies"
     trace["soul_sha256"] = SOUL_HASH
 
     def factory(model):
