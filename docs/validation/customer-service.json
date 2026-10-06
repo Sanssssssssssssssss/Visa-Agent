@@ -1,0 +1,474 @@
+{
+  "rows": [
+    {
+      "id": "blank-image-1-after",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 2922,
+        "output_tokens": 157
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "blank-image-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 2865,
+        "output_tokens": 158
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "cn-beginner-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 2398,
+        "output_tokens": 107
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "damaged-pdf-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 4960,
+        "output_tokens": 207
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "demo-progress-1-after",
+      "application_checks": false,
+      "application_failures": [
+        "unexpected_status:NEEDS_HUMAN",
+        "reply_missing:3/3",
+        "wrong_material_progress"
+      ],
+      "semantic_checks": false,
+      "semantic_failures": [
+        "expected_progress_not_reached"
+      ],
+      "state": "NEEDS_HUMAN",
+      "progress": [
+        0,
+        1,
+        2
+      ],
+      "usage": {
+        "requests": 3,
+        "input_tokens": 11843,
+        "output_tokens": 1849
+      },
+      "duplicate_checks": 3,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "demo-progress-1-baseline",
+      "application_checks": false,
+      "application_failures": [
+        "unexpected_status:WAIT_USER",
+        "reply_missing:3/3",
+        "wrong_material_progress"
+      ],
+      "semantic_checks": false,
+      "semantic_failures": [
+        "expected_progress_not_reached"
+      ],
+      "state": "WAIT_USER",
+      "progress": [
+        0,
+        0,
+        2
+      ],
+      "usage": {
+        "requests": 3,
+        "input_tokens": 12209,
+        "output_tokens": 1632
+      },
+      "duplicate_checks": 3,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "demo-progress-1-funding-fix",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "READY_FOR_REVIEW",
+      "progress": [
+        0,
+        1,
+        3
+      ],
+      "usage": {
+        "requests": 3,
+        "input_tokens": 11994,
+        "output_tokens": 1928
+      },
+      "duplicate_checks": 3,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "demo-progress-1-repeat",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "READY_FOR_REVIEW",
+      "progress": [
+        0,
+        1,
+        3
+      ],
+      "usage": {
+        "requests": 3,
+        "input_tokens": 11981,
+        "output_tokens": 1802
+      },
+      "duplicate_checks": 3,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "document-injection-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 3806,
+        "output_tokens": 764
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "document-injection-1-repeat",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 3863,
+        "output_tokens": 845
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "en-beginner-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 2399,
+        "output_tokens": 69
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "fake-evidence-1-after",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "NEEDS_HUMAN",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 6142,
+        "output_tokens": 1537
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "fake-evidence-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 6085,
+        "output_tokens": 1523
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "language-switch-1-after",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0,
+        0
+      ],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5499,
+        "output_tokens": 299
+      },
+      "duplicate_checks": 2,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "language-switch-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0,
+        0
+      ],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5385,
+        "output_tokens": 299
+      },
+      "duplicate_checks": 2,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "misnamed-receipt-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 3609,
+        "output_tokens": 185
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "public-image-1-after",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 4032,
+        "output_tokens": 258
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "public-image-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": false,
+      "semantic_failures": [
+        "stated_route_omitted",
+        "repeated_known_question"
+      ],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 8176,
+        "output_tokens": 377
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "public-pdf-1-after",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 4010,
+        "output_tokens": 201
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "public-pdf-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": false,
+      "semantic_failures": [
+        "stated_route_omitted",
+        "repeated_known_question"
+      ],
+      "state": "WAIT_USER",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 3884,
+        "output_tokens": 159
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    },
+    {
+      "id": "uk-location-1-baseline",
+      "application_checks": true,
+      "application_failures": [],
+      "semantic_checks": true,
+      "semantic_failures": [],
+      "state": "NEEDS_HUMAN",
+      "progress": [
+        0
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 2405,
+        "output_tokens": 184
+      },
+      "duplicate_checks": 1,
+      "duplicate_failures": 0
+    }
+  ],
+  "usage": {
+    "requests": 33,
+    "input_tokens": 120467,
+    "output_tokens": 14540
+  },
+  "native_pdf_probes": [
+    {
+      "model": "deepseek-flash",
+      "input": "external-materials\\public-samples\\06-deposit-certificate-Warwick.pdf",
+      "sha256": "a9b209802904f34eb45131c206314ca777fd26bb5c2f2fc9102af1095099a882",
+      "transport": "native_pdf_file_data",
+      "format": "deepseek",
+      "requests": 1,
+      "status": 400,
+      "error": "{\"error\":{\"message\":\".messages[0]: You have uploaded an unsupported file. Please make sure your file is valid and has one of the following formats: webp, png, jpeg, and gif. (request_id: 5f8c0668-71d7-4214-a8b9-b2c32663d004)\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":\"invalid_request_error\"}}",
+      "seconds": 1.672,
+      "ledger_requests": 31
+    },
+    {
+      "model": "deepseek-flash",
+      "input": "external-materials\\public-samples\\06-deposit-certificate-Warwick.pdf",
+      "sha256": "a9b209802904f34eb45131c206314ca777fd26bb5c2f2fc9102af1095099a882",
+      "transport": "native_pdf_file_data",
+      "requests": 1,
+      "status": 400,
+      "error": "{\"error\":{\"message\":\".messages[0]: file must have a file_id or file_data (request_id: f6810549-0137-4786-9036-96ac111757f9)\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":\"invalid_request_error\"}}",
+      "seconds": 1.469,
+      "ledger_requests": 27
+    }
+  ],
+  "packs": [
+    {
+      "case_id": "bad-demo-progress-1-funding-fix",
+      "pack": "E:\\GPTProject2\\Visa-Agent\\output\\customer-service-v1\\cases\\packs\\bad-demo-progress-1-funding-fix\\v3-903e7c186564.zip",
+      "verified": true,
+      "files": [
+        "manifest.json",
+        "originals/b8f08092e628142efb39.pdf",
+        "originals/d5d64359c31d7aafe815.pdf",
+        "originals/fbf31d0b46433f53fa2d.pdf",
+        "report.html",
+        "review.json"
+      ],
+      "approval": null
+    },
+    {
+      "case_id": "bad-demo-progress-1-repeat",
+      "pack": "E:\\GPTProject2\\Visa-Agent\\output\\customer-service-v1\\cases\\packs\\bad-demo-progress-1-repeat\\v3-bb63e6dcce29.zip",
+      "verified": true,
+      "files": [
+        "manifest.json",
+        "originals/b8f08092e628142efb39.pdf",
+        "originals/d5d64359c31d7aafe815.pdf",
+        "originals/fbf31d0b46433f53fa2d.pdf",
+        "report.html",
+        "review.json"
+      ],
+      "approval": null
+    }
+  ],
+  "ledger_requests": 35,
+  "request_cap": 36,
+  "price_configured": false,
+  "scope": "Public examples and deliberately synthetic/invalid cases. No real-client authenticity or end-to-end delivery validation."
+}

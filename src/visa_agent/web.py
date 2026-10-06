@@ -13,6 +13,8 @@ from urllib.parse import unquote, urlsplit
 import uuid
 
 from .documents import MAX_BYTES
+from .conversation import material_progress, action_for
+from .diagnostics import document_issues
 from .service import VisaService
 from .types import CaseEvent
 
@@ -37,7 +39,7 @@ class LocalApp:
             scenario = json.loads((ROOT / "datasets/cases" / (SAMPLES[sample] + ".json")).read_text(encoding="utf-8"))
             self.initial_text = scenario["events"][0]["text"]
         self.case_id = "web-" + uuid.uuid4().hex[:16]
-        self.service.store.create(self.case_id)
+        self.service.store.create(self.case_id, test_mode=sample != "blank")
         self.initial_sent = False
         self.event_prefixes = {}
         self.last_error = None
@@ -45,6 +47,10 @@ class LocalApp:
     def state(self):
         case = self.service.store.get(self.case_id)
         return {"case": case.model_dump(mode="json"), "sample": self.sample,
+                "progress": material_progress(case),
+                "customer_issues": list(dict.fromkeys(action_for(c, case)[1] for c in case.checks
+                                                       if c.status in {"fail", "unknown"})),
+                "diagnostics": [i for d in case.documents for i in document_issues(d)],
                 "initial_text": self.initial_text, "mode": self.service.mode,
                 "used": self.service.budget.count(), "limit": self.service.budget.limit,
                 "key_available": bool(os.getenv("VISA_API_KEY") or os.getenv("DEEPSEEK_API_KEY")),

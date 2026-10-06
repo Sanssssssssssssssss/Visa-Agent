@@ -1,0 +1,29 @@
+{
+  "reason": "Added after baseline review found route omissions and demonstration evidence omitted. Original expectations and results retained.",
+  "checks": {
+    "public-image": {
+      "route": "visitor",
+      "forbidden_reply": "您去英国主要是"
+    },
+    "public-pdf": {
+      "route": "student",
+      "forbidden_reply": "Are you visiting, studying or working"
+    },
+    "demo-progress": {
+      "progress": [
+        0,
+        1,
+        3
+      ]
+    },
+    "language-switch": {
+      "route": "visitor"
+    },
+    "cn-beginner": {
+      "absent_nationality": true
+    },
+    "en-beginner": {
+      "absent_nationality": true
+    }
+  }
+}

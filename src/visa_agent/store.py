@@ -61,10 +61,10 @@ class Store:
         finally:
             db.close()
 
-    def create(self, case_id: str) -> Case:
+    def create(self, case_id: str, *, test_mode=False) -> Case:
         from .types import CaseEvent
         CaseEvent(case_id=case_id, event_id="validate")
-        case = Case(id=case_id)
+        case = Case(id=case_id, test_mode=test_mode)
         with self.transaction() as db:
             db.execute("INSERT INTO cases VALUES (?,?)", (case.id, case.model_dump_json()))
         return case

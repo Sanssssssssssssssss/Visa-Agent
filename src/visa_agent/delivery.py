@@ -16,8 +16,9 @@ def manifest(case: Case) -> dict:
     return {
         "case_id": case.id, "version": case.version, "route": case.route,
         "rule_version": case.rule_version,
+        "test_mode": case.test_mode,
         "documents": [{"id": d.id, "name": d.name, "sha256": d.sha256, "kind": d.kind,
-                       "language": d.language} for d in case.documents if not d.rejected],
+                       "language": d.language, "content_role": d.content_role} for d in case.documents if not d.rejected],
         "facts": [f.model_dump() for f in case.facts if f.active],
         "checks": [c.model_dump() for c in case.checks],
     }
@@ -57,7 +58,7 @@ td,th{{padding:8px;border:1px solid #ccd7dc;text-align:left;overflow-wrap:anywhe
 .checks th:nth-child(2){{width:9%}}.checks th:nth-child(3){{width:40%}}
 .checks th:nth-child(4){{width:33%}}.checks td:nth-child(2){{white-space:nowrap}}
 .status{{padding:14px;background:#edf5f4}}li{{overflow-wrap:anywhere}}
-</style><h1>申请材料准备报告</h1><p class="status">案件 {esc(case.id)} · 版本 {case.version}
+</style><h1>{'演示材料包 · 仅供测试' if case.test_mode else '申请材料准备报告'}</h1><p class="status">案件 {esc(case.id)} · 版本 {case.version}
 · {esc(case.status)} · {esc(case.route)}</p>
 <p>本报告记录材料准备检查与人工复核，不代表签证获批。真实性、资格及适用条件须由顾问核对。</p>
 <p>规则版本：{esc(case.rule_version)}<br>证据清单哈希：{digest(content)}</p>

@@ -34,7 +34,7 @@ def replay(service: VisaService, scenario_path: Path, *, approve_demo=False) -> 
     frozen_hash = verify_dataset(root)
     scenario = json.loads(scenario_path.read_text(encoding="utf-8"))
     case_id = scenario["id"] + "-" + uuid.uuid4().hex[:8]
-    service.store.create(case_id)
+    service.store.create(case_id, test_mode=True)  # This command consumes the frozen synthetic dataset.
     results, assertions = [], []
     event_states, before_adviser = [], None
     for index, item in enumerate(scenario["events"]):

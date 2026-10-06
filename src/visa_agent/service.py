@@ -12,6 +12,8 @@ import uuid
 
 from .agent import LiveBudget, extract
 from .delivery import build_pack, manifest, verify_pack
+from .conversation import language_for, material_progress, progress_text
+from .diagnostics import turn_diagnostics
 from .documents import read_document, stage_file
 from .evidence import apply_proposal
 from .rules import RULE_VERSION, evaluate, reply_for, status_for
@@ -72,6 +74,7 @@ class VisaService:
                     return TurnResult.model_validate_json(row["result"]).model_copy(update={"duplicate": True})
                 case = self.store.get(event.case_id, db)
                 trace["before"] = case.model_dump()
+                case.language = language_for(event.text, case.language)
                 if case.rule_version and case.rule_version != RULE_VERSION:
                     case.version += 1
                     case.approval, case.pack_path = None, None
@@ -81,6 +84,7 @@ class VisaService:
                     reply = self._tick(case, event)
                 else:
                     new_docs = []
+                    intent = "continue"
                     for original, sha, path in staged:
                         if any(d.sha256 == sha for d in case.documents):
                             continue
@@ -91,6 +95,11 @@ class VisaService:
                     if event.text.strip() or new_docs:
                         proposal = extract(case, event, new_docs, trace, self.mode, self.budget,
                                            self.model_override)
+                        intent = proposal.intent
+                        for item in trace.get("visual_inputs", []):
+                            if not item["sent"]:
+                                doc = next(d for d in case.documents if d.id == item["document_id"])
+                                doc.problems.append(f"Visual input unavailable page {item['page']}: {item['reason']}")
                         for doc in case.documents:
                             if doc.id in trace.get("context_limited_documents", []):
                                 problem = "Model context capacity exceeded; full-page review required"
@@ -116,7 +125,7 @@ class VisaService:
                         case.pending_error = None
                         if case.status == Status.READY:
                             case.pack_path = build_pack(case, self.store.root)
-                    reply = reply_for(case)
+                    reply = reply_for(case, text=event.text, intent=intent, received_count=len(staged))
                     case.last_contact = max(case.last_contact, event.at.isoformat())
                     case.reminder_count = 0
                     case.last_reminder = None
@@ -128,6 +137,8 @@ class VisaService:
                 db.execute("UPDATE events SET status='done',result=?,error=NULL WHERE case_id=? AND event_id=?",
                            (result.model_dump_json(), case.id, event.event_id))
                 trace["after"] = case.model_dump()
+                trace["diagnostics"] = turn_diagnostics(case, trace)
+                trace["material_progress"] = material_progress(case)
                 self.store.record_run(case.id, run_id, trace, db)
                 return result
         except Exception as exc:
@@ -137,6 +148,7 @@ class VisaService:
                     error = error.replace(os.environ[name], "[REDACTED]")
             with self.store.transaction() as db:
                 case = self.store.get(event.case_id, db)
+                case.language = language_for(event.text, case.language)
                 case.status, case.approval, case.pack_path = Status.NEEDS_HUMAN, None, None
                 case.pending_error = error
                 self.store.save(case, db)
@@ -144,22 +156,24 @@ class VisaService:
                            (error, case.id, event.event_id))
                 trace["error"] = error
                 trace["after"] = case.model_dump()
+                trace["diagnostics"] = turn_diagnostics(case, trace)
                 self.store.record_run(case.id, run_id, trace, db)
             return TurnResult(case_id=case.id, version=case.version, status=case.status, run_id=run_id,
-                              reply="本轮处理失败，已保存原始输入。请查看运行记录后重试。", error=error)
+                              reply=("抱歉，这次没能完成检查，原始输入已经保存。需要由工作人员处理后重试，您暂时不用重复上传。" if case.language == "zh" else
+                                     "Sorry, this check could not be completed. Your original input is saved. Staff need to resolve the issue before retrying; you do not need to upload it again yet.") + "\n\n" + progress_text(case), error=error)
 
     @staticmethod
     def _tick(case, event):
         if case.status != Status.WAIT_USER:
-            return "当前状态不需要自动提醒。"
+            return ("当前状态不需要自动提醒。" if case.language == "zh" else "No reminder is needed in the current state.") + "\n" + progress_text(case)
         if case.reminder_count >= 2:
-            return "已达到两次提醒上限，保留等待状态，请顾问跟进。"
+            return ("已达到两次提醒上限，保留等待状态，请顾问跟进。" if case.language == "zh" else "Two reminders have been sent. We will keep your case open for adviser follow-up.") + "\n" + progress_text(case)
         reference = datetime.fromisoformat(case.last_reminder or case.last_contact)
         if event.at < reference + timedelta(hours=24):
-            return "尚未到提醒时间。"
+            return ("尚未到提醒时间。" if case.language == "zh" else "The next reminder is not due yet.") + "\n" + progress_text(case)
         case.reminder_count += 1
         case.last_reminder = event.at.isoformat()
-        return "材料准备提醒：\n" + reply_for(case)
+        return ("材料准备提醒：\n" if case.language == "zh" else "Document preparation reminder:\n") + reply_for(case)
 
     def review_case(self, case_id, expected_version, decision, notes, *, reviewer="local-adviser", target=None):
         if not notes.strip() or not reviewer.strip():

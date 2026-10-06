@@ -2,7 +2,7 @@
 
 一个可回放、可检查的英国签证材料准备 CLI。支持 Visitor、Student、Skilled Worker 的有限基础分支：接收消息和附件，保存有来源的事实，检查缺项与冲突，等待补件，生成材料包，最后通过独立顾问入口确认。
 
-合成案件真实模型验收 **6/6**，当前离线测试 **65 项通过**。后续[公开图片测试](docs/public-images-v2.md)和[最新 16 次回复复测](docs/public-replies.md)发现了提取错误与重复补问，失败记录完整保留。最终版本的八个场景满足应用检查，但仍有三轮模型提案被校验拒绝；真实客户完整交付与顾问式交互尚未验收。详细结果见 [验收记录](docs/acceptance.md)。
+最新版本加入 **V4.1 原图读取、PDF 逐页转图、中英文客服回复、材料进度及问题分类**。本轮 21 次案件运行、35 次 API 请求；保留 4 次行为问题，修复后完整演示连续两次推进到待人工复核。样例在普通案件里不能通过；真实客户完整交付尚未验收。见[本轮记录](docs/customer-service.md)及[历史验收](docs/acceptance.md)。
 
 ## 安装
 
@@ -23,6 +23,8 @@ uv run pytest -q
 直接拖文件体验：启动 `uv run python -m visa_agent.web`，打开 <http://127.0.0.1:8765>。默认调用真实模型，创建空白案件；输入申请情况后上传图片或 PDF。右侧明确标注的“合成演示”可载入 Visitor/Student/Skilled Worker 的虚构背景，再上传对应 `datasets/materials/` 文件。服务仅监听本机；需要离线演示时加 `--mode offline --data data/web-offline --sample visitor`。
 
 想亲手分批上传、查看补件并自行审批，请按 [手动测试指南](docs/manual-testing.md) 操作，内含现成材料索引和真实模型测试步骤。
+
+可以直接用中文或英文提问，例如“第一次办英国签证，怎么申请，需要什么材料？”每轮回复附材料进度。默认 `VISA_VISION=1`：图片传原图，PDF 传渲染页与 OCR；最多 6 张图/20 MB，超过范围需拆分或复核。普通案件中的样例会被拦住，只有右侧明确选择的合成演示案件允许使用测试材料，材料包也标注仅供测试。
 
 想看模型每次实际输出及客户收到的回复，见[原文查看说明](docs/public-replies.md)。本地已有日志时，执行 `uv run python scripts/show_case_replies.py output/public-replies-v1 output/public-images-v2`，再打开 `output/reply-review/index.html`。原图、客户回复、模型 JSON 和拒绝项分别展示。
 

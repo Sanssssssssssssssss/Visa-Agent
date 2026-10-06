@@ -104,3 +104,12 @@ CAS/CoS 必须有可核对的学校/雇主来源信息，不要求所谓“官�
 ## 为什么选择这些组件
 
 PydanticAI 只承担模型适配、类型输出和工具限制；SQLite 提供事务与唯一约束；PDF/OCR 使用已有库。复用 Camunda KYC 的异步补件流程、DocProof 的提取/确定性检查分离、LangChain 邮件例子的 HITL/评测思路，未复制其运行时代码或引入 Camunda/LangGraph/Chatwoot 服务。Chatwoot 留作后续渠道层；运行时无 agent-reach 和 Codex skill 依赖。
+# 2026-10-06：视觉输入与客户回复
+
+`handle_event()` 仍是唯一业务写入入口。`extract()` 在原有文字上下文外调用 `vision.visual_inputs()`：保留图片原始字节，PDF 用 PDFium 逐页渲染，连同页码和 OCR 发给 `deepseek-flash`。发送结果和图片哈希保存在 `visual_inputs`；日志不写 base64。被遮盖内容不会从 PDF 隐藏文字层恢复。
+
+模型输出新增材料 `content_role`、视觉差异标志和客户 `intent`。`apply_proposal()` 保留样例标记并校验引用；`Evidence.admissible()` 决定字段能否参与检查。普通案件中的样例/无关材料不能用于满足要求。`Case.test_mode` 只能在本地创建演示案件时明确设置，模型工具、客户文本和切换离线传输都不能打开它。
+
+`conversation.reply_for()` 接收已检查的 Case，使用官方步骤、材料说明和三条以内的下一步组织回复；`language_for()` 只看客户消息，附件不会改变回复语言。`material_progress()` 按材料类别汇总，未知、姓名冲突和未适用要求不算通过。初始路线未知时不显示虚假的百分比；人工审批单独显示。客户回复本身不由第二次自由生成调用产生。
+
+`diagnostics.turn_diagnostics()` 保存问题阶段、类别、源文件/页码、检查项和恢复动作。`agent.py` 保留实际 HTTP 响应中的可观察输出，包含失败重试，排除隐藏推理；`scripts/show_case_replies.py` 展示原话、视觉发送记录与分类详情。规则版本变化仍会使旧审批失效。

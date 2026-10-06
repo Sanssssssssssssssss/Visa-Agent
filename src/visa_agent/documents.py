@@ -114,6 +114,9 @@ def read_document(path: Path, sha: str, original_name: str) -> Document:
                     raise ValueError("Image exceeds pixel limit")
                 doc.pages.append(image_text(im, 1))
         doc.problems.extend(pagination_problems(doc.pages))
+        if re.search(r"SYNTHETIC|TEST SPECIMEN|TEST USE ONLY|NOT VALID FOR APPLICATION|合成测试|仅供测试",
+                     "\n".join(p.text for p in doc.pages), re.I):
+            doc.content_role = "sample"
         for page in doc.pages:
             if len(page.text.strip()) < 20:
                 doc.problems.append(f"page {page.number}: unreadable")

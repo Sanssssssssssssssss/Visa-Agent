@@ -69,6 +69,7 @@ class Document(StrictModel):
     language: str = "unknown"
     problems: list[str] = Field(default_factory=list)
     rejected: bool = False
+    content_role: Literal["evidence", "sample", "unrelated", "uncertain"] = "uncertain"
 
 
 class Candidate(StrictModel):
@@ -93,11 +94,15 @@ class DocumentTag(StrictModel):
         "cas", "cos", "english", "tb", "atas", "translation", "sponsorship", "unknown",
     ]
     language: Literal["en", "cy", "zh", "other", "unknown"]
+    content_role: Literal["evidence", "sample", "unrelated", "uncertain"] = "uncertain"
+    visual_observation: str = Field(default="", max_length=300)
+    needs_visual_review: bool = False
 
 
 class Proposal(StrictModel):
     facts: list[Candidate] = Field(default_factory=list, max_length=100)
     documents: list[DocumentTag] = Field(default_factory=list, max_length=30)
+    intent: Literal["getting_started", "how_to_apply", "materials", "status", "continue", "other"] = "continue"
 
 
 class Check(StrictModel):
@@ -134,6 +139,8 @@ class Case(StrictModel):
     last_reminder: str | None = None
     reminder_count: int = 0
     pending_error: str | None = None
+    language: Literal["zh", "en"] = "zh"
+    test_mode: bool = False
 
 
 class TurnResult(StrictModel):

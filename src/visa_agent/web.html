@@ -375,6 +375,8 @@
       </div>
       <div class="panel">
         <h2>已收到的材料 <span id="count">0</span></h2>
+        <p id="material-count" class="muted"></p>
+        <progress id="material-meter" value="0" max="1" style="width:100%" aria-label="材料核对进度"></progress>
         <div id="documents" class="muted">等待上传</div>
       </div>
       <div class="panel" id="issues-panel" hidden>
@@ -462,6 +464,12 @@
       $("background").textContent = data.initial_text || "没有预填信息。";
       $("case-id").textContent = c.id + " · 版本 " + c.version;
       $("count").textContent = c.documents.length;
+      const progress = data.progress || {checked:0, total:0};
+      $("material-meter").max = Math.max(progress.total, 1);
+      $("material-meter").value = progress.checked;
+      $("material-count").textContent = progress.route_known
+        ? `${progress.checked}/${progress.total} 类材料已核对 · ${progress.reviewed ? "人工复核已确认" : "人工复核待完成"}`
+        : "先确认申请情况，再确定材料清单";
       $("documents").replaceChildren();
       for (const d of c.documents) {
         const row = element("div", d.name, "file");
@@ -470,8 +478,10 @@
             "small",
             d.rejected
               ? "已排除"
+              : d.content_role === "sample" ? "样例 / 测试材料"
+              : d.content_role === "unrelated" ? "与所需证据不符"
               : d.problems.length
-                ? d.problems.join("；")
+                ? "部分内容待核对，请看下方建议"
                 : `已读取 ${d.pages.length} 页 · ${d.kind}`,
           ),
         );
@@ -483,7 +493,7 @@
       );
       $("issues-panel").hidden = !issues.length;
       $("issues").replaceChildren(
-        ...issues.map((x) => element("div", x.message, "issue")),
+        ...(data.customer_issues || []).map((x) => element("div", x, "issue")),
       );
       $("messages").replaceChildren();
       for (const h of c.history) {
@@ -504,14 +514,14 @@
       }
       if (!c.history.length)
         $("messages").append(
-          element("p", "背景已准备好，拖入配套材料即可开始。", "empty"),
+          element("p", "可以先告诉我：您去英国做什么、持哪个国家的护照、准备从哪里申请？也可以直接上传材料。", "empty"),
         );
       $("pack").hidden = !c.pack_path;
       $("approval").hidden = c.status !== "READY_FOR_REVIEW";
       $("confirmed").checked = false;
       $("approve").disabled = true;
       $("debug").textContent = JSON.stringify(
-        { facts: c.facts, checks: c.checks },
+        { diagnostics: data.diagnostics, facts: c.facts, checks: c.checks },
         null,
         2,
       );

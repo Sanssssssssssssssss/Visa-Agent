@@ -52,5 +52,5 @@ def test_uploaded_document_problem_precedes_routine_intake_questions():
               for k in ("applicant_name", "nationality", "age")]
     checks.append(Check(id="read:d", status="fail", source="test", message="读取失败"))
     reply = reply_for(Case(id="unit", documents=[doc], checks=checks))
-    assert reply.splitlines()[2].startswith("1. certificate.png")
+    assert next(line for line in reply.splitlines() if line.startswith("1.")).startswith("1. certificate.png")
     assert "无法可靠读取" in reply and "\n4." not in reply

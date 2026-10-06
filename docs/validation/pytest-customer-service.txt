@@ -1,0 +1,7 @@
+Executed locally on Windows / Python 3.12, 2026-10-06.
+Command: .venv/Scripts/python.exe -X utf8 -m pytest -q
+Result: 77 passed in 36.43s
+Command: .venv/Scripts/ruff.exe check src tests scripts
+Result: All checks passed!
+Frozen original dataset verified: 778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2
+Real model results are separately recorded in customer-service.json.

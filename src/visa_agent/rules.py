@@ -89,6 +89,9 @@ def evaluate(case: Case) -> list[Check]:
     for doc in case.documents:
         if doc.rejected:
             continue
+        if doc.content_role == "unrelated" or (doc.content_role == "sample" and not case.test_mode):
+            add(f"{doc.content_role}:{doc.id}", "fail", "此文件不能作为本人的申请证据，请补充实际材料。")
+            continue
         if doc.problems:
             add(f"read:{doc.id}", "fail", f"{doc.name} 无法可靠读取，请上传清晰完整文件。")
         if any(p.startswith("Declared pagination incomplete") for p in doc.problems):
@@ -100,7 +103,7 @@ def evaluate(case: Case) -> list[Check]:
         if doc.kind == "unknown":
             add(f"kind:{doc.id}", "unknown", f"请确认 {doc.name} 是什么材料。")
         if doc.language not in {"en", "cy"}:
-            translations = [d for d in case.documents if d.kind == "translation" and not d.rejected]
+            translations = [d for d in case.documents if d.kind == "translation" and e.admissible(d)]
             translated = False
             for td in translations:
                 facts = {f.key: f.value for f in case.facts
@@ -235,7 +238,7 @@ def _finance(e: Evidence, checks: list[Check], required: Decimal | None, *, peri
     keys = ("bank_name", "bank_holder", "bank_currency", "bank_minimum", "bank_start", "bank_end")
     # All required fields must come from ONE admissible document. Substitution cannot
     # bypass field checks or assemble a fictitious complete statement from unrelated files.
-    documents = [d for d in e.case.documents if d.kind in kinds and not d.rejected and not d.problems]
+    documents = [d for d in e.case.documents if d.kind in kinds and e.admissible(d)]
     reasons = []
     for doc in documents:
         values = {key: {f.value for f in e.facts(key, kinds) if f.source_id == doc.id} for key in keys}
@@ -279,54 +282,6 @@ def status_for(checks: list[Check]) -> Status:
     return Status.WAIT_USER if blockers else Status.READY
 
 
-def reply_for(case: Case) -> str:
-    if case.status == Status.COMPLETE:
-        return "当前版本材料包已由顾问确认，可用于下一步申请准备。"
-    if case.status == Status.READY:
-        return "已整理当前材料并完成本轮检查，材料包已生成。请顾问核对原件和适用条件后确认。"
-    blockers = [c for c in case.checks if c.status in {"fail", "unknown"}]
-    document_families = {"pagination", "context", "read", "translation", "kind"}
-
-    def priority(check):
-        if check.id == "route":
-            return 0
-        if check.human:
-            return 1
-        if check.id.split(":")[0] in document_families:
-            return 2
-        return 3
-
-    actions, seen = [], set()
-    for check in sorted(blockers, key=priority):
-        family = check.id.split(":")[0]
-        if family in {"pagination", "context", "read"}:
-            if family in seen:
-                continue
-            seen.add(family)
-            related = [c for c in blockers if c.id.startswith(family + ":")]
-            if family == "pagination":
-                message = (f"有 {len(related)} 个文件带有多页页码，页面完整性和归属待核对。"
-                           "请将同一份文件的完整页面按顺序合并为 PDF，或请顾问核对这些页面。")
-            elif family == "context":
-                message = "部分材料未能完整阅读，需要顾问核对全文；相关内容暂不能用于确认材料齐备。"
-            else:
-                # Pagination/capacity already has an actionable message. Keep an
-                # additional reading request only for genuine OCR/file problems.
-                sources = {c.id.split(":", 1)[1] for c in related}
-                unreadable = [d for d in case.documents if d.id in sources and any(
-                    not p.startswith(("Declared pagination incomplete", "Model context capacity exceeded"))
-                    for p in d.problems)]
-                if not unreadable:
-                    continue
-                names = "、".join(d.name for d in unreadable[:3])
-                message = f"{names} 的部分内容无法可靠读取。请上传清晰完整版本，或请顾问对照原件确认。"
-        else:
-            message = check.message
-        if message not in actions:
-            actions.append(message)
-        if len(actions) == 3:
-            break
-    documents = [d for d in case.documents if not d.rejected]
-    receipt = f"已收到 {len(documents)} 个文件，材料检查尚未完成。\n" if documents else ""
-    intro = "这部分需要顾问核对：" if case.status == Status.NEEDS_HUMAN else "我们先补齐以下信息："
-    return receipt + intro + "\n" + "\n".join(f"{i + 1}. {message}" for i, message in enumerate(actions))
+def reply_for(case: Case, **kwargs) -> str:
+    from .conversation import reply_for as compose_reply
+    return compose_reply(case, **kwargs)

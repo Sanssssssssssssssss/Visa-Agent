@@ -25,16 +25,15 @@ LABELS = {
 def communication_checks(reply, trace):
     """Frozen mechanical checks; do not label these as adviser quality scores."""
     failures = []
-    documents = trace.get("after", {}).get("documents", [])
-    if (documents or trace.get("input", {}).get("attachments")) and not any(
-        word in reply for word in ("收到", "已读取", "已整理")
+    if trace.get("input", {}).get("attachments") and not any(
+        word in reply for word in ("收到", "已读取", "已整理", "received")
     ):
         failures.append("没有确认收到材料")
     blockers = [c for c in trace.get("after", {}).get("checks", [])
                 if c["status"] in {"fail", "unknown"}]
     document_issue = any(c["id"].startswith(("read:", "context:", "pagination:", "translation:", "kind:"))
                          for c in blockers)
-    if document_issue and not any(word in reply for word in ("页面", "读取", "译文", "阅读", "扫描", "是什么材料")):
+    if document_issue and not any(word in reply.lower() for word in ("页面", "读取", "译", "阅读", "扫描", "是什么证明", "read", "pages", "translation", "identify", "sample", "样例")):
         failures.append("没有解释材料问题")
     if reply.count("合成 PDF") + reply.count("合并为 PDF") > 1:
         failures.append("重复要求合并同一组页面")
@@ -76,6 +75,8 @@ def build(batch_paths, destination):
                     materials[asset] = source.name
                     links.append(f'<a href="assets/{esc(asset)}" target="_blank">{esc(source.name)}</a>')
                 messages = [m for m in trace.get("messages", []) if m.get("kind") == "response"]
+                if not messages:
+                    messages = [r for r in trace.get("http_responses", []) if r.get("messages")]
                 issues = communication_checks(result["reply"], trace)
                 record = {
                     "batch": batch.name, "id": row["id"], "turn": number,
@@ -85,6 +86,8 @@ def build(batch_paths, destination):
                     "tools": trace.get("tools", []), "error": result.get("error"),
                     "status": result["status"], "guardrail_pass": row["passed"],
                     "communication_failures": issues, "usage": trace.get("usage", {}),
+                    "diagnostics": trace.get("diagnostics", []), "visual_inputs": trace.get("visual_inputs", []),
+                    "material_progress": trace.get("material_progress"),
                 }
                 records.append(record)
                 fields = "".join(
@@ -103,6 +106,7 @@ def build(batch_paths, destination):
                     <table><tr><th>字段</th><th>值</th><th>置信度</th><th>来源</th><th>引用原文</th></tr>{fields}</table></div></details>
                     <details><summary>每次模型响应原文：工具调用 / final_result JSON</summary>{missing}<pre>{pretty(messages)}</pre></details>
                     <details><summary>应用拒绝项、工具结果、错误、用量</summary><pre>{pretty({k: record[k] for k in ('rejected_candidates', 'tools', 'error', 'usage')})}</pre></details>
+                    <details><summary>问题分类、原图发送记录、材料进度</summary><pre>{pretty({k: record[k] for k in ('diagnostics', 'visual_inputs', 'material_progress')})}</pre></details>
                     </section>''')
             search = f"{batch.name} {row['id']} {LABELS.get(row['scenario'], '')}"
             cards.append(f'''<article data-search="{esc(search.lower())}">
@@ -126,7 +130,7 @@ def build(batch_paths, destination):
         input{box-sizing:border-box;width:100%;padding:14px;font:inherit;border:1px solid #aab8c8;border-radius:6px}
         .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}.gallery img,.pdf{height:230px;width:100%;object-fit:contain;background:#e9eef3}.gallery span{display:block;font-size:13px}a{color:#1f5c9e}.pdf{display:grid;place-items:center}
         </style><main><header><h1>材料与逐轮回复</h1>
-        <p>图片为大学公开脱敏扫描件，保留原遮盖。点击图片可查看原尺寸；客户回复逐字来自运行记录。模型负责结构化提取，中文回复由规则代码生成。没有把历史回复改写成改进后的版本。</p>
+        <p>材料包含大学公开脱敏样例和明确标记的故障测试文件，不能当作已核验的客户材料。点击可查看原文件；客户回复逐字来自运行记录。模型负责提取与意图分类，中英文回复由应用根据检查结果组织。历史回复保持原样。</p>
         <p>COUNT</p><details><summary>检查原始材料</summary><div class="gallery">GALLERY</div></details>
         <input id="search" placeholder="筛选场景或阶段，例如 Warwick、before、after、split"><p id="visible" class="muted"></p></header>
         CARDS</main><script>const s=document.getElementById('search');function filter(){let n=0;for(const a of document.querySelectorAll('article')){a.hidden=!a.dataset.search.includes(s.value.toLowerCase());if(!a.hidden)n++}document.getElementById('visible').textContent='显示 '+n+' 次案件运行'}s.addEventListener('input',filter);filter();</script></html>'''

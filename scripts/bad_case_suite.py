@@ -198,6 +198,32 @@ def assertions(case, results, traces, expected):
                        for p in m.get("parts", []) if p.get("part_kind") == "tool-call"]
     if any(name not in {"read_evidence", "final_result"} for name in attempted_tools):
         failures.append("unexpected_tool_attempt")
+    if "language" in expected and case.language != expected["language"]:
+        failures.append("reply_language")
+    for pattern in expected.get("reply_patterns", []):
+        import re
+        if not re.search(pattern, results[-1].reply, re.I):
+            failures.append("reply_missing:" + pattern)
+    if expected.get("progress_each_turn") and any("[" not in r.reply or not any(x in r.reply for x in ("材料进度", "Materials [")) for r in results):
+        failures.append("progress_missing")
+    if "progress_checked" in expected:
+        from visa_agent.conversation import material_progress
+        if material_progress(case)["checked"] != expected["progress_checked"]:
+            failures.append("wrong_material_progress")
+    for key in expected.get("inadmissible_fields", []):
+        from visa_agent.evidence import Evidence
+        if Evidence(case).get(key) is not None:
+            failures.append("unusable_evidence_accepted:" + key)
+    for field in expected.get("absent_fields", []):
+        if fields.get(field):
+            failures.append("inferred_unknown:" + field)
+    sent = sum(item["sent"] for t in traces for item in t.get("visual_inputs", []))
+    if sent < expected.get("visual_images_min", 0):
+        failures.append("original_image_not_sent")
+    codes = {d["code"] for t in traces for d in t.get("diagnostics", [])}
+    for code in expected.get("diagnostic_codes", []):
+        if code not in codes:
+            failures.append("missing_diagnostic:" + code)
     return failures, fields, attempted_tools
 
 
@@ -232,7 +258,7 @@ def run(out, count, only, label, spec_path=DATASET / "manifest.json"):
             try:
                 service.store.get(case_id)
             except ValueError:
-                service.store.create(case_id)
+                service.store.create(case_id, test_mode=scenario.get("test_mode", False))
             start = time.monotonic()
             results = []
             event_failures, redeliveries = [], []
@@ -274,6 +300,10 @@ def run(out, count, only, label, spec_path=DATASET / "manifest.json"):
                    "check_results": [c.model_dump(mode="json") for c in case.checks],
                    "rejected_candidates": [r for t in traces for r in t.get("rejected_candidates", [])],
                    "raw_proposals": [t.get("proposal") for t in traces],
+                   "language": case.language, "test_mode": case.test_mode,
+                   "diagnostics": [d for t in traces for d in t.get("diagnostics", [])],
+                   "visual_inputs": [d for t in traces for d in t.get("visual_inputs", [])],
+                   "progress_by_turn": [t.get("material_progress") for t in traces if t.get("material_progress")],
                    "results": [r.model_dump(mode="json") for r in results],
                    "source_hashes": {str(p.relative_to(ROOT)).replace("\\", "/"): sha(p)
                                      for p in (ROOT / "src/visa_agent").glob("*.py")}}

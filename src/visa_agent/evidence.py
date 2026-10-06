@@ -51,6 +51,10 @@ def validate_value(key: str, value: str, quote: str) -> str:
         if key in {"application_location", "study_location"}:
             raise ValueError(f"Unsupported location value: {key}")
     if key == "funding":
+        # Models sometimes return only the tail of "my own money". Canonicalize
+        # that value, then still require explicit self-funding in the source quote.
+        if value.casefold() in {"own money", "own funds"}:
+            value = "self"
         patterns = {"self": r"\b(self(?:[- ]funded)?|my own (?:money|funds)|my savings|myself)\b|自费|本人出资",
                     "employer": r"\bemployer(?:[- ]funded)?\b|雇主"}
         matches = [kind for kind, pattern in patterns.items() if re.search(pattern, value, re.I)]
@@ -116,6 +120,13 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
         doc = docs[tag.document_id]
         if not doc.rejected:
             doc.kind, doc.language = tag.kind, tag.language
+            # A visible test watermark cannot be overruled by a model tag.
+            if doc.content_role != "sample" and tag.content_role != "uncertain":
+                doc.content_role = tag.content_role
+            if tag.needs_visual_review:
+                problem = "Visual/OCR discrepancy: " + (tag.visual_observation or "Compare original and extracted text")
+                if problem not in doc.problems:
+                    doc.problems.append(problem)
     rejected = []
     for candidate in proposal.facts:
         try:
@@ -161,13 +172,17 @@ class Evidence:
         self.case = case
         self.docs = {d.id: d for d in case.documents}
 
+    def admissible(self, doc) -> bool:
+        return not (doc.rejected or doc.problems or doc.content_role == "unrelated"
+                    or (doc.content_role == "sample" and not self.case.test_mode))
+
     def facts(self, key: str, kinds: set[str] | None = None) -> list[Fact]:
         result = []
         for fact in self.case.facts:
             if not fact.active or fact.key != key or (fact.confidence == "low" and not fact.confirmed_by):
                 continue
             doc = self.docs.get(fact.source_id)
-            if doc and (doc.rejected or doc.problems):
+            if doc and not self.admissible(doc):
                 continue
             if kinds is not None and (doc is None or doc.kind not in kinds):
                 continue
