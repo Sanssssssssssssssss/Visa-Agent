@@ -99,7 +99,8 @@ def test_crash_after_business_commit_before_delivery_receipt_is_retry_safe(tmp_p
 
 
 @pytest.mark.parametrize("iteration", range(3))
-def test_thirty_logical_days_four_interleaved_senders_restart_and_compress(tmp_path, iteration):
+@pytest.mark.parametrize("hitl", [True, False])
+def test_thirty_logical_days_four_interleaved_senders_restart_and_compress(tmp_path, iteration, hitl):
     actors = [("email", "mail", "lin@example.com", "Lin"), ("email", "mail", "alex@example.com", "Alex"),
               ("whatsapp", "wa-1", "+8613812345001", "Wen"), ("whatsapp", "wa-2", "+8613812345001", "Bo")]
     start = datetime(2026, 9, 7, tzinfo=timezone.utc)
@@ -109,7 +110,7 @@ def test_thirty_logical_days_four_interleaved_senders_restart_and_compress(tmp_p
         event = incoming(channel=channel, account=account, sender=sender, thread="thread-"+name,
                          message_id=f"{name}-{day}", text="applicant_name: " + name,
                          at=start + timedelta(days=day))
-        inbox = Inbox(VisaService(tmp_path, "offline"))  # New process-equivalent object each delivery.
+        inbox = Inbox(VisaService(tmp_path, "offline", hitl=hitl))  # Recreate objects for each delivery.
         result = inbox.receive_simulated(event)
         duplicate = Inbox(VisaService(tmp_path, "offline")).receive_simulated(event)
         assert duplicate["duplicate"] and duplicate["case_id"] == result["case_id"]
@@ -121,6 +122,7 @@ def test_thirty_logical_days_four_interleaved_senders_restart_and_compress(tmp_p
     service = VisaService(tmp_path, "offline")
     for name, case_id in roots.items():
         case = service.store.get(case_id)
+        assert case.hitl_enabled == hitl
         assert {f.value for f in case.facts} == {name}
         assert len(case.history) == 20 and case.history_count == 30
         assert len(service.store.dialogue(case.id)) == 30

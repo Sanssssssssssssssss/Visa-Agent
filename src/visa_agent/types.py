@@ -18,6 +18,7 @@ class StrictModel(BaseModel):
 class Status(StrEnum):
     WAIT_USER = "WAIT_USER"
     NEEDS_HUMAN = "NEEDS_HUMAN"
+    BLOCKED = "BLOCKED"
     READY = "READY_FOR_REVIEW"
     COMPLETE = "COMPLETE"
 
@@ -120,6 +121,7 @@ class Guidance(StrictModel):
     explanation: Literal["continue", "how_to_apply", "materials"] = "continue"
     approach: Literal["neutral", "step_by_step", "explain_material"] = "neutral"
     warn_material_risk: bool = False
+    delivery_decision: Literal["continue", "deliver"] = "continue"
 
 
 class Approval(StrictModel):
@@ -127,6 +129,13 @@ class Approval(StrictModel):
     manifest_hash: str
     reviewer: str
     notes: str
+    at: str = Field(default_factory=now_utc)
+
+
+class AutomaticCompletion(StrictModel):
+    version: int
+    manifest_hash: str
+    decision_run_id: str
     at: str = Field(default_factory=now_utc)
 
 
@@ -143,6 +152,8 @@ class Case(StrictModel):
     history: list[dict] = Field(default_factory=list)
     reviews: list[dict] = Field(default_factory=list)
     approval: Approval | None = None
+    automatic_completion: AutomaticCompletion | None = None
+    hitl_enabled: bool = True
     pack_path: str | None = None
     last_contact: str = Field(default_factory=now_utc)
     last_reminder: str | None = None

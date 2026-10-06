@@ -80,10 +80,10 @@ class Store:
             db.execute("BEGIN IMMEDIATE")
             yield db
 
-    def create(self, case_id: str, *, test_mode=False) -> Case:
+    def create(self, case_id: str, *, test_mode=False, hitl_enabled=True) -> Case:
         from .types import CaseEvent
         CaseEvent(case_id=case_id, event_id="validate")
-        case = Case(id=case_id, test_mode=test_mode)
+        case = Case(id=case_id, test_mode=test_mode, hitl_enabled=hitl_enabled)
         with self.transaction() as db:
             db.execute("INSERT INTO cases VALUES (?,?)", (case.id, case.model_dump_json()))
         return case

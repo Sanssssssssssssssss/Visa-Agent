@@ -21,6 +21,7 @@ def main():
     parser = argparse.ArgumentParser(description="Inspect and prepare a visa material case")
     parser.add_argument("--data", default=os.getenv("VISA_DATA_DIR", "data"))
     parser.add_argument("--mode", choices=["live", "offline"], default="live")
+    parser.add_argument("--hitl", choices=["on", "off"], help="Policy for new cases; otherwise VISA_HITL or on")
     sub = parser.add_subparsers(dest="command", required=True)
     receive = sub.add_parser("receive", help="Simulate a routed email/WhatsApp delivery; does not send messages")
     receive.add_argument("--channel", choices=["email", "whatsapp"], required=True)
@@ -65,14 +66,14 @@ def main():
     verify.add_argument("--dataset", type=Path, default=Path("datasets"))
     args = parser.parse_args()
     try:
-        service = VisaService(args.data, args.mode)
+        service = VisaService(args.data, args.mode, hitl=args.hitl)
         if args.command == "receive":
             from .inbox import Inbox, Incoming
             result = Inbox(service).receive_simulated(Incoming(channel=args.channel, account=args.account,
                 sender=args.sender, thread=args.thread, message_id=args.message_id, text=args.text),
                 args.files, test_mode=args.demo)
         elif args.command == "new":
-            result = service.store.create(args.case_id)
+            result = service.create_case(args.case_id)
         elif args.command in {"message", "attach", "tick"}:
             data = {"case_id": args.case_id, "event_id": args.event_id or uuid.uuid4().hex,
                     "text": getattr(args, "text", ""), "attachments": getattr(args, "files", []),

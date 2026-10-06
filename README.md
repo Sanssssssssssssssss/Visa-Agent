@@ -1,8 +1,8 @@
 # Visa Agent
 
-一个可回放、可检查的英国签证材料准备 CLI。支持 Visitor、Student、Skilled Worker 的有限基础分支：接收消息和附件，保存有来源的事实，检查缺项与冲突，等待补件，生成材料包，最后通过独立顾问入口确认。
+一个可回放、可检查的英国签证材料准备 Agent。支持 Visitor、Student、Skilled Worker 的有限基础分支：接收消息和附件，保存有来源的事实，检查缺项与冲突，等待补件，生成材料包。部署时可选择人工复核或模型决定自动交付。
 
-最新版本加入 **V4.1 原图读取、PDF 逐页转图、中英文客服回复、材料进度及问题分类**。本轮 21 次案件运行、35 次 API 请求；保留 4 次行为问题，修复后完整演示连续两次推进到待人工复核。样例在普通案件里不能通过；真实客户完整交付尚未验收。见[本轮记录](docs/customer-service.md)及[历史验收](docs/acceptance.md)。
+最新版本加入 **HITL 开关与 Outlook Graph 测试适配器**。132 项离线测试通过；本轮真实模型 25 次请求、5 案中 4 案通过。中文完整输入已自动生成演示材料包；八轮渐进案例漏提取目的，原失败保留。Outlook 真实收发待用户完成应用注册后验证。见[开关、工作流和邮箱接入](docs/hitl-outlook.md)、[本轮实际记录](docs/validation/hitl-outlook.json)及[历史验收](docs/acceptance.md)。
 
 ## 安装
 
@@ -23,6 +23,8 @@ uv run pytest -q
 直接拖文件体验：启动 `uv run python -m visa_agent.web`，打开 <http://127.0.0.1:8765>。默认调用真实模型，创建空白案件；输入申请情况后上传图片或 PDF。右侧明确标注的“合成演示”可载入 Visitor/Student/Skilled Worker 的虚构背景，再上传对应 `datasets/materials/` 文件。服务仅监听本机；需要离线演示时加 `--mode offline --data data/web-offline --sample visitor`。
 
 想亲手分批上传、查看补件并自行审批，请按 [手动测试指南](docs/manual-testing.md) 操作，内含现成材料索引和真实模型测试步骤。
+
+关闭人工审核：`uv run python -m visa_agent.web --hitl off --data data/web-auto`。所有自动检查满足且模型决定交付后，直接生成材料包，明确标注“未经人工审核”。缺项和冲突仍阻止完成。开关只作用于新建或重置的案件。
 
 中文分步体验、`/exit`、一键清空、邮箱/WhatsApp 身份隔离及本轮真实结果见 [会话与引导验收](docs/session-guidance.md)。当前保留最近 20 轮，模型在每轮检查后选择最多三个优先问题。普通事件通常消耗两次模型请求。
 

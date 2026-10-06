@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-06",
+  "offline": {
+    "tests": 132,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 71.825,
+    "log": "output/hitl-outlook/offline-final.xml"
+  },
+  "stress": {
+    "mode": "offline model, real SQLite/files",
+    "hitl_modes": [
+      "on",
+      "off"
+    ],
+    "repeats_per_mode": 3,
+    "actors": 4,
+    "logical_days": 30,
+    "new_events": 720,
+    "redeliveries": 720,
+    "tests": 6,
+    "seconds_in_test_calls": 38.118,
+    "assertions": [
+      "sender/account isolation",
+      "restart persistence",
+      "no duplicate mutation",
+      "20 complete history turns",
+      "conflicting values retained"
+    ],
+    "boundary": "logical dates, not 30-day uptime or measured production throughput"
+  },
+  "live": {
+    "model": "deepseek-flash",
+    "requests": 25,
+    "input_tokens": 99934,
+    "output_tokens": 9194,
+    "estimated_cost_usd": null,
+    "cases": 5,
+    "passed": 4,
+    "customer_turns": 12,
+    "baseline": {
+      "request_cap": 24,
+      "requests": 23,
+      "cases_run": 4,
+      "cases_passed": 3,
+      "usage": {
+        "requests": 23,
+        "input_tokens": 90675,
+        "output_tokens": 6882
+      },
+      "price_configured": false,
+      "cost": null,
+      "results": [
+        {
+          "id": "chinese-email",
+          "passed": false,
+          "status": "WAIT_USER",
+          "failures": [
+            "unexpected_state:WAIT_USER",
+            "no_pack",
+            "automatic_receipt",
+            "automatic_disclosure"
+          ],
+          "seconds": 44.907
+        },
+        {
+          "id": "garbage",
+          "passed": true,
+          "status": "WAIT_USER",
+          "failures": [],
+          "seconds": 7.046
+        },
+        {
+          "id": "human-review-on",
+          "passed": true,
+          "status": "READY_FOR_REVIEW",
+          "failures": [],
+          "seconds": 10.796
+        },
+        {
+          "id": "injection",
+          "passed": true,
+          "status": "WAIT_USER",
+          "failures": [],
+          "seconds": 7.922
+        }
+      ]
+    },
+    "focused": {
+      "request_cap": 4,
+      "requests": 2,
+      "cases_run": 1,
+      "cases_passed": 1,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 9259,
+        "output_tokens": 2312
+      },
+      "price_configured": false,
+      "cost": null,
+      "results": [
+        {
+          "id": "chinese-auto-complete",
+          "passed": true,
+          "status": "COMPLETE",
+          "failures": [],
+          "seconds": 12.234
+        }
+      ]
+    },
+    "remaining_issue": "Original Chinese eight-turn case missed purpose. Prompt updated; one-turn combined Chinese profile and three PDFs passed automatic delivery. Fresh eight-turn success not yet verified.",
+    "mechanical_reply_checks": {
+      "turns": 12,
+      "failures": 0,
+      "boundary": "not a human language-quality score"
+    },
+    "raw_logs": "output/hitl-outlook",
+    "fixture_hashes": {
+      "focused.json": "8592d411f1b62a2043d683b836cb3980599aab943209d29d62ca07330de71a71",
+      "manifest.json": "2d376456b3488af531f092e4f7d8f874a878515a9724ad5f91cceae171500f6e"
+    }
+  },
+  "outlook": {
+    "offline_provider_boundary": "18 tests passed in full suite",
+    "real_oauth": "pending user app registration",
+    "real_receive": "not run",
+    "real_send": "not run",
+    "windows_encrypted_cache_probe": {
+      "encrypted": true,
+      "round_trip": true,
+      "plaintext_present": false
+    }
+  },
+  "ui": {
+    "url": "http://127.0.0.1:63985/",
+    "hitl": "off",
+    "approval_hidden": true,
+    "mode": "live"
+  },
+  "frozen_dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2"
+}

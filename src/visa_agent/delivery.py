@@ -17,6 +17,7 @@ def manifest(case: Case) -> dict:
         "case_id": case.id, "version": case.version, "route": case.route,
         "rule_version": case.rule_version,
         "test_mode": case.test_mode,
+        "hitl_enabled": case.hitl_enabled,
         "documents": [{"id": d.id, "name": d.name, "sha256": d.sha256, "kind": d.kind,
                        "language": d.language, "content_role": d.content_role} for d in case.documents if not d.rejected],
         "facts": [f.model_dump() for f in case.facts if f.active],
@@ -38,6 +39,7 @@ def build_pack(case: Case, root: Path) -> str:
         shutil.copyfile(source, originals / (doc.id + source.suffix))
     write_json(directory / "manifest.json", content)
     write_json(directory / "review.json", {"approval": case.approval.model_dump() if case.approval else None,
+                                            "automatic_completion": case.automatic_completion.model_dump() if case.automatic_completion else None,
                                             "review_history": case.reviews})
     def esc(value):
         return html.escape(str(value))
@@ -49,6 +51,9 @@ def build_pack(case: Case, root: Path) -> str:
     docs = "".join(f'<li><a href="originals/{d.id}{Path(d.path).suffix}">{esc(d.name)}</a>'
                    f" — {esc(d.sha256)}</li>" for d in case.documents if not d.rejected)
     review = "".join(f"<li>{esc(item)}</li>" for item in FINAL_REVIEW)
+    outcome = (case.approval.model_dump_json(indent=2) if case.approval else
+               "自动完成（未经人工审核）\n" + case.automatic_completion.model_dump_json(indent=2) if case.automatic_completion else
+               "等待当前版本人工确认" if case.hitl_enabled else "尚未自动完成；HITL 已关闭")
     report = f"""<!doctype html><html lang="zh-CN"><meta charset="utf-8">
 <title>材料包 {esc(case.id)}</title><style>
 body{{max-width:1100px;margin:40px auto;padding:0 24px;font:16px/1.6 system-ui;color:#182b38}}
@@ -60,13 +65,13 @@ td,th{{padding:8px;border:1px solid #ccd7dc;text-align:left;overflow-wrap:anywhe
 .status{{padding:14px;background:#edf5f4}}li{{overflow-wrap:anywhere}}
 </style><h1>{'演示材料包 · 仅供测试' if case.test_mode else '申请材料准备报告'}</h1><p class="status">案件 {esc(case.id)} · 版本 {case.version}
 · {esc(case.status)} · {esc(case.route)}</p>
-<p>本报告记录材料准备检查与人工复核，不代表签证获批。真实性、资格及适用条件须由顾问核对。</p>
+<p>本报告记录材料准备检查及本案交付方式，不代表签证获批，不进行材料真伪鉴定。自动完成不包含人工审核。</p>
 <p>规则版本：{esc(case.rule_version)}<br>证据清单哈希：{digest(content)}</p>
 <h2>原始材料</h2><ul>{docs}</ul><h2>检查结果</h2>
 <table class="checks"><tr><th>检查</th><th>结果</th><th>说明</th><th>依据</th></tr>{rows}</table>
 <h2>事实与来源</h2><table><tr><th>字段</th><th>值</th><th>来源/页码</th><th>原文</th></tr>{facts}</table>
 <h2>顾问复核清单</h2><ul>{review}</ul>
-<h2>审批</h2><pre>{esc(case.approval.model_dump_json(indent=2) if case.approval else '等待当前版本人工确认')}</pre>
+<h2>交付记录</h2><pre>{esc(outcome)}</pre>
 </html>"""
     (directory / "report.html").write_text(report, encoding="utf-8")
     archive = directory.with_suffix(".zip")

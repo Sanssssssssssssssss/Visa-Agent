@@ -11,6 +11,7 @@ from pathlib import Path
 import uuid
 
 from .agent import HISTORY_TURNS, LiveBudget, extract
+from .config import resolve_hitl
 from .guidance import guide
 from .delivery import build_pack, manifest, verify_pack
 from .conversation import language_for, material_progress, progress_text
@@ -19,18 +20,27 @@ from .documents import read_document, stage_file
 from .evidence import apply_proposal
 from .rules import RULE_VERSION, evaluate, reply_for, status_for
 from .store import Store, digest
-from .types import Approval, CaseEvent, Check, Status, TurnResult, now_utc
+from .types import Approval, AutomaticCompletion, CaseEvent, Check, Status, TurnResult, now_utc
 
 
 class VisaService:
-    def __init__(self, root="data", mode="live", *, model_override=None, guidance_model_override=None, budget=None):
+    def __init__(self, root="data", mode="live", *, model_override=None, guidance_model_override=None, budget=None, hitl=None):
         if mode not in {"live", "offline"}:
             raise ValueError("mode must be live or offline")
         self.store = Store(root)
         self.mode = mode
+        self.hitl_enabled = resolve_hitl(hitl)
         self.model_override = model_override
         self.guidance_model_override = guidance_model_override
         self.budget = budget or LiveBudget(self.store.root / "live-budget.sqlite3")
+
+    def create_case(self, case_id, *, test_mode=False):
+        return self.store.create(case_id, test_mode=test_mode, hitl_enabled=self.hitl_enabled)
+
+    @staticmethod
+    def checked_status(case):
+        status = status_for(case.checks)
+        return Status.BLOCKED if status == Status.NEEDS_HUMAN and not case.hitl_enabled else status
 
     def handle_event(self, event: CaseEvent) -> TurnResult:
         staged = [(p, *stage_file(p, self.store.root)) for p in event.attachments]
@@ -65,6 +75,7 @@ class VisaService:
                     if not pure_duplicate:
                         case.version += 1
                         case.approval = None
+                        case.automatic_completion = None
                         case.pack_path = None
                         case.status = Status.WAIT_USER
                         case.pending_error = "Incoming event has not completed"
@@ -84,7 +95,8 @@ class VisaService:
                 if case.rule_version and case.rule_version != RULE_VERSION:
                     case.version += 1
                     case.approval, case.pack_path = None, None
-                    case.status = Status.NEEDS_HUMAN
+                    case.automatic_completion = None
+                    case.status = Status.NEEDS_HUMAN if case.hitl_enabled else Status.BLOCKED
                     case.pending_error = "Rules changed; adviser refresh required"
                 if event.kind == "tick":
                     reply = self._tick(case, event)
@@ -126,6 +138,7 @@ class VisaService:
                         if rejected:
                             case.extraction_issues[event.event_id] = rejected
                         case.approval = None
+                        case.automatic_completion = None
                         case.rule_version = RULE_VERSION
                         case.checks = evaluate(case)
                         others = db.execute("SELECT event_id FROM events WHERE case_id=? AND event_id<>? "
@@ -133,11 +146,16 @@ class VisaService:
                         if others:
                             case.checks.append(Check(id="pending_events", status="unknown", human=True,
                                                      source="project:inbox", message="有未完成输入，须重试或由顾问处置。"))
-                        case.status = status_for(case.checks)
+                        case.status = self.checked_status(case)
                         case.pending_error = None
                         guidance = guide(case, event, trace, "offline" if self.model_override else self.mode,
                                          self.budget, model_override=self.guidance_model_override)
                         if case.status == Status.READY:
+                            if not case.hitl_enabled and guidance.delivery_decision == "deliver":
+                                case.automatic_completion = AutomaticCompletion(version=case.version,
+                                    manifest_hash=digest(manifest(case)), decision_run_id=run_id)
+                                case.status = Status.COMPLETE
+                        if case.status in {Status.READY, Status.COMPLETE}:
                             case.pack_path = build_pack(case, self.store.root)
                     reply = reply_for(case, text=event.text, intent=intent, received_count=len(staged), guidance=guidance)
                     case.last_contact = max(case.last_contact, event.at.isoformat())
@@ -165,7 +183,8 @@ class VisaService:
             with self.store.transaction() as db:
                 case = self.store.get(event.case_id, db)
                 case.language = language_for(event.text, case.language)
-                case.status, case.approval, case.pack_path = Status.NEEDS_HUMAN, None, None
+                case.status = Status.NEEDS_HUMAN if case.hitl_enabled else Status.BLOCKED
+                case.approval, case.automatic_completion, case.pack_path = None, None, None
                 case.pending_error = error
                 self.store.save(case, db)
                 db.execute("UPDATE events SET status='failed',error=? WHERE case_id=? AND event_id=?",
@@ -175,15 +194,17 @@ class VisaService:
                 trace["diagnostics"] = turn_diagnostics(case, trace)
                 self.store.record_run(case.id, run_id, trace, db)
             return TurnResult(case_id=case.id, version=case.version, status=case.status, run_id=run_id,
-                              reply=("抱歉，这次没能完成检查，原始输入已经保存。需要由工作人员处理后重试，您暂时不用重复上传。" if case.language == "zh" else
-                                     "Sorry, this check could not be completed. Your original input is saved. Staff need to resolve the issue before retrying; you do not need to upload it again yet.") + "\n\n" + progress_text(case), error=error)
+                              reply=("抱歉，这次没能完成检查，原始输入已经保存。运行问题解决后可重试，您暂时不用重复上传。" if case.language == "zh" else
+                                     "Sorry, this check could not be completed. Your original input is saved. It can be retried once the runtime issue is resolved; you do not need to upload it again yet.") + "\n\n" + progress_text(case), error=error)
 
     @staticmethod
     def _tick(case, event):
         if case.status != Status.WAIT_USER:
             return ("当前状态不需要自动提醒。" if case.language == "zh" else "No reminder is needed in the current state.") + "\n" + progress_text(case)
         if case.reminder_count >= 2:
-            return ("已达到两次提醒上限，保留等待状态，请顾问跟进。" if case.language == "zh" else "Two reminders have been sent. We will keep your case open for adviser follow-up.") + "\n" + progress_text(case)
+            if case.hitl_enabled:
+                return ("已达到两次提醒上限，保留等待状态，请顾问跟进。" if case.language == "zh" else "Two reminders have been sent. We will keep your case open for adviser follow-up.") + "\n" + progress_text(case)
+            return ("已达到两次提醒上限，案件保留等待状态；您可以随时回复继续。" if case.language == "zh" else "Two reminders have been sent. Your case stays open; reply whenever you are ready to continue.") + "\n" + progress_text(case)
         reference = datetime.fromisoformat(case.last_reminder or case.last_contact)
         if event.at < reference + timedelta(hours=24):
             return ("尚未到提醒时间。" if case.language == "zh" else "The next reminder is not due yet.") + "\n" + progress_text(case)
@@ -199,6 +220,8 @@ class VisaService:
             raise ValueError(f"Unsupported review decision: {decision}")
         with self.store.transaction() as db:
             case = self.store.get(case_id, db)
+            if not case.hitl_enabled:
+                raise ValueError("HITL is disabled for this case; no review endpoint is enabled")
             if case.version != expected_version:
                 raise ValueError("Stale review: case version changed")
             audit = {"decision": decision, "reviewer": reviewer, "notes": notes,

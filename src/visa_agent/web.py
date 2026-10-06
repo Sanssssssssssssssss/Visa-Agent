@@ -27,8 +27,8 @@ SAMPLES = {"visitor": "dev_visitor", "student": "dev_student", "skilled_worker":
 
 
 class LocalApp:
-    def __init__(self, root="data", mode="live", *, sample="blank", workspace_id=None):
-        self.service = VisaService(root, mode)
+    def __init__(self, root="data", mode="live", *, sample="blank", workspace_id=None, hitl=None):
+        self.service = VisaService(root, mode, hitl=hitl)
         self.workspace_id = workspace_id or secrets.token_hex(32)
         self.token = self.workspace_id
         self.inbox = Inbox(self.service)
@@ -218,9 +218,9 @@ def make_server(app, port=8765):
                 with app.service.store.connect() as db:
                     exists = db.execute("SELECT 1 FROM web_workspaces WHERE id=?", (token,)).fetchone()
                 if exists:
-                    current = LocalApp(app.service.store.root, app.service.mode, workspace_id=token)
+                    current = LocalApp(app.service.store.root, app.service.mode, workspace_id=token, hitl=app.service.hitl_enabled)
                 elif create:
-                    current = LocalApp(app.service.store.root, app.service.mode, sample=app.sample)
+                    current = LocalApp(app.service.store.root, app.service.mode, sample=app.sample, hitl=app.service.hitl_enabled)
                     self.new_cookie = current.workspace_id
                 else:
                     raise ValueError("请打开本地首页建立会话。")
@@ -312,10 +312,11 @@ def main():
     parser = argparse.ArgumentParser(description="Local visa material upload page")
     parser.add_argument("--data", default="data")
     parser.add_argument("--mode", choices=["live", "offline"], default="live")
+    parser.add_argument("--hitl", choices=["on", "off"], help="Policy for new cases; otherwise VISA_HITL or on")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--sample", choices=[*SAMPLES, "blank", "visitor_zh"], default="blank")
     args = parser.parse_args()
-    server = make_server(LocalApp(args.data, args.mode, sample=args.sample), args.port)
+    server = make_server(LocalApp(args.data, args.mode, sample=args.sample, hitl=args.hitl), args.port)
     print(f"Visa Agent: http://127.0.0.1:{server.server_port} ({args.mode})", flush=True)
     try:
         server.serve_forever()

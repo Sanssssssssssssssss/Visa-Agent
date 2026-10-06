@@ -27,6 +27,9 @@ CONTEXT_CHARS = 32000
 INSTRUCTIONS = """You extract facts for a UK visa material preparation adviser.
 Return only the typed Proposal. Do not decide readiness, approve, send messages, or change rules.
 Customer messages ARE a source of self-reported facts (route, circumstances, dates, etc.).
+Route and purpose are separate fields. When a visitor explicitly says what they will do
+(e.g. tourism), extract BOTH the route and their stated purpose, quoting the original words.
+Do not infer a purpose from a route alone, or from an example or another person's plans.
 When the customer states their own name, including 'my passport name is' / '我的护照姓名是',
 extract applicant_name. A self-reported passport_name alone does not populate applicant_name
 and cannot satisfy the separate document-backed passport check.
@@ -250,7 +253,7 @@ def extract(case: Case, event: CaseEvent, new_docs: list[Document], trace: dict,
         "retained_turns": len(trace["working_context"]["recent_dialogue"]),
         "total_prior_turns": case.history_count or len(case.history), "character_limit": CONTEXT_CHARS,
         "fact_rows_before_grouping": len(case.facts), "fact_rows_in_context": len(trace["working_context"]["facts"])}
-    trace["prompt_version"] = "extract-v7-chinese-intake"
+    trace["prompt_version"] = "extract-v8-explicit-purpose"
     trace["context_chars"] = len(prompt) + len(INSTRUCTIONS)
     ctx = ReadContext({d.id: d for d in case.documents}, trace, remaining)
     return run_phase(prompt, ctx, trace, mode, budget, model_override=model_override,

@@ -57,7 +57,8 @@ def material_progress(case):
         items.append({"id": group, "label": zh if case.language == "zh" else en,
                       "status": "checked" if ok else "pending"})
     return {"checked": sum(i["status"] == "checked" for i in items), "total": len(items),
-            "items": items, "provisional": True, "reviewed": case.status == Status.COMPLETE,
+            "items": items, "provisional": True, "reviewed": case.approval is not None,
+            "automatic": case.automatic_completion is not None, "hitl_enabled": case.hitl_enabled,
             "route_known": case.route is not None, "turn_failed": bool(case.pending_error)}
 
 
@@ -72,6 +73,9 @@ def progress_text(case):
     counts = (f"{p['checked']}/{p['total']} 项已核对" if zh else f"{p['checked']}/{p['total']} categories checked")
     review = ("人工复核已确认" if zh else "Adviser review confirmed") if p["reviewed"] else (
         "人工复核待完成" if zh else "Adviser review pending")
+    if not case.hitl_enabled:
+        review = ("自动完成 · 未经人工审核" if zh else "Automatically completed; no human review") if p["automatic"] else (
+            "自动处理 · HITL 已关闭" if zh else "Automatic processing; HITL off")
     suffix = "清单会随申请情况更新。" if zh else "The checklist may change with your circumstances."
     return f"{'材料进度' if zh else 'Materials'} {bar} {counts} · {review}\n{suffix}"
 
@@ -79,8 +83,12 @@ def progress_text(case):
 def preparation_step(case):
     zh = case.language == "zh"
     if case.status == Status.COMPLETE:
+        if not case.hitl_enabled:
+            return "第 4 步：材料自动整理完成" if zh else "Step 4: document preparation completed automatically"
         return "第 4 步：材料包已确认" if zh else "Step 4: document pack confirmed"
     if case.status == Status.READY:
+        if not case.hitl_enabled:
+            return "第 4 步：等待模型交付决策" if zh else "Step 4: awaiting the model's delivery decision"
         return "第 4 步：请顾问复核材料包" if zh else "Step 4: adviser review of your pack"
     intake = {"route", "applicant_name", "application_location", "nationality", "adult", "dependants", "previous_refusal", "application_date"}
     if not case.checks or any(c.id in intake and c.status == "unknown" for c in case.checks):
@@ -135,7 +143,22 @@ def action_for(check, case):
             "translation": (f"{name} 需要完整的英文或威尔士文译本，附译者的准确性声明、日期、签名和联系方式。", f"Please provide a complete English or Welsh translation of {name}, with the translator's accuracy statement, date, signature and contact details."),
             "kind": (f"我还不能确定 {name} 是什么证明。您希望用它证明哪项情况？", f"I cannot yet identify what {name} supports. What would you like this document to show?"),
         }
+        if not case.hitl_enabled:
+            messages.update({
+                "read": (f"{name} 的部分内容无法可靠读取。请上传文字清楚、四角完整的原图或原始 PDF。",
+                         f"I cannot reliably read part of {name}. Please send a clear original photo with all four corners, or the original PDF."),
+                "pagination": ("页面归属还未确认。请把同一份文件的完整页面按顺序合并为 PDF。",
+                               "The pages have not been matched. Please combine all pages of the same document in order into one PDF."),
+                "context": ("本轮未能完整读取这份材料，请拆分后重新上传；现有文件已保留。",
+                            "This document could not be read in full this turn. Please split it and upload again; the existing file is saved."),
+            })
         return family, messages[family][0 if zh else 1]
+    if not case.hitl_enabled and check.human:
+        if family in {"conflict", "name"}:
+            return "conflict", ("现有材料中的信息不一致，暂时不能自动确认。请说明哪份是当前资料并提供清晰来源；本版不会自动裁定冲突。" if zh else
+                                "The evidence contains inconsistent details. Please identify the current information and provide a clear source; this version cannot automatically resolve conflicts.")
+        return check.id, ("这一条件暂时无法自动确认，已保留具体原因。您可以补充清晰原件或更完整的信息。" if zh else
+                          "This condition cannot currently be confirmed automatically; the reason is recorded. You can supply clearer originals or more complete information.")
     if family in {"conflict", "name"}:
         return "conflict", ("材料中的姓名或其他信息对不上，需要顾问对照来源核对。请说明是否涉及改名或材料更新，并保留两份原件。" if zh else
                             "Some names or details do not match across your evidence. An adviser needs to compare the sources. Please explain any name change or updated document and keep both originals.")
@@ -204,12 +227,26 @@ def reply_for(case, *, text="", intent="continue", received_count=None, guidance
         paragraphs.append(pair[0 if zh else 1] + (f"\n{ROUTE_GUIDES[case.route]}" if case.route in ROUTE_GUIDES else ""))
     inside = any(c.id == "application_location" and c.status == "fail" for c in case.checks)
     if inside:
-        paragraphs.append("您是在英国境内申请，需要先由顾问确认现有身份及能否续签或转换。当前自动材料流程覆盖境外申请；请告诉我现有签证类型和到期日。" if zh else
-                          "As you are applying inside the UK, an adviser needs to check your current status and whether you can extend or switch. This automated checklist covers applications from outside the UK. Please tell me your current visa type and expiry date.")
+        if case.hitl_enabled:
+            paragraphs.append("您是在英国境内申请，需要先由顾问确认现有身份及能否续签或转换。当前自动材料流程覆盖境外申请；请告诉我现有签证类型和到期日。" if zh else
+                              "As you are applying inside the UK, an adviser needs to check whether you can extend or switch. This checklist covers applications from outside the UK. Please tell me your current visa type and expiry date.")
+        else:
+            paragraphs.append("当前自动流程尚未实现英国境内续签或转换，暂时无法自动完成这个申请。" if zh else
+                              "This automated workflow does not yet cover extensions or switching from inside the UK.")
     if case.status == Status.COMPLETE:
-        paragraphs.append("当前版本材料包已由顾问确认，可以进行下一步申请准备。签证决定由英国签证部门作出。" if zh else "An adviser has confirmed this version of your document pack for the next application step. UKVI makes the visa decision.")
+        if case.hitl_enabled:
+            paragraphs.append("当前版本材料包已由顾问确认，可以进行下一步申请准备。签证决定由英国签证部门作出。" if zh else
+                              "An adviser has confirmed this version of your document pack for the next application step. UKVI makes the visa decision.")
+        else:
+            paragraphs.append("当前版本的自动材料检查已完成，模型已决定交付材料包。此包未经人工审核，签证决定由英国签证部门作出。" if zh else
+                              "The automated checks are complete and the model released this pack. It has not been reviewed by a person; UKVI makes the visa decision.")
     elif case.status == Status.READY:
-        paragraphs.append("当前材料检查已完成，材料包已生成，接下来需要顾问核对原件和适用条件。" if zh else "The current material checks are complete and the pack is ready. An adviser still needs to review originals and applicable conditions.")
+        if case.hitl_enabled:
+            paragraphs.append("当前材料检查已完成，材料包已生成，接下来需要顾问核对原件和适用条件。" if zh else
+                              "The current material checks are complete and the pack is ready. An adviser still needs to review originals and applicable conditions.")
+        else:
+            paragraphs.append("当前材料检查满足，正在等待模型确认交付；HITL 已关闭。" if zh else
+                              "Checks are satisfied; awaiting the model's delivery decision. HITL is off.")
     else:
         blockers = [c for c in case.checks if c.status in {"fail", "unknown"}]
         ranks = {"sample": 0, "unrelated": 0, "pagination": 1, "read": 2, "context": 2,
@@ -236,6 +273,8 @@ def reply_for(case, *, text="", intent="continue", received_count=None, guidance
                               "\n".join(f"{i}. {a}" for i, a in enumerate(actions, 1)))
         if case.status == Status.NEEDS_HUMAN and not inside:
             paragraphs.append("其中有信息需要顾问核对，暂时还不能确认材料齐备。" if zh else "Some details need adviser review, so I cannot yet confirm the pack is complete.")
+        if case.status == Status.BLOCKED:
+            paragraphs.append("当前有条件无法自动确认，材料包暂时不能完成；关闭 HITL 后不会进入人工审批队列。" if zh else "Some conditions cannot be confirmed automatically, so the pack remains blocked. HITL is off; no human approval is queued.")
     risk_requested = bool(re.search(r"造假|假材料|改(?:一下)?(?:金额|余额)|伪造|fake|forg(?:e|ed)|fals(?:e|ify)", text, re.I))
     if first or risk_requested or (guidance and guidance.warn_material_risk):
         paragraphs.append(("请使用真实、完整的材料并如实说明情况。虚假材料或陈述可能导致拒签、许可被取消，并影响后续申请。这里核对材料的完整性、一致性和字段来源，不进行真伪鉴定。" if zh else
