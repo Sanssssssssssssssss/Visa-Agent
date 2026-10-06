@@ -133,7 +133,9 @@ class VisaService:
                                 if row:
                                     sources[candidate.source_id] = json.loads(row[0])["text"]
                         sources[f"message:{event.event_id}"] = event.text
-                        rejected = apply_proposal(case, proposal, sources)
+                        trace["unconfirmed_candidates"] = []
+                        rejected = apply_proposal(case, proposal, sources,
+                                                  unconfirmed=trace["unconfirmed_candidates"])
                         trace["rejected_candidates"] = rejected
                         if rejected:
                             case.extraction_issues[event.event_id] = rejected

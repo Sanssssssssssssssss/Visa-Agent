@@ -112,7 +112,7 @@ def build(batch_paths, destination):
             search = f"{batch.name} {row['id']} {LABELS.get(row['scenario'], '')}"
             cards.append(f'''<article data-search="{esc(search.lower())}">
                 <h2>{esc(LABELS.get(row['scenario'], row['scenario']))}</h2>
-                <p class="muted">{esc(batch.name)} / {esc(row['id'])} · 规则检查：{'满足' if row['passed'] else '不满足'} · 请求 {row['usage']['requests']}</p>
+                <p class="muted">{esc(batch.name)} / {esc(row['id'])} · 场景预期：{'满足' if row['passed'] else '不满足'} · 请求 {row['usage']['requests']}</p>
                 {''.join(turns)}</article>''')
     gallery = []
     for asset, name in materials.items():

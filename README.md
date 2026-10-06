@@ -2,7 +2,9 @@
 
 一个可回放、可检查的英国签证材料准备 Agent。支持 Visitor、Student、Skilled Worker 的有限基础分支：接收消息和附件，保存有来源的事实，检查缺项与冲突，等待补件，生成材料包。部署时可选择人工复核或模型决定自动交付。
 
-最新版本加入 **HITL 开关与 Outlook Graph 测试适配器**。132 项离线测试通过；本轮真实模型 25 次请求、5 案中 4 案通过。中文完整输入已自动生成演示材料包；八轮渐进案例漏提取目的，原失败保留。Outlook 真实收发待用户完成应用注册后验证。见[开关、工作流和邮箱接入](docs/hitl-outlook.md)、[本轮实际记录](docs/validation/hitl-outlook.json)及[历史验收](docs/acceptance.md)。
+最新版本支持 **HITL 开关与 QQ 真实邮件接入**，166 项离线测试通过。QQ 已完成 Outlook 客户发信 → 自动建案 → 中文回复 → 客户收件箱确认；开放收件支持任意发件人、任意主题，同线程继续原案件。见 [QQ 操作与实测](docs/qq-mail.md)、[邮件验收记录](docs/validation/qq-mail.json)。Outlook Graph 适配器也已实现，但本机尚无应用 Client ID，未验证 Graph 收发。
+
+此前 HITL 真实模型实验共 25 次请求、5 案中 4 案通过。中文完整输入已自动生成演示材料包；八轮渐进案例漏提取目的，原失败保留。见[开关与工作流](docs/hitl-outlook.md)、[该轮记录](docs/validation/hitl-outlook.json)及[历史验收](docs/acceptance.md)。
 
 ## 安装
 
@@ -100,7 +102,7 @@ uv run visa-agent --mode offline replay datasets/cases/dev_stale_approval.json -
 
 [implementation.md](docs/implementation.md) 从 `handle_event()` 逐步解释状态写入、上下文、工具预算、规则与恢复；[acceptance.md](docs/acceptance.md) 记录实际检查和失败修正。
 
-应用采用直接函数调用：PydanticAI 提取候选事实，Python 检查要求，SQLite 保存状态。客户回复由检查结果生成，最多三个优先问题。CLI 和本地上传页面都调用同一案件引擎；真实 WhatsApp/email 渠道尚未接入，后续可由 Chatwoot webhook 转成 `CaseEvent`。
+应用采用直接函数调用：PydanticAI 提取候选事实，Python 检查要求，SQLite 保存状态。客户回复由检查结果生成，最多三个优先问题。CLI、本地上传页面和 QQ 邮件调用同一案件引擎；真实 WhatsApp 尚未接入，后续可由 Chatwoot webhook 转成 `CaseEvent`。
 
 V1 仅覆盖成年、境外、无家属、无拒签解释的一部分情况。Visitor 自动分支采用在职自费场景；Student 自动资金计算限 GBP、自有资金；Skilled Worker 职业自动分支限 2134。其他国籍/居住历史、资助形式、英语证明路径等有转人工边界。SOP 的完整限制见实现说明。
 

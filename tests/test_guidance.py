@@ -65,6 +65,72 @@ def test_chinese_self_funding_requires_unambiguous_affirmative_quote():
             validate_value("funding", "self", quote)
 
 
+def test_explicit_chinese_dates_from_live_mail_are_grounded():
+    from visa_agent.evidence import validate_value
+    for quote in ("预计2026年12月10日去英国旅游", "2026年12月10号", "2026 年 12 月 10 日"):
+        assert validate_value("travel_start", "2026-12-10", quote) == "2026-12-10"
+    assert validate_value("travel_start", "2026-02-01", "2026年02月01日") == "2026-02-01"
+
+
+def test_date_guard_does_not_invent_year_or_accept_mismatched_chinese_date():
+    from visa_agent.evidence import validate_value
+    for quote in ("12月17日回来", "2026年12月10日出发，12月17日回来", "2027年12月17日", "2026年11月17日"):
+        with pytest.raises(ValueError, match="not grounded"):
+            validate_value("travel_end", "2026-12-17", quote)
+
+
+def test_model_invented_year_in_initial_customer_date_is_logged_and_asked_not_saved(tmp_path):
+    from visa_agent.service import VisaService
+    from visa_agent.evidence import Evidence
+    model = TestModel(call_tools=[], custom_output_args={"facts": [
+        {"key": "travel_start", "value": "2026-12-10", "source_id": "message:first", "quote": "2026年12月10日"},
+        {"key": "travel_end", "value": "2026-12-17", "source_id": "message:first", "quote": "12月17日回来"},
+    ]})
+    app = VisaService(tmp_path, "offline", hitl=False, model_override=model)
+    app.create_case("c")
+    result = app.handle_event(CaseEvent(case_id="c", event_id="first", text="2026年12月10日出发，12月17日回来"))
+    case = app.store.get("c")
+    assert result.status == Status.WAIT_USER and not case.extraction_issues
+    assert Evidence(case).get("travel_start") == "2026-12-10"
+    assert Evidence(case).get("travel_end") is None
+    trace = app.store.traces("c")[-1]
+    assert trace["unconfirmed_candidates"][0]["reason"] == "date_year_missing"
+    assert any(d["code"] == "date_year_missing" for d in trace["diagnostics"])
+
+
+def test_partial_date_exception_cannot_bypass_documents_mismatch_or_existing_date():
+    from visa_agent.evidence import apply_proposal
+    from visa_agent.types import Candidate, Document, Page, Proposal
+    for source, value, previous in [("file", "2026-12-17", False),
+                                    ("message:m", "2026-12-18", False),
+                                    ("message:m", "2026-12-17", True)]:
+        case = Case(id="c", documents=[Document(id="file", path="unused", name="bank.pdf", sha256="a"*64,
+                                               pages=[Page(number=1, text="12月17日", method="pdf_text")])])
+        if previous:
+            case.facts.append(Fact(id="old", key="travel_end", value="2026-12-20",
+                                   source_id="message:old", quote="2026-12-20"))
+        proposal = Proposal(facts=[Candidate(key="travel_end", value=value, source_id=source,
+                                             page=1 if source == "file" else None, quote="12月17日")])
+        pending = []
+        assert apply_proposal(case, proposal, {"message:m": "12月17日"}, unconfirmed=pending)
+        assert not pending and len(case.facts) == (1 if previous else 0)
+
+
+@pytest.mark.parametrize("language", ["zh", "en"])
+def test_sample_disclosure_survives_model_choosing_only_intake_questions(language):
+    from visa_agent.types import Document
+    case = Case(id="live-mail", language=language, hitl_enabled=False,
+                documents=[Document(id="d", path="unused", name="identity.pdf", sha256="a"*64,
+                                    kind="passport", content_role="sample")],
+                checks=[Check(id=key, status=status, message="test", source="test") for key, status in
+                        [("sample:d", "fail"), ("travel_start", "unknown"), ("funding", "unknown")]])
+    plan = Guidance(actions=["travel_start", "funding"])
+    answer = reply_for(case, received_count=1, guidance=plan)
+    assert "identity.pdf" in answer
+    assert ("不能作为您本人的正式申请证据" if language == "zh" else "cannot count as your application evidence") in answer
+    assert "1. " in answer and "2. " in answer and "3. " not in answer
+
+
 def test_source_rejection_remains_blocking_until_explicit_review(tmp_path):
     from visa_agent.service import VisaService
     bad = TestModel(call_tools=[], custom_output_args={"facts": [{"key": "age", "value": "99",

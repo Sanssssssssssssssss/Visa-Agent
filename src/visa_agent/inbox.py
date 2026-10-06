@@ -82,9 +82,10 @@ class Inbox:
     def receive_simulated(self, incoming: Incoming, attachments=(), *, test_mode=False):
         return self._receive(incoming, attachments, proof="local_simulation", test_mode=test_mode)
 
-    def receive_connector(self, incoming: Incoming, attachments=()):
-        """Internal call after authenticated Graph mailbox retrieval, never a public HTTP endpoint."""
-        return self._receive(incoming, attachments, proof="graph_mailbox_oauth_test_allowlist")
+    def receive_connector(self, incoming: Incoming, attachments=(), *, provider="graph"):
+        """Internal call after provider retrieval, never a public HTTP endpoint."""
+        proofs = {"graph": "graph_mailbox_oauth_test_allowlist", "imap": "imap_mailbox_login"}
+        return self._receive(incoming, attachments, proof=proofs[provider])
 
     def session(self, session_id):
         with self.store.connect() as db:

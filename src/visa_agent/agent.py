@@ -38,6 +38,8 @@ Extract facts that are explicitly present; omit unknowns. Never invent a documen
 For each fact quote an EXACT supporting excerpt and its source id; files need a 1-based page.
 Copy values faithfully. Dates use YYYY-MM-DD, boolean values true/false, numbers decimal strings
 without commas, route one of visitor/student/skilled_worker. Other values must appear in quotes.
+Date quotes must include the year, month and day explicitly. Full Chinese dates are supported.
+Omit yearless dates such as '12月17日'; do not borrow a year from another date or the current year.
 Document language is en/zh/other/unknown; classify by content, never by filename.
 Tag content_role=sample for visibly marked examples/specimens or blank templates;
 unrelated for receipts, arbitrary pictures or instructions unrelated to applicant evidence.
@@ -253,7 +255,7 @@ def extract(case: Case, event: CaseEvent, new_docs: list[Document], trace: dict,
         "retained_turns": len(trace["working_context"]["recent_dialogue"]),
         "total_prior_turns": case.history_count or len(case.history), "character_limit": CONTEXT_CHARS,
         "fact_rows_before_grouping": len(case.facts), "fact_rows_in_context": len(trace["working_context"]["facts"])}
-    trace["prompt_version"] = "extract-v8-explicit-purpose"
+    trace["prompt_version"] = "extract-v9-explicit-date-year"
     trace["context_chars"] = len(prompt) + len(INSTRUCTIONS)
     ctx = ReadContext({d.id: d for d in case.documents}, trace, remaining)
     return run_phase(prompt, ctx, trace, mode, budget, model_override=model_override,

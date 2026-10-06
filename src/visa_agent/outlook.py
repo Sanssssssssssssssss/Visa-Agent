@@ -15,6 +15,7 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from .documents import MAX_BYTES
 from .inbox import Inbox, Incoming, normalize_sender
+from .mail_outbox import send_prepared_reply
 from .service import VisaService
 from .store import digest, write_json
 
@@ -172,30 +173,11 @@ class OutlookInbox:
         return self._send(receipt_id, message_id, result, send_replies)
 
     def _send(self, receipt_id, message_id, result, enabled):
-        with self.service.store.transaction() as db:
-            row = db.execute("SELECT send_status FROM outlook_receipts WHERE id=?", (receipt_id,)).fetchone()
-            status = row[0]
-            if not enabled or status != "prepared":
-                return {"result": result, "send_status": status}
-            if result.get("mail_sender") not in self.allowed:
-                raise ValueError("Prepared recipient is no longer in the test sender allowlist")
-            case = self.service.store.get(result["case_id"], db)
-            active = db.execute("SELECT case_id,state FROM inbox_sessions WHERE id=?", (result["session_id"],)).fetchone()
-            if not active or active[0] != case.id or case.version != result["version"] or active[1] != result["session_state"]:
-                db.execute("UPDATE outlook_receipts SET send_status='superseded' WHERE id=?", (receipt_id,))
-                return {"result": result, "send_status": "superseded"}
-            # A crash after this reservation is deliberately not retried automatically.
-            db.execute("UPDATE outlook_receipts SET send_status='sending' WHERE id=?", (receipt_id,))
-        try:
+        def send():
             self.graph.request("POST", "/me/messages/" + quote(message_id, safe="") + "/reply",
                                {"message": {"body": {"contentType": "Text", "content": result["reply"]}}})
-        except Exception:
-            with self.service.store.transaction() as db:
-                db.execute("UPDATE outlook_receipts SET send_status='uncertain',error='Check Sent Items before retrying' WHERE id=?", (receipt_id,))
-            raise
-        with self.service.store.transaction() as db:
-            db.execute("UPDATE outlook_receipts SET send_status='sent' WHERE id=?", (receipt_id,))
-        return {"result": result, "send_status": "sent"}
+        return send_prepared_reply(self.service.store, "outlook_receipts", receipt_id, result,
+                                   enabled, self.allowed, send)
 
 
 def main():

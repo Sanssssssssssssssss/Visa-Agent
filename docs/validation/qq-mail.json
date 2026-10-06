@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-06",
+  "transport": "real QQ IMAP/SMTP with Outlook web as customer",
+  "settings": {
+    "accept_all": true,
+    "require_subject_tag": false,
+    "hitl": false,
+    "poll_interval_seconds": 15,
+    "validation_request_cap": 12,
+    "interactive_request_cap": 24,
+    "requests_used_when_opened_for_user": 12
+  },
+  "offline": {
+    "tests": 166,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 71.663,
+    "log": "output/hitl-outlook/qq-final-166.xml"
+  },
+  "live": {
+    "model": "deepseek-flash",
+    "usage": {
+      "requests": 12,
+      "input_tokens": 38333,
+      "output_tokens": 3675
+    },
+    "ledger_requests": 12,
+    "model_duration_seconds": 43.905,
+    "estimated_cost": null,
+    "price_configured": false,
+    "imap_login": true,
+    "smtp_login": true,
+    "first_reply_confirmed_in_outlook": true,
+    "reset_reply_confirmed_in_outlook": true,
+    "repair_reply_confirmed_in_outlook": true,
+    "receipts": [
+      {
+        "receipt": "2996eb8fee01ff23fcb3333480c51a1017c3b1c29465c8a6db0eb26eaa0b64a6",
+        "case_id": "case-28d967c3fbaa42a280763d465b8d43c9",
+        "version": 1,
+        "state": "WAIT_USER",
+        "command": null,
+        "send_status": "ignored",
+        "provider_notification": true,
+        "run_id": "4666dc5e07ba43868a0fd4784ec0c8ca"
+      },
+      {
+        "receipt": "6528cf8f90b3921f93f3d1780a50e81d26d9ee95d9eeb7451b4e8685c8131cbe",
+        "case_id": "case-7296b6c542ed4348bcbf7f98a773174a",
+        "version": 1,
+        "state": "WAIT_USER",
+        "command": null,
+        "send_status": "sent",
+        "provider_notification": false,
+        "run_id": "1378703bbdac4be69117b439cbff54cc"
+      },
+      {
+        "receipt": "abd29b35087eb07b2d9f82bbcb4db890d54a4aa4d73937f22b68d367f197ea33",
+        "case_id": "case-7296b6c542ed4348bcbf7f98a773174a",
+        "version": 2,
+        "state": "BLOCKED",
+        "command": null,
+        "send_status": "sent",
+        "provider_notification": false,
+        "run_id": "6e94afb611e44bf380e0441a7758e2d9"
+      },
+      {
+        "receipt": "fab1234eaecf098c4f77eaabfb42ad4b62334a82aecefce0ef367dc8ef28171c",
+        "case_id": "case-7296b6c542ed4348bcbf7f98a773174a",
+        "version": 3,
+        "state": "BLOCKED",
+        "command": null,
+        "send_status": "sent",
+        "provider_notification": false,
+        "run_id": "4098e74b569a4751bbaff51ba94c9802"
+      },
+      {
+        "receipt": "d299af1df587fe5ee75a047333b9d36ccb832118bc2e90a751a93e72fee8fadf",
+        "case_id": "case-c05f0c279bfa4728896e4a8c434a82ea",
+        "version": 0,
+        "state": "WAIT_USER",
+        "command": "/reset",
+        "send_status": "sent",
+        "provider_notification": false,
+        "run_id": "b5aac37b2f455e05f6879361478c27a365aca721964f9b93742a0e5c474e170f"
+      },
+      {
+        "receipt": "7701d2e99f9d1e2ae0bffb6c6b0fcfc745f99286f5c6a215ff4214c85c77ab36",
+        "case_id": "case-c05f0c279bfa4728896e4a8c434a82ea",
+        "version": 1,
+        "state": "BLOCKED",
+        "command": null,
+        "send_status": "sent",
+        "provider_notification": false,
+        "run_id": "2261d6787deb43ed8e871552c1c2b7db"
+      },
+      {
+        "receipt": "6b04fccb1ef869286c59d59d473e8a495013e972f70c4275926e3e107c41720a",
+        "case_id": "case-da8137c542e54c959f9652b6015f2a69",
+        "version": 0,
+        "state": "WAIT_USER",
+        "command": "/reset",
+        "send_status": "sent",
+        "provider_notification": false,
+        "run_id": "aa3323400c63cd06d515500a98137c58dc482b0cecf45615b5b4866ace03035a"
+      },
+      {
+        "receipt": "992badd1d61c3c7070b0e2c3e5185b60c93cfd96d3f2ad65cd5aa225dfff889b",
+        "case_id": "case-da8137c542e54c959f9652b6015f2a69",
+        "version": 1,
+        "state": "WAIT_USER",
+        "command": null,
+        "send_status": "sent",
+        "provider_notification": false,
+        "run_id": "0f0d449b94b7484babead0a66c8c1209"
+      }
+    ],
+    "repair_checks": {
+      "same_case_as_reset": true,
+      "WAIT_USER": true,
+      "route": true,
+      "explicit_chinese_date": true,
+      "yearless_date_omitted": true,
+      "sample_classified": true,
+      "sample_explained": true,
+      "no_pack": true,
+      "smtp_accepted": true
+    },
+    "customer_replies_smtp_accepted": 7,
+    "repair_assertions_passed": true
+  },
+  "preserved_failures": [
+    "QQ single-digit INTERNALDATE initially failed parsing; normalized and regression-tested.",
+    "QQ provider promotion initially created a case and used 2 model requests; reply was not sent. Marked ignored; sender filtered before body download.",
+    "First PDF follow-up preserved the case and blocked the sample, but Chinese dates were rejected and reply omitted sample explanation. Original BLOCKED case retained.",
+    "First Outlook /reset contained a quote separator and used 2 model requests instead of resetting. Fixed MIME cleanup; subsequent real /reset created an empty case with zero model calls.",
+    "First repair accepted the full Chinese date and explained the sample, but the model still invented the year of a partial customer date; the guard rejected it and BLOCKED the case. Snapshot retained in output/qq-mail/attempt-1.json. Initial missing-year customer dates now remain unconfirmed with an explicit diagnostic instead of becoming persisted facts."
+  ],
+  "boundaries": [
+    "Open intake validates mail headers/thread binding, not customer identity or general spam classification.",
+    "This pilot has no uptime/production throughput claim; failures and stale/uncertain sends remain inspectable locally.",
+    "Final ZIP export remains local; email attachment delivery is not implemented.",
+    "Original eight-turn HITL experiment failure is still retained in hitl-outlook.json; this email pilot does not prove a complete live multi-turn application."
+  ],
+  "logs": "data/qq-test",
+  "reply_export": "output/qq-mail",
+  "repair_expectations_sha256": "938e39d43c1cf8d88e1c95d7620c29bad2828344c0263c265bae84ca941840cc",
+  "reply_viewer": "http://127.0.0.1:62114/"
+}

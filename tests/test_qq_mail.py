@@ -1,0 +1,258 @@
+from datetime import datetime, timedelta, timezone
+from email.message import EmailMessage
+from pathlib import Path
+
+import pytest
+
+from visa_agent.mime_mail import MAX_MAIL_BYTES, parse_mail
+from visa_agent.qq_mail import QQConnection, QQInbox
+from visa_agent.service import VisaService
+
+AT = datetime(2026, 10, 6, 10, tzinfo=timezone.utc)
+
+
+def mail(id="1", sender="lin@example.com", text="applicant_name: Lin", parent=None):
+    message = EmailMessage()
+    message["From"], message["To"] = sender, "12345@qq.com"
+    message["Subject"] = "[VisaTest] 英国签证咨询"
+    message["Message-ID"] = f"<{id}@example.com>"
+    if parent:
+        message["In-Reply-To"] = parent
+    message.set_content(text)
+    return message
+
+
+class Connection:
+    uidvalidity = 1
+
+    def __init__(self, messages):
+        self.messages, self.sent, self.downloads = messages, [], []
+        self.failure = False
+
+    def uids(self, since, after):
+        return [uid for uid in sorted(self.messages) if uid > after][:100]
+
+    def header(self, uid):
+        raw = self.messages[uid].as_bytes()
+        return raw.split(b"\n\n", 1)[0] + b"\n\n", len(raw), AT + timedelta(minutes=uid)
+
+    def body(self, uid):
+        self.downloads.append(uid)
+        return self.messages[uid].as_bytes()
+
+    def send(self, message, recipient):
+        self.sent.append((message, recipient))
+        if self.failure:
+            raise TimeoutError("Lost response")
+
+
+def adapter(tmp_path, conn):
+    return QQInbox(VisaService(tmp_path, "offline", hitl=False), conn, "12345@qq.com", ["lin@example.com", "bo@example.com"])
+
+
+def test_read_chinese_pdf_then_reply_in_same_thread_after_restart(tmp_path):
+    message = mail(text="route: visitor\napplicant_name: Lin Example")
+    content = (Path(__file__).resolve().parents[1] / "datasets/materials/dev_visitor/identity.pdf").read_bytes()
+    message.add_attachment(content, maintype="application", subtype="pdf", filename="护照.pdf")
+    conn = Connection({1: message})
+    app = adapter(tmp_path, conn)
+    result = app.poll(AT.isoformat())["messages"][0]
+    assert result["send_status"] == "prepared" and not conn.sent
+    case_id = result["result"]["case_id"]
+    case = app.service.store.get(case_id)
+    assert len(case.documents) == 1 and case.documents[0].content_role == "sample"
+    adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)
+    assert len(conn.sent) == 1 and conn.sent[0][1] == "lin@example.com"
+    response = conn.sent[0][0]
+    assert response["In-Reply-To"] == message["Message-ID"]
+    assert response["Auto-Submitted"] == "auto-replied"
+    assert response.get_content().strip() == result["result"]["reply"]
+    conn.messages[2] = mail("2", text="age: 30", parent=response["Message-ID"])
+    next_result = adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)["messages"][0]
+    assert next_result["result"]["case_id"] == case_id and len(conn.sent) == 2
+    assert adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)["messages"] == []
+
+
+def test_duplicate_rfc_message_across_new_uidvalidity_does_not_resend(tmp_path):
+    conn = Connection({1: mail()})
+    adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)
+    conn.uidvalidity = 2
+    adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)
+    assert len(conn.sent) == 1
+    changed = mail(text="applicant_name: Mallory")
+    conn.messages[2] = changed
+    result = adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)
+    assert result["messages"][0]["send_status"] == "rejected" and len(conn.sent) == 1
+
+
+def test_reference_hijack_is_rejected_and_other_sender_gets_separate_case(tmp_path):
+    conn = Connection({1: mail()})
+    first = adapter(tmp_path, conn).poll(AT.isoformat())["messages"][0]["result"]
+    conn.messages[2] = mail("2", sender="bo@example.com", parent="<1@example.com>")
+    conn.messages[3] = mail("3", sender="bo@example.com")
+    rows = adapter(tmp_path, conn).poll(AT.isoformat())["messages"]
+    assert rows[0]["send_status"] == "rejected"
+    assert rows[1]["result"]["case_id"] != first["case_id"]
+
+
+def test_uncertain_smtp_delivery_is_not_retried(tmp_path):
+    conn = Connection({1: mail()})
+    conn.failure = True
+    with pytest.raises(TimeoutError):
+        adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)
+    conn.failure = False
+    rows = adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)["messages"]
+    assert rows[0]["send_status"] == "uncertain" and len(conn.sent) == 1
+
+
+def test_stale_prepared_reply_not_sent_after_exit(tmp_path):
+    conn = Connection({1: mail()})
+    adapter(tmp_path, conn).poll(AT.isoformat())
+    conn.messages[2] = mail("2", text="/exit", parent="<1@example.com>")
+    adapter(tmp_path, conn).poll(AT.isoformat())
+    rows = adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)["messages"]
+    assert [r["send_status"] for r in rows] == ["superseded", "sent"]
+    assert len(conn.sent) == 1
+
+
+@pytest.mark.parametrize("header,value", [("Reply-To", "third@example.com"), ("Sender", "third@example.com"),
+    ("Auto-Submitted", "auto-replied"), ("List-ID", "list.example.com")])
+def test_bad_envelopes_never_create_case(tmp_path, header, value):
+    message = mail()
+    message[header] = value
+    conn = Connection({1: message})
+    app = adapter(tmp_path, conn)
+    assert app.poll(AT.isoformat(), send_replies=True)["messages"][0]["send_status"] == "rejected"
+    with app.service.store.connect() as db:
+        assert db.execute("SELECT count(*) FROM cases").fetchone()[0] == 0
+    assert not conn.sent
+
+
+def test_unrelated_mail_body_is_not_downloaded(tmp_path):
+    message = mail()
+    message.replace_header("Subject", "Personal message")
+    conn = Connection({1: message, 2: mail("2", sender="unknown@example.com")})
+    assert adapter(tmp_path, conn).poll(AT.isoformat())["messages"] == []
+    assert conn.downloads == []
+
+
+def test_html_reply_removes_outlook_history_and_remote_content():
+    message = mail(text="unused")
+    message.clear_content()
+    message.set_content('<div>我想去英国旅游。</div><script>bad()</script><img src="https://example.com/pixel">'
+                        '<div id="divRplyFwdMsg">From: earlier</div><div>age: 99</div>', subtype="html")
+    parsed = parse_mail(message.as_bytes(), "12345@qq.com", {"lin@example.com"})
+    assert parsed["text"] == "我想去英国旅游。"
+
+
+@pytest.mark.parametrize("quote", ["On Monday Lin wrote:", "在 2026 年 10 月 5 日写道：", "发件人：Agent", "> old reply"])
+def test_plain_reply_excludes_quoted_model_or_customer_text(quote):
+    message = mail(text="age: 30\n\n" + quote + "\napplicant_name: Wrong")
+    result = parse_mail(message.as_bytes(), "12345@qq.com", {"lin@example.com"})
+    assert result["text"] == "age: 30"
+
+
+def test_outlook_plain_reply_separator_does_not_hide_reset_command(tmp_path):
+    conn = Connection({1: mail()})
+    app = adapter(tmp_path, conn)
+    old = app.poll(AT.isoformat())["messages"][0]["result"]
+    conn.messages[2] = mail("2", text="/reset\n________________________________\n发件人: Agent\nold reply",
+                            parent="<1@example.com>")
+    result = adapter(tmp_path, conn).poll(AT.isoformat())["messages"][0]["result"]
+    assert result["command"] == "/reset" and result["case_id"] != old["case_id"]
+    assert app.service.store.get(result["case_id"]).history_count == 0
+    assert all(t.get("command") == "/reset" for t in app.service.store.traces(result["case_id"]))
+
+
+def test_oversized_mail_is_not_downloaded(tmp_path):
+    conn = Connection({1: mail()})
+    raw, _, at = conn.header(1)
+    conn.header = lambda uid: (raw, MAX_MAIL_BYTES + 1, at)
+    assert adapter(tmp_path, conn).poll(AT.isoformat())["messages"][0]["send_status"] == "rejected"
+    assert not conn.downloads
+
+
+def test_thirty_messages_restart_and_bound_history(tmp_path):
+    conn = Connection({1: mail()})
+    for i in range(2, 31):
+        conn.messages[i] = mail(str(i), parent="<1@example.com>")
+    cases = set()
+    for _ in range(10):
+        results = adapter(tmp_path, conn).poll(AT.isoformat(), max_messages=3, send_replies=True)["messages"]
+        assert len(results) == 3
+        cases.update(r["result"]["case_id"] for r in results)
+    assert len(cases) == 1 and len(conn.sent) == 30
+    case = adapter(tmp_path, conn).service.store.get(next(iter(cases)))
+    assert len(case.history) == 20 and case.history_count == 30
+
+
+def test_open_intake_accepts_new_senders_and_subjects_but_keeps_cases_separate(tmp_path):
+    first = mail(sender="newperson@example.com")
+    first.replace_header("Subject", "英国签证咨询")
+    second = mail("2", sender="another@example.com")
+    second.replace_header("Subject", "材料")
+    own = mail("3", sender="12345@qq.com")
+    auto = mail("4", sender="newperson@example.com")
+    auto["Auto-Submitted"] = "auto-replied"
+    conn = Connection({1: first, 2: second, 3: own, 4: auto})
+    app = QQInbox(VisaService(tmp_path, "offline", hitl=False), conn, "12345@qq.com", require_tag=False)
+    rows = app.poll(AT.isoformat(), send_replies=True)["messages"]
+    assert [r["send_status"] for r in rows] == ["sent", "sent", "rejected"]
+    assert rows[0]["result"]["case_id"] != rows[1]["result"]["case_id"]
+    assert {to for _, to in conn.sent} == {"newperson@example.com", "another@example.com"}
+    assert 3 not in conn.downloads
+
+
+@pytest.mark.parametrize("day", ["6", "06", " 6"])
+def test_qq_server_internaldate_single_digit_day(day):
+    connection = QQConnection("12345@qq.com", "not-a-real-credential")
+    metadata = f'140 (UID 153 RFC822.SIZE 10846 INTERNALDATE "{day}-Oct-2026 23:00:03 +0800" BODY[HEADER] {{10}}'.encode()
+    connection._uid = lambda *args: [(metadata, b"From: test")]
+    _, size, at = connection.header(153)
+    assert size == 10846 and at == datetime(2026, 10, 6, 15, 0, 3, tzinfo=timezone.utc)
+
+
+def test_qq_provider_notice_is_filtered_before_body_download_or_model(tmp_path):
+    message = mail(sender="10000@qq.com")
+    message.replace_header("Subject", "QQ 邮箱 APP 推广")
+    conn = Connection({1: message})
+    app = QQInbox(VisaService(tmp_path, "offline", hitl=False), conn, "12345@qq.com", require_tag=False)
+    assert app.poll(AT.isoformat(), send_replies=True)["messages"] == []
+    assert not conn.downloads and not conn.sent
+    with app.service.store.connect() as db:
+        assert db.execute("SELECT count(*) FROM cases").fetchone()[0] == 0
+
+
+@pytest.mark.parametrize("filename", ["../passport.pdf", "archive.zip", "hidden.exe"])
+def test_mime_attachment_boundaries(filename):
+    message = mail()
+    message.add_attachment(b"test", maintype="application", subtype="octet-stream", filename=filename)
+    with pytest.raises(ValueError):
+        parse_mail(message.as_bytes(), "12345@qq.com", {"lin@example.com"})
+
+
+@pytest.mark.parametrize("exercise", ["transient_network", "budget"])
+def test_worker_recovers_network_failure_and_stops_at_request_cap(tmp_path, monkeypatch, exercise):
+    import json
+    from types import SimpleNamespace
+    import visa_agent.qq_mail as module
+    (tmp_path / "qq-config.json").write_text(json.dumps({"mailbox": "12345@qq.com"}))
+    monkeypatch.setattr(module, "build_encrypted_persistence", lambda path: SimpleNamespace(load=lambda: "test-only"))
+    monkeypatch.setattr(module.time, "sleep", lambda seconds: None)
+    monkeypatch.setattr("sys.argv", ["qq_mail", "watch", "--data", str(tmp_path), "--request-cap", "1"])
+    calls = []
+    def fake_poll(args, config, secret, budget):
+        calls.append(1)
+        if exercise == "transient_network" and len(calls) == 1:
+            raise OSError("offline transport test")
+        if exercise == "budget":
+            budget.reserve("offline-test-accounting")
+        else:
+            (tmp_path / "qq-stop").touch()
+        return {"messages": [], "model_requests": budget.count()}
+    monkeypatch.setattr(module, "receive_once", fake_poll)
+    module.main()
+    assert len(calls) == (2 if exercise == "transient_network" else 1)
+    state = json.loads((tmp_path / "qq-watch-last.json").read_text())
+    if exercise == "budget":
+        assert state["paused"] == "model_request_budget"

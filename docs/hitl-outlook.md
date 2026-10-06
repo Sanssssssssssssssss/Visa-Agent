@@ -51,7 +51,7 @@ flowchart TD
 
 应用注册需要可用的 Entra 租户和注册权限；只有个人邮箱并不保证可以直接创建应用。如果你还没有应用，我们先完成这一步。
 
-本次现场接入：个人 Microsoft 账户已在浏览器登录；Entra 和 Azure 管理入口均出现 `PageLoadTimeout`，未创建应用，未执行本应用 OAuth 或邮件收发。用户确认尚未开通 Azure。继续此方案需先完成 Azure/目录设置；[微软开户说明](https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account)要求手机和银行卡验证。若只需尽快测试，可另接支持客户端授权码的测试邮箱，当前代码中该替代接入尚未实现。
+本次现场接入：个人 Microsoft 账户已在浏览器登录；Entra 和 Azure 管理入口均出现 `PageLoadTimeout`，未创建应用，未执行本应用 OAuth 或 Graph 邮件收发。用户确认尚未开通 Azure。继续此方案需先完成 Azure/目录设置；[微软开户说明](https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account)要求手机和银行卡验证。用户随后选择 QQ 作为 Agent 邮箱，Outlook 网页作为客户发件端；[QQ 接入](qq-mail.md)已实现并单独记录真实收发结果。
 
 在仓库 PowerShell 中配置以下**非密码**信息，填实际值：
 

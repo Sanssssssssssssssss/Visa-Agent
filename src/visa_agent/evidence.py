@@ -72,7 +72,12 @@ def validate_value(key: str, value: str, quote: str) -> str:
         parsed = date.fromisoformat(value)
         formats = [parsed.isoformat(), parsed.strftime("%d/%m/%Y"),
                    parsed.strftime("%d %B %Y"), parsed.strftime("%Y/%m/%d")]
-        if not any(normalized(item) in normalized(quote) for item in formats):
+        # Match only an explicit full Chinese date. Never borrow a year from a
+        # different date or turn "12月17日" into a silently inferred full date.
+        chinese = re.findall(r"(?<!\d)(\d{4})年(\d{1,2})月(\d{1,2})[日号]", normalized(quote))
+        chinese_match = any(tuple(map(int, parts)) == (parsed.year, parsed.month, parsed.day)
+                            for parts in chinese)
+        if not chinese_match and not any(normalized(item) in normalized(quote) for item in formats):
             raise ValueError(f"Date value not grounded in quote: {key}")
     elif key in NUMBER_FIELDS:
         try:
@@ -112,7 +117,7 @@ def validate_value(key: str, value: str, quote: str) -> str:
     return value
 
 
-def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, str]) -> list[str]:
+def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, str], *, unconfirmed=None) -> list[str]:
     docs = {d.id: d for d in case.documents}
     for tag in proposal.documents:
         if tag.document_id not in docs:
@@ -146,6 +151,21 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
                     raise ValueError("Incomplete statement cannot establish the full-period minimum")
             if not text or normalized(candidate.quote) not in normalized(text):
                 raise ValueError("Supporting quote not found in source")
+            # An initial customer date without a year is a missing answer, not
+            # document evidence. Ignore an invented year and ask through the
+            # existing missing-date check. Changes to an existing date still
+            # require review; never silently retain an old date after a change.
+            if (candidate.source_id.startswith("message:") and
+                candidate.key in {"travel_start", "travel_end", "application_date"} and
+                not any(f.active and f.key == candidate.key for f in case.facts) and
+                not re.search(r"\d{4}", normalized(candidate.quote))):
+                partial = re.findall(r"(?<!\d)(\d{1,2})月(\d{1,2})[日号]", normalized(candidate.quote))
+                if len(partial) == 1:
+                    parsed = date.fromisoformat(candidate.value)
+                    if tuple(map(int, partial[0])) == (parsed.month, parsed.day):
+                        if unconfirmed is not None:
+                            unconfirmed.append({**candidate.model_dump(), "reason": "date_year_missing"})
+                        continue
             if candidate.key in {"applicant_name", "passport_name", "employment_name", "bank_holder", "cas_name", "cos_name", "tb_name"}:
                 if candidate.key == "bank_holder" and re.fullmatch(
                     r"(?:e?savings|current|checking|business|deposit|term|joint)\s+account|account\s+(?:holder|name|type)",

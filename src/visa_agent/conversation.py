@@ -111,7 +111,7 @@ QUESTIONS = {
     "funding": ("这次费用由您自己、雇主还是其他人承担？这决定资金证明怎么准备。", "Who will pay: you, your employer or someone else? This determines the funding evidence."),
     "purpose": ("这次来英国具体做什么？简单说说您的计划即可。", "What will you do during your visit? A brief explanation is enough to start."),
     "travel_start": ("您预计哪天到英国？用来核对行程和材料有效期。", "When do you expect to arrive in the UK? We use this to check your travel and document dates."),
-    "travel_end": ("您预计哪天离开英国？暂未订票也可以先告诉我计划日期。", "When do you plan to leave the UK? A planned date is fine; you do not need to book a ticket now."),
+    "travel_end": ("您预计哪天离开英国？请包含年份，例如 2026-12-17；暂未订票也可以先告诉我计划日期。", "When do you plan to leave the UK? Please include the year (YYYY-MM-DD). A planned date is fine; you do not need to book a ticket now."),
     "return_reason": ("旅行结束后有什么回国安排，比如继续工作或学业？", "What are your plans after the visit, such as returning to work or study?"),
     "trip_budget": ("这次交通、住宿和日常开销一共预计多少英镑？估算即可。", "What is your estimated total trip cost in pounds, including travel, accommodation and daily spending?"),
     "employer": ("请提供说明您工作情况的材料，例如在职证明；如果目前没有工作，告诉我您的实际情况即可。", "Please provide evidence of your employment, such as an employer letter. If you are not employed, tell me your circumstances."),
@@ -206,6 +206,14 @@ def reply_for(case, *, text="", intent="continue", received_count=None, guidance
     count = len([d for d in case.documents if not d.rejected]) if received_count is None else received_count
     if count:
         paragraphs.append(f"已收到 {count} 个文件，我会逐项帮您核对。" if zh else f"I've received {count} file(s). I'll help you check them step by step.")
+    # A model may prioritise intake questions. Still disclose why uploaded
+    # examples cannot count as evidence, independently of those three actions.
+    if count and not case.test_mode:
+        samples = [d.name for d in case.documents if not d.rejected and d.content_role == "sample"]
+        if samples:
+            names = ", ".join(samples[:5]) + (" …" if len(samples) > 5 else "")
+            paragraphs.append(f"文件检查：{names} 是样例或测试材料，不能作为您本人的正式申请证据。" if zh else
+                              f"Document check: {names} is sample or test material and cannot count as your application evidence.")
     first = not case.history
     process = intent in {"getting_started", "how_to_apply"} or bool(re.search(r"怎么申请|如何申请|how (?:do I|to) apply", text, re.I))
     materials = intent in {"getting_started", "materials"} or bool(re.search(r"什么材料|哪些材料|what (?:documents|evidence)|what do I need", text, re.I))

@@ -8,15 +8,17 @@
 
 ```mermaid
 flowchart LR
-  A[CLI 消息或附件] --> B[持久化 inbox / 去重]
+  A[CLI / 网页 / QQ 消息与附件] --> B[持久化 inbox / 去重]
   B --> C[PDF 文本 / OCR]
   C --> D[PydanticAI 候选事实]
   D --> E[来源与字段校验]
   E --> F[规则检查 / Case 事务]
   F --> G[等待客户或顾问]
-  F --> H[生成待复核材料包]
-  H --> I[独立人工入口]
+  F --> H{所有检查通过}
+  H -->|HITL on| I[待审核材料包 / 独立人工入口]
   I --> J[COMPLETE]
+  H -->|HITL off| K[模型决定是否交付]
+  K -->|交付 / 自动完成记录| J
 ```
 
 ## 一条消息如何落库
@@ -47,6 +49,8 @@ flowchart LR
 
 `evidence.apply_proposal()` 校验来源属于案件、页码存在、原文摘录可定位、字段在有限词表中，随后校验金额、日期或值与摘录的关系。金额用 `Decimal` 比较，日期解析为 `date`；持久化为规范字符串以便 JSON 审计。两份不一致事实同时保留。客户自述的来源是 `message:<event_id>`，不能满足要求文件证据的检查。
 
+完整中文日期（如 `2026年12月10日`）按原文核对。首次自述的申请/旅行日期只说月日时，模型猜出的年份不会写入事实；`unconfirmed_candidates` 和 `date_year_missing` 诊断记录原因，缺失日期检查继续询问。该处理不用于文件日期，也不用于更改已有日期；错误月日、伪造引用仍会进入提取复核。
+
 `Evidence` 忽略被拒绝文件、读取有问题的文件和未确认低置信度字段。多个不同值会返回未知。模型不能静默选择冲突中的一个。顾问 `confirm_fact` 明确选择一个值，旧值仍在历史内。
 
 来源校验验证可定位性和有限格式/值约束，不能证明模型对任意自然语言语义的理解正确，也不能认证文件真实性。分类、姓名归属、资金来源及完整页码需最终复核。扫描件裁掉未见内容时，程序只能发现缺少所需字段，不能保证识别所有缺页。
@@ -71,7 +75,11 @@ PydanticAI 提供 `Proposal` 的结构校验与工具调用；检查后再用 `G
 
 `inbox.Incoming` 不接受客户端传入的 case_id。`Inbox` 按 channel/account/thread 查找会话，并核对已绑定的 sender；message_id 在渠道账户内唯一，重复内容复用结果，同 ID 不同内容拒绝。邮箱只做格式与域名规范化，不合并加号别名；WhatsApp 使用 E.164 电话格式。格式有效不等于身份已验证。
 
-`receive_simulated()` 是本地收件测试。`receive_signed()` 验证内部连接器的原始字节 HMAC 和五分钟时间窗，不是 Twilio/SendGrid 的官方 webhook 签名实现。实际渠道仍需自己的验签、收件账户校验及可信发送方映射；目前未接真实邮箱或 WhatsApp。
+`receive_simulated()` 是本地收件测试。`receive_signed()` 验证内部连接器的原始字节 HMAC 和五分钟时间窗，不是 Twilio/SendGrid 的官方 webhook 签名实现。真实 WhatsApp 尚未接入。
+
+QQ 邮件由 `QQConnection` 从登录的收件箱读取，`parse_mail()` 拆出新正文和附件，`QQInbox.receive()` 校验发件地址、Message-ID 和引用链。新线程创建案件，回复引用入站或出站 Message-ID 时沿用原线程；其他发件人不能接入已绑定线程。随后调用 `Inbox.receive_connector(provider="imap")`，由现有服务写入案件。这里确认的是收件账户及邮件头绑定，不是对客户的身份认证。
+
+收信游标保存在 `qq_cursor`；引用链在 `qq_threads`；预览及发送状态在 `qq_receipts`。`mail_outbox.send_prepared_reply()` 同时服务 QQ 和 Graph：发送前重新核对案件版本与会话状态，事务占位后调用网络；成功标记 `sent`，网络歧义标记 `uncertain`，不自动重发。新轮询从 SQLite 恢复，空扫描不调用模型。QQ 的配置、限额、停止及真实结果见 [qq-mail.md](qq-mail.md)。
 
 `/exit` 关闭会话，后续输入不调用模型。`/reset`、`/start` 新建空白案件；原案件关闭、原始审计保留，不进入新上下文。命令本身不耗模型。网页通过服务端随机 cookie 隔离浏览器工作区，重启从 `web_workspaces` 恢复。右侧渠道身份切换是本地测试人员模拟入口，不是面向客户的身份认证。
 

@@ -46,6 +46,9 @@ def turn_diagnostics(case, trace):
                 break
         rows.append({"code": code, "stage": "grounding", "detail": rejected,
                      "next_action": "compare_quote_and_original"})
+    rows.extend({"code": row["reason"], "stage": "grounding", "field": row["key"],
+                 "source_id": row["source_id"], "quote": row["quote"], "next_action": "confirm_full_date"}
+                for row in trace.get("unconfirmed_candidates", []))
     for check in case.checks:
         if check.status in {"fail", "unknown"}:
             rows.append({"code": "rule_failed" if check.status == "fail" else "rule_unresolved",
