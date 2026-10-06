@@ -25,6 +25,22 @@ jobs:
           python -c "import json; r=json.load(open('container-smoke.json')); assert len(r['routes'])==3 and r['sigterm']=='graceful_exit'"
       - name: Check image excludes private configuration
         run: docker run --rm visa-agent:ci python -c "from pathlib import Path; assert not Path('/app/.env').exists(); assert not Path('/app/data/qq-test/qq-config.json').exists()"
+      - name: Compose lifecycle, secrets and named-volume persistence
+        run: |
+          mkdir -p secrets
+          printf 'offline-test-key' > secrets/model_key.txt
+          printf 'abcdefghijklmnop' > secrets/qq_code.txt
+          chmod 644 secrets/*.txt
+          docker compose -p visa-agent-ci -f compose.yaml -f compose.secrets.yaml -f tests/compose.ci.yaml up -d --no-build --wait --wait-timeout 90
+          docker compose -p visa-agent-ci -f compose.yaml -f compose.secrets.yaml -f tests/compose.ci.yaml exec -T agent visa-agent --mode offline --data /data --hitl off new persistence-case
+          docker compose -p visa-agent-ci -f compose.yaml -f compose.secrets.yaml -f tests/compose.ci.yaml exec -T agent visa-agent --mode offline --data /data message persistence-case 'route: visitor' --event-id one
+          docker compose -p visa-agent-ci -f compose.yaml -f compose.secrets.yaml -f tests/compose.ci.yaml exec -T agent sha256sum /data/qq-config.json > configuration-before.sha256
+          docker compose -p visa-agent-ci -f compose.yaml -f compose.secrets.yaml -f tests/compose.ci.yaml restart agent
+          docker compose -p visa-agent-ci -f compose.yaml -f compose.secrets.yaml -f tests/compose.ci.yaml up -d --no-build --wait --wait-timeout 90
+          docker compose -p visa-agent-ci -f compose.yaml -f compose.secrets.yaml -f tests/compose.ci.yaml exec -T agent sha256sum /data/qq-config.json > configuration-after.sha256
+          diff configuration-before.sha256 configuration-after.sha256
+          docker compose -p visa-agent-ci -f compose.yaml -f compose.secrets.yaml -f tests/compose.ci.yaml exec -T agent visa-agent --data /data inspect persistence-case > restored-case.json
+          python -c "import json; c=json.load(open('restored-case.json')); assert c['route']=='visitor' and c['version']==1"
       - name: Build test image
         run: docker build --target test -t visa-agent:test .
       - name: Run container regression suite
@@ -33,4 +49,11 @@ jobs:
         if: always()
         with:
           name: container-validation
-          path: container-smoke.json
+          path: |
+            container-smoke.json
+            restored-case.json
+            configuration-before.sha256
+            configuration-after.sha256
+      - name: Remove isolated CI volumes
+        if: always()
+        run: docker compose -p visa-agent-ci -f compose.yaml -f compose.secrets.yaml -f tests/compose.ci.yaml down -v

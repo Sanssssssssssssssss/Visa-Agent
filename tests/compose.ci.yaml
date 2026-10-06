@@ -1,0 +1,12 @@
+# Explicit isolated overlay. Never use this as a live deployment.
+services:
+  agent:
+    image: visa-agent:ci
+    environment:
+      PYTHONPATH: /ci-fake
+      VISA_QQ_MAILBOX: 12345@qq.com
+      VISA_QQ_ACCEPT_ALL: "1"
+      VISA_QQ_ALLOW_SAMPLES: "1"
+      VISA_MAIL_INTERVAL: "10"
+    volumes:
+      - ./tests/container_fakes:/ci-fake:ro
