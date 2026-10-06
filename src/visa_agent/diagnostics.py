@@ -28,6 +28,9 @@ def document_issues(doc):
     if doc.content_role in {"sample", "unrelated"}:
         rows.append({"code": "sample_material" if doc.content_role == "sample" else "irrelevant_material",
                      "stage": "classify", "document_id": doc.id, "next_action": "supply_applicant_evidence"})
+    if doc.content_role in {"self_report", "uncertain"}:
+        rows.append({"code": "self_report_not_evidence" if doc.content_role == "self_report" else "evidence_type_unconfirmed",
+                     "stage": "classify", "document_id": doc.id, "next_action": "supply_original_document"})
     return rows
 
 

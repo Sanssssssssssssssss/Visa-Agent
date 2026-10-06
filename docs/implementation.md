@@ -2,6 +2,8 @@
 
 入口是 `VisaService.handle_event(CaseEvent) -> TurnResult`。没有通用工作流引擎。一次调用处理一次外部事件，返回后停止；下一条消息或定时事件继续案件。
 
+最终交付入口：`delivery.build_pack()` 按 `archive_path()` 保存原始字节，另生成双语信息表、`START-HERE.html`、检查记录和 `submission.bilingual_guide()`。`verify_pack()` 在发信前检查清单、原件哈希、信息表和指引内容。`QQInbox._send()` 仅在 COMPLETE 且 ZIP 未超附件上限时添加 `visa-materials.zip`，发送后保存 MIME 回执；Outlook 下载验证见 [full-delivery.md](full-delivery.md)。`service.handle_event()` 只在信息项仍缺失或格式失败时附待填表，避免信息已齐仍反复催填。
+
 以下人工复核说明适用于默认 `--hitl on`。新增 `--hitl off` 时，检查满足后应用自动确认收集完成，写入独立 `automatic_completion`，不会伪造人工审批；完整状态和 Outlook 接入见 [hitl-outlook.md](hitl-outlook.md)。
 
 本地上传页入口是 `python -m visa_agent.web`，默认空白案件。`web.html` 把拖入的文件和消息提交到 `/api/event`；`web.LocalApp.event()` 保存附件，经 `Inbox` 路由到同一个服务。仅在明确选择合成演示时载入对应背景，并随首次成功事件录入。`/api/review` 独立调用 `review_case()`，关闭 HITL 的案件禁用此入口。页面用随机 Cookie 标识工作区，数据库保存工作区、渠道会话和案件的绑定；重启恢复绑定，`/reset` 才新建案件。旧案件和原始对话保留供追溯。
@@ -31,6 +33,10 @@ flowchart LR
 `Store.transaction()` 使用 `BEGIN IMMEDIATE`。当前选择一个 SQLite writer，包括模型期间的锁，以换取直接可读的串行语义。吞吐量限于本地 CLI；服务化时先改为持久任务和按案租约。
 
 ## 文档与字段
+
+`Document.content_role` 区分证明、自述、样例、无关和未确定。`documents.content_role_for()` 拦截内部字段清单，旧持久化附件也重新检查；`Evidence.admissible()` 只接受明确的证明，或本机演示案件中的样例。模型不能把读取器识别的字段清单提升为证明。普通文字 PDF 本身不是拒绝条件；银行信、在职信仍可按内容分类。普通标签的自制页依赖模型分类，尚不能保证任意版式不误判。错误原因以 `self_report_not_evidence` / `evidence_type_unconfirmed` 记录。
+
+材料规则指纹包含 `evidence.py` 和 `documents.py`；规则变化时既有批准失效，`mail_outbox.send_prepared_reply()` 也拒发旧规则下排队的回复。
 
 `documents.read_document()` 对每页先用 pypdf 提取文字，并检查 PDFium 图片和填充矢量图形（含嵌套 Form）。含图片或填充图形、文字过少、字符损坏的页面整页渲染后交给 RapidOCR；这样可以覆盖本次出现的扫描材料和黑条遮盖情形。纯文字页继续直接提取。独立的 `Page X of Y` 行用于发现明确声明的缺页；没有页码的缺页不保证能检出。OCR 最低行置信度低于 0.8 时，该文件不能直接作为通过检查的证据。阈值未做真实证件校准，logo/背景色块也会触发 OCR，增加耗时。
 

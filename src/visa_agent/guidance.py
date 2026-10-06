@@ -81,7 +81,7 @@ def guide(case, event, trace, mode, budget, *, model_override=None):
         @agent.output_validator
         def validate(output: Guidance):
             if len(set(output.actions)) != len(output.actions) or any(k not in actions for k in output.actions):
-                raise ModelRetry("Select unique existing unresolved IDs from allowed_actions only")
+                raise ModelRetry("Select unique IDs from this allowed list only: " + json.dumps(list(actions)))
             if actions and not output.actions:
                 raise ModelRetry("Select at least one unresolved action")
             if output.delivery_decision == "deliver" and (actions or case.status.value != "READY_FOR_REVIEW"):

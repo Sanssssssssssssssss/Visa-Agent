@@ -182,7 +182,8 @@ class VisaService:
                         if case.status in {Status.READY, Status.COMPLETE}:
                             case.pack_path = build_pack(case, self.store.root)
                         case.form_path = None
-                        if case.application_forms and case.route and case.status not in {Status.COMPLETE, Status.READY}:
+                        if (case.application_forms and case.route and case.status not in {Status.COMPLETE, Status.READY}
+                                and any(c.id.startswith(("info:", "form:")) and c.status in {"unknown", "fail"} for c in case.checks)):
                             case.form_path = write_form(case, self.store.root / "forms" / case.id / f"v{case.version}" / "application-information.xlsx")
                     reply = reply_for(case, text=event.text, intent=intent, received_count=len(staged),
                                       received_names=[Path(original).name for original, _, _ in staged], guidance=guidance)

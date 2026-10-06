@@ -1,0 +1,285 @@
+{
+  "date": "2026-10-07",
+  "provider_end_to_end": {
+    "date": "2026-10-07",
+    "provider": "Outlook UI -> QQ IMAP -> real model -> QQ SMTP -> Outlook UI download",
+    "passed": 3,
+    "cases": 3,
+    "results": [
+      {
+        "route": "visitor",
+        "states": [
+          "WAIT_USER",
+          "WAIT_USER",
+          "COMPLETE"
+        ],
+        "passed": true,
+        "actual_email_turns": 3,
+        "case_owner_continuity": true,
+        "synthetic_demo": true,
+        "smtp_sent": true,
+        "outlook_downloaded": true,
+        "download_equals_sent_bytes": true,
+        "zip_sha256": "e64168156fcaaa152e173669d794bb6392d2414fd8e3d784a923e57c15c4b8e8",
+        "zip_bytes": 37602,
+        "zip_entries": 10,
+        "pdf_pages_opened": 3,
+        "originals_hash_verified": 4,
+        "worksheet_opened": true,
+        "html_local_links_valid": true,
+        "final_email_body_verified": true,
+        "usage": {
+          "requests": 5,
+          "input_tokens": 24698,
+          "output_tokens": 1550
+        },
+        "models": [
+          "deepseek-flash"
+        ],
+        "check_count": 64,
+        "unknown_or_failed_checks": [],
+        "artifact": "examples/packs/visitor-demo.zip"
+      },
+      {
+        "route": "student",
+        "states": [
+          "WAIT_USER",
+          "WAIT_USER",
+          "COMPLETE"
+        ],
+        "passed": true,
+        "actual_email_turns": 3,
+        "case_owner_continuity": true,
+        "synthetic_demo": true,
+        "smtp_sent": true,
+        "outlook_downloaded": true,
+        "download_equals_sent_bytes": true,
+        "zip_sha256": "d5555a0d49dccfd0131341289680a65b4d39fbff04fd54c6274b080310fdd0fa",
+        "zip_bytes": 38584,
+        "zip_entries": 11,
+        "pdf_pages_opened": 4,
+        "originals_hash_verified": 5,
+        "worksheet_opened": true,
+        "html_local_links_valid": true,
+        "final_email_body_verified": true,
+        "usage": {
+          "requests": 5,
+          "input_tokens": 25512,
+          "output_tokens": 1963
+        },
+        "models": [
+          "deepseek-flash"
+        ],
+        "check_count": 65,
+        "unknown_or_failed_checks": [],
+        "artifact": "examples/packs/student-demo.zip"
+      },
+      {
+        "route": "skilled_worker",
+        "states": [
+          "WAIT_USER",
+          "WAIT_USER",
+          "COMPLETE"
+        ],
+        "passed": true,
+        "actual_email_turns": 3,
+        "case_owner_continuity": true,
+        "synthetic_demo": true,
+        "smtp_sent": true,
+        "outlook_downloaded": true,
+        "download_equals_sent_bytes": true,
+        "zip_sha256": "9b38499f51766165ab4d8470cb8cfaa66ddd2c633b5bbe76e148df932d73ce62",
+        "zip_bytes": 38341,
+        "zip_entries": 11,
+        "pdf_pages_opened": 4,
+        "originals_hash_verified": 5,
+        "worksheet_opened": true,
+        "html_local_links_valid": true,
+        "final_email_body_verified": true,
+        "usage": {
+          "requests": 5,
+          "input_tokens": 25924,
+          "output_tokens": 1784
+        },
+        "models": [
+          "deepseek-flash"
+        ],
+        "check_count": 65,
+        "unknown_or_failed_checks": [],
+        "artifact": "examples/packs/skilled_worker-demo.zip"
+      }
+    ],
+    "usage": {
+      "requests": 15,
+      "input_tokens": 76134,
+      "output_tokens": 5297
+    },
+    "price_configured": false,
+    "scope": "Synthetic demo evidence; material collection only, not UKVI eligibility or authenticity approval.",
+    "observed_defect": "Completed worksheet was redundantly requested in turn 2; fixed after provider run and separately replayed.",
+    "browser_automation_notes": [
+      "Waited for selected message body to avoid stale reading pane.",
+      "Attachment progress locator initially matched two uploads; corrected before sending Student draft; no duplicate send."
+    ]
+  },
+  "final_code_api_replay": {
+    "passed": 3,
+    "cases": 3,
+    "http_requests": 15,
+    "usage": {
+      "requests": 15,
+      "input_tokens": 74580,
+      "output_tokens": 5155
+    },
+    "price_configured": false
+  },
+  "negative_api": {
+    "passed": 2,
+    "cases": 2,
+    "http_requests": 8,
+    "usage": {
+      "requests": 8,
+      "input_tokens": 36585,
+      "output_tokens": 2030
+    },
+    "price_configured": false
+  },
+  "negative_outcomes": [
+    {
+      "id": "sample-real-case",
+      "passed": true,
+      "states": [
+        "WAIT_USER",
+        "WAIT_USER"
+      ]
+    },
+    {
+      "id": "injection-with-documents",
+      "passed": true,
+      "states": [
+        "WAIT_USER",
+        "WAIT_USER"
+      ]
+    }
+  ],
+  "offline": {
+    "full_suite_passed": 202,
+    "seconds": 87.54,
+    "post_fix_focused_passed": 28,
+    "post_fix_focused_seconds": 5.63,
+    "ruff": "passed"
+  },
+  "total_usage": {
+    "requests": 38,
+    "input_tokens": 187299,
+    "output_tokens": 12482
+  },
+  "price_configured": false,
+  "provider_run_source_hashes": {
+    "src\\visa_agent\\agent.py": "27ea45533e8c8d3cdd30fae00ccb9137dbdaa558dc99c0fd52145c24bea57154",
+    "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+    "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+    "src\\visa_agent\\conversation.py": "8ef84a082a0af28c77b7f6caf19f23e761f1628a0c4204c6582efcaac0a86b29",
+    "src\\visa_agent\\delivery.py": "77730b2a93d1d22fd3a31e96bbd92b924fef7b92f144a7fb0b60445396e534b8",
+    "src\\visa_agent\\diagnostics.py": "501b62fb523ca7605b87a9822a4756ab493c6bb9f24be0ff60c0e318de2c6e31",
+    "src\\visa_agent\\documents.py": "725de541ad0b31912e9b8f6793a52327559dcde2d211773754153ab01eb454e7",
+    "src\\visa_agent\\evidence.py": "6375405aaace84f7150c7f7ce8bb97203fb8a63413c900ed2f6b11377a3bdaaa",
+    "src\\visa_agent\\guidance.py": "00885d3ae3ce4e03d0c9a606193b305d3b6e629ec43715efb6fd0b8abc0e9d01",
+    "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+    "src\\visa_agent\\intake.py": "3392d7384332cdbf6ce533c08545759d8ba88887941497ceb686dea6f907b39b",
+    "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+    "src\\visa_agent\\mail_outbox.py": "03c1ddeffb293991e727f2f939eabe2e8d8cc3a02e8b55b949fa768bb7bdb84b",
+    "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+    "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+    "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+    "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+    "src\\visa_agent\\qq_mail.py": "31155f9ac9e9694c7955bea4ec6bd051b8002f06666cabff8639b9ff8bac2123",
+    "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+    "src\\visa_agent\\rules.py": "dfef1341cb03b7e39c3ba39d5338dc6e4eb40e2b12d638488d2187ac5d5875ba",
+    "src\\visa_agent\\service.py": "7ee7e839e286583e1e18e4f61b9302cdb56e43cbf97a8f778e5dff371ded11a8",
+    "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+    "src\\visa_agent\\submission.py": "397490637554ff2e32222b8459a32fe4d23fd3eb53cb9f3595effb85f3ad8494",
+    "src\\visa_agent\\types.py": "38e15ff369d4e0ee95c31638361a29765a205015dd5533281e60cabb07c4a19c",
+    "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+    "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+    "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+    "src\\visa_agent\\prompts\\SOUL.md": "a2f6d98e5acc9a0d7506f9f4f59f14a4be480dc4d41c9554b30e2770fede5ada"
+  },
+  "final_replay_source_hashes": {
+    "src\\visa_agent\\agent.py": "27ea45533e8c8d3cdd30fae00ccb9137dbdaa558dc99c0fd52145c24bea57154",
+    "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+    "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+    "src\\visa_agent\\conversation.py": "8ef84a082a0af28c77b7f6caf19f23e761f1628a0c4204c6582efcaac0a86b29",
+    "src\\visa_agent\\delivery.py": "77730b2a93d1d22fd3a31e96bbd92b924fef7b92f144a7fb0b60445396e534b8",
+    "src\\visa_agent\\diagnostics.py": "501b62fb523ca7605b87a9822a4756ab493c6bb9f24be0ff60c0e318de2c6e31",
+    "src\\visa_agent\\documents.py": "725de541ad0b31912e9b8f6793a52327559dcde2d211773754153ab01eb454e7",
+    "src\\visa_agent\\evidence.py": "6375405aaace84f7150c7f7ce8bb97203fb8a63413c900ed2f6b11377a3bdaaa",
+    "src\\visa_agent\\guidance.py": "00885d3ae3ce4e03d0c9a606193b305d3b6e629ec43715efb6fd0b8abc0e9d01",
+    "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+    "src\\visa_agent\\intake.py": "3392d7384332cdbf6ce533c08545759d8ba88887941497ceb686dea6f907b39b",
+    "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+    "src\\visa_agent\\mail_outbox.py": "03c1ddeffb293991e727f2f939eabe2e8d8cc3a02e8b55b949fa768bb7bdb84b",
+    "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+    "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+    "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+    "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+    "src\\visa_agent\\qq_mail.py": "31155f9ac9e9694c7955bea4ec6bd051b8002f06666cabff8639b9ff8bac2123",
+    "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+    "src\\visa_agent\\rules.py": "dfef1341cb03b7e39c3ba39d5338dc6e4eb40e2b12d638488d2187ac5d5875ba",
+    "src\\visa_agent\\service.py": "9c64f02b5e917cf6bf136cb5bb53ed91cef759ab85c8bc1342a3daa3e101a427",
+    "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+    "src\\visa_agent\\submission.py": "397490637554ff2e32222b8459a32fe4d23fd3eb53cb9f3595effb85f3ad8494",
+    "src\\visa_agent\\types.py": "38e15ff369d4e0ee95c31638361a29765a205015dd5533281e60cabb07c4a19c",
+    "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+    "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+    "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+    "src\\visa_agent\\prompts\\SOUL.md": "a2f6d98e5acc9a0d7506f9f4f59f14a4be480dc4d41c9554b30e2770fede5ada"
+  },
+  "final_replay_results": [
+    {
+      "route": "visitor",
+      "passed": true,
+      "states": [
+        "WAIT_USER",
+        "WAIT_USER",
+        "COMPLETE"
+      ],
+      "completed_form_not_requested_again": true,
+      "usage": {
+        "requests": 5,
+        "input_tokens": 23847,
+        "output_tokens": 1493
+      }
+    },
+    {
+      "route": "student",
+      "passed": true,
+      "states": [
+        "WAIT_USER",
+        "WAIT_USER",
+        "COMPLETE"
+      ],
+      "completed_form_not_requested_again": true,
+      "usage": {
+        "requests": 5,
+        "input_tokens": 25029,
+        "output_tokens": 1920
+      }
+    },
+    {
+      "route": "skilled_worker",
+      "passed": true,
+      "states": [
+        "WAIT_USER",
+        "WAIT_USER",
+        "COMPLETE"
+      ],
+      "completed_form_not_requested_again": true,
+      "usage": {
+        "requests": 5,
+        "input_tokens": 25704,
+        "output_tokens": 1742
+      }
+    }
+  ]
+}

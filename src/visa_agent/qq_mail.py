@@ -238,6 +238,8 @@ class QQInbox:
                 verify_pack(case)
                 pack = Path(case.pack_path)
                 if pack.stat().st_size <= 18_000_000:
+                    body = message.get_body(preferencelist=("plain",))
+                    body.set_content(result["reply"] + ("\n\n📦 整理好的材料包见附件 visa-materials.zip。" if case.language == "zh" else "\n\n📦 Your organised pack is attached as visa-materials.zip."))
                     message.add_attachment(pack.read_bytes(), maintype="application", subtype="zip", filename="visa-materials.zip")
                 else:
                     body = message.get_body(preferencelist=("plain",))

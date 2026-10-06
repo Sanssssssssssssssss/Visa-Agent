@@ -30,7 +30,7 @@ def base_case():
                        "dependants": "false", "previous_refusal": "false", "age": "30", "funding": "self"}.items():
         add_fact(c, key, value)
     c.documents.append(Document(id="passport", name="passport.pdf", path="unused", sha256="1"*64,
-                                kind="passport", language="en"))
+                                kind="passport", language="en", content_role="evidence"))
     return c
 
 
@@ -53,7 +53,7 @@ def test_low_confidence_metadata_and_substitution_do_not_pass():
     case.facts = [f for f in case.facts if f.key != "nationality"]
     assert check(case, "nationality").status == "unknown"
     case.documents.append(Document(id="bank", name="bank-letter.pdf", path="unused", sha256="2"*64,
-                                   kind="bank_letter", language="en"))
+                                   kind="bank_letter", language="en", content_role="evidence"))
     add_fact(case, "bank_holder", "A Person", "bank")
     assert check(case, "finance").status == "fail"
 
@@ -237,7 +237,7 @@ def test_complete_bank_letter_can_substitute_statement():
     from decimal import Decimal
     case = base_case()
     case.documents.append(Document(id="bank", name="letter.pdf", path="unused", sha256="2"*64,
-                                   kind="bank_letter", language="en"))
+                                   kind="bank_letter", language="en", content_role="evidence"))
     for key, value in {"bank_name": "Bank", "bank_holder": "A Person", "bank_currency": "GBP",
                        "bank_minimum": "2000", "bank_start": "2026-09-01", "bank_end": "2026-09-30"}.items():
         add_fact(case, key, value, "bank")

@@ -71,7 +71,7 @@ class Document(StrictModel):
     language: str = "unknown"
     problems: list[str] = Field(default_factory=list)
     rejected: bool = False
-    content_role: Literal["evidence", "sample", "unrelated", "uncertain"] = "uncertain"
+    content_role: Literal["evidence", "sample", "self_report", "unrelated", "uncertain"] = "uncertain"
 
 
 class Candidate(StrictModel):
@@ -96,7 +96,7 @@ class DocumentTag(StrictModel):
         "cas", "cos", "english", "tb", "atas", "translation", "sponsorship", "unknown",
     ]
     language: Literal["en", "cy", "zh", "other", "unknown"]
-    content_role: Literal["evidence", "sample", "unrelated", "uncertain"] = "uncertain"
+    content_role: Literal["evidence", "sample", "self_report", "unrelated", "uncertain"] = "uncertain"
     visual_observation: str = Field(default="", max_length=300)
     needs_visual_review: bool = False
 

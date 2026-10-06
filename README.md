@@ -6,6 +6,10 @@
 
 此前 HITL 真实模型实验共 25 次请求、5 案中 4 案通过。中文完整输入已自动生成演示材料包；八轮渐进案例漏提取目的，原失败保留。见[开关与工作流](docs/hitl-outlook.md)、[该轮记录](docs/validation/hitl-outlook.json)及[历史验收](docs/acceptance.md)。
 
+最新修复：[自填文字附件曾被误当成证明，已复现并收紧接受条件](docs/document-quality.md)。普通文字页、截图和公开样例的真实 API 反例均等待补件；原来的三路线合成演示只验证交付流程。
+
+完整交付记录：[三条路线各 3 轮真实邮件 → ZIP 下载核对](docs/full-delivery.md)。可查看 [Visitor](examples/packs/visitor-demo.zip)、[Student](examples/packs/student-demo.zip)、[Skilled Worker](examples/packs/skilled_worker-demo.zip) 演示包及[逐轮邮件](docs/full-delivery-transcripts.md)。最终邮件附 GOV.UK 申请和身份核验/预约步骤。这不能证明满足全部英国签证资格要求。
+
 ## 安装
 
 需要 Python 3.12 和 [uv](https://docs.astral.sh/uv/)。在仓库根目录执行：
@@ -20,19 +24,15 @@ uv run pytest -q
 
 ## 两分钟体验
 
-想直接测试公开扫描图片：按[图片与来源说明](docs/public-images.md)准备中国银行存款证明、Lloyds 三页流水，然后运行 `uv run python -m visa_agent.web --sample blank`。在空白案件里输入自己的测试背景并上传图片。这些公开脱敏样例用于检验真实版式、OCR 和补件，仍需区分公开样例与已核验的客户材料。
+按 [QQ 接入说明](docs/qq-mail.md) 配置 Agent 邮箱并运行收件进程。客户直接发邮件咨询，在原邮件中回复信息并附文件；系统自动建案、补件和回复，不需要前端。关闭 HITL 时仍必须通过材料及信息检查，才能发送材料 ZIP。
 
-直接拖文件体验：启动 `uv run python -m visa_agent.web`，打开 <http://127.0.0.1:8765>。默认调用真实模型，创建空白案件；输入申请情况后上传图片或 PDF。右侧明确标注的“合成演示”可载入 Visitor/Student/Skilled Worker 的虚构背景，再上传对应 `datasets/materials/` 文件。服务仅监听本机；需要离线演示时加 `--mode offline --data data/web-offline --sample visitor`。
-
-想亲手分批上传、查看补件并自行审批，请按 [手动测试指南](docs/manual-testing.md) 操作，内含现成材料索引和真实模型测试步骤。
-
-关闭人工审核：`uv run python -m visa_agent.web --hitl off --data data/web-auto`。所有自动检查满足后，直接生成材料包，明确标注“未经人工审核”。缺项和冲突仍阻止完成。开关只作用于新建或重置的案件。
+现成反例在 [datasets/document-quality](datasets/document-quality/README.md)，公开银行扫描件的获取方式见[来源说明](docs/public-images.md)。这些文件适合检查能否正确要求补件；不能用于正式申请。三路线合成图片仅用于[演示与 OCR 回放](datasets/formatted-materials-v2/README.md)。
 
 中文分步体验、`/exit`、一键清空、邮箱/WhatsApp 身份隔离及本轮真实结果见 [会话与引导验收](docs/session-guidance.md)。当前保留最近 20 轮，模型在每轮检查后选择最多三个优先问题。普通事件通常消耗两次模型请求。
 
-可以直接用中文或英文提问，例如“第一次办英国签证，怎么申请，需要什么材料？”每轮回复附材料进度。默认 `VISA_VISION=1`：图片传原图，PDF 传渲染页与 OCR；最多 6 张图/20 MB，超过范围需拆分或复核。普通案件中的样例会被拦住，只有右侧明确选择的合成演示案件允许使用测试材料，材料包也标注仅供测试。
+可以直接用中文或英文提问，例如“第一次办英国签证，怎么申请，需要什么材料？”每轮回复附材料进度。默认 `VISA_VISION=1`：图片传原图，PDF 传渲染页与 OCR；最多 6 张图/20 MB，超过范围需拆分或复核。只有本机操作者明确开启的合成演示案件允许使用测试材料；客户邮件不能开启演示模式。
 
-想看模型每次实际输出及客户收到的回复，见[原文查看说明](docs/public-replies.md)。本地已有日志时，执行 `uv run python scripts/show_case_replies.py output/public-replies-v1 output/public-images-v2`，再打开 `output/reply-review/index.html`。原图、客户回复、模型 JSON 和拒绝项分别展示。
+想看模型每次实际输出及客户收到的回复，使用下方 `trace` 命令，或查阅[实际邮件原文](docs/full-delivery-transcripts.md)。完整文件和运行日志保留在本地。
 
 ```powershell
 uv run visa-agent --mode offline replay datasets/cases/dev_visitor.json

@@ -44,7 +44,13 @@ Omit yearless dates such as '12月17日'; do not borrow a year from another date
 Document language is en/zh/other/unknown; classify by content, never by filename.
 Tag content_role=sample for visibly marked examples/specimens or blank templates;
 unrelated for receipts, arbitrary pictures or instructions unrelated to applicant evidence.
-Tag evidence only when the document has relevant applicant information; this is NOT authentication.
+Tag evidence only when it is the corresponding document, not merely asserted field values.
+This classification is NOT authentication.
+Use self_report for personal notes or retyped details offered instead of a passport, bank,
+school or employer document. Having all the field values does not make a page that document.
+Inspect the visible document as well as its text. If its type or origin is unclear, use uncertain.
+Ordinary text PDFs can be bank/employer letters; an applicant-authored travel plan is also valid
+as a travel plan. Do not require images, logos or stamps universally, and do not authenticate.
 Redaction alone does not prove a sample, but hidden values always remain unknown.
 Where provided, inspect BOTH visible images and OCR text. Report discrepancies in visual_observation.
 Facts still need exact OCR/text source quotes; omit image-only or OCR-disputed facts and explain
@@ -72,6 +78,8 @@ facts about this applicant. A document's sample date is not the intended applica
 employment_name is the EMPLOYEE'S personal name; employer is the COMPANY'S name. cas_name is
 the STUDENT'S name, not the university or signatory. cos_name is the WORKER'S name, not the sponsor.
 All boolean fields (including dependants) require the strings true/false, never counts like 0.
+english_confirmed needs an explicit confirmation in its quote; a CEFR grade alone only
+establishes english_level. Do not infer a confirmation flag from meeting a rule.
 For narrative fields such as return_reason, purpose and job_title, copy an EXACT CONTIGUOUS
 substring of the supporting quote as the value. Do not paraphrase, shorten by removing words,
 or summarize it: semantic similarity alone fails the deterministic source check.
@@ -258,7 +266,7 @@ def extract(case: Case, event: CaseEvent, new_docs: list[Document], trace: dict,
         "retained_turns": len(trace["working_context"]["recent_dialogue"]),
         "total_prior_turns": case.history_count or len(case.history), "character_limit": CONTEXT_CHARS,
         "fact_rows_before_grouping": len(case.facts), "fact_rows_in_context": len(trace["working_context"]["facts"])}
-    trace["prompt_version"] = "extract-v11-mail-intake"
+    trace["prompt_version"] = "extract-v12-document-role"
     trace["soul_sha256"] = SOUL_HASH
     trace["context_chars"] = len(prompt) + len(INSTRUCTIONS)
     ctx = ReadContext({d.id: d for d in case.documents}, trace, remaining)

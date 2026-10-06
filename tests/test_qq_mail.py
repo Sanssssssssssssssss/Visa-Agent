@@ -154,6 +154,18 @@ def test_stale_prepared_reply_not_sent_after_exit(tmp_path):
     assert len(conn.sent) == 1
 
 
+def test_prepared_reply_is_not_sent_after_material_rules_change(tmp_path, monkeypatch):
+    import visa_agent.mail_outbox as outbox
+
+    conn = Connection({1: mail()})
+    app = adapter(tmp_path, conn)
+    prepared = app.poll(AT.isoformat())["messages"][0]
+    assert prepared["send_status"] == "prepared"
+    monkeypatch.setattr(outbox, "RULE_VERSION", "different-material-rules")
+    result = app.poll(AT.isoformat(), send_replies=True)["messages"][0]
+    assert result["send_status"] == "superseded" and not conn.sent
+
+
 @pytest.mark.parametrize("header,value", [("Reply-To", "third@example.com"), ("Sender", "third@example.com"),
     ("Auto-Submitted", "auto-replied"), ("List-ID", "list.example.com")])
 def test_bad_envelopes_never_create_case(tmp_path, header, value):

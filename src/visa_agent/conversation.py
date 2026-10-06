@@ -134,6 +134,10 @@ QUESTIONS = {
 def action_for(check, case):
     zh = case.language == "zh"
     family = check.id.split(":")[0]
+    if family in {"self_report", "uncertain"}:
+        names = ", ".join(d.name for d in case.documents if not d.rejected and d.content_role == family)
+        return family, (f"{names} 目前只能作为信息整理，不能替代对应证明。请提供护照原页、银行出具的文件或学校/雇主原始材料的清晰副本。" if zh else
+                        f"{names} can currently be used only as notes, not the supporting document. Please send a clear copy of the passport page or the original bank, school or employer document.")
     if family == "form":
         from .intake_schema import ALL_QUESTIONS
         question = ALL_QUESTIONS.get(check.id.split(":", 1)[1])
@@ -327,18 +331,20 @@ def reply_for(case, *, text="", intent="continue", received_count=None, received
         paragraphs.append(explanation + ROUTE_GUIDES.get(case.route, VISA_CHECK))
 
     if case.status == Status.COMPLETE:
-        paragraphs.append(("当前清单需要的材料和信息已收齐，暂时不用补充。后续有变化，直接回复这封邮件即可。" if zh else
-                           "The documents and information on the current checklist are collected. Nothing further is needed now; reply to this email if anything changes."))
+        paragraphs.append(("当前清单的材料和信息已收齐，材料包也整理好了。里面有原始文件、填好的信息表和申请指引，解压后先打开 START-HERE.html。后续信息有变化，直接回复即可。" if zh else
+                           "Your current checklist is complete and the pack is ready. It contains your original documents, completed worksheet and application guide. Unzip it and open START-HERE.html first. Reply here if anything changes."))
         if case.hitl_enabled:
             paragraphs.append("顾问已确认当前版本材料包。" if zh else "An adviser has confirmed this version of the pack.")
         paragraphs.append("这里只确认收集完成，不代表签证获批，也未替您提交申请。" if zh else
                           "This confirms collection only. It is not a visa approval, and no visa application has been submitted for you.")
+        from .submission import submission_steps
+        paragraphs.append(submission_steps(case.route, case.language))
     elif case.status == Status.READY:
         paragraphs.append("当前清单材料已齐，等待您选择的顾问复核。" if zh else
                           "The current checklist is complete and awaits your selected adviser review.")
     else:
         blockers = [c for c in case.checks if c.status in {"fail", "unknown"}]
-        ranks = {"sample": 0, "unrelated": 0, "pagination": 1, "read": 2, "context": 2,
+        ranks = {"sample": 0, "unrelated": 0, "self_report": 0, "uncertain": 0, "pagination": 1, "read": 2, "context": 2,
                  "route": 3, "application_location": 4, "nationality": 5}
         actions, seen = [], set()
         ordered = ([c for key in guidance.actions for c in blockers if c.id == key] if guidance else

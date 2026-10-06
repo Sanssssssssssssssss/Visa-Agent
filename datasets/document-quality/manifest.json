@@ -1,0 +1,11 @@
+{
+  "purpose": "Adversarial invented notes, NOT genuine documents. Files intentionally omit a test watermark to test classification.",
+  "files": {
+    "bank.pdf": "f011c480c7e809b7af5f0a3c77c48c1d738abb96004c71ba78aaf966377d642a",
+    "completed-information.xlsx": "58cec4f05d7438714b9263da3cdee66097fee3b159ebd94c12f945fa70d9869c",
+    "employment.pdf": "bac992b6a9ae6702cd881d495f78f6535b02e27388e65b9931c4844828a4db25",
+    "passport-notes.jpg": "89c5da1469af7de8ffd60b43597e408b153c41c76eefb385c768368458d0c991",
+    "passport.pdf": "c875f40425cbc75c6b8e70d7dd7de305cb60f30cd0b710a48e3396cb2bd0a973",
+    "personal-notes.pdf": "1ae27457c28aa12bb96394e93fe222e8f8bc0693c4aacf6f6096244932c8e325"
+  }
+}

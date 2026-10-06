@@ -4,12 +4,53 @@ import hashlib
 import html
 import json
 from pathlib import Path
+import re
 import shutil
+from urllib.parse import quote
 import zipfile
 
 from .rules import FINAL_REVIEW
 from .store import digest, write_json
+from .submission import bilingual_guide
 from .types import Case
+
+
+def archive_path(doc) -> str:
+    """Keep readable names, isolate intake forms, and prevent collisions/traversal."""
+    name = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", doc.name).strip(" .")[:100] or "document"
+    folder = "information/source-forms" if doc.kind == "intake" else "documents"
+    return f"{folder}/{doc.id}-{name}"
+
+
+def start_page(case: Case) -> str:
+    esc = html.escape
+    documents = "".join(
+        f'<li><a href="{quote(archive_path(d))}">{esc(d.name)}</a> — {esc(d.kind)}</li>'
+        for d in case.documents if not d.rejected and d.kind != "intake")
+    worksheet = ('<p><a href="application-information.xlsx">填好的信息表 / Completed worksheet</a></p>'
+                 if case.application_forms else "")
+    warning = ('<p class="notice">演示材料 · 仅供测试，不能用于真实申请。<br>DEMO ONLY — not valid application evidence.</p>'
+               if case.test_mode else "")
+    return f'''<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<title>您的签证材料 / Your visa documents</title><style>
+body{{max-width:850px;margin:40px auto;padding:0 24px;font:17px/1.7 system-ui;color:#20313d}}
+h1,h2{{color:#155e63}}a{{color:#156677}}.notice{{background:#fff4dd;padding:16px}}
+li{{margin:8px 0;overflow-wrap:anywhere}}</style>
+<h1>您的材料已整理好 ✅<br>Your documents are organised</h1>{warning}
+<p>{esc(case.route.value if case.route else '')} · {esc(case.id)} · v{case.version}</p>
+<p>请先核对自己的信息。收齐本版清单不等于满足全部签证资格，也不表示已经提交或获批。<br>
+Please check your details. Completing this checklist does not establish full visa eligibility, submission or approval.</p>
+<h2>1. 信息 / Your information</h2>{worksheet}
+<p>信息表用于准备官网答案；历史回传表在 information/source-forms。<br>
+The worksheet helps you complete the official application. Earlier returned forms are in information/source-forms.</p>
+<h2>2. 原始材料 / Original documents</h2><ul>{documents}</ul>
+<p>文件内容保持原样。按官方清单选择上传，勿把整份 ZIP 当作证据提交。<br>
+Original bytes are preserved. Select files requested by the official checklist; do not upload this whole ZIP as evidence.</p>
+<h2>3. 提交与预约 / Apply and arrange identity checks</h2>
+<p><a href="submission-guide.txt">中英双语申请与预约步骤 / Bilingual application and appointment guide</a></p>
+<details><summary>检查记录 / Checking records</summary><p><a href="report.html">检查报告 / Report</a> ·
+<a href="manifest.json">文件与来源 / Manifest</a> · <a href="review.json">交付记录 / Delivery record</a></p>
+<p>这些是本服务的记录，不是官方证明。 / These are service records, not official evidence.</p></details></html>'''
 
 
 def manifest(case: Case) -> dict:
@@ -20,7 +61,8 @@ def manifest(case: Case) -> dict:
         "hitl_enabled": case.hitl_enabled,
         "application_forms": case.application_forms,
         "documents": [{"id": d.id, "name": d.name, "sha256": d.sha256, "kind": d.kind,
-                       "language": d.language, "content_role": d.content_role} for d in case.documents if not d.rejected],
+                       "language": d.language, "content_role": d.content_role,
+                       "archive_path": archive_path(d)} for d in case.documents if not d.rejected],
         "facts": [f.model_dump() for f in case.facts if f.active],
         "checks": [c.model_dump() for c in case.checks],
     }
@@ -29,16 +71,19 @@ def manifest(case: Case) -> dict:
 def build_pack(case: Case, root: Path) -> str:
     content = manifest(case)
     directory = root / "packs" / case.id / f"v{case.version}-{digest(content)[:12]}"
-    originals = directory / "originals"
-    originals.mkdir(parents=True, exist_ok=True)
+    directory.mkdir(parents=True, exist_ok=True)
     for doc in case.documents:
         if doc.rejected:
             continue
         source = Path(doc.path)
         if hashlib.sha256(source.read_bytes()).hexdigest() != doc.sha256:
             raise ValueError(f"Stored evidence was modified: {doc.id}")
-        shutil.copyfile(source, originals / (doc.id + source.suffix))
+        target = directory / archive_path(doc)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
     write_json(directory / "manifest.json", content)
+    (directory / "START-HERE.html").write_text(start_page(case), encoding="utf-8", newline="\n")
+    (directory / "submission-guide.txt").write_text(bilingual_guide(case.route), encoding="utf-8", newline="\n")
     if case.application_forms:
         from .intake import write_form
         write_form(case, directory / "application-information.xlsx")
@@ -52,7 +97,7 @@ def build_pack(case: Case, root: Path) -> str:
     facts = "".join(f"<tr><td>{esc(f.key)}</td><td>{esc(f.value)}</td>"
                     f"<td>{esc(f.source_id)} / {esc(f.page)}</td><td>{esc(f.quote)}</td></tr>"
                     for f in case.facts if f.active)
-    docs = "".join(f'<li><a href="originals/{d.id}{Path(d.path).suffix}">{esc(d.name)}</a>'
+    docs = "".join(f'<li><a href="{quote(archive_path(d))}">{esc(d.name)}</a>'
                    f" — {esc(d.sha256)}</li>" for d in case.documents if not d.rejected)
     review = "".join(f"<li>{esc(item)}</li>" for item in FINAL_REVIEW)
     outcome = (case.approval.model_dump_json(indent=2) if case.approval else
@@ -93,7 +138,10 @@ def verify_pack(case: Case) -> None:
     with zipfile.ZipFile(case.pack_path) as archive:
         if digest(json.loads(archive.read("manifest.json"))) != digest(manifest(case)):
             raise ValueError("Review pack manifest was modified")
-        expected = {"manifest.json", "review.json", "report.html"}
+        expected = {"manifest.json", "review.json", "report.html", "START-HERE.html", "submission-guide.txt"}
+        if (archive.read("START-HERE.html").decode("utf-8") != start_page(case)
+                or archive.read("submission-guide.txt").decode("utf-8") != bilingual_guide(case.route)):
+            raise ValueError("Pack handover guide was modified")
         if case.application_forms:
             expected.add("application-information.xlsx")
             from .intake import read_rows
@@ -108,7 +156,7 @@ def verify_pack(case: Case) -> None:
                 raise ValueError("Pack information worksheet was modified")
         for doc in case.documents:
             if not doc.rejected:
-                name = f"originals/{doc.id}{Path(doc.path).suffix}"
+                name = archive_path(doc)
                 expected.add(name)
                 if hashlib.sha256(archive.read(name)).hexdigest() != doc.sha256:
                     raise ValueError("Review pack evidence was modified")

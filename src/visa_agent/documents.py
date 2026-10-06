@@ -11,11 +11,30 @@ from PIL import Image
 from pypdf import PdfReader
 import pypdfium2 as pdfium
 
-from .types import Document, Page
+from .types import Document, FIELDS, Page
 
 MAX_BYTES = 10 * 1024 * 1024
 MAX_PAGES = 20
 Image.MAX_IMAGE_PIXELS = 25_000_000
+
+
+def is_evidence_field_list(text: str) -> bool:
+    """Internal field exports are notes, not a substitute for an issuer's document.
+
+    This narrow format check does not classify all text PDFs or authenticate files.
+    Ordinary bank letters and applicant-authored travel plans remain readable.
+    """
+    keys = set(re.findall(r"^\s*([a-z][a-z_]+)\s*[:：]", text, re.M)) & FIELDS
+    issuer_keys = {key for key in keys if key.startswith(("passport_", "bank_", "cas_", "cos_", "tb_", "english_"))
+                   or key in {"employment_name", "employer"}}
+    return len(issuer_keys) >= 2
+
+
+def content_role_for(doc: Document) -> str:
+    """Also apply the format gate to documents persisted by older versions."""
+    if doc.kind != "intake" and doc.content_role != "sample" and is_evidence_field_list("\n".join(p.text for p in doc.pages)):
+        return "self_report"
+    return doc.content_role
 
 
 def needs_visible_page_ocr(page) -> bool:
@@ -120,6 +139,8 @@ def read_document(path: Path, sha: str, original_name: str) -> Document:
         if re.search(r"SYNTHETIC|TEST SPECIMEN|TEST USE ONLY|NOT VALID FOR APPLICATION|合成测试|仅供测试",
                      "\n".join(p.text for p in doc.pages), re.I):
             doc.content_role = "sample"
+        elif is_evidence_field_list("\n".join(p.text for p in doc.pages)):
+            doc.content_role = "self_report"
         for page in doc.pages:
             if len(page.text.strip()) < 20:
                 doc.problems.append(f"page {page.number}: unreadable")

@@ -34,6 +34,8 @@ def validate_value(key: str, value: str, quote: str) -> str:
         "Canada": ["Canada", "Canadian"], "Australia": ["Australia", "Australian"],
     }
     enums = {
+        "employment_status": {value: [value] for value in
+                              ("employed", "self_employed", "student", "unemployed", "retired")},
         "nationality": countries,
         "residence_country": countries,
         "application_location": {
@@ -51,6 +53,10 @@ def validate_value(key: str, value: str, quote: str) -> str:
     if key in enums:
         for canonical, aliases in enums[key].items():
             if any(normalized(value) == normalized(alias) for alias in aliases):
+                if key == "employment_status" and not any(
+                    re.search(r"(?<!\w)" + re.escape(alias) + r"(?!\w)", quote, re.I) for alias in aliases
+                ):
+                    raise ValueError(f"Value not grounded in quote: {key}")
                 if not any(normalized(alias) in normalized(quote) for alias in aliases):
                     raise ValueError(f"Value not grounded in quote: {key}")
                 return canonical
@@ -133,9 +139,11 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
         if doc.kind == "intake":
             raise ValueError("The model cannot reclassify a self-report worksheet as evidence")
         if not doc.rejected:
+            from .documents import content_role_for
+            doc.content_role = content_role_for(doc)
             doc.kind, doc.language = tag.kind, tag.language
-            # A visible test watermark cannot be overruled by a model tag.
-            if doc.content_role != "sample" and tag.content_role != "uncertain":
+            # Reading already identified these formats; a model cannot promote them.
+            if doc.content_role not in {"sample", "self_report"}:
                 doc.content_role = tag.content_role
             if tag.needs_visual_review:
                 problem = "Visual/OCR discrepancy: " + (tag.visual_observation or "Compare original and extracted text")
@@ -217,8 +225,10 @@ class Evidence:
         self.docs = {d.id: d for d in case.documents}
 
     def admissible(self, doc) -> bool:
-        return not (doc.rejected or doc.problems or doc.content_role == "unrelated"
-                    or (doc.content_role == "sample" and not self.case.test_mode))
+        from .documents import content_role_for
+        role = content_role_for(doc)
+        return (not doc.rejected and not doc.problems
+                and (role == "evidence" or (role == "sample" and self.case.test_mode)))
 
     def facts(self, key: str, kinds: set[str] | None = None) -> list[Fact]:
         result = []

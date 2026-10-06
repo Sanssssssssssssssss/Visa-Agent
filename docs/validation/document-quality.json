@@ -1,0 +1,1277 @@
+{
+  "date": "2026-10-07",
+  "model": "deepseek-flash",
+  "runs": [
+    {
+      "id": "baseline",
+      "passed": 1,
+      "cases": 2,
+      "usage": {
+        "requests": 3,
+        "input_tokens": 16832,
+        "output_tokens": 1996
+      },
+      "results": [
+        {
+          "id": "typed-fields",
+          "passed": false,
+          "state": "COMPLETE",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "pass",
+            "passport_number": "pass",
+            "passport_valid": "pass"
+          },
+          "reply": "材料收集完成！✅ 感谢您配合整理。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、passport.pdf、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n✅ 已收齐：护照、资金证明、工作证明\n\n当前清单的材料和信息已收齐，材料包也整理好了。里面有原始文件、填好的信息表和申请指引，解压后先打开 START-HERE.html。后续信息有变化，直接回复即可。\n\n这里只确认收集完成，不代表签证获批，也未替您提交申请。\n\n📌 接下来，您可以这样提交申请：\n1. 解压材料包，先打开 START-HERE.html。核对信息表和原始材料；信息表用于准备答案，不是官方申请表。\n2. 打开本路线的 GOV.UK 页面，从页面中的申请入口开始，填写在线表格：\nhttps://www.gov.uk/standard-visitor/apply-standard-visitor-visa\n   核对行程、费用来源和离境安排。访问签证没有统一的最低银行余额；是否足够取决于您的具体情况。\n3. 确认答案后，按账户提示提交并支付申请费及适用的移民医疗附加费。保存申请编号、回执和官方材料清单。\n4. 按申请账户提示完成身份核验。访问签证需要预约签证申请中心采集指纹和照片。需要预约时，从申请账户进入预约网站，选择中心和可用时间（slot），保存确认函。中心查询：\nhttps://www.gov.uk/find-a-visa-application-centre\n5. 按官方清单和上传期限逐份上传解压后的文件，勿将整个 ZIP 或我们的内部检查报告当作申请证据上传。需要到场时，携带护照及预约确认函要求的材料，按时出席。之后在申请账户或通知邮件中查看进展。\n预约名额、费用和最终材料要求以官方账户为准；我们尚未替您提交申请或预约。\n\n材料进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 3/3 项已收齐\n按当前申请情况统计。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "passport.pdf",
+              "kind": "passport",
+              "role": "evidence",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "bank_letter",
+              "role": "evidence",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "employment",
+              "role": "evidence",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            }
+          ],
+          "usage": {
+            "requests": 1,
+            "input_tokens": 6448,
+            "output_tokens": 908
+          }
+        },
+        {
+          "id": "self-written-passport",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、personal-notes.pdf、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n✅ 已收齐：资金证明、工作证明\n\n待补齐或确认：护照\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. 我还不能确定 personal-notes.pdf 是什么证明。您希望用它证明哪项情况？\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n\n材料进度 🟩🟩🟩🟩🟩🟩⬜⬜⬜⬜ 2/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "personal-notes.pdf",
+              "kind": "unknown",
+              "role": "evidence",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "bank_letter",
+              "role": "evidence",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "employment",
+              "role": "evidence",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 10384,
+            "output_tokens": 1088
+          }
+        }
+      ],
+      "source_hashes": {
+        "src\\visa_agent\\agent.py": "27ea45533e8c8d3cdd30fae00ccb9137dbdaa558dc99c0fd52145c24bea57154",
+        "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+        "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+        "src\\visa_agent\\conversation.py": "8ef84a082a0af28c77b7f6caf19f23e761f1628a0c4204c6582efcaac0a86b29",
+        "src\\visa_agent\\delivery.py": "77730b2a93d1d22fd3a31e96bbd92b924fef7b92f144a7fb0b60445396e534b8",
+        "src\\visa_agent\\diagnostics.py": "501b62fb523ca7605b87a9822a4756ab493c6bb9f24be0ff60c0e318de2c6e31",
+        "src\\visa_agent\\documents.py": "725de541ad0b31912e9b8f6793a52327559dcde2d211773754153ab01eb454e7",
+        "src\\visa_agent\\evidence.py": "6375405aaace84f7150c7f7ce8bb97203fb8a63413c900ed2f6b11377a3bdaaa",
+        "src\\visa_agent\\guidance.py": "00885d3ae3ce4e03d0c9a606193b305d3b6e629ec43715efb6fd0b8abc0e9d01",
+        "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+        "src\\visa_agent\\intake.py": "3392d7384332cdbf6ce533c08545759d8ba88887941497ceb686dea6f907b39b",
+        "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+        "src\\visa_agent\\mail_outbox.py": "03c1ddeffb293991e727f2f939eabe2e8d8cc3a02e8b55b949fa768bb7bdb84b",
+        "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+        "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+        "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+        "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+        "src\\visa_agent\\qq_mail.py": "31155f9ac9e9694c7955bea4ec6bd051b8002f06666cabff8639b9ff8bac2123",
+        "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+        "src\\visa_agent\\rules.py": "dfef1341cb03b7e39c3ba39d5338dc6e4eb40e2b12d638488d2187ac5d5875ba",
+        "src\\visa_agent\\service.py": "9c64f02b5e917cf6bf136cb5bb53ed91cef759ab85c8bc1342a3daa3e101a427",
+        "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+        "src\\visa_agent\\submission.py": "397490637554ff2e32222b8459a32fe4d23fd3eb53cb9f3595effb85f3ad8494",
+        "src\\visa_agent\\types.py": "38e15ff369d4e0ee95c31638361a29765a205015dd5533281e60cabb07c4a19c",
+        "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+        "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+        "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+        "src\\visa_agent\\prompts\\SOUL.md": "a2f6d98e5acc9a0d7506f9f4f59f14a4be480dc4d41c9554b30e2770fede5ada"
+      },
+      "inputs": {
+        "purpose": "Adversarial invented notes, NOT genuine documents. Files intentionally omit a test watermark to test classification.",
+        "files": {
+          "bank.pdf": "f011c480c7e809b7af5f0a3c77c48c1d738abb96004c71ba78aaf966377d642a",
+          "completed-information.xlsx": "58cec4f05d7438714b9263da3cdee66097fee3b159ebd94c12f945fa70d9869c",
+          "employment.pdf": "bac992b6a9ae6702cd881d495f78f6535b02e27388e65b9931c4844828a4db25",
+          "passport-notes.jpg": "89c5da1469af7de8ffd60b43597e408b153c41c76eefb385c768368458d0c991",
+          "passport.pdf": "c875f40425cbc75c6b8e70d7dd7de305cb60f30cd0b710a48e3396cb2bd0a973",
+          "personal-notes.pdf": "1ae27457c28aa12bb96394e93fe222e8f8bc0693c4aacf6f6096244932c8e325"
+        }
+      },
+      "extra_input_hashes": {}
+    },
+    {
+      "id": "fixed-v1",
+      "passed": 3,
+      "cases": 4,
+      "usage": {
+        "requests": 9,
+        "input_tokens": 45916,
+        "output_tokens": 3908
+      },
+      "results": [
+        {
+          "id": "typed-fields",
+          "passed": false,
+          "state": "BLOCKED",
+          "error": "UnexpectedModelBehavior: Exceeded maximum output retries (1)",
+          "passport_checks": {},
+          "reply": "抱歉，这次没能完成检查，原始输入已经保存。运行问题解决后可重试，您暂时不用重复上传。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 清单待确认；先了解您的申请情况。",
+          "documents": [],
+          "usage": {
+            "requests": 3,
+            "input_tokens": 15692,
+            "output_tokens": 1303
+          }
+        },
+        {
+          "id": "self-written-passport",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、personal-notes.pdf、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. 我还不能确定 personal-notes.pdf 是什么证明。您希望用它证明哪项情况？\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "personal-notes.pdf",
+              "kind": "unknown",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "bank_letter",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "employment",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 10966,
+            "output_tokens": 1026
+          }
+        },
+        {
+          "id": "screenshot-of-notes",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、passport-notes.jpg、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. passport-notes.jpg, bank.pdf, employment.pdf 目前只能作为信息整理，不能替代对应证明。请把个人信息填进信息表，并提供护照原页、银行出具的文件或学校/雇主原始材料的清晰副本。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "passport-notes.jpg",
+              "kind": "passport",
+              "role": "self_report",
+              "methods": [
+                "ocr"
+              ],
+              "problems": []
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "bank_statement",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "employment",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 10895,
+            "output_tokens": 1231
+          }
+        },
+        {
+          "id": "public-bank-sample",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 2 个文件：completed-information.xlsx、01-BOC-deposit-redacted.png\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. 01-BOC-deposit-redacted.png 是样例或测试材料，不能用于您的正式申请。请提供属于您本人的实际材料；我可以继续说明怎么准备。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "01-BOC-deposit-redacted.png",
+              "kind": "bank_letter",
+              "role": "sample",
+              "methods": [
+                "ocr"
+              ],
+              "problems": [
+                "page 1: low OCR confidence"
+              ]
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 8363,
+            "output_tokens": 348
+          }
+        }
+      ],
+      "source_hashes": {
+        "src\\visa_agent\\agent.py": "b5f306078e69d67ef543fe7aac6ace0533433b9334fd56be95281011ac9fa27b",
+        "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+        "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+        "src\\visa_agent\\conversation.py": "99ff40ded4f77f0ba983dd73ef5aeb36e870d38b84e7cf2443800a081760da8f",
+        "src\\visa_agent\\delivery.py": "77730b2a93d1d22fd3a31e96bbd92b924fef7b92f144a7fb0b60445396e534b8",
+        "src\\visa_agent\\diagnostics.py": "3ff75e0456e818afebcec8ac289cb4b1a671ac841589f46e5ade46f86b8f1682",
+        "src\\visa_agent\\documents.py": "1c1cea4a29f164220c5a32d3669a6283ba867bcaaff27a128b9f7fb8c4e6735f",
+        "src\\visa_agent\\evidence.py": "fc41f4057ad8b82f21c697624cdbb105b244310c98e281e845e7c86e2b71eb52",
+        "src\\visa_agent\\guidance.py": "00885d3ae3ce4e03d0c9a606193b305d3b6e629ec43715efb6fd0b8abc0e9d01",
+        "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+        "src\\visa_agent\\intake.py": "3392d7384332cdbf6ce533c08545759d8ba88887941497ceb686dea6f907b39b",
+        "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+        "src\\visa_agent\\mail_outbox.py": "03c1ddeffb293991e727f2f939eabe2e8d8cc3a02e8b55b949fa768bb7bdb84b",
+        "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+        "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+        "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+        "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+        "src\\visa_agent\\qq_mail.py": "31155f9ac9e9694c7955bea4ec6bd051b8002f06666cabff8639b9ff8bac2123",
+        "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+        "src\\visa_agent\\rules.py": "c37be190f2cd1a1fa6500442466a5555aee7c0df828682bc5cb367c41cb7d9e2",
+        "src\\visa_agent\\service.py": "9c64f02b5e917cf6bf136cb5bb53ed91cef759ab85c8bc1342a3daa3e101a427",
+        "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+        "src\\visa_agent\\submission.py": "397490637554ff2e32222b8459a32fe4d23fd3eb53cb9f3595effb85f3ad8494",
+        "src\\visa_agent\\types.py": "f85c39a3e9c7cba2e9261bea45333c835491d39bbbea4c4c277ddeb62a92cfd5",
+        "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+        "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+        "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+        "src\\visa_agent\\prompts\\SOUL.md": "a2f6d98e5acc9a0d7506f9f4f59f14a4be480dc4d41c9554b30e2770fede5ada"
+      },
+      "inputs": {
+        "purpose": "Adversarial invented notes, NOT genuine documents. Files intentionally omit a test watermark to test classification.",
+        "files": {
+          "bank.pdf": "f011c480c7e809b7af5f0a3c77c48c1d738abb96004c71ba78aaf966377d642a",
+          "completed-information.xlsx": "58cec4f05d7438714b9263da3cdee66097fee3b159ebd94c12f945fa70d9869c",
+          "employment.pdf": "bac992b6a9ae6702cd881d495f78f6535b02e27388e65b9931c4844828a4db25",
+          "passport-notes.jpg": "89c5da1469af7de8ffd60b43597e408b153c41c76eefb385c768368458d0c991",
+          "passport.pdf": "c875f40425cbc75c6b8e70d7dd7de305cb60f30cd0b710a48e3396cb2bd0a973",
+          "personal-notes.pdf": "1ae27457c28aa12bb96394e93fe222e8f8bc0693c4aacf6f6096244932c8e325"
+        }
+      },
+      "extra_input_hashes": {}
+    },
+    {
+      "id": "fixed-v2",
+      "passed": 4,
+      "cases": 4,
+      "usage": {
+        "requests": 8,
+        "input_tokens": 41021,
+        "output_tokens": 3792
+      },
+      "results": [
+        {
+          "id": "typed-fields",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、passport.pdf、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. passport.pdf, bank.pdf, employment.pdf 目前只能作为信息整理，不能替代对应证明。请提供护照原页、银行出具的文件或学校/雇主原始材料的清晰副本。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "passport.pdf",
+              "kind": "passport",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": [
+                "Visual/OCR discrepancy: Page shows only a 'Personal information' heading with three labelled lines (passport_name, passport_number, passport_expiry); no passport booklet imagery, photo page layout, MRZ, issuing authority or signature. It reads like a typed data sheet rather than a passport page."
+              ]
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "bank_letter",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": [
+                "Visual/OCR discrepancy: Page shows only a 'Personal information' heading with labelled lines (bank_holder, bank_name, bank_currency, bank_minimum, bank_start, bank_end); no bank letterhead, statement table, transactions or balances. It reads like a typed data sheet rather than a bank document."
+              ]
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "employment",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": [
+                "Visual/OCR discrepancy: Page shows only a 'Personal information' heading with two labelled lines (employment_name, employer); no employer letterhead, job title, salary, dates or signature. It reads like a typed data sheet rather than an employer letter."
+              ]
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 10878,
+            "output_tokens": 1151
+          }
+        },
+        {
+          "id": "self-written-passport",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、personal-notes.pdf、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. personal-notes.pdf, bank.pdf, employment.pdf 目前只能作为信息整理，不能替代对应证明。请提供护照原页、银行出具的文件或学校/雇主原始材料的清晰副本。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "personal-notes.pdf",
+              "kind": "unknown",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "bank_letter",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "employment",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 10892,
+            "output_tokens": 1056
+          }
+        },
+        {
+          "id": "screenshot-of-notes",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、passport-notes.jpg、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. passport-notes.jpg, bank.pdf, employment.pdf 目前只能作为信息整理，不能替代对应证明。请提供护照原页、银行出具的文件或学校/雇主原始材料的清晰副本。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "passport-notes.jpg",
+              "kind": "passport",
+              "role": "self_report",
+              "methods": [
+                "ocr"
+              ],
+              "problems": []
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "bank_letter",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "employment",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 10888,
+            "output_tokens": 1238
+          }
+        },
+        {
+          "id": "public-bank-sample",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 2 个文件：completed-information.xlsx、01-BOC-deposit-redacted.png\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. 01-BOC-deposit-redacted.png 是样例或测试材料，不能用于您的正式申请。请提供属于您本人的实际材料；我可以继续说明怎么准备。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "01-BOC-deposit-redacted.png",
+              "kind": "bank_letter",
+              "role": "sample",
+              "methods": [
+                "ocr"
+              ],
+              "problems": [
+                "page 1: low OCR confidence"
+              ]
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 8363,
+            "output_tokens": 347
+          }
+        }
+      ],
+      "source_hashes": {
+        "src\\visa_agent\\agent.py": "3a42a2aa152adca3edacfb6f0db11f7ab0a7329fc3ad88e93d09c12b1fa8fd8a",
+        "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+        "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+        "src\\visa_agent\\conversation.py": "1df99d65ff39066f6c071528ae016e18a503ae61075615394c8175ad155591ac",
+        "src\\visa_agent\\delivery.py": "77730b2a93d1d22fd3a31e96bbd92b924fef7b92f144a7fb0b60445396e534b8",
+        "src\\visa_agent\\diagnostics.py": "3ff75e0456e818afebcec8ac289cb4b1a671ac841589f46e5ade46f86b8f1682",
+        "src\\visa_agent\\documents.py": "1c1cea4a29f164220c5a32d3669a6283ba867bcaaff27a128b9f7fb8c4e6735f",
+        "src\\visa_agent\\evidence.py": "fc41f4057ad8b82f21c697624cdbb105b244310c98e281e845e7c86e2b71eb52",
+        "src\\visa_agent\\guidance.py": "d2c2a4ed92d432d84e5e83f6c83148855e76827ee748bda47e10a3a780904890",
+        "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+        "src\\visa_agent\\intake.py": "3392d7384332cdbf6ce533c08545759d8ba88887941497ceb686dea6f907b39b",
+        "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+        "src\\visa_agent\\mail_outbox.py": "03c1ddeffb293991e727f2f939eabe2e8d8cc3a02e8b55b949fa768bb7bdb84b",
+        "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+        "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+        "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+        "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+        "src\\visa_agent\\qq_mail.py": "31155f9ac9e9694c7955bea4ec6bd051b8002f06666cabff8639b9ff8bac2123",
+        "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+        "src\\visa_agent\\rules.py": "3c51bd5f6b9a7da5aa9f1a77c30e986108f51ef7f8962eb27f40e3073614ead3",
+        "src\\visa_agent\\service.py": "9c64f02b5e917cf6bf136cb5bb53ed91cef759ab85c8bc1342a3daa3e101a427",
+        "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+        "src\\visa_agent\\submission.py": "397490637554ff2e32222b8459a32fe4d23fd3eb53cb9f3595effb85f3ad8494",
+        "src\\visa_agent\\types.py": "f85c39a3e9c7cba2e9261bea45333c835491d39bbbea4c4c277ddeb62a92cfd5",
+        "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+        "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+        "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+        "src\\visa_agent\\prompts\\SOUL.md": "a2f6d98e5acc9a0d7506f9f4f59f14a4be480dc4d41c9554b30e2770fede5ada"
+      },
+      "inputs": {
+        "purpose": "Adversarial invented notes, NOT genuine documents. Files intentionally omit a test watermark to test classification.",
+        "files": {
+          "bank.pdf": "f011c480c7e809b7af5f0a3c77c48c1d738abb96004c71ba78aaf966377d642a",
+          "completed-information.xlsx": "58cec4f05d7438714b9263da3cdee66097fee3b159ebd94c12f945fa70d9869c",
+          "employment.pdf": "bac992b6a9ae6702cd881d495f78f6535b02e27388e65b9931c4844828a4db25",
+          "passport-notes.jpg": "89c5da1469af7de8ffd60b43597e408b153c41c76eefb385c768368458d0c991",
+          "passport.pdf": "c875f40425cbc75c6b8e70d7dd7de305cb60f30cd0b710a48e3396cb2bd0a973",
+          "personal-notes.pdf": "1ae27457c28aa12bb96394e93fe222e8f8bc0693c4aacf6f6096244932c8e325"
+        }
+      },
+      "extra_input_hashes": {}
+    },
+    {
+      "id": "final",
+      "passed": 5,
+      "cases": 5,
+      "usage": {
+        "requests": 10,
+        "input_tokens": 52264,
+        "output_tokens": 5180
+      },
+      "results": [
+        {
+          "id": "typed-fields",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、passport.pdf、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. passport.pdf, bank.pdf, employment.pdf 目前只能作为信息整理，不能替代对应证明。请提供护照原页、银行出具的文件或学校/雇主原始材料的清晰副本。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "passport.pdf",
+              "kind": "passport",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": [
+                "Visual/OCR discrepancy: Page shows only a 'Personal information' heading with three labelled lines (passport_name, passport_number, passport_expiry); no passport booklet imagery, photo page layout, MRZ, issuing authority or signature. Looks like a typed data sheet rather than a passport scan."
+              ]
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "bank_letter",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": [
+                "Visual/OCR discrepancy: Page shows only a 'Personal information' heading with labelled fields (bank_holder, bank_name, bank_currency, bank_minimum, bank_start, bank_end); no bank letterhead, statement table, transactions or balances. Looks like a typed data sheet rather than a bank document."
+              ]
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "employment",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": [
+                "Visual/OCR discrepancy: Page shows only a 'Personal information' heading with two labelled lines (employment_name, employer); no employer letterhead, job title, salary, dates or signature. Looks like a typed data sheet rather than an employer letter."
+              ]
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 10924,
+            "output_tokens": 1226
+          }
+        },
+        {
+          "id": "self-written-passport",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、personal-notes.pdf、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. personal-notes.pdf, bank.pdf, employment.pdf 目前只能作为信息整理，不能替代对应证明。请提供护照原页、银行出具的文件或学校/雇主原始材料的清晰副本。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "personal-notes.pdf",
+              "kind": "passport",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "bank_statement",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "employment",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 10983,
+            "output_tokens": 1087
+          }
+        },
+        {
+          "id": "screenshot-of-notes",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、passport-notes.jpg、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. passport-notes.jpg, bank.pdf, employment.pdf 目前只能作为信息整理，不能替代对应证明。请提供护照原页、银行出具的文件或学校/雇主原始材料的清晰副本。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "passport-notes.jpg",
+              "kind": "unknown",
+              "role": "self_report",
+              "methods": [
+                "ocr"
+              ],
+              "problems": []
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "unknown",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "unknown",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 10934,
+            "output_tokens": 1230
+          }
+        },
+        {
+          "id": "ordinary-labels",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、plain-language.pdf、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. plain-language.pdf, bank.pdf, employment.pdf 目前只能作为信息整理，不能替代对应证明。请提供护照原页、银行出具的文件或学校/雇主原始材料的清晰副本。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "plain-language.pdf",
+              "kind": "passport",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "bank.pdf",
+              "kind": "bank_letter",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            },
+            {
+              "name": "employment.pdf",
+              "kind": "employment",
+              "role": "self_report",
+              "methods": [
+                "pdf_text"
+              ],
+              "problems": []
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 11014,
+            "output_tokens": 1286
+          }
+        },
+        {
+          "id": "public-bank-sample",
+          "passed": true,
+          "state": "WAIT_USER",
+          "error": null,
+          "passport_checks": {
+            "passport_name": "unknown",
+            "passport_number": "unknown",
+            "passport_valid": "unknown"
+          },
+          "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 2 个文件：completed-information.xlsx、01-BOC-deposit-redacted.png\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. 01-BOC-deposit-redacted.png 是样例或测试材料，不能用于您的正式申请。请提供属于您本人的实际材料；我可以继续说明怎么准备。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+          "documents": [
+            {
+              "name": "completed-information.xlsx",
+              "kind": "intake",
+              "role": "evidence",
+              "methods": [
+                "form"
+              ],
+              "problems": []
+            },
+            {
+              "name": "01-BOC-deposit-redacted.png",
+              "kind": "bank_letter",
+              "role": "sample",
+              "methods": [
+                "ocr"
+              ],
+              "problems": [
+                "page 1: low OCR confidence"
+              ]
+            }
+          ],
+          "usage": {
+            "requests": 2,
+            "input_tokens": 8409,
+            "output_tokens": 351
+          }
+        }
+      ],
+      "source_hashes": {
+        "src\\visa_agent\\agent.py": "a8c358742b0b1a0aa683e96fc34828eb0429d7a732f4bc129d58e09ec75da5db",
+        "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+        "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+        "src\\visa_agent\\conversation.py": "1df99d65ff39066f6c071528ae016e18a503ae61075615394c8175ad155591ac",
+        "src\\visa_agent\\delivery.py": "77730b2a93d1d22fd3a31e96bbd92b924fef7b92f144a7fb0b60445396e534b8",
+        "src\\visa_agent\\diagnostics.py": "3ff75e0456e818afebcec8ac289cb4b1a671ac841589f46e5ade46f86b8f1682",
+        "src\\visa_agent\\documents.py": "29e85e6a7e7230fac457bbfe04dfd1dfd561847574601fc1c2e71a7447760593",
+        "src\\visa_agent\\evidence.py": "3992de92350e90a20c649856c2460774c49d76f91b0ec24aefb3e58fb3946694",
+        "src\\visa_agent\\guidance.py": "d2c2a4ed92d432d84e5e83f6c83148855e76827ee748bda47e10a3a780904890",
+        "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+        "src\\visa_agent\\intake.py": "3392d7384332cdbf6ce533c08545759d8ba88887941497ceb686dea6f907b39b",
+        "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+        "src\\visa_agent\\mail_outbox.py": "8b8c2517c54ca89f0fbf1cc9e3ceb623b20c79c535091ea8a185b3379cde878f",
+        "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+        "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+        "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+        "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+        "src\\visa_agent\\qq_mail.py": "31155f9ac9e9694c7955bea4ec6bd051b8002f06666cabff8639b9ff8bac2123",
+        "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+        "src\\visa_agent\\rules.py": "34760ba62fc4f8a55783dad492b200b20383c8ff26787cd0a462ab63505554c8",
+        "src\\visa_agent\\service.py": "9c64f02b5e917cf6bf136cb5bb53ed91cef759ab85c8bc1342a3daa3e101a427",
+        "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+        "src\\visa_agent\\submission.py": "397490637554ff2e32222b8459a32fe4d23fd3eb53cb9f3595effb85f3ad8494",
+        "src\\visa_agent\\types.py": "f85c39a3e9c7cba2e9261bea45333c835491d39bbbea4c4c277ddeb62a92cfd5",
+        "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+        "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+        "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+        "src\\visa_agent\\prompts\\SOUL.md": "a2f6d98e5acc9a0d7506f9f4f59f14a4be480dc4d41c9554b30e2770fede5ada"
+      },
+      "inputs": {
+        "purpose": "Adversarial invented notes, NOT genuine documents. Files intentionally omit a test watermark to test classification.",
+        "files": {
+          "bank.pdf": "f011c480c7e809b7af5f0a3c77c48c1d738abb96004c71ba78aaf966377d642a",
+          "completed-information.xlsx": "58cec4f05d7438714b9263da3cdee66097fee3b159ebd94c12f945fa70d9869c",
+          "employment.pdf": "bac992b6a9ae6702cd881d495f78f6535b02e27388e65b9931c4844828a4db25",
+          "passport-notes.jpg": "89c5da1469af7de8ffd60b43597e408b153c41c76eefb385c768368458d0c991",
+          "passport.pdf": "c875f40425cbc75c6b8e70d7dd7de305cb60f30cd0b710a48e3396cb2bd0a973",
+          "personal-notes.pdf": "1ae27457c28aa12bb96394e93fe222e8f8bc0693c4aacf6f6096244932c8e325"
+        }
+      },
+      "extra_input_hashes": {
+        "plain-language.pdf": "9221c4e638d80db2ea83b2620f8873f48a66521c170b582d755c5f23b3fb7d7b"
+      }
+    },
+    {
+      "id": "formatted-v1",
+      "passed": 1,
+      "cases": 3,
+      "usage": {
+        "requests": 17,
+        "input_tokens": 84603,
+        "output_tokens": 5658
+      },
+      "results": [
+        {
+          "id": "visitor",
+          "passed": false,
+          "failures": [
+            2
+          ],
+          "usage": {
+            "requests": 6,
+            "input_tokens": 28969,
+            "output_tokens": 1760
+          },
+          "models": [
+            "deepseek-flash"
+          ],
+          "states": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "BLOCKED"
+          ],
+          "final_reply": "收到，谢谢您 😊\n\n演示案件：测试材料仅供体验，不用于真实申请。\n\n📥 本次已收到 2 个文件：funds-scan.pdf、work.jpg\n\n已了解：英国访问签证；姓名：Lin Example；国籍：中国\n\n📝 附件是中英双语信息表：填写 C 列，保存后直接作为附件回复。可先填会填的，其余我们逐步补齐。它是准备表，不能替代 GOV.UK 在线申请。\n\n✅ 已收齐：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. 现有材料中的信息不一致，暂时不能自动确认。请说明哪份是当前资料并提供清晰来源；本版不会自动裁定冲突。\n2. 请填写附件信息表的 C 列并回传，目前还缺 工作情况、雇主地址与电话 等信息；不清楚的可以先留空。\n\n还有信息无法确认，已收到的资料会保留，目前还不能确认收集完成。\n\n材料进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜ 3/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜ 34/36",
+          "final_blockers": [
+            {
+              "id": "conflict:employer_contact",
+              "status": "fail",
+              "message": "employer_contact 存在多个不一致的值，请核对来源。",
+              "source": "project:adult-outside-uk-material-preparation-v1",
+              "human": true,
+              "evidence": [
+                "0003b0e693d69fba0cb6",
+                "df8a6d79cc96e10487a5"
+              ]
+            },
+            {
+              "id": "info:employment_status",
+              "status": "unknown",
+              "message": "工作情况 / Employment status",
+              "source": "https://www.gov.uk/standard-visitor/apply-standard-visitor-visa",
+              "human": false,
+              "evidence": [
+                "bbd845b472f4474ac070",
+                "cfdc105e9a5d88ec091a"
+              ]
+            },
+            {
+              "id": "info:employer_contact",
+              "status": "unknown",
+              "message": "雇主地址与电话 / Employer contact",
+              "source": "https://www.gov.uk/standard-visitor/apply-standard-visitor-visa",
+              "human": false,
+              "evidence": [
+                "0003b0e693d69fba0cb6",
+                "df8a6d79cc96e10487a5"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "student",
+          "passed": true,
+          "failures": [],
+          "usage": {
+            "requests": 5,
+            "input_tokens": 25275,
+            "output_tokens": 2019
+          },
+          "models": [
+            "deepseek-flash"
+          ],
+          "states": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "COMPLETE"
+          ],
+          "final_reply": "材料收集完成！✅ 感谢您配合整理。\n\n演示案件：测试材料仅供体验，不用于真实申请。\n\n📥 本次已收到 3 个文件：funds-scan.pdf、health.jpg、school.jpg\n\n已了解：英国学生签证；姓名：Mei Example；国籍：中国\n\n✅ 已收齐：护照、资金证明、学校材料、结核检查\n\n当前清单的材料和信息已收齐，材料包也整理好了。里面有原始文件、填好的信息表和申请指引，解压后先打开 START-HERE.html。后续信息有变化，直接回复即可。\n\n这里只确认收集完成，不代表签证获批，也未替您提交申请。\n\n📌 接下来，您可以这样提交申请：\n1. 解压材料包，先打开 START-HERE.html。核对信息表和原始材料；信息表用于准备答案，不是官方申请表。\n2. 打开本路线的 GOV.UK 页面，从页面中的申请入口开始，填写在线表格：\nhttps://www.gov.uk/student-visa/apply-online\n   核对学校 CAS、学费、生活费及适用的 TB/ATAS；资金条件与是否必须提交资金证明是两回事。\n3. 确认答案后，按账户提示提交并支付申请费及适用的移民医疗附加费。保存申请编号、回执和官方材料清单。\n4. 按申请账户提示完成身份核验。如果指定使用 UK Immigration: ID Check App，按 App 指引操作；只有要求到签证申请中心时才需要预约。需要预约时，从申请账户进入预约网站，选择中心和可用时间（slot），保存确认函。中心查询：\nhttps://www.gov.uk/find-a-visa-application-centre\n5. 按官方清单和上传期限逐份上传解压后的文件，勿将整个 ZIP 或我们的内部检查报告当作申请证据上传。需要到场时，携带护照及预约确认函要求的材料，按时出席。之后在申请账户或通知邮件中查看进展。\n预约名额、费用和最终材料要求以官方账户为准；我们尚未替您提交申请或预约。\n\n材料进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 4/4 项已收齐\n按当前申请情况统计。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 31/31",
+          "final_blockers": []
+        },
+        {
+          "id": "skilled_worker",
+          "passed": false,
+          "failures": [
+            2
+          ],
+          "usage": {
+            "requests": 6,
+            "input_tokens": 30359,
+            "output_tokens": 1879
+          },
+          "models": [
+            "deepseek-flash"
+          ],
+          "states": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "BLOCKED"
+          ],
+          "final_reply": "Thanks, I've received your update 😊\n\nDemo case: these test documents are for practice only.\n\n📥 Received 3 file(s) this time：health.jpg、language.jpg、sponsor-scan.pdf\n\nNoted: UK Skilled Worker visa; Name：Kai Example; Nationality：China\n\n✅ Collected: Passport, Sponsorship, English evidence, TB evidence\n\n📌 Next, please help with:\n1. This condition cannot currently be confirmed automatically; the reason is recorded. You can supply clearer originals or more complete information.\n\nSome details cannot be confirmed yet. Your documents are saved, but collection is not complete.\n\nMaterials 🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜ 4/4 categories collected\nSome details still need clarification; the checklist may change.\nInformation 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 34/34",
+          "final_blockers": [
+            {
+              "id": "extraction_review",
+              "status": "unknown",
+              "message": "部分字段无法核对来源，请顾问检查提取结果。",
+              "source": "project:source-grounding",
+              "human": true,
+              "evidence": []
+            }
+          ]
+        }
+      ],
+      "source_hashes": {
+        "src\\visa_agent\\agent.py": "3a42a2aa152adca3edacfb6f0db11f7ab0a7329fc3ad88e93d09c12b1fa8fd8a",
+        "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+        "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+        "src\\visa_agent\\conversation.py": "1df99d65ff39066f6c071528ae016e18a503ae61075615394c8175ad155591ac",
+        "src\\visa_agent\\delivery.py": "77730b2a93d1d22fd3a31e96bbd92b924fef7b92f144a7fb0b60445396e534b8",
+        "src\\visa_agent\\diagnostics.py": "3ff75e0456e818afebcec8ac289cb4b1a671ac841589f46e5ade46f86b8f1682",
+        "src\\visa_agent\\documents.py": "1c1cea4a29f164220c5a32d3669a6283ba867bcaaff27a128b9f7fb8c4e6735f",
+        "src\\visa_agent\\evidence.py": "fc41f4057ad8b82f21c697624cdbb105b244310c98e281e845e7c86e2b71eb52",
+        "src\\visa_agent\\guidance.py": "d2c2a4ed92d432d84e5e83f6c83148855e76827ee748bda47e10a3a780904890",
+        "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+        "src\\visa_agent\\intake.py": "3392d7384332cdbf6ce533c08545759d8ba88887941497ceb686dea6f907b39b",
+        "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+        "src\\visa_agent\\mail_outbox.py": "03c1ddeffb293991e727f2f939eabe2e8d8cc3a02e8b55b949fa768bb7bdb84b",
+        "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+        "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+        "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+        "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+        "src\\visa_agent\\qq_mail.py": "31155f9ac9e9694c7955bea4ec6bd051b8002f06666cabff8639b9ff8bac2123",
+        "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+        "src\\visa_agent\\rules.py": "3c51bd5f6b9a7da5aa9f1a77c30e986108f51ef7f8962eb27f40e3073614ead3",
+        "src\\visa_agent\\service.py": "9c64f02b5e917cf6bf136cb5bb53ed91cef759ab85c8bc1342a3daa3e101a427",
+        "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+        "src\\visa_agent\\submission.py": "397490637554ff2e32222b8459a32fe4d23fd3eb53cb9f3595effb85f3ad8494",
+        "src\\visa_agent\\types.py": "f85c39a3e9c7cba2e9261bea45333c835491d39bbbea4c4c277ddeb62a92cfd5",
+        "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+        "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+        "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+        "src\\visa_agent\\prompts\\SOUL.md": "a2f6d98e5acc9a0d7506f9f4f59f14a4be480dc4d41c9554b30e2770fede5ada"
+      },
+      "inputs": {
+        "datasets\\formatted-materials\\skilled_worker\\health.jpg": "8767e633a0984dad1473ae72740787f68bc6b694e76cf33f1ff507357a22f9e2",
+        "datasets\\formatted-materials\\skilled_worker\\identity.jpg": "083b39e9f05aca5562c41637089c11495ed15d1f3ac753f516651ffdce866471",
+        "datasets\\formatted-materials\\skilled_worker\\language.jpg": "7c3e3d9074015b196369417be31da25584742618613ad896f926b6fec6ee1940",
+        "datasets\\formatted-materials\\skilled_worker\\sponsor-scan.pdf": "a94ac13e624fcfd5a596ed4a38fa7ea40fdb7c474055062db575f36adf116535",
+        "datasets\\formatted-materials\\student\\funds-scan.pdf": "cba1cc63df6ca09ca06068dede829fdd580d72ac79d1efa16e5e9b192fd62279",
+        "datasets\\formatted-materials\\student\\health.jpg": "f780e09ca45b903605bc2256c063d5de920b10fecbeb27a35bb96674eb74d427",
+        "datasets\\formatted-materials\\student\\identity.jpg": "159e421c634a7a01f5f000bee43afda15d34d98bccd92b0cec51b79e54749cec",
+        "datasets\\formatted-materials\\student\\school.jpg": "b4c155d31877349affc2bc59384ffaed35ed0d7b5dba9b0d538a6f98e782b8a3",
+        "datasets\\formatted-materials\\visitor\\funds-scan.pdf": "229098d28f72948560f572d7ba80cc04d9bd0c37e29f69059858dd67b8094c37",
+        "datasets\\formatted-materials\\visitor\\identity.jpg": "502bff7b798d2bd8e38befdfd8aa4b52178a4be91e52046ce02cc158272fed33",
+        "datasets\\formatted-materials\\visitor\\work.jpg": "63eb773513a6084bac26f8fd58abc98a7f028fa82b183ce14aff0ceec3c7a29b",
+        "datasets\\intake\\skilled_worker-example-TEST-ONLY.xlsx": "7a9a87fed8e33a9ca5f753633750a06d3de716dde6dffe1e4f08f0be4497f654",
+        "datasets\\intake\\student-example-TEST-ONLY.xlsx": "bff4efcedad74e1baad68483d0f937f2851f0f11d4be37e532275091b461440e",
+        "datasets\\intake\\visitor-example-TEST-ONLY.xlsx": "0f9e4eb78812701a61f5116d59730e7aa9a73b2d61a2f2c8e9b196d500b72a1c"
+      },
+      "extra_input_hashes": {}
+    },
+    {
+      "id": "formatted-v2",
+      "passed": 2,
+      "cases": 2,
+      "usage": {
+        "requests": 10,
+        "input_tokens": 50332,
+        "output_tokens": 3496
+      },
+      "results": [
+        {
+          "id": "visitor",
+          "passed": true,
+          "failures": [],
+          "usage": {
+            "requests": 5,
+            "input_tokens": 24290,
+            "output_tokens": 1659
+          },
+          "models": [
+            "deepseek-flash"
+          ],
+          "states": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "COMPLETE"
+          ],
+          "final_reply": "材料收集完成！✅ 感谢您配合整理。\n\n演示案件：测试材料仅供体验，不用于真实申请。\n\n📥 本次已收到 2 个文件：funds-scan.pdf、work.jpg\n\n已了解：英国访问签证；姓名：Lin Example；国籍：中国\n\n✅ 已收齐：护照、资金证明、工作证明\n\n当前清单的材料和信息已收齐，材料包也整理好了。里面有原始文件、填好的信息表和申请指引，解压后先打开 START-HERE.html。后续信息有变化，直接回复即可。\n\n这里只确认收集完成，不代表签证获批，也未替您提交申请。\n\n📌 接下来，您可以这样提交申请：\n1. 解压材料包，先打开 START-HERE.html。核对信息表和原始材料；信息表用于准备答案，不是官方申请表。\n2. 打开本路线的 GOV.UK 页面，从页面中的申请入口开始，填写在线表格：\nhttps://www.gov.uk/standard-visitor/apply-standard-visitor-visa\n   核对行程、费用来源和离境安排。访问签证没有统一的最低银行余额；是否足够取决于您的具体情况。\n3. 确认答案后，按账户提示提交并支付申请费及适用的移民医疗附加费。保存申请编号、回执和官方材料清单。\n4. 按申请账户提示完成身份核验。访问签证需要预约签证申请中心采集指纹和照片。需要预约时，从申请账户进入预约网站，选择中心和可用时间（slot），保存确认函。中心查询：\nhttps://www.gov.uk/find-a-visa-application-centre\n5. 按官方清单和上传期限逐份上传解压后的文件，勿将整个 ZIP 或我们的内部检查报告当作申请证据上传。需要到场时，携带护照及预约确认函要求的材料，按时出席。之后在申请账户或通知邮件中查看进展。\n预约名额、费用和最终材料要求以官方账户为准；我们尚未替您提交申请或预约。\n\n材料进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 3/3 项已收齐\n按当前申请情况统计。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36",
+          "final_blockers": []
+        },
+        {
+          "id": "skilled_worker",
+          "passed": true,
+          "failures": [],
+          "usage": {
+            "requests": 5,
+            "input_tokens": 26042,
+            "output_tokens": 1837
+          },
+          "models": [
+            "deepseek-flash"
+          ],
+          "states": [
+            "WAIT_USER",
+            "WAIT_USER",
+            "COMPLETE"
+          ],
+          "final_reply": "Document collection complete! ✅ Thanks for working through it with me.\n\nDemo case: these test documents are for practice only.\n\n📥 Received 3 file(s) this time：health.jpg、language.jpg、sponsor-scan.pdf\n\nNoted: UK Skilled Worker visa; Name：Kai Example; Nationality：China\n\n✅ Collected: Passport, Sponsorship, English evidence, TB evidence\n\nYour current checklist is complete and the pack is ready. It contains your original documents, completed worksheet and application guide. Unzip it and open START-HERE.html first. Reply here if anything changes.\n\nThis confirms collection only. It is not a visa approval, and no visa application has been submitted for you.\n\n📌 Your next steps:\n1. Unzip the pack and open START-HERE.html. Check the worksheet and originals. The worksheet prepares your answers; it is not the official application form.\n2. Start your online application from the GOV.UK page for your route:\nhttps://www.gov.uk/skilled-worker-visa/apply-from-outside-the-uk\n   Ask your employer to check the CoS, sponsor eligibility, occupation code and salary threshold for your working hours. This service collects salary details but does not verify full salary eligibility or the sponsor register.\n3. Check your answers, submit and pay the application fee and any applicable immigration health surcharge as directed. Save the reference, receipt and official document checklist.\n4. Follow your account's identity-check instructions. If directed to the UK Immigration: ID Check App, follow its instructions. Only book a centre appointment if your application directs you to one. If an appointment is needed, use the link in your application account, choose the centre and an available slot, and save the confirmation. Find centres here:\nhttps://www.gov.uk/find-a-visa-application-centre\n5. Upload individual unpacked documents as requested, before the stated deadline. Do not upload the whole ZIP or our internal checking report as evidence. For an in-person appointment, bring your passport and the items listed in your appointment confirmation. Then follow updates in your account or notification emails.\nAvailable slots, fees and final requirements come from your official account. We have not submitted an application or booked an appointment for you.\n\nMaterials 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 4/4 categories collected\nBased on your current circumstances.\nInformation 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 34/34",
+          "final_blockers": []
+        }
+      ],
+      "source_hashes": {
+        "src\\visa_agent\\agent.py": "a8c358742b0b1a0aa683e96fc34828eb0429d7a732f4bc129d58e09ec75da5db",
+        "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+        "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+        "src\\visa_agent\\conversation.py": "1df99d65ff39066f6c071528ae016e18a503ae61075615394c8175ad155591ac",
+        "src\\visa_agent\\delivery.py": "77730b2a93d1d22fd3a31e96bbd92b924fef7b92f144a7fb0b60445396e534b8",
+        "src\\visa_agent\\diagnostics.py": "3ff75e0456e818afebcec8ac289cb4b1a671ac841589f46e5ade46f86b8f1682",
+        "src\\visa_agent\\documents.py": "29e85e6a7e7230fac457bbfe04dfd1dfd561847574601fc1c2e71a7447760593",
+        "src\\visa_agent\\evidence.py": "3992de92350e90a20c649856c2460774c49d76f91b0ec24aefb3e58fb3946694",
+        "src\\visa_agent\\guidance.py": "d2c2a4ed92d432d84e5e83f6c83148855e76827ee748bda47e10a3a780904890",
+        "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+        "src\\visa_agent\\intake.py": "3392d7384332cdbf6ce533c08545759d8ba88887941497ceb686dea6f907b39b",
+        "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+        "src\\visa_agent\\mail_outbox.py": "8b8c2517c54ca89f0fbf1cc9e3ceb623b20c79c535091ea8a185b3379cde878f",
+        "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+        "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+        "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+        "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+        "src\\visa_agent\\qq_mail.py": "31155f9ac9e9694c7955bea4ec6bd051b8002f06666cabff8639b9ff8bac2123",
+        "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+        "src\\visa_agent\\rules.py": "34760ba62fc4f8a55783dad492b200b20383c8ff26787cd0a462ab63505554c8",
+        "src\\visa_agent\\service.py": "9c64f02b5e917cf6bf136cb5bb53ed91cef759ab85c8bc1342a3daa3e101a427",
+        "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+        "src\\visa_agent\\submission.py": "397490637554ff2e32222b8459a32fe4d23fd3eb53cb9f3595effb85f3ad8494",
+        "src\\visa_agent\\types.py": "f85c39a3e9c7cba2e9261bea45333c835491d39bbbea4c4c277ddeb62a92cfd5",
+        "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+        "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+        "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+        "src\\visa_agent\\prompts\\SOUL.md": "a2f6d98e5acc9a0d7506f9f4f59f14a4be480dc4d41c9554b30e2770fede5ada"
+      },
+      "inputs": {
+        "datasets\\formatted-materials-v2\\skilled_worker\\health.jpg": "8767e633a0984dad1473ae72740787f68bc6b694e76cf33f1ff507357a22f9e2",
+        "datasets\\formatted-materials-v2\\skilled_worker\\identity.jpg": "083b39e9f05aca5562c41637089c11495ed15d1f3ac753f516651ffdce866471",
+        "datasets\\formatted-materials-v2\\skilled_worker\\language.jpg": "7c3e3d9074015b196369417be31da25584742618613ad896f926b6fec6ee1940",
+        "datasets\\formatted-materials-v2\\skilled_worker\\sponsor-scan.pdf": "e6ebb71dc5127a1ab3470554f3a9b49d44a20669a7c95d757a82ed0b8f99a6dc",
+        "datasets\\formatted-materials-v2\\visitor\\funds-scan.pdf": "227bc7eaaea7f18a2c4c8cd90e3df7c32f88c5b08437a9c12f18a9751f5103c9",
+        "datasets\\formatted-materials-v2\\visitor\\identity.jpg": "502bff7b798d2bd8e38befdfd8aa4b52178a4be91e52046ce02cc158272fed33",
+        "datasets\\formatted-materials-v2\\visitor\\work.jpg": "759c202b3102790fc315dff0d5d3e040527a4780b3d1b0a2e9ad1bd3a4fc6968",
+        "datasets\\intake\\skilled_worker-example-TEST-ONLY.xlsx": "7a9a87fed8e33a9ca5f753633750a06d3de716dde6dffe1e4f08f0be4497f654",
+        "datasets\\intake\\visitor-example-TEST-ONLY.xlsx": "0f9e4eb78812701a61f5116d59730e7aa9a73b2d61a2f2c8e9b196d500b72a1c"
+      },
+      "extra_input_hashes": {}
+    }
+  ],
+  "ordinary_case_email": {
+    "case_id": "case-e4038647441c4fd6a94776d3640aa553",
+    "state": "WAIT_USER",
+    "sent": "sent",
+    "error": null,
+    "test_mode": false,
+    "hitl": false,
+    "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n📥 本次已收到 4 个文件：completed-information.xlsx、plain-language.pdf、bank.pdf、employment.pdf\n\n已了解：英国访问签证；姓名：Lin Chen；国籍：中国\n\n待补齐或确认：护照、资金证明、工作证明\n\n材料说明：https://www.gov.uk/standard-visitor\n\n📌 下一步，先补充这几项：\n1. plain-language.pdf, bank.pdf, employment.pdf 目前只能作为信息整理，不能替代对应证明。请提供护照原页、银行出具的文件或学校/雇主原始材料的清晰副本。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+    "attachments": [],
+    "roles": {
+      "completed-information.xlsx": "evidence",
+      "plain-language.pdf": "self_report",
+      "bank.pdf": "self_report",
+      "employment.pdf": "self_report"
+    },
+    "usage": {
+      "requests": 3,
+      "input_tokens": 19352,
+      "output_tokens": 2651
+    },
+    "outlook_body_verified": true,
+    "zip_absent_in_smtp_and_outlook": true,
+    "browser_note": "First send was prevented by Outlook attachment loading dialog; sent once after loading completed."
+  },
+  "usage": {
+    "requests": 60,
+    "input_tokens": 310320,
+    "output_tokens": 26681
+  },
+  "offline": {
+    "full_suite": 210,
+    "seconds": 112.79,
+    "additional_rule_change_mail_test": 1,
+    "final_document_and_mail_regression": 40,
+    "final_regression_seconds": 14.6,
+    "ruff": "passed"
+  },
+  "scope": "Source type acceptance and limited OCR/demo delivery; no authenticity or full immigration eligibility verification.",
+  "price_configured": false,
+  "visual_review": "Checked rendered identity, bank, employment, CAS, CoS, language and TB synthetic layouts; also inspected university-published redacted bank scan.",
+  "frozen_manifest_sha256": {
+    "datasets\\document-quality\\manifest.json": "bee8933cc642ba4c9b2132a4582905e9f1eaff24093d31eca75197cc3b6d42cb",
+    "datasets\\formatted-materials\\manifest.json": "201c41d4306e45f5997637fa415388cdbda3338b45622f369749f66ce647a22f",
+    "datasets\\formatted-materials-v2\\manifest.json": "59b88b19e00e2adb34af8d5340112aa5a6212f996bc35d22802a472f6220310c"
+  }
+}

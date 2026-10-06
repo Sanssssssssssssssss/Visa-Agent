@@ -1,6 +1,6 @@
 # 公开扫描图片
 
-本地图片位于 `external-materials/public-images/`，可以直接上传到本地测试页面。这些图片来自大学公开 PDF 的可见原页，保留脱敏遮盖、批注、金额和旧日期；不是本项目生成的申请人材料。公开来源不能证明原始客户或交易的真实性。
+本地图片位于 `external-materials/public-images/`，可以作为附件发给 Agent 邮箱。这些图片来自大学公开 PDF 的可见原页，保留脱敏遮盖、批注、金额和旧日期；不是本项目生成的申请人材料。公开来源不能证明原始客户或交易的真实性。
 
 | 文件 | 内容与原始来源 |
 |---|---|
@@ -10,7 +10,7 @@
 | `04-Lloyds-statement-page3.png` | 同一份流水的第 3 页，对应原 PDF 第 4 页 |
 | `05-BOC-Warwick-partially-redacted.png` | 姓名部分遮盖的另一份中国银行证明；[Warwick 原 PDF](https://warwick.ac.uk/study/international/visa/applying-for-a-visa/visas-for-studying/student-visa/certofdeposit.pdf)，第 1 页 |
 
-启动 `uv run python -m visa_agent.web --sample blank`，按终端地址打开页面。新建空白案件，先说清申请路线和目的；三张 Lloyds 图片一起上传。BOC 图片用另一个空白案件测试。被遮盖的姓名应保持未知或待确认，旧材料不能直接被当作本次申请的完整资金证明。这些样例适合检验读取和补件，不构成一套可以交付的完整申请材料。
+给已配置的 Agent 邮箱发新邮件，先说清申请路线和目的；三张 Lloyds 图片一起附上。BOC 图片用另一封新邮件测试。被遮盖的姓名应保持未知或待确认，旧材料不能直接被当作本次申请的完整资金证明。这些样例适合检验读取和补件，不构成一套可以交付的完整申请材料。
 
 单独上传的图片即使页码连续，也不能证明属于同一个账户或同一份文件。当前会要求顾问确认归属，或让客户将同一份文件按顺序合成 PDF。已有同源三页 PDF 可用本地 `external-materials/try-these/01-Lloyds-statement-redacted.pdf` 对照。不要靠文件名或相同页数自动拼接不同人的材料。
 

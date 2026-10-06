@@ -25,7 +25,8 @@ SOURCES = {
 }
 CHECKED_AT = "2026-10-07"
 RULE_VERSION = "2026-10-07-" + hashlib.sha256(b"".join(
-    Path(__file__).with_name(name).read_bytes() for name in ("rules.py", "intake.py", "intake_schema.py")
+    Path(__file__).with_name(name).read_bytes()
+    for name in ("rules.py", "intake.py", "intake_schema.py", "evidence.py", "documents.py")
 )).hexdigest()[:12]
 
 # Freeze the published rates rather than fetching policy during a customer conversation.
@@ -94,9 +95,16 @@ def evaluate(case: Case) -> list[Check]:
     for doc in case.documents:
         if doc.rejected or doc.kind == "intake":
             continue
+        from .documents import content_role_for
+        doc.content_role = content_role_for(doc)
         if doc.content_role == "unrelated" or (doc.content_role == "sample" and not case.test_mode):
             add(f"{doc.content_role}:{doc.id}", "fail", "此文件不能作为本人的申请证据，请补充实际材料。")
             continue
+        if doc.content_role in {"self_report", "uncertain"}:
+            add(f"{doc.content_role}:{doc.id}", "unknown",
+                "附件是自填信息或证明类型尚未确认，不能替代护照、银行或签发机构的材料。请提供相应原件的清晰副本。")
+            if doc.content_role == "self_report":
+                continue
         if doc.problems:
             add(f"read:{doc.id}", "fail", f"{doc.name} 无法可靠读取，请上传清晰完整文件。")
         if any(p.startswith("Declared pagination incomplete") for p in doc.problems):
