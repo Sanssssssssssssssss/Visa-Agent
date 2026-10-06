@@ -262,6 +262,16 @@ def test_oversized_mail_is_not_downloaded(tmp_path):
     assert not conn.downloads
 
 
+def test_stop_between_messages_keeps_unprocessed_cursor_for_restart(tmp_path):
+    conn = Connection({1: mail("1"), 2: mail("2")})
+    app = adapter(tmp_path, conn)
+    result = app.poll(AT.isoformat(), send_replies=True, stop_requested=lambda: bool(conn.sent))
+    assert len(result["messages"]) == 1 and conn.downloads == [1]
+    restarted = adapter(tmp_path, conn).poll(AT.isoformat(), send_replies=True)
+    assert len(restarted["messages"]) == 1 and conn.downloads == [1, 2]
+    assert len(conn.sent) == 2
+
+
 def test_thirty_messages_restart_and_bound_history(tmp_path):
     conn = Connection({1: mail()})
     for i in range(2, 31):

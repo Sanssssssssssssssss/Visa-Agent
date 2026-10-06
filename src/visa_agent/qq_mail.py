@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import re
 import smtplib
+import signal
 import ssl
 import time
 
@@ -133,21 +134,25 @@ class QQInbox:
             db.execute("CREATE TABLE IF NOT EXISTS qq_threads(account TEXT, message_id TEXT, thread TEXT, sender TEXT, "
                        "input_hash TEXT, PRIMARY KEY(account,message_id))")
 
-    def poll(self, since, *, max_messages=5, send_replies=False):
+    def poll(self, since, *, max_messages=5, send_replies=False, stop_requested=None):
         when = datetime.fromisoformat(since.replace("Z", "+00:00"))
         if when.tzinfo is None or not 1 <= max_messages <= 10:
             raise ValueError("since needs a timezone; max_messages must be 1-10")
         rows = []
+        stopping = stop_requested or (lambda: False)
         if send_replies:
             pending = pending_replies(self.service.store, "qq_receipts", self.account, max_messages)
-            rows.extend(self._send(r["id"], json.loads(r["result"]), True) for r in pending)
+            for row in pending:
+                if stopping():
+                    break
+                rows.append(self._send(row["id"], json.loads(row["result"]), True))
         with self.service.store.connect() as db:
             cursor = db.execute("SELECT uid FROM qq_cursor WHERE account=? AND validity=?",
                                 (self.account, self.connection.uidvalidity)).fetchone()
         uids = self.connection.uids(when, cursor[0] if cursor else 0)
         scanned = 0
         for uid in uids:
-            if len(rows) >= max_messages:
+            if stopping() or len(rows) >= max_messages:
                 break
             # Network failures preserve the cursor so the same message can be fetched again.
             raw_header, size, at = self.connection.header(uid)
@@ -281,7 +286,8 @@ def receive_once(args, config, secret, budget):
         allowed = None if config.get("accept_all") else config["allowed_senders"]
         result = QQInbox(service, connection, config["mailbox"], allowed,
                          require_tag=config.get("require_tag", True), allow_samples=config.get("allow_samples", False)).poll(
-            args.since or config["since"], max_messages=args.max_messages, send_replies=args.send_replies)
+            args.since or config["since"], max_messages=args.max_messages, send_replies=args.send_replies,
+            stop_requested=(lambda: (args.data / "qq-stop").exists()) if args.action == "watch" else None)
         result["model_requests"] = budget.count()
         result["allow_samples_for_new_cases"] = config.get("allow_samples", False)
         return result
@@ -304,6 +310,7 @@ def main():
         parser.error("interval must be >=10 seconds and request-cap must be positive")
     stage = "local_configuration"
     worker_scope = ExitStack()
+    previous_signals = {}
     try:
         stop_file = args.data / "qq-stop"
         if args.action == "status":
@@ -334,6 +341,12 @@ def main():
         failures = 0
         if args.action == "watch":
             stop_file.unlink(missing_ok=True)
+            # Docker/systemd terminate after the current message commits/sends.
+            # A stop between messages preserves the cursor for the next process.
+            def request_stop(signum, frame):
+                stop_file.touch()
+            for signum in (signal.SIGTERM, signal.SIGINT):
+                previous_signals[signum] = signal.signal(signum, request_stop)
         while True:
             if args.action == "watch" and stop_file.exists():
                 print("Mail worker stopped", flush=True)
@@ -369,6 +382,8 @@ def main():
                            "error": "QQ operation failed; check local configuration, authorization and network. Unconfirmed sends stay in the persistent outbox."}))
         raise SystemExit(1)
     finally:
+        for signum, handler in previous_signals.items():
+            signal.signal(signum, handler)
         worker_scope.close()
 
 

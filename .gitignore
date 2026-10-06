@@ -6,6 +6,8 @@ __pycache__/
 .env
 .env.*
 !.env.example
+secrets/
+backups/
 data/
 output/
 external-materials/

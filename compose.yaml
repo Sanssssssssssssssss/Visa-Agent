@@ -1,0 +1,34 @@
+services:
+  agent:
+    image: visa-agent:local
+    build:
+      context: .
+      target: runtime
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 10m
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      VISA_DATA_DIR: /data
+      VISA_QQ_DATA_DIR: /data
+      VISA_HITL: ${VISA_HITL:-off}
+    volumes:
+      - case-data:/data
+      - backup-data:/backups
+    read_only: true
+    tmpfs:
+      - /tmp:size=512m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+volumes:
+  case-data:
+  backup-data:
