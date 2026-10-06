@@ -16,6 +16,7 @@ dependencies = [
   "onnxruntime>=1.22",
   "Pillow>=11",
   "reportlab>=4",
+  "email-validator>=2,<3",
 ]
 
 [dependency-groups]

@@ -16,7 +16,7 @@
 | 已在英国的申请人 | 说明自动流程范围，询问现有签证及到期日，交顾问核对 |
 | 中断重投 | 31 次重启后的重复事件检查通过，额外请求为 0 |
 
-PDF 固定走 **可见页面渲染 → 图片 + OCR 文本**；图片文件发送原始字节。原 PDF 保留，日志保存文件哈希、页码、发送方式和用量。每轮最多 6 张图、20 MB 图片数据；未发送的页面会明确阻塞核对。12,000 字符上限控制文字上下文，图片 token 另外计入实际用量。原生 PDF 的第一种嵌套格式返回参数错误，第二种供应商格式返回不支持 PDF；没有改写成兼容成功。[DeepSeek 视觉文档](https://api-docs.deepseek.com/guides/vision/) · [模型名称](https://api-docs.deepseek.com/quick_start/pricing/)
+PDF 固定走 **可见页面渲染 → 图片 + OCR 文本**；图片文件发送原始字节。原 PDF 保留，日志保存文件哈希、页码、发送方式和用量。每轮最多 6 张图、20 MB 图片数据；未发送的页面会明确阻塞核对。本节历史版本的 12,000 字符上限控制文字上下文（当前版本已改为 32,000 字符、20 轮，见 [会话验收](session-guidance.md)），图片 token 另外计入实际用量。原生 PDF 的第一种嵌套格式返回参数错误，第二种供应商格式返回不支持 PDF；没有改写成兼容成功。[DeepSeek 视觉文档](https://api-docs.deepseek.com/guides/vision/) · [模型名称](https://api-docs.deepseek.com/quick_start/pricing/)
 
 回复采用小型、可检查的实现：模型在同一次请求中提取事实、分类材料和识别咨询意图；应用根据检查结果组织中英文回复。步骤和链接固定来自官方指南，进度由代码计算，模型不能编造百分比或批准结果。借鉴 Intercom 的沟通风格、澄清、来源与转人工指导，没有引入客服平台依赖。[Intercom 指导](https://www.intercom.com/help/en/articles/10210126-provide-fin-ai-agent-with-specific-guidance) · [GOV.UK 申请步骤](https://www.gov.uk/apply-to-come-to-the-uk)
 

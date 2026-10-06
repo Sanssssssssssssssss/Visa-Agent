@@ -329,6 +329,7 @@
       <div id="progress" role="status" aria-live="polite"></div>
       <div id="error" role="alert" hidden></div>
       <button id="retry" class="secondary" hidden>重试上次输入</button>
+      <p id="session-notice" role="status" style="white-space:pre-wrap"></p>
       <div id="messages" aria-live="polite">
         <p class="empty">尚未提交材料。右侧已载入测试背景，可以直接拖文件。</p>
       </div>
@@ -355,6 +356,7 @@
         <label for="sample" class="muted">测试场景</label
         ><select id="sample">
           <option value="blank">空白案件 · 自己填写情况</option>
+          <option value="visitor_zh">中文分步演示 · 逐轮了解情况</option>
           <option value="visitor">合成演示 · Visitor · Lin Example</option>
           <option value="student">合成演示 · Student · Mei Example</option>
           <option value="skilled_worker">合成演示 · Skilled Worker · Kai Example</option>
@@ -362,6 +364,27 @@
         <button id="new" class="secondary" style="margin-top: 12px">
           开始新案件
         </button>
+        <button id="reset" class="secondary" style="margin-top:8px">一键清空上下文并新建</button>
+        <button id="exit" class="secondary" style="margin-top:8px">结束会话 /exit</button>
+        <p id="session-state" class="muted"></p>
+        <details><summary>状态与会话命令</summary>
+          <p>WAIT_USER：等您补信息或材料。<br>NEEDS_HUMAN：有冲突或条件需要顾问核对。<br>READY_FOR_REVIEW：检查齐备，等人工复核。<br>COMPLETE：当前版本经人工确认。</p>
+          <p>/exit 结束会话；/start 或 /reset 开始空白案件；/status 查看进度。新案件不会读取旧案件上下文，旧记录保留供追溯。</p>
+          <p>默认保留最近 20 轮完整对话；超过文字预算时按整轮裁剪。事实、材料、冲突和原始记录保存在案件中。</p>
+          <a href="/api/history" target="_blank" rel="noopener">查看最近 100 轮原始记录</a>
+        </details>
+        <details><summary>中文演示：从不知道怎么申请开始</summary>
+          <p>选择“中文分步演示”，第一句发“我第一次申请，想去英国旅游，不知道怎么准备”。然后按每轮问题回答。</p>
+          <p>测试人物：Lin Example，中国国籍，30 岁，从中国境外申请，无家属、无拒签。2026-10-20 申请，11 月 1–15 日旅游，自费 3000 英镑，之后回公司工作。</p>
+          <p>依次上传 Lin Example 的 passport.pdf、bank.pdf、employment.pdf。它们有测试标记，只能用于演示案件；公开样例请在普通空白案件中测试拦截和补件。</p>
+        </details>
+        <details><summary>模拟不同邮箱 / WhatsApp 收件</summary>
+          <p class="muted">本地收件模拟；未连接真实邮箱或 WhatsApp。相同身份和会话 ID 可以恢复，换发件人不能读取原会话。</p>
+          <label for="channel">渠道</label><select id="channel"><option value="web">网页</option><option value="email">Email</option><option value="whatsapp">WhatsApp</option></select>
+          <label for="sender">发件地址或完整国际号码</label><input id="sender" placeholder="lin@example.com 或 +8613812345678" style="width:100%;box-sizing:border-box">
+          <label for="thread">外部会话 ID</label><input id="thread" placeholder="例如 visitor-lin-01" style="width:100%;box-sizing:border-box">
+          <button id="connect" class="secondary" style="margin-top:8px">恢复 / 开始此会话</button>
+        </details>
         <p id="hint" class="muted" style="margin: 16px 0 0"></p>
         <details>
           <summary>已载入的测试背景</summary>
@@ -423,6 +446,7 @@
       COMPLETE: "当前版本已确认",
     };
     const hints = {
+      visitor_zh: "使用 Lin Example 的演示文件。先用中文说明情况，按顾问问题逐步回答，再上传护照、资金及工作材料。",
       visitor:
         "请从 dev_visitor 文件夹拖入 identity.pdf、funds.pdf、work.pdf。",
       student:
@@ -444,7 +468,7 @@
     function setBusy(value) {
       busy = value;
       $("drop").classList.toggle("busy", value);
-      for (const id of ["files", "text", "send", "new", "sample", "retry"])
+      for (const id of ["files", "text", "send", "new", "sample", "retry", "reset", "exit", "connect"])
         $(id).disabled = value;
       $("approve").disabled = value || !$("confirmed").checked;
       $("progress").textContent = value ? "正在读取材料并检查，请稍候…" : "";
@@ -463,6 +487,11 @@
       $("hint").textContent = hints[data.sample];
       $("background").textContent = data.initial_text || "没有预填信息。";
       $("case-id").textContent = c.id + " · 版本 " + c.version;
+      $("session-state").textContent = data.session.state === "closed" ? "会话已结束 · 发 /start 开始新案件" : "会话进行中";
+      $("session-notice").textContent = data.notice || "";
+      $("channel").value = data.session.channel;
+      $("sender").value = data.session.channel === "web" ? "" : data.session.sender;
+      $("thread").value = data.session.thread;
       $("count").textContent = c.documents.length;
       const progress = data.progress || {checked:0, total:0};
       $("material-meter").max = Math.max(progress.total, 1);
@@ -473,6 +502,8 @@
       $("documents").replaceChildren();
       for (const d of c.documents) {
         const row = element("div", d.name, "file");
+        const material = data.material_states[d.id];
+        row.append(element("small", `已保存 · ${material.readable ? "可读取" : "读取待解决"} · ${material.usable_for_checks ? "可参与检查，仍需复核" : "暂不能作为有效证据"} · ${material.field_count} 个候选字段`));
         row.append(
           element(
             "small",
@@ -620,6 +651,19 @@
       }
     };
     $("sample").onchange = () => $("new").click();
+    for (const command of ["reset", "exit"]) $(command).onclick = async () => {
+      if (busy) return;
+      setBusy(true);
+      try { await deliver({event_id:crypto.randomUUID(), text:"/"+command, files:[]}); }
+      catch(e) {showError(e.message);} finally {setBusy(false);}
+    };
+    $("connect").onclick = async () => {
+      setBusy(true);
+      try {
+        await post("/api/connect", {routing:{channel:$("channel").value, sender:$("sender").value, thread:$("thread").value}});
+        lastInput = null;
+      } catch(e) {showError(e.message);} finally {setBusy(false);}
+    };
     $("retry").onclick = async () => {
       if (!lastInput) return;
       setBusy(true);

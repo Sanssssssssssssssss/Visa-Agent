@@ -1,0 +1,160 @@
+{
+  "scenario_count": 6,
+  "planned_baseline_runs": 6,
+  "completed_runs": 8,
+  "passed": 5,
+  "ledger_requests": 59,
+  "request_cap": 60,
+  "input_tokens": 234455,
+  "output_tokens": 12323,
+  "median_seconds": 10.6875,
+  "offline_tests": 103,
+  "offline_seconds": 61.39,
+  "model": "deepseek-flash",
+  "cost_usd": null,
+  "client_authenticity_verified": false,
+  "notes": [
+    "Three eight-turn Chinese run records failed and remain failed.",
+    "One Chinese case subsequently reached READY_FOR_REVIEW in a ninth real-model turn, then COMPLETE via independent test-operator approval.",
+    "Final alias correction passed recorded-output offline replay; no fresh eight-turn live rerun after that correction.",
+    "Four negative scenarios met frozen assertions.",
+    "Three interleaved offline runs: 360 unique plus 360 duplicate deliveries, with service reconstruction; logical dates do not measure continuous uptime."
+  ],
+  "rows": [
+    {
+      "id": "chinese-email-baseline",
+      "scenario": "chinese-email",
+      "case_id": "case-7593aff4968c4b8d8a0817cbe486daf2",
+      "status": "WAIT_USER",
+      "passed": false,
+      "failures": [
+        "unexpected_status:WAIT_USER"
+      ],
+      "usage": {
+        "requests": 16,
+        "input_tokens": 65666,
+        "output_tokens": 3385
+      },
+      "previous_run": null,
+      "operator_review": null
+    },
+    {
+      "id": "chinese-email-fixed-recovery",
+      "scenario": "chinese-email",
+      "case_id": "case-fc287b6031904317bf269b55b6ef4ad1",
+      "status": "COMPLETE",
+      "passed": true,
+      "failures": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 11324,
+        "output_tokens": 152
+      },
+      "previous_run": "chinese-email-fixed",
+      "operator_review": {
+        "version": 9,
+        "manifest_hash": "fe88081b748a66b51b980e5bf521a3d9f1a048287b2d83afef1a24e8985f7e72",
+        "reviewer": "acceptance-test-operator",
+        "notes": "Test operator validates demo archive only; not real adviser/client review",
+        "at": "2026-10-06T13:48:32.511442+00:00"
+      }
+    },
+    {
+      "id": "chinese-email-fixed",
+      "scenario": "chinese-email",
+      "case_id": "case-fc287b6031904317bf269b55b6ef4ad1",
+      "status": "WAIT_USER",
+      "passed": false,
+      "failures": [
+        "unexpected_status:WAIT_USER"
+      ],
+      "usage": {
+        "requests": 16,
+        "input_tokens": 65785,
+        "output_tokens": 3403
+      },
+      "previous_run": null,
+      "operator_review": null
+    },
+    {
+      "id": "chinese-whatsapp-fixed",
+      "scenario": "chinese-whatsapp",
+      "case_id": "case-3bfb8976c07f44a4a726c77ae57fdb6c",
+      "status": "WAIT_USER",
+      "passed": false,
+      "failures": [
+        "unexpected_status:WAIT_USER"
+      ],
+      "usage": {
+        "requests": 16,
+        "input_tokens": 65802,
+        "output_tokens": 3382
+      },
+      "previous_run": null,
+      "operator_review": null
+    },
+    {
+      "id": "garbage-fixed",
+      "scenario": "garbage",
+      "case_id": "case-4e0aed71545543929f5e3c4b6043b81d",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5203,
+        "output_tokens": 406
+      },
+      "previous_run": null,
+      "operator_review": null
+    },
+    {
+      "id": "injection-fixed",
+      "scenario": "injection",
+      "case_id": "case-6a6ba19ef08f435dbecb4a0b9af46056",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "usage": {
+        "requests": 3,
+        "input_tokens": 10439,
+        "output_tokens": 791
+      },
+      "previous_run": null,
+      "operator_review": null
+    },
+    {
+      "id": "inside-uk-fixed",
+      "scenario": "inside-uk",
+      "case_id": "case-5e97158a03994ffba33a49f359bbedfb",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 4283,
+        "output_tokens": 383
+      },
+      "previous_run": null,
+      "operator_review": null
+    },
+    {
+      "id": "sample-ordinary-fixed",
+      "scenario": "sample-ordinary",
+      "case_id": "case-9f9c9a17e9bd4763a899892bf81a436b",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5953,
+        "output_tokens": 421
+      },
+      "previous_run": null,
+      "operator_review": null
+    }
+  ],
+  "redelivery_checks": 28,
+  "raw_input_turns": 29,
+  "receipt_identity": "local_simulation, not authenticated production channels"
+}

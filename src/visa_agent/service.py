@@ -10,7 +10,8 @@ import os
 from pathlib import Path
 import uuid
 
-from .agent import LiveBudget, extract
+from .agent import HISTORY_TURNS, LiveBudget, extract
+from .guidance import guide
 from .delivery import build_pack, manifest, verify_pack
 from .conversation import language_for, material_progress, progress_text
 from .diagnostics import turn_diagnostics
@@ -22,12 +23,13 @@ from .types import Approval, CaseEvent, Check, Status, TurnResult, now_utc
 
 
 class VisaService:
-    def __init__(self, root="data", mode="live", *, model_override=None, budget=None):
+    def __init__(self, root="data", mode="live", *, model_override=None, guidance_model_override=None, budget=None):
         if mode not in {"live", "offline"}:
             raise ValueError("mode must be live or offline")
         self.store = Store(root)
         self.mode = mode
         self.model_override = model_override
+        self.guidance_model_override = guidance_model_override
         self.budget = budget or LiveBudget(self.store.root / "live-budget.sqlite3")
 
     def handle_event(self, event: CaseEvent) -> TurnResult:
@@ -41,6 +43,8 @@ class VisaService:
         trace = {"input": body, "mode": self.mode, "rule_version": RULE_VERSION}
         with self.store.transaction() as db:
             case = self.store.get(event.case_id, db)
+            if case.conversation_closed:
+                raise ValueError("Conversation is closed; start a new case before sending input")
             old = db.execute("SELECT * FROM events WHERE case_id=? AND event_id=?",
                              (case.id, event.event_id)).fetchone()
             if old:
@@ -73,6 +77,8 @@ class VisaService:
                 if row["status"] == "done":
                     return TurnResult.model_validate_json(row["result"]).model_copy(update={"duplicate": True})
                 case = self.store.get(event.case_id, db)
+                if case.conversation_closed:
+                    raise ValueError("Conversation closed before processing started")
                 trace["before"] = case.model_dump()
                 case.language = language_for(event.text, case.language)
                 if case.rule_version and case.rule_version != RULE_VERSION:
@@ -85,6 +91,7 @@ class VisaService:
                 else:
                     new_docs = []
                     intent = "continue"
+                    guidance = None
                     for original, sha, path in staged:
                         if any(d.sha256 == sha for d in case.documents):
                             continue
@@ -105,17 +112,22 @@ class VisaService:
                                 problem = "Model context capacity exceeded; full-page review required"
                                 if problem not in doc.problems:
                                     doc.problems.append(problem)
-                        sources = {f"message:{h['event_id']}": h["text"] for h in case.history}
+                        # Resolve only requested historical citations, scoped to this case.
+                        sources = {}
+                        for candidate in proposal.facts:
+                            if candidate.source_id.startswith("message:"):
+                                row = db.execute("SELECT body FROM events WHERE case_id=? AND event_id=?",
+                                    (case.id, candidate.source_id.removeprefix("message:"))).fetchone()
+                                if row:
+                                    sources[candidate.source_id] = json.loads(row[0])["text"]
                         sources[f"message:{event.event_id}"] = event.text
                         rejected = apply_proposal(case, proposal, sources)
                         trace["rejected_candidates"] = rejected
+                        if rejected:
+                            case.extraction_issues[event.event_id] = rejected
                         case.approval = None
                         case.rule_version = RULE_VERSION
                         case.checks = evaluate(case)
-                        if rejected:
-                            case.checks.append(Check(id="extraction_review", status="unknown", human=True,
-                                                     source="project:source-grounding",
-                                                     message="部分字段无法核对来源，请顾问检查提取结果。"))
                         others = db.execute("SELECT event_id FROM events WHERE case_id=? AND event_id<>? "
                                             "AND status IN ('pending','failed')", (case.id, event.event_id)).fetchall()
                         if others:
@@ -123,14 +135,18 @@ class VisaService:
                                                      source="project:inbox", message="有未完成输入，须重试或由顾问处置。"))
                         case.status = status_for(case.checks)
                         case.pending_error = None
+                        guidance = guide(case, event, trace, "offline" if self.model_override else self.mode,
+                                         self.budget, model_override=self.guidance_model_override)
                         if case.status == Status.READY:
                             case.pack_path = build_pack(case, self.store.root)
-                    reply = reply_for(case, text=event.text, intent=intent, received_count=len(staged))
+                    reply = reply_for(case, text=event.text, intent=intent, received_count=len(staged), guidance=guidance)
                     case.last_contact = max(case.last_contact, event.at.isoformat())
                     case.reminder_count = 0
                     case.last_reminder = None
+                    case.history_count = max(case.history_count, len(case.history)) + 1
                     case.history.append({"event_id": event.event_id, "text": event.text,
                                          "reply": reply, "at": event.at.isoformat()})
+                    case.history = case.history[-HISTORY_TURNS:]
                 result = TurnResult(case_id=case.id, version=case.version, status=case.status,
                                     reply=reply, run_id=run_id, pack_path=case.pack_path)
                 self.store.save(case, db)
@@ -178,7 +194,7 @@ class VisaService:
     def review_case(self, case_id, expected_version, decision, notes, *, reviewer="local-adviser", target=None):
         if not notes.strip() or not reviewer.strip():
             raise ValueError("Reviewer and review notes are required")
-        allowed = {"approve", "request_changes", "confirm_fact", "reject_document", "accept_document", "dismiss_event", "refresh"}
+        allowed = {"approve", "request_changes", "confirm_fact", "reject_document", "accept_document", "dismiss_event", "dismiss_extraction", "refresh"}
         if decision not in allowed:
             raise ValueError(f"Unsupported review decision: {decision}")
         with self.store.transaction() as db:
@@ -229,6 +245,10 @@ class VisaService:
                                         "AND status IN ('pending','failed')", (case.id, target))
                     if not result.rowcount:
                         raise ValueError("Pending/failed event not found")
+                if decision == "dismiss_extraction":
+                    if target not in case.extraction_issues:
+                        raise ValueError("Extraction issue event not found")
+                    del case.extraction_issues[target]
                 case.version += 1
                 case.approval, case.pack_path = None, None
                 case.rule_version = RULE_VERSION

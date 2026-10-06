@@ -50,6 +50,9 @@ SOP_CONTEXT = {
 def evaluate(case: Case) -> list[Check]:
     e = Evidence(case)
     checks: list[Check] = []
+    if case.extraction_issues:
+        checks.append(Check(id="extraction_review", status="unknown", human=True,
+                            source="project:source-grounding", message="部分字段无法核对来源，请顾问检查提取结果。"))
 
     def add(id, status, message, source="scope", *, human=False, keys=()):
         ids = [f.id for key in keys for f in e.facts(key)]

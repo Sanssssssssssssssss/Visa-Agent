@@ -82,6 +82,7 @@ def build(batch_paths, destination):
                     "batch": batch.name, "id": row["id"], "turn": number,
                     "input": incoming, "customer_reply": result["reply"],
                     "model_responses": messages, "model_proposal": trace.get("proposal"),
+                    "model_guidance": trace.get("guidance"), "context_policy": trace.get("context_policy"),
                     "rejected_candidates": trace.get("rejected_candidates", []),
                     "tools": trace.get("tools", []), "error": result.get("error"),
                     "status": result["status"], "guardrail_pass": row["passed"],
@@ -130,7 +131,7 @@ def build(batch_paths, destination):
         input{box-sizing:border-box;width:100%;padding:14px;font:inherit;border:1px solid #aab8c8;border-radius:6px}
         .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}.gallery img,.pdf{height:230px;width:100%;object-fit:contain;background:#e9eef3}.gallery span{display:block;font-size:13px}a{color:#1f5c9e}.pdf{display:grid;place-items:center}
         </style><main><header><h1>材料与逐轮回复</h1>
-        <p>材料包含大学公开脱敏样例和明确标记的故障测试文件，不能当作已核验的客户材料。点击可查看原文件；客户回复逐字来自运行记录。模型负责提取与意图分类，中英文回复由应用根据检查结果组织。历史回复保持原样。</p>
+        <p>材料包含公开脱敏样例及明确标记的测试文件，不能当作已核验的客户材料。点击可查看原文件；客户回复逐字来自运行记录。新版本由模型提取事实并在检查后选择下一轮引导，应用组织核对结果、风险说明与进度。历史回复保持原样。</p>
         <p>COUNT</p><details><summary>检查原始材料</summary><div class="gallery">GALLERY</div></details>
         <input id="search" placeholder="筛选场景或阶段，例如 Warwick、before、after、split"><p id="visible" class="muted"></p></header>
         CARDS</main><script>const s=document.getElementById('search');function filter(){let n=0;for(const a of document.querySelectorAll('article')){a.hidden=!a.dataset.search.includes(s.value.toLowerCase());if(!a.hidden)n++}document.getElementById('visible').textContent='显示 '+n+' 次案件运行'}s.addEventListener('input',filter);filter();</script></html>'''

@@ -29,7 +29,7 @@ def request(web, path, body=None, *, authorized=True):
     headers = {}
     if authorized:
         headers = {"X-Visa-Session": app.token, "Origin": f"http://127.0.0.1:{port}",
-                   "Content-Type": "application/json"}
+                   "Content-Type": "application/json", "Cookie": f"visa_workspace={app.workspace_id}"}
     connection = http.client.HTTPConnection("127.0.0.1", port, timeout=15)
     try:
         connection.request("GET" if body is None else "POST", path,
@@ -94,4 +94,54 @@ def test_concurrent_redelivery_only_processes_event_once(web):
     assert {r["case"]["version"] for r in results} == {1}
     app = web[0]
     assert len(app.service.store.get(app.case_id).documents) == 1
-    assert len(app.service.store.traces(app.case_id)) == 1
+    assert len([t for t in app.service.store.traces(app.case_id) if not t.get("command")]) == 1
+
+
+def test_browser_cookie_isolation_and_rehydration(web):
+    app, port = web
+    connection = http.client.HTTPConnection("127.0.0.1", port)
+    connection.request("GET", "/")
+    response = connection.getresponse()
+    cookie = response.getheader("Set-Cookie").split(";", 1)[0]
+    response.read()
+    connection.request("GET", "/api/state", headers={"Cookie": cookie})
+    response = connection.getresponse()
+    other = json.loads(response.read())
+    assert other["case"]["id"] != app.case_id
+    connection.request("GET", "/api/state")
+    assert connection.getresponse().status == 400
+    connection.close()
+    restored = LocalApp(app.service.store.root, "offline", workspace_id=app.workspace_id)
+    assert restored.case_id == app.case_id and restored.session_id == app.session_id
+
+
+def test_web_exit_reset_and_channel_switch_do_not_reuse_facts(tmp_path):
+    app = LocalApp(tmp_path, "offline")
+    first = app.event({"event_id": "first", "text": "applicant_name: Old Name"})["case"]["id"]
+    exited = app.event({"event_id": "exit", "text": "/exit"})
+    assert exited["session"]["state"] == "closed"
+    fresh = app.event({"event_id": "reset", "text": "/reset"})
+    assert fresh["case"]["id"] != first and not fresh["case"]["facts"]
+    app.connect_identity({"channel": "email", "sender": "a@example.com", "thread": "mail-a"})
+    app.event({"event_id": "mail-first", "text": "applicant_name: Mail A"})
+    a = app.case_id
+    app.connect_identity({"channel": "email", "sender": "b@example.com", "thread": "mail-b"})
+    assert not app.service.store.get(app.case_id).facts
+    app.connect_identity({"channel": "email", "sender": "a@example.com", "thread": "mail-a"})
+    assert app.case_id == a and app.service.store.get(a).facts[0].value == "Mail A"
+    with pytest.raises(ValueError, match="绑定其他发件人"):
+        app.connect_identity({"channel": "email", "sender": "b@example.com", "thread": "mail-a"})
+
+
+def test_reset_in_another_workspace_rejects_stale_tab_input(web):
+    first, port = web
+    routing = {"channel": "email", "sender": "same@example.com", "thread": "shared"}
+    first.connect_identity(routing)
+    other = LocalApp(first.service.store.root, "offline")
+    other.connect_identity(routing)
+    stale_id = first.case_id
+    other.event({"event_id": "reset-other", "text": "/reset"})
+    status, _ = request((first, port), "/api/event", {"case_id": stale_id, "event_id": "stale", "text": "age: 99"})
+    assert status == 409
+    assert first.case_id == other.case_id and first.case_id != stale_id
+    assert not first.service.store.get(first.case_id).facts

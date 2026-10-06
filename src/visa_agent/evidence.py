@@ -55,13 +55,13 @@ def validate_value(key: str, value: str, quote: str) -> str:
         # that value, then still require explicit self-funding in the source quote.
         if value.casefold() in {"own money", "own funds"}:
             value = "self"
-        patterns = {"self": r"\b(self(?:[- ]funded)?|my own (?:money|funds)|my savings|myself)\b|自费|本人出资",
+        patterns = {"self": r"\b(self(?:[- ]funded)?|my own (?:money|funds)|my savings|myself)\b|自费|本人出资|(?:我|本人)自己(?:支付|付|承担)",
                     "employer": r"\bemployer(?:[- ]funded)?\b|雇主"}
         matches = [kind for kind, pattern in patterns.items() if re.search(pattern, value, re.I)]
         if len(matches) == 1:
             pattern = patterns[matches[0]]
             quote_kinds = [kind for kind, pat in patterns.items() if re.search(pat, quote, re.I)]
-            if (quote_kinds != matches or re.search(r"\b(not|parents?|loan|scholarship|sponsor)\b", quote, re.I)):
+            if (quote_kinds != matches or re.search(r"\b(not|parents?|loan|scholarship|sponsor)\b|不是|并非|不由|不打算|父母|贷款|奖学金", quote, re.I)):
                 raise ValueError("Funding source is negative or ambiguous; adviser review needed")
             if re.search(pattern, quote, re.I):
                 return matches[0]
@@ -179,7 +179,13 @@ class Evidence:
     def facts(self, key: str, kinds: set[str] | None = None) -> list[Fact]:
         result = []
         for fact in self.case.facts:
-            if not fact.active or fact.key != key or (fact.confidence == "low" and not fact.confirmed_by):
+            # "My passport name is X" is also a self-reported applicant name.
+            # Retain the original field/source, and never promote it to file evidence.
+            own_passport_name = (key == "applicant_name" and fact.key == "passport_name"
+                and fact.source_id.startswith("message:")
+                and re.search(r"我的护照(?:上(?:的)?)?姓名(?:是|为)|\bmy passport name is\b", fact.quote, re.I)
+                and not re.search(r"不是|并非|\bnot\b", fact.quote, re.I))
+            if not fact.active or (fact.key != key and not own_passport_name) or (fact.confidence == "low" and not fact.confirmed_by):
                 continue
             doc = self.docs.get(fact.source_id)
             if doc and not self.admissible(doc):

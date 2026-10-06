@@ -22,6 +22,13 @@ def main():
     parser.add_argument("--data", default=os.getenv("VISA_DATA_DIR", "data"))
     parser.add_argument("--mode", choices=["live", "offline"], default="live")
     sub = parser.add_subparsers(dest="command", required=True)
+    receive = sub.add_parser("receive", help="Simulate a routed email/WhatsApp delivery; does not send messages")
+    receive.add_argument("--channel", choices=["email", "whatsapp"], required=True)
+    for field in ("account", "sender", "thread", "message-id"):
+        receive.add_argument("--" + field, required=True)
+    receive.add_argument("--text", default="")
+    receive.add_argument("--files", nargs="*", default=[])
+    receive.add_argument("--demo", action="store_true", help="Explicit synthetic demonstration case")
     new = sub.add_parser("new")
     new.add_argument("case_id")
     for name in ("message", "attach"):
@@ -38,7 +45,7 @@ def main():
     review = sub.add_parser("review")
     review.add_argument("case_id")
     review.add_argument("--version", type=int, required=True)
-    review.add_argument("--decision", required=True, choices=["approve", "request_changes", "confirm_fact", "reject_document", "accept_document", "dismiss_event", "refresh"])
+    review.add_argument("--decision", required=True, choices=["approve", "request_changes", "confirm_fact", "reject_document", "accept_document", "dismiss_event", "dismiss_extraction", "refresh"])
     review.add_argument("--notes", required=True)
     review.add_argument("--reviewer", default="local-adviser")
     review.add_argument("--target")
@@ -59,7 +66,12 @@ def main():
     args = parser.parse_args()
     try:
         service = VisaService(args.data, args.mode)
-        if args.command == "new":
+        if args.command == "receive":
+            from .inbox import Inbox, Incoming
+            result = Inbox(service).receive_simulated(Incoming(channel=args.channel, account=args.account,
+                sender=args.sender, thread=args.thread, message_id=args.message_id, text=args.text),
+                args.files, test_mode=args.demo)
+        elif args.command == "new":
             result = service.store.create(args.case_id)
         elif args.command in {"message", "attach", "tick"}:
             data = {"case_id": args.case_id, "event_id": args.event_id or uuid.uuid4().hex,

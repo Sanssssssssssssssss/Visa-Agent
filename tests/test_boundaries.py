@@ -116,7 +116,7 @@ def test_working_set_limit_preserves_critical_facts():
     prompt, remaining = build_context(case, CaseEvent(case_id="unit", event_id="last", text="age: 30"), [])
     assert "age: 30" in prompt and remaining >= 0
     with pytest.raises(BudgetExceeded):
-        build_context(case, CaseEvent(case_id="unit", event_id="last", text="x"*12000), [])
+        build_context(case, CaseEvent(case_id="unit", event_id="last", text="x"*12000), [], limit=12000)
 
 
 def test_testmodel_sdk_connection():

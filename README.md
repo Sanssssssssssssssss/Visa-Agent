@@ -24,6 +24,8 @@ uv run pytest -q
 
 想亲手分批上传、查看补件并自行审批，请按 [手动测试指南](docs/manual-testing.md) 操作，内含现成材料索引和真实模型测试步骤。
 
+中文分步体验、`/exit`、一键清空、邮箱/WhatsApp 身份隔离及本轮真实结果见 [会话与引导验收](docs/session-guidance.md)。当前保留最近 20 轮，模型在每轮检查后选择最多三个优先问题。普通事件通常消耗两次模型请求。
+
 可以直接用中文或英文提问，例如“第一次办英国签证，怎么申请，需要什么材料？”每轮回复附材料进度。默认 `VISA_VISION=1`：图片传原图，PDF 传渲染页与 OCR；最多 6 张图/20 MB，超过范围需拆分或复核。普通案件中的样例会被拦住，只有右侧明确选择的合成演示案件允许使用测试材料，材料包也标注仅供测试。
 
 想看模型每次实际输出及客户收到的回复，见[原文查看说明](docs/public-replies.md)。本地已有日志时，执行 `uv run python scripts/show_case_replies.py output/public-replies-v1 output/public-images-v2`，再打开 `output/reply-review/index.html`。原图、客户回复、模型 JSON 和拒绝项分别展示。
@@ -75,7 +77,7 @@ uv run visa-agent tick my-case --now 2026-10-08T10:00:00+08:00 --event-id remind
 
 真实自然语言输入可能得到未确认字段或转人工，不能套用标签样例的成功率。若只想理解程序，请在全局参数加 `--mode offline`，使用 [场景文件](datasets/cases/dev_visitor.json) 中的消息。
 
-人工入口还支持 `confirm_fact`、`reject_document`、`accept_document`、`request_changes`、`dismiss_event`、`refresh`。事实/文件 ID 来自 `inspect`，事件 ID 来自 `events`，用 `--target` 指定。所有操作要求当前 `--version` 与复核说明。规则变化后用 `refresh` 重新检查。`accept_document` 表示顾问已核对低质量读取结果，不能救回完全没有页内容的文件。
+人工入口还支持 `confirm_fact`、`reject_document`、`accept_document`、`request_changes`、`dismiss_event`、`dismiss_extraction`、`refresh`。事实/文件 ID 来自 `inspect`，事件 ID 来自 `events`，用 `--target` 指定。所有操作要求当前 `--version` 与复核说明。规则变化后用 `refresh` 重新检查。`accept_document` 表示顾问已核对低质量读取结果，不能救回完全没有页内容的文件。
 
 失败事件保留在 inbox；同一事件 ID、文本和附件重发可重试。已处理事件重复发送不会再改状态。同 ID 换内容会被拒绝。模型没有批准、删材料或发送外部消息的工具。
 

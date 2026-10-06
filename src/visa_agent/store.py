@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import sqlite3
+import time
 
 from .types import Case, now_utc
 
@@ -26,9 +27,21 @@ class Store:
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.path = self.root / "cases.sqlite3"
+        for attempt in range(8):
+            try:
+                self._initialize()
+                break
+            except sqlite3.OperationalError as exc:
+                # Concurrent first-start workers can race on WAL's exclusive lock.
+                if "locked" not in str(exc) or attempt == 7:
+                    raise
+                time.sleep(0.05 * (attempt + 1))
+
+    def _initialize(self):
         with self.connect() as db:
+            if db.execute("PRAGMA journal_mode").fetchone()[0] != "wal":
+                db.execute("PRAGMA journal_mode=WAL")
             db.executescript("""
-                PRAGMA journal_mode=WAL;
                 CREATE TABLE IF NOT EXISTS cases(id TEXT PRIMARY KEY, body TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS events(
                     case_id TEXT NOT NULL, event_id TEXT NOT NULL,
@@ -38,28 +51,34 @@ class Store:
                     FOREIGN KEY(case_id) REFERENCES cases(id));
                 CREATE TABLE IF NOT EXISTS runs(
                     run_id TEXT PRIMARY KEY, case_id TEXT NOT NULL, body TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS inbox_sessions(
+                    id TEXT PRIMARY KEY, channel TEXT NOT NULL, account TEXT NOT NULL,
+                    thread TEXT NOT NULL, sender TEXT NOT NULL, state TEXT NOT NULL,
+                    case_id TEXT NOT NULL REFERENCES cases(id));
+                CREATE TABLE IF NOT EXISTS inbox_deliveries(
+                    id TEXT PRIMARY KEY, session_id TEXT NOT NULL, input_hash TEXT NOT NULL,
+                    case_id TEXT NOT NULL, result TEXT);
+                CREATE TABLE IF NOT EXISTS web_workspaces(id TEXT PRIMARY KEY, body TEXT NOT NULL);
             """)
 
-    def connect(self) -> sqlite3.Connection:
+    @contextmanager
+    def connect(self):
         db = sqlite3.connect(self.path, timeout=120)
         db.row_factory = sqlite3.Row
         db.execute("PRAGMA foreign_keys=ON")
-        return db
+        try:
+            with db:
+                yield db
+        finally:
+            db.close()
 
     @contextmanager
     def transaction(self):
         # ponytail: one SQLite writer serializes all cases, including model calls.
         # For concurrent servers, replace with per-case leases; CLI throughput is intentionally low.
-        db = self.connect()
-        try:
+        with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
             yield db
-            db.commit()
-        except BaseException:
-            db.rollback()
-            raise
-        finally:
-            db.close()
 
     def create(self, case_id: str, *, test_mode=False) -> Case:
         from .types import CaseEvent
@@ -100,3 +119,14 @@ class Store:
         with self.connect() as db:
             return [dict(r) for r in db.execute(
                 "SELECT * FROM events WHERE case_id=? ORDER BY rowid", (case_id,))]
+
+    def dialogue(self, case_id: str, *, limit=100, before=None):
+        """Paged durable transcript; Case.history is only the recent working window."""
+        if not 1 <= limit <= 100:
+            raise ValueError("History limit must be 1..100")
+        with self.connect() as db:
+            rows = db.execute("SELECT rowid,body,result FROM events WHERE case_id=? AND result IS NOT NULL "
+                              "AND rowid < ? ORDER BY rowid DESC LIMIT ?",
+                              (case_id, before or 2**63-1, limit)).fetchall()
+        return [{"cursor": r["rowid"], "input": json.loads(r["body"]), "result": json.loads(r["result"])}
+                for r in reversed(rows)]

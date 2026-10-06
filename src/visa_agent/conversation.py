@@ -1,7 +1,7 @@
 """Customer language and progress, built from checked state rather than model claims.
 
-The model selects an intent; this small response catalogue owns instructions,
-official links and completion wording. No second model call is needed.
+The model selects priorities after checks. This response catalogue owns factual
+claims, official links and completion wording; it cannot override a check.
 """
 
 import re
@@ -10,6 +10,7 @@ from .types import Status
 
 APPLICATION_GUIDE = "https://www.gov.uk/apply-to-come-to-the-uk"
 VISA_CHECK = "https://www.gov.uk/check-uk-visa"
+SUITABILITY_GUIDE = "https://www.gov.uk/guidance/immigration-rules/immigration-rules-part-suitability"
 ROUTE_GUIDES = {
     "visitor": "https://www.gov.uk/standard-visitor",
     "student": "https://www.gov.uk/student-visa/documents-you-must-provide",
@@ -73,6 +74,20 @@ def progress_text(case):
         "人工复核待完成" if zh else "Adviser review pending")
     suffix = "清单会随申请情况更新。" if zh else "The checklist may change with your circumstances."
     return f"{'材料进度' if zh else 'Materials'} {bar} {counts} · {review}\n{suffix}"
+
+
+def preparation_step(case):
+    zh = case.language == "zh"
+    if case.status == Status.COMPLETE:
+        return "第 4 步：材料包已确认" if zh else "Step 4: document pack confirmed"
+    if case.status == Status.READY:
+        return "第 4 步：请顾问复核材料包" if zh else "Step 4: adviser review of your pack"
+    intake = {"route", "applicant_name", "application_location", "nationality", "adult", "dependants", "previous_refusal", "application_date"}
+    if not case.checks or any(c.id in intake and c.status == "unknown" for c in case.checks):
+        return "第 1 步：了解您的申请情况" if zh else "Step 1: understand your application"
+    if any(c.id.startswith("passport") and c.status != "pass" for c in case.checks):
+        return "第 2 步：核对护照个人信息页" if zh else "Step 2: check your passport details page"
+    return "第 3 步：补齐支持材料和未确认信息" if zh else "Step 3: complete supporting evidence and missing details"
 
 
 # Plain questions, including why we need the answer. The finite SOP remains in rules.py.
@@ -151,9 +166,18 @@ def action_for(check, case):
                      "An adviser needs to check this evidence or eligibility condition. You can continue sending the documents you have.")
 
 
-def reply_for(case, *, text="", intent="continue", received_count=None):
+def reply_for(case, *, text="", intent="continue", received_count=None, guidance=None):
     zh = case.language == "zh"
-    paragraphs = []
+    paragraphs = [preparation_step(case)]
+    if guidance:
+        if guidance.explanation != "continue":
+            intent = guidance.explanation
+        approaches = {
+            "step_by_step": ("我们一次处理几项就好，不需要您先了解所有签证术语。", "We can handle a few things at a time; you do not need to know all the visa terms."),
+            "explain_material": ("我会说明每项材料用来核对什么，您可以先提供手头已有的文件。", "I'll explain what each document helps us check. You can start with the files you already have."),
+        }
+        if guidance.approach in approaches:
+            paragraphs.append(approaches[guidance.approach][0 if zh else 1])
     if case.test_mode:
         paragraphs.append("演示案件：使用测试材料，生成的材料包仅供测试。" if zh else "Demo case: test materials and any resulting pack are for testing only.")
     count = len([d for d in case.documents if not d.rejected]) if received_count is None else received_count
@@ -191,7 +215,9 @@ def reply_for(case, *, text="", intent="continue", received_count=None):
         ranks = {"sample": 0, "unrelated": 0, "pagination": 1, "read": 2, "context": 2,
                  "route": 3, "application_location": 4, "nationality": 5}
         actions, seen = [], set()
-        for check in sorted(blockers, key=lambda c: ranks.get(c.id.split(":")[0], 6 if c.human else 7)):
+        ordered = ([c for key in guidance.actions for c in blockers if c.id == key] if guidance else
+                   sorted(blockers, key=lambda c: ranks.get(c.id.split(":")[0], 6 if c.human else 7)))
+        for check in ordered:
             family = check.id.split(":")[0]
             if inside and check.id == "application_location":
                 continue
@@ -210,5 +236,9 @@ def reply_for(case, *, text="", intent="continue", received_count=None):
                               "\n".join(f"{i}. {a}" for i, a in enumerate(actions, 1)))
         if case.status == Status.NEEDS_HUMAN and not inside:
             paragraphs.append("其中有信息需要顾问核对，暂时还不能确认材料齐备。" if zh else "Some details need adviser review, so I cannot yet confirm the pack is complete.")
+    risk_requested = bool(re.search(r"造假|假材料|改(?:一下)?(?:金额|余额)|伪造|fake|forg(?:e|ed)|fals(?:e|ify)", text, re.I))
+    if first or risk_requested or (guidance and guidance.warn_material_risk):
+        paragraphs.append(("请使用真实、完整的材料并如实说明情况。虚假材料或陈述可能导致拒签、许可被取消，并影响后续申请。这里核对材料的完整性、一致性和字段来源，不进行真伪鉴定。" if zh else
+                           "Please provide genuine, complete documents and accurate information. False documents or statements can lead to refusal, cancellation of permission and consequences for future applications. These checks cover completeness, consistency and field sources; they do not authenticate documents.") + f"\n{SUITABILITY_GUIDE}")
     paragraphs.append(progress_text(case))
     return "\n\n".join(paragraphs)

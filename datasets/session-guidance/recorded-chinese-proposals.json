@@ -1,0 +1,288 @@
+{
+  "source": "deepseek-flash actual chinese-email-fixed output; regression replay is offline, not a new model measurement",
+  "turns": [
+    {
+      "facts": [
+        {
+          "key": "route",
+          "value": "visitor",
+          "source_id": "message:5a4fc0226a0ef2f5888c057dd8ba2554075b80853f39755a1c70c553167d3b94",
+          "page": null,
+          "quote": "想去英国旅游",
+          "confidence": "high"
+        },
+        {
+          "key": "purpose",
+          "value": "旅游",
+          "source_id": "message:5a4fc0226a0ef2f5888c057dd8ba2554075b80853f39755a1c70c553167d3b94",
+          "page": null,
+          "quote": "想去英国旅游",
+          "confidence": "high"
+        }
+      ],
+      "documents": [],
+      "intent": "getting_started"
+    },
+    {
+      "facts": [
+        {
+          "key": "application_location",
+          "value": "outside_uk",
+          "source_id": "message:6099db7882541899270fbeb689c4750ac012c275c63637f3c4b2698f6f5ab409",
+          "page": null,
+          "quote": "我在英国境外，从中国申请。",
+          "confidence": "high"
+        },
+        {
+          "key": "nationality",
+          "value": "中国",
+          "source_id": "message:6099db7882541899270fbeb689c4750ac012c275c63637f3c4b2698f6f5ab409",
+          "page": null,
+          "quote": "我是中国国籍",
+          "confidence": "high"
+        },
+        {
+          "key": "age",
+          "value": "30",
+          "source_id": "message:6099db7882541899270fbeb689c4750ac012c275c63637f3c4b2698f6f5ab409",
+          "page": null,
+          "quote": "今年30岁",
+          "confidence": "high"
+        }
+      ],
+      "documents": [],
+      "intent": "continue"
+    },
+    {
+      "facts": [
+        {
+          "key": "passport_name",
+          "value": "Lin Example",
+          "source_id": "message:d588527e4e4277bb11711bfcc70f8e3a40587605cfd71efc6b69195a9dc26376",
+          "page": null,
+          "quote": "我的护照姓名是 Lin Example。",
+          "confidence": "high"
+        },
+        {
+          "key": "dependants",
+          "value": "false",
+          "source_id": "message:d588527e4e4277bb11711bfcc70f8e3a40587605cfd71efc6b69195a9dc26376",
+          "page": null,
+          "quote": "没有随行家属",
+          "confidence": "high"
+        },
+        {
+          "key": "previous_refusal",
+          "value": "false",
+          "source_id": "message:d588527e4e4277bb11711bfcc70f8e3a40587605cfd71efc6b69195a9dc26376",
+          "page": null,
+          "quote": "以前也没有被拒签过",
+          "confidence": "high"
+        }
+      ],
+      "documents": [],
+      "intent": "continue"
+    },
+    {
+      "facts": [
+        {
+          "key": "application_date",
+          "value": "2026-10-20",
+          "source_id": "message:7cd1792fd7b944d4dddc7f494f9d643becb504e6ec89803b1746f4b5685398fb",
+          "page": null,
+          "quote": "准备2026-10-20提交申请。",
+          "confidence": "high"
+        },
+        {
+          "key": "funding",
+          "value": "self",
+          "source_id": "message:7cd1792fd7b944d4dddc7f494f9d643becb504e6ec89803b1746f4b5685398fb",
+          "page": null,
+          "quote": "我自己付旅行费用",
+          "confidence": "high"
+        },
+        {
+          "key": "trip_budget",
+          "value": "3000",
+          "source_id": "message:7cd1792fd7b944d4dddc7f494f9d643becb504e6ec89803b1746f4b5685398fb",
+          "page": null,
+          "quote": "预算3000英镑",
+          "confidence": "high"
+        }
+      ],
+      "documents": [],
+      "intent": "continue"
+    },
+    {
+      "facts": [
+        {
+          "key": "travel_start",
+          "value": "2026-11-01",
+          "source_id": "message:0d82b71c716fa1f468bf2b39fbbe0cc5c5397b531528fc5c7e520c6c5b35ccaf",
+          "page": null,
+          "quote": "2026-11-01去英国",
+          "confidence": "high"
+        },
+        {
+          "key": "travel_end",
+          "value": "2026-11-15",
+          "source_id": "message:0d82b71c716fa1f468bf2b39fbbe0cc5c5397b531528fc5c7e520c6c5b35ccaf",
+          "page": null,
+          "quote": "2026-11-15离开",
+          "confidence": "high"
+        },
+        {
+          "key": "return_reason",
+          "value": "旅行结束后回公司继续工作。",
+          "source_id": "message:0d82b71c716fa1f468bf2b39fbbe0cc5c5397b531528fc5c7e520c6c5b35ccaf",
+          "page": null,
+          "quote": "旅行结束后回公司继续工作。",
+          "confidence": "high"
+        }
+      ],
+      "documents": [],
+      "intent": "continue"
+    },
+    {
+      "facts": [
+        {
+          "key": "passport_name",
+          "value": "Lin Example",
+          "source_id": "47894116fa3c0af40296",
+          "page": 1,
+          "quote": "passport_name: Lin Example",
+          "confidence": "high"
+        },
+        {
+          "key": "passport_number",
+          "value": "TEST-390274",
+          "source_id": "47894116fa3c0af40296",
+          "page": 1,
+          "quote": "passport_number: TEST-390274",
+          "confidence": "high"
+        },
+        {
+          "key": "passport_expiry",
+          "value": "2036-01-01",
+          "source_id": "47894116fa3c0af40296",
+          "page": 1,
+          "quote": "passport_expiry: 2036-01-01",
+          "confidence": "high"
+        }
+      ],
+      "documents": [
+        {
+          "document_id": "47894116fa3c0af40296",
+          "kind": "passport",
+          "language": "en",
+          "content_role": "sample",
+          "visual_observation": "Page is a synthetic test fixture headed 'TEST EVIDENCE / PASSPORT' with 'SYNTHETIC - fictitious people and institutions - not a valid document'. Visible text matches OCR; no applicant photo page or MRZ present.",
+          "needs_visual_review": false
+        }
+      ],
+      "intent": "continue"
+    },
+    {
+      "facts": [
+        {
+          "key": "bank_name",
+          "value": "Fictional Example Bank",
+          "source_id": "dfe99c5058c90e3b0894",
+          "page": 1,
+          "quote": "bank_name: Fictional Example Bank",
+          "confidence": "high"
+        },
+        {
+          "key": "bank_holder",
+          "value": "Lin Example",
+          "source_id": "dfe99c5058c90e3b0894",
+          "page": 1,
+          "quote": "bank_holder: Lin Example",
+          "confidence": "high"
+        },
+        {
+          "key": "bank_currency",
+          "value": "GBP",
+          "source_id": "dfe99c5058c90e3b0894",
+          "page": 1,
+          "quote": "bank_currency: GBP",
+          "confidence": "high"
+        },
+        {
+          "key": "bank_minimum",
+          "value": "40000",
+          "source_id": "dfe99c5058c90e3b0894",
+          "page": 1,
+          "quote": "bank_minimum: 40000",
+          "confidence": "high"
+        },
+        {
+          "key": "bank_start",
+          "value": "2026-08-01",
+          "source_id": "dfe99c5058c90e3b0894",
+          "page": 1,
+          "quote": "bank_start: 2026-08-01",
+          "confidence": "high"
+        },
+        {
+          "key": "bank_end",
+          "value": "2026-09-28",
+          "source_id": "dfe99c5058c90e3b0894",
+          "page": 1,
+          "quote": "bank_end: 2026-09-28",
+          "confidence": "high"
+        }
+      ],
+      "documents": [
+        {
+          "document_id": "dfe99c5058c90e3b0894",
+          "kind": "bank_statement",
+          "language": "en",
+          "content_role": "sample",
+          "visual_observation": "Visible page matches OCR text; header 'TEST EVIDENCE / BANK STATEMENT' and 'SYNTHETIC - fictitious people and institutions - not a valid document' mark it as a synthetic test fixture. No discrepancy between image and OCR.",
+          "needs_visual_review": false
+        }
+      ],
+      "intent": "materials"
+    },
+    {
+      "facts": [
+        {
+          "key": "employment_name",
+          "value": "Lin Example",
+          "source_id": "d2839ffb2895b28ebc46",
+          "page": 1,
+          "quote": "employment_name: Lin Example",
+          "confidence": "high"
+        },
+        {
+          "key": "employer",
+          "value": "Example Studio Ltd",
+          "source_id": "d2839ffb2895b28ebc46",
+          "page": 1,
+          "quote": "employer: Example Studio Ltd",
+          "confidence": "high"
+        },
+        {
+          "key": "salary",
+          "value": "45000",
+          "source_id": "d2839ffb2895b28ebc46",
+          "page": 1,
+          "quote": "salary: 45000",
+          "confidence": "high"
+        }
+      ],
+      "documents": [
+        {
+          "document_id": "d2839ffb2895b28ebc46",
+          "kind": "employment",
+          "language": "en",
+          "content_role": "sample",
+          "visual_observation": "Page 1 is a synthetic test fixture headed 'TEST EVIDENCE / EMPLOYMENT' with 'SYNTHETIC - fictitious people and institutions - not a valid document'. Visible text matches OCR; no discrepancies.",
+          "needs_visual_review": false
+        }
+      ],
+      "intent": "materials"
+    }
+  ]
+}

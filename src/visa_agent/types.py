@@ -114,6 +114,14 @@ class Check(StrictModel):
     evidence: list[str] = Field(default_factory=list)
 
 
+class Guidance(StrictModel):
+    actions: list[str] = Field(default_factory=list, max_length=3,
+                              description="Existing unresolved check IDs, in priority order")
+    explanation: Literal["continue", "how_to_apply", "materials"] = "continue"
+    approach: Literal["neutral", "step_by_step", "explain_material"] = "neutral"
+    warn_material_risk: bool = False
+
+
 class Approval(StrictModel):
     version: int
     manifest_hash: str
@@ -131,6 +139,7 @@ class Case(StrictModel):
     facts: list[Fact] = Field(default_factory=list)
     documents: list[Document] = Field(default_factory=list)
     checks: list[Check] = Field(default_factory=list)
+    extraction_issues: dict[str, list[str]] = Field(default_factory=dict)
     history: list[dict] = Field(default_factory=list)
     reviews: list[dict] = Field(default_factory=list)
     approval: Approval | None = None
@@ -141,6 +150,8 @@ class Case(StrictModel):
     pending_error: str | None = None
     language: Literal["zh", "en"] = "zh"
     test_mode: bool = False
+    conversation_closed: bool = False
+    history_count: int = 0
 
 
 class TurnResult(StrictModel):
