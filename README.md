@@ -2,7 +2,7 @@
 
 一个可回放、可检查的英国签证材料准备 CLI。支持 Visitor、Student、Skilled Worker 的有限基础分支：接收消息和附件，保存有来源的事实，检查缺项与冲突，等待补件，生成材料包，最后通过独立顾问入口确认。
 
-真实模型验收 **6/6**，离线测试 **41 项通过**。这证明本仓库合成样例中的行为；真实签证规则覆盖、文件真实性和专业判断仍需顾问。详细结果见 [验收记录](docs/acceptance.md)。
+真实模型验收 **6/6**，离线测试 **44 项通过**（含本地上传页面的 3 项接口测试）。这证明本仓库合成样例中的行为；真实签证规则覆盖、文件真实性和专业判断仍需顾问。详细结果见 [验收记录](docs/acceptance.md)。
 
 ## 安装
 
@@ -17,6 +17,8 @@ uv run pytest -q
 依赖安装进项目 `.venv`，版本固定在 `uv.lock`。锁定的 RapidOCR wheel 自带中英文 OCR 模型；运行不要求另装 GPU、Tesseract 或 OCR 服务。第一次安装需要下载依赖，离线测试不访问模型 API。
 
 ## 两分钟体验
+
+直接拖文件体验：启动 `uv run python -m visa_agent.web`，打开 <http://127.0.0.1:8765>，从 `datasets/materials/dev_visitor/` 拖入三份 PDF。默认调用真实模型并载入该合成申请人的背景，页面会显示补件回复、材料包及独立确认按钮。切换右侧场景可测试 Student/Skilled Worker，或选空白案件自己输入情况。服务仅监听本机；需要离线演示时加 `--mode offline --data data/web-offline`。
 
 想亲手分批上传、查看补件并自行审批，请按 [手动测试指南](docs/manual-testing.md) 操作，内含现成材料索引和真实模型测试步骤。
 
@@ -88,7 +90,7 @@ uv run visa-agent --mode offline replay datasets/cases/dev_stale_approval.json -
 
 [implementation.md](docs/implementation.md) 从 `handle_event()` 逐步解释状态写入、上下文、工具预算、规则与恢复；[acceptance.md](docs/acceptance.md) 记录实际检查和失败修正。
 
-应用采用直接函数调用：PydanticAI 提取候选事实，Python 检查要求，SQLite 保存状态。客户回复由检查结果生成，最多三个优先问题。当前 CLI 模拟 WhatsApp/email 事件，没有真实渠道或 UI；后续可由 Chatwoot webhook 转成 `CaseEvent`。
+应用采用直接函数调用：PydanticAI 提取候选事实，Python 检查要求，SQLite 保存状态。客户回复由检查结果生成，最多三个优先问题。CLI 和本地上传页面都调用同一案件引擎；真实 WhatsApp/email 渠道尚未接入，后续可由 Chatwoot webhook 转成 `CaseEvent`。
 
 V1 仅覆盖成年、境外、无家属、无拒签解释的一部分情况。Visitor 自动分支采用在职自费场景；Student 自动资金计算限 GBP、自有资金；Skilled Worker 职业自动分支限 2134。其他国籍/居住历史、资助形式、英语证明路径等有转人工边界。SOP 的完整限制见实现说明。
 

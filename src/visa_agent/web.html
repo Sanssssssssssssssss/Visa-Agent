@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="zh-CN">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+  <title>Visa Agent · 材料准备</title>
+  <link rel="icon" href="data:," />
+  <style>
+    :root {
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      color: #253449;
+      background: #f4f7fb;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+    }
+    header {
+      background: #173d77;
+      color: white;
+      padding: 18px max(24px, calc((100vw - 1160px) / 2));
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    header strong {
+      font-size: 21px;
+    }
+    header span {
+      font-size: 14px;
+      color: #d9e5ff;
+    }
+    main {
+      max-width: 1208px;
+      margin: 34px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 30px;
+    }
+    h1 {
+      font-size: 32px;
+      margin: 0 0 6px;
+      letter-spacing: -0.8px;
+    }
+    h2 {
+      font-size: 18px;
+      margin: 0 0 14px;
+    }
+    p {
+      margin: 0 0 18px;
+    }
+    .muted {
+      color: #617187;
+      font-size: 14px;
+    }
+    button,
+    select,
+    textarea,
+    input {
+      font: inherit;
+    }
+    button,
+    .link {
+      border: 0;
+      background: #2468e4;
+      color: white;
+      border-radius: 7px;
+      padding: 10px 17px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button.secondary {
+      background: #e8eef8;
+      color: #173d77;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+    :focus-visible {
+      outline: 3px solid #76a4ff;
+      outline-offset: 3px;
+    }
+    select {
+      width: 100%;
+      padding: 9px;
+      background: white;
+      border: 1px solid #c6d2e3;
+      border-radius: 6px;
+    }
+    #drop {
+      display: block;
+      position: relative;
+      margin: 26px 0 18px;
+      padding: 42px 24px;
+      border: 2px dashed #91b0df;
+      background: #edf4ff;
+      border-radius: 12px;
+      text-align: center;
+      transition: background 0.15s;
+    }
+    #drop.over {
+      background: #dceaff;
+      border-color: #2468e4;
+    }
+    #drop svg {
+      color: #2468e4;
+      display: block;
+      margin: 0 auto 12px;
+    }
+    #drop strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+    #drop input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    #drop small {
+      display: block;
+      color: #617187;
+      margin-top: 12px;
+    }
+    #drop:focus-within {
+      outline: 3px solid #76a4ff;
+      outline-offset: 3px;
+    }
+    #drop.busy {
+      opacity: 0.65;
+      pointer-events: none;
+    }
+    .panel {
+      background: white;
+      border: 1px solid #d5deeb;
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .state {
+      background: #e8eef8;
+      color: #173d77;
+      border-radius: 5px;
+      padding: 4px 9px;
+      font-size: 14px;
+    }
+    .state.ready {
+      background: #e3f3e9;
+      color: #356c4a;
+    }
+    .message {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      padding: 16px 18px;
+      margin: 12px 0;
+      background: white;
+      border-left: 3px solid #2468e4;
+    }
+    .message.customer {
+      background: #eaf0f7;
+      border-left-color: #9bb0cc;
+    }
+    .message small {
+      display: block;
+      font-size: 12px;
+      color: #617187;
+      margin-bottom: 7px;
+    }
+    .empty {
+      padding: 10px 0;
+      color: #617187;
+    }
+    textarea {
+      display: block;
+      width: 100%;
+      resize: vertical;
+      min-height: 95px;
+      border: 1px solid #c6d2e3;
+      border-radius: 7px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: white;
+    }
+    #error {
+      white-space: pre-wrap;
+      background: #fff0ee;
+      color: #982f23;
+      border: 1px solid #ecc5bf;
+      padding: 14px;
+      border-radius: 7px;
+      margin: 16px 0;
+    }
+    #progress {
+      color: #173d77;
+      font-weight: 600;
+      min-height: 25px;
+    }
+    .file {
+      padding: 11px 0;
+      border-bottom: 1px solid #e6ebf3;
+      overflow-wrap: anywhere;
+    }
+    .file small {
+      display: block;
+      color: #617187;
+    }
+    .issue {
+      padding: 9px 0;
+      border-bottom: 1px solid #e6ebf3;
+      font-size: 14px;
+    }
+    details {
+      margin-top: 16px;
+    }
+    summary {
+      cursor: pointer;
+      color: #173d77;
+      font-size: 14px;
+    }
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 12px;
+      max-height: 340px;
+      overflow: auto;
+      background: #f4f7fb;
+      padding: 12px;
+    }
+    #pack {
+      border-color: #afd1bd;
+    }
+    label.review {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    footer {
+      max-width: 1160px;
+      margin: 0 auto 30px;
+      padding: 0 24px;
+      color: #617187;
+      font-size: 13px;
+    }
+    .sr {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+    [hidden] {
+      display: none !important;
+    }
+    @media (max-width: 850px) {
+      main {
+        grid-template-columns: 1fr;
+        margin-top: 22px;
+      }
+      h1 {
+        font-size: 27px;
+      }
+      aside {
+        order: 2;
+      }
+      header {
+        padding: 16px 24px;
+      }
+      #drop {
+        padding: 28px 18px;
+      }
+    }
+  </style>
+  <header>
+    <strong>Visa Agent</strong><span id="mode">正在连接本地服务…</span>
+  </header>
+  <main>
+    <section>
+      <h1>把申请材料拖到这里</h1>
+      <p class="muted">读取材料、检查缺项，跟着回复继续补齐。</p>
+      <label id="drop"
+        ><input
+          id="files"
+          type="file"
+          multiple
+          accept=".pdf,.png,.jpg,.jpeg"
+          aria-label="上传签证材料"
+        />
+        <svg
+          width="42"
+          height="48"
+          viewBox="0 0 42 48"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M9 2h16l12 12v31H5V2h4Z"
+            stroke="currentColor"
+            stroke-width="2.5"
+          />
+          <path
+            d="M25 2v12h12M21 36V21m-7 7 7-7 7 7"
+            stroke="currentColor"
+            stroke-width="2.5"
+          />
+        </svg>
+        <strong>拖入文件，或点击选择</strong><span>放下后自动开始检查</span
+        ><small>PDF / JPG / PNG · 每个最多 10 MB · 每次最多 5 份</small></label
+      >
+      <div id="progress" role="status" aria-live="polite"></div>
+      <div id="error" role="alert" hidden></div>
+      <button id="retry" class="secondary" hidden>重试上次输入</button>
+      <div id="messages" aria-live="polite">
+        <p class="empty">尚未提交材料。右侧已载入测试背景，可以直接拖文件。</p>
+      </div>
+      <label for="text" class="sr">回答问题或补充说明</label
+      ><textarea
+        id="text"
+        placeholder="在这里回答补件问题，或补充申请情况…"
+      ></textarea>
+      <button id="send">发送回答</button>
+      <details>
+        <summary>查看本轮记录与提取字段</summary>
+        <button id="trace" class="secondary" style="margin-top: 12px">
+          加载运行记录
+        </button>
+        <pre id="debug">提交材料后可以查看。</pre>
+      </details>
+    </section>
+    <aside>
+      <div class="panel">
+        <h2>当前案件</h2>
+        <div class="row" style="margin-bottom: 14px">
+          <span id="status" class="state">等待材料</span>
+        </div>
+        <label for="sample" class="muted">测试场景</label
+        ><select id="sample">
+          <option value="visitor">Visitor · Lin Example</option>
+          <option value="student">Student · Mei Example</option>
+          <option value="skilled_worker">Skilled Worker · Kai Example</option>
+          <option value="blank">空白案件 · 自己填写情况</option>
+        </select>
+        <button id="new" class="secondary" style="margin-top: 12px">
+          开始新案件
+        </button>
+        <p id="hint" class="muted" style="margin: 16px 0 0"></p>
+        <details>
+          <summary>已载入的测试背景</summary>
+          <pre id="background"></pre>
+        </details>
+        <small
+          id="case-id"
+          class="muted"
+          style="display: block; overflow-wrap: anywhere; margin-top: 14px"
+        ></small>
+      </div>
+      <div class="panel">
+        <h2>已收到的材料 <span id="count">0</span></h2>
+        <div id="documents" class="muted">等待上传</div>
+      </div>
+      <div class="panel" id="issues-panel" hidden>
+        <h2>还需要处理</h2>
+        <div id="issues"></div>
+      </div>
+      <div class="panel" id="pack" hidden>
+        <h2>材料包已生成</h2>
+        <div class="row">
+          <a
+            class="link"
+            href="/pack/report.html"
+            target="_blank"
+            rel="noopener"
+            >查看报告</a
+          ><a href="/pack/download">下载 ZIP</a>
+        </div>
+        <div id="approval" style="margin-top: 16px">
+          <label class="review"
+            ><input
+              type="checkbox"
+              id="confirmed"
+            />我已核对当前材料及报告</label
+          ><button id="approve" disabled>确认这版材料包</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+  <footer>
+    本地测试工作台。示例为合成材料，准备完成后仍需你确认。<span
+      id="budget"
+    ></span>
+  </footer>
+  <script>
+    const token = "__SESSION_TOKEN__";
+    let state = null,
+      busy = false,
+      lastInput = null;
+    const $ = (id) => document.getElementById(id);
+    const statuses = {
+      WAIT_USER: "等待补充",
+      NEEDS_HUMAN: "需要人工核对",
+      READY_FOR_REVIEW: "等待你的确认",
+      COMPLETE: "当前版本已确认",
+    };
+    const hints = {
+      visitor:
+        "请从 dev_visitor 文件夹拖入 identity.pdf、funds.pdf、work.pdf。",
+      student:
+        "请从 dev_student 拖入 identity.pdf、funds.pdf、school.pdf、health.pdf。",
+      skilled_worker:
+        "请从 dev_skilled_worker 拖入 identity.pdf、sponsor.pdf、language.pdf、health.pdf。",
+      blank: "先描述申请情况，再上传对应材料。",
+    };
+    function element(tag, text, cls) {
+      const e = document.createElement(tag);
+      e.textContent = text;
+      if (cls) e.className = cls;
+      return e;
+    }
+    function showError(message) {
+      $("error").hidden = !message;
+      $("error").textContent = message || "";
+    }
+    function setBusy(value) {
+      busy = value;
+      $("drop").classList.toggle("busy", value);
+      for (const id of ["files", "text", "send", "new", "sample", "retry"])
+        $(id).disabled = value;
+      $("approve").disabled = value || !$("confirmed").checked;
+      $("progress").textContent = value ? "正在读取材料并检查，请稍候…" : "";
+    }
+    function render(data) {
+      state = data;
+      const c = data.case;
+      $("mode").textContent =
+        data.mode === "live" ? "真实模型" : "离线流程演示";
+      $("budget").textContent = ` 本批模型请求 ${data.used} / ${data.limit}`;
+      $("status").textContent = statuses[c.status] || c.status;
+      $("status").className =
+        "state" +
+        (["READY_FOR_REVIEW", "COMPLETE"].includes(c.status) ? " ready" : "");
+      $("sample").value = data.sample;
+      $("hint").textContent = hints[data.sample];
+      $("background").textContent = data.initial_text || "没有预填信息。";
+      $("case-id").textContent = c.id + " · 版本 " + c.version;
+      $("count").textContent = c.documents.length;
+      $("documents").replaceChildren();
+      for (const d of c.documents) {
+        const row = element("div", d.name, "file");
+        row.append(
+          element(
+            "small",
+            d.rejected
+              ? "已排除"
+              : d.problems.length
+                ? d.problems.join("；")
+                : `已读取 ${d.pages.length} 页 · ${d.kind}`,
+          ),
+        );
+        $("documents").append(row);
+      }
+      if (!c.documents.length) $("documents").textContent = "等待上传";
+      const issues = c.checks.filter((x) =>
+        ["fail", "unknown"].includes(x.status),
+      );
+      $("issues-panel").hidden = !issues.length;
+      $("issues").replaceChildren(
+        ...issues.map((x) => element("div", x.message, "issue")),
+      );
+      $("messages").replaceChildren();
+      for (const h of c.history) {
+        let text = h.text;
+        if (data.initial_text && text.startsWith(data.initial_text))
+          text = text.slice(data.initial_text.length).trim();
+        if (text) {
+          const m = element("div", "", "message customer");
+          m.append(element("small", "你"), document.createTextNode(text));
+          $("messages").append(m);
+        }
+        const reply = element("div", "", "message");
+        reply.append(
+          element("small", "材料顾问"),
+          document.createTextNode(h.reply),
+        );
+        $("messages").append(reply);
+      }
+      if (!c.history.length)
+        $("messages").append(
+          element("p", "背景已准备好，拖入配套材料即可开始。", "empty"),
+        );
+      $("pack").hidden = !c.pack_path;
+      $("approval").hidden = c.status !== "READY_FOR_REVIEW";
+      $("confirmed").checked = false;
+      $("approve").disabled = true;
+      $("debug").textContent = JSON.stringify(
+        { facts: c.facts, checks: c.checks },
+        null,
+        2,
+      );
+      showError(
+        data.error ||
+          c.pending_error ||
+          (data.mode === "live" && !data.key_available
+            ? "服务进程未读取到模型密钥，请配置后重新启动。"
+            : ""),
+      );
+    }
+    async function post(path, body) {
+      const response = await fetch(path, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Visa-Session": token,
+        },
+        body: JSON.stringify({ ...body, case_id: state.case.id }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw Error(data.error || "请求失败");
+      render(data);
+      return data;
+    }
+    function encode(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () =>
+          resolve({ name: file.name, content: reader.result.split(",")[1] });
+        reader.onerror = () => reject(Error("读取文件失败：" + file.name));
+        reader.readAsDataURL(file);
+      });
+    }
+    async function deliver(body) {
+      lastInput = body;
+      const data = await post("/api/event", body);
+      $("retry").hidden = !data.result.error;
+      if (!data.result.error) {
+        lastInput = null;
+        $("text").value = "";
+      }
+      $("files").value = "";
+    }
+    async function submit(files = []) {
+      if (busy || !state) return;
+      try {
+        if (files.length > 5) throw Error("每次最多上传 5 份材料。");
+        if (files.some((f) => f.size > 10 * 1024 * 1024))
+          throw Error("有文件超过 10 MB，请拆分后上传。");
+        if (files.some((f) => !/\.(pdf|png|jpe?g)$/i.test(f.name)))
+          throw Error("仅支持 PDF、JPG、PNG。");
+        if (!files.length && !$("text").value.trim()) return;
+        setBusy(true);
+        showError("");
+        await deliver({
+          event_id: crypto.randomUUID(),
+          text: $("text").value,
+          files: await Promise.all(files.map(encode)),
+        });
+      } catch (e) {
+        showError(e.message);
+        $("retry").hidden = !lastInput;
+      } finally {
+        setBusy(false);
+      }
+    }
+    $("files").addEventListener("change", (e) => submit([...e.target.files]));
+    $("send").onclick = () => submit();
+    for (const name of ["dragenter", "dragover"])
+      $("drop").addEventListener(name, (e) => {
+        e.preventDefault();
+        if (!busy) $("drop").classList.add("over");
+      });
+    $("drop").addEventListener("dragleave", () =>
+      $("drop").classList.remove("over"),
+    );
+    $("drop").addEventListener("drop", (e) => {
+      e.preventDefault();
+      $("drop").classList.remove("over");
+      submit([...e.dataTransfer.files]);
+    });
+    document.addEventListener("dragover", (e) => e.preventDefault());
+    document.addEventListener("drop", (e) => e.preventDefault());
+    $("new").onclick = async () => {
+      setBusy(true);
+      try {
+        await post("/api/new", { sample: $("sample").value });
+        lastInput = null;
+        $("retry").hidden = true;
+        $("text").value = "";
+      } catch (e) {
+        showError(e.message);
+      } finally {
+        setBusy(false);
+      }
+    };
+    $("sample").onchange = () => $("new").click();
+    $("retry").onclick = async () => {
+      if (!lastInput) return;
+      setBusy(true);
+      try {
+        await deliver(lastInput);
+      } catch (e) {
+        showError(e.message);
+      } finally {
+        setBusy(false);
+      }
+    };
+    $("confirmed").onchange = () => {
+      $("approve").disabled = busy || !$("confirmed").checked;
+    };
+    $("approve").onclick = async () => {
+      if (!$("confirmed").checked) return;
+      setBusy(true);
+      try {
+        await post("/api/review", {
+          version: state.case.version,
+          notes: "用户在浏览器勾选确认，已核对当前合成测试材料与报告。",
+        });
+      } catch (e) {
+        showError(e.message);
+      } finally {
+        setBusy(false);
+      }
+    };
+    $("trace").onclick = async () => {
+      try {
+        const r = await fetch("/api/trace");
+        if (!r.ok) throw Error("读取运行记录失败");
+        $("debug").textContent = JSON.stringify(await r.json(), null, 2);
+      } catch (e) {
+        showError(e.message);
+      }
+    };
+    fetch("/api/state")
+      .then((r) => {
+        if (!r.ok) throw Error("无法连接本地服务");
+        return r.json();
+      })
+      .then(render)
+      .catch((e) => showError(e.message));
+  </script>
+</html>
