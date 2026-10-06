@@ -9,6 +9,9 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
       - name: Validate Compose
@@ -16,7 +19,10 @@ jobs:
       - name: Build runtime image
         run: docker build --target runtime --build-arg VCS_REF=${GITHUB_SHA} -t visa-agent:ci .
       - name: Run offline production-image acceptance
-        run: docker run --rm --read-only --tmpfs /tmp:rw,size=1g visa-agent:ci python scripts/container_smoke.py | tee container-smoke.json
+        run: |
+          set -o pipefail
+          docker run --rm --read-only --tmpfs /tmp:rw,size=1g visa-agent:ci python scripts/container_smoke.py | tee container-smoke.json
+          python -c "import json; r=json.load(open('container-smoke.json')); assert len(r['routes'])==3 and r['sigterm']=='graceful_exit'"
       - name: Check image excludes private configuration
         run: docker run --rm visa-agent:ci python -c "from pathlib import Path; assert not Path('/app/.env').exists(); assert not Path('/app/data/qq-test/qq-config.json').exists()"
       - name: Build test image

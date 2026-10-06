@@ -26,6 +26,19 @@ Download recorded demo packs: [Visitor](examples/packs/visitor-demo.zip) · [Stu
 
 ## Try it
 
+### Docker email service
+
+```sh
+cp .env.example .env
+# Fill your model key, QQ/Foxmail inbox, authorization code and sender policy.
+docker compose up -d --build
+docker compose ps
+```
+
+The container initializes a new inbox once and preserves case data on restart. [Complete Docker setup, secrets, backups, restore and upgrades](docs/docker.md) · [Container validation](docs/container-acceptance.md).
+
+### Local CLI demo
+
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/). It creates a project-local Python 3.12 environment from the lockfile.
 
 ```sh
@@ -33,7 +46,7 @@ git clone https://github.com/Sanssssssssssssssss/Visa-Agent.git
 cd Visa-Agent
 uv sync --locked --python 3.12
 uv run visa-agent --mode offline verify-dataset
-uv run visa-agent --mode offline replay datasets/cases/dev_visitor.json --approve-demo
+uv run visa-agent --mode offline --hitl on replay datasets/cases/dev_visitor.json --approve-demo
 ```
 
 The replay prints its case ID and ZIP path. Expected final status: `COMPLETE`, with a synthetic adviser record. This offline model reads fixture labels; it tests the workflow, not live model understanding.

@@ -4,6 +4,8 @@
 
 The verified channel is a QQ/Foxmail inbox on Windows. It needs outbound access to the model API, IMAP 993 and SMTP 465. Customers send email; no public web server or customer UI is needed.
 
+For a persistent container deployment, follow the [Docker guide](docker.md).
+
 ## Install and configure
 
 ```sh
@@ -53,7 +55,7 @@ Windows shortcuts live in `scripts/mail-{start,status,stop}.cmd` and `sample-deb
 
 `running: true` means the OS lock is held. `last_poll.at` records the last completed poll; document/model processing can delay its update. Polling defaults to 15 seconds. Idle polls do not call the model. Stop waits for the current event; confirm `running: false` before upgrading.
 
-One lock prevents duplicate workers for one data directory. Transient network failures back off at 15/30/60 seconds and continue from the cursor after recovery. Configuration, authentication and programming failures exit with a diagnostic; ambiguous SMTP delivery remains held for inspection.
+One lock prevents duplicate workers for one data directory. Transient network failures back off at 15/30/60 seconds and continue from the cursor after recovery. Configuration, authentication and programming failures exit with a diagnostic; unconfirmed SMTP sends persist with retry backoff up to 300 seconds.
 
 | Setting | Meaning |
 |---|---|

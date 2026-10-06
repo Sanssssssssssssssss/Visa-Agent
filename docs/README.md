@@ -3,6 +3,7 @@
 | Start here / 入口 | English | 简体中文 |
 |---|---|---|
 | Install and operate / 部署启停 | [Deployment](deployment.md) | [部署](deployment.zh-CN.md) |
+| Docker, backup and upgrade / 容器运维 | [Docker](docker.md) | [Docker 部署](docker.zh-CN.md) |
 | Send your first email / 亲自测试 | [Email](channels/email.md) | [邮件](channels/email.zh-CN.md) |
 | WhatsApp status and integration / 接入边界 | [WhatsApp](channels/whatsapp.md) | [WhatsApp](channels/whatsapp.zh-CN.md) |
 | Harness and stability / 架构与稳定性 | [Architecture](architecture.md) | [架构](architecture.zh-CN.md) |

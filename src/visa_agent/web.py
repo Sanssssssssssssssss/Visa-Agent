@@ -21,7 +21,7 @@ from .inbox import Inbox, Incoming, normalize_sender
 from .evidence import Evidence
 from .types import CaseEvent
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(os.getenv("VISA_PROJECT_ROOT", str(Path(__file__).resolve().parents[2])))
 MAX_REQUEST_BYTES = 70 * 1024 * 1024
 SAMPLES = {"visitor": "dev_visitor", "student": "dev_student", "skilled_worker": "dev_skilled_worker"}
 

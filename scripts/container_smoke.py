@@ -18,8 +18,9 @@ import time
 from pydantic_ai import models
 
 from visa_agent.documents import read_document
-from visa_agent.replay import replay
+from visa_agent.replay import dataset_path, replay
 from visa_agent.service import VisaService
+from visa_agent.types import CaseEvent
 
 from manage_data import backup, restore
 
@@ -34,10 +35,20 @@ def check():
     with tempfile.TemporaryDirectory() as temporary:
         work = Path(temporary)
         for route in ("visitor", "student", "skilled_worker"):
-            report = replay(VisaService(work / route, "offline", hitl=False),
-                            ROOT / f"datasets/cases/dev_{route}.json")
+            report = replay(VisaService(work / route, "offline", hitl=True),
+                            ROOT / f"datasets/cases/dev_{route}.json", approve_demo=True)
             assert report["passed"] and report["pack_path"]
-            result["routes"][route] = "complete_zip_verified"
+            auto = VisaService(work / (route + "-auto"), "offline", hitl=False)
+            auto.create_case(route, test_mode=True)
+            scenario = json.loads((ROOT / f"datasets/cases/dev_{route}.json").read_text(encoding="utf-8"))
+            for index, event in enumerate(scenario["events"]):
+                turn = auto.handle_event(CaseEvent(case_id=route, event_id=str(index), text=event["text"],
+                    attachments=[str(dataset_path(ROOT / "datasets", p)) for p in event["attachments"]]))
+                assert not turn.error
+            assert turn.status == "COMPLETE"
+            from visa_agent.delivery import verify_pack
+            verify_pack(auto.store.get(route))
+            result["routes"][route] = "reviewed_and_automatic_zip_verified"
         for name in ("identity.jpg", "funds-scan.pdf"):
             path = ROOT / "datasets/formatted-materials-v2/student" / name
             doc = read_document(path, hashlib.sha256(path.read_bytes()).hexdigest(), name)

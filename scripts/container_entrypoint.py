@@ -17,8 +17,9 @@ def initialize(data):
         raise ValueError("Configure VISA_QQ_MAILBOX")
     config_path = data / "qq-config.json"
     if config_path.exists():
+        from visa_agent.inbox import normalize_sender
         config = json.loads(config_path.read_text(encoding="utf-8"))
-        if config["mailbox"] != os.environ["VISA_QQ_MAILBOX"]:
+        if config["mailbox"] != normalize_sender("email", os.environ["VISA_QQ_MAILBOX"]):
             raise ValueError("Mailbox differs from persisted configuration; use a separate data volume")
         return
     from configure_qq import main as configure

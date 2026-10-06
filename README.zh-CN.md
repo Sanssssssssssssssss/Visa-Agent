@@ -26,6 +26,19 @@
 
 ## 开始使用
 
+### Docker 邮箱服务
+
+```sh
+cp .env.example .env
+# 填好自己的模型密钥、QQ/Foxmail 邮箱、授权码和收件策略。
+docker compose up -d --build
+docker compose ps
+```
+
+首次启动初始化收件配置，重启保留案件和游标。[Docker 配置、secrets、启停、备份恢复和升级](docs/docker.zh-CN.md) · [容器验收](docs/container-acceptance.md)。
+
+### 本机 CLI 回放
+
 安装 [uv](https://docs.astral.sh/uv/getting-started/installation/)。Python 3.12 和依赖安装到本项目环境，版本锁定在 `uv.lock`。
 
 ```sh
@@ -33,7 +46,7 @@ git clone https://github.com/Sanssssssssssssssss/Visa-Agent.git
 cd Visa-Agent
 uv sync --locked --python 3.12
 uv run visa-agent --mode offline verify-dataset
-uv run visa-agent --mode offline replay datasets/cases/dev_visitor.json --approve-demo
+uv run visa-agent --mode offline --hitl on replay datasets/cases/dev_visitor.json --approve-demo
 ```
 
 回放输出案件 ID 和 ZIP 路径。预期最终为 `COMPLETE`，审批记录标注模拟顾问。离线模型读取样例中的字段标签，用于验证流程，不能证明真实模型理解能力。

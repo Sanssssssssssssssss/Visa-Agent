@@ -11,6 +11,8 @@ def main():
     status = worker_status(Path(os.getenv("VISA_QQ_DATA_DIR", "/data")))
     if not status["running"] or status["stop_requested"]:
         return 1
+    if status.get("last_poll", {}).get("error_type"):
+        return 1
     stamp = status.get("last_poll", {}).get("at") or status.get("process", {}).get("started_at")
     if not stamp:
         return 1

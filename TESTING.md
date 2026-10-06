@@ -30,6 +30,7 @@ uv run python scripts/check_docs.py
 | Channels / 渠道 | MIME, reference chains, deduplication, stale/ambiguous sending | [QQ](tests/test_qq_mail.py), [Graph](tests/test_outlook.py) |
 | Persistence / 隔离与恢复 | 4 interleaved sender/account identities × 30 logical days × 3 repetitions × HITL on/off | [inbox](tests/test_inbox.py) |
 | Worker / 后台 | OS lock across processes, abrupt exit, 5 network failures then recovery, headless credentials | [worker](tests/test_worker.py) |
+| Deployment / 部署 | Secret files, repeated boot, backup integrity, traversal rejection, stop cursor | [deployment](tests/test_deployment.py), [container CI](.github/workflows/container.yml) |
 | Pack / 交付 | ZIP file set, hashes, worksheet and bilingual handover | [delivery](tests/test_delivery_handover.py) |
 
 The 30-day test advances timestamps; it is not a month of real uptime. Concurrency uses the current serialized SQLite engine and does not establish production capacity.
