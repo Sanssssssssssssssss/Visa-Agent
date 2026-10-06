@@ -9,7 +9,7 @@ QQ 使用 Python 标准库 `imaplib`、`email`、`smtplib`，无需 Azure 应用
 ```powershell
 uv run python scripts/configure_qq.py
 uv run python -m visa_agent.qq_mail probe
-uv run python -m visa_agent.qq_mail watch --hitl off --send-replies --request-cap 24
+uv run python -m visa_agent.qq_mail watch --hitl off --send-replies
 ```
 
 配置时，允许的发件邮箱留空表示开放收件；填一个地址则仅接收该测试邮箱。授权码在终端隐藏输入。`probe` 只检查 IMAP/SMTP 登录，不发邮件。
@@ -31,6 +31,8 @@ uv run python -m visa_agent.qq_mail stop
 ## 自己测试
 
 客户直接发邮件、回复邮件和发送附件即可，整个流程在邮箱里完成，不需要打开项目页面。页面和 CLI 是开发者查看日志的辅助入口。
+
+2026-10-07 更新：回复跟随本轮中文/英文，路线明确后附双语 XLSX 信息表，支持回传、缺项检查及完成后的 ZIP 附件。见 [信息收集 SOP 与测试](application-information.md)。累计请求默认不限；`--request-cap` 仅在操作者显式设置时启用。
 
 1. 用另一个邮箱向配置的 Agent 邮箱发一封新邮件，主题任意。正文可写“我在中国，30岁，想去英国旅游，不知道需要什么材料”。预期自动建案，中文回复询问信息并显示材料进度。
 2. **直接回复 Agent 的邮件**，提供姓名、时间、资金来源等信息。预期沿用同一案件，保留先前事实。
@@ -54,7 +56,7 @@ uv run python -m visa_agent.qq_mail stop
 
 发送记录状态包括 `prepared`（等待发送）、`sent`（SMTP 接受）、`superseded`（案件已变更）、`uncertain`（连接中断，是否送达未知）、`ignored`（系统通知）。旧版 `failed` 记录继续保留。现在模型检查失败时，也发送应用生成的失败说明；`result.error`、失败事件与 `BLOCKED` 状态保留，回信不会夹带内部异常。`sent` 只表示邮件被接受，不等于案件完成或客户已读；不确定发送不会自动重发。文件、模型失败及被拒邮件记录保留在本机。
 
-后台网络错误最多连续重试两次，第三次失败停止并留下错误类型；不会伪造成功。没有新邮件时不调用模型。达到模型请求额度时暂停；未扫描的邮件仍在服务器。读取或模型失败的案件需要操作者查看记录、处理原因后重试，不承诺无人值守生产运行。
+后台网络错误最多连续重试两次，第三次失败停止并留下错误类型；不会伪造成功。没有新邮件时不调用模型。显式配置累计额度时，达到额度暂停；未扫描的邮件仍在服务器。读取或模型失败的案件需要操作者查看记录、处理原因后重试，不承诺无人值守生产运行。
 
 ## 当前收集体验
 

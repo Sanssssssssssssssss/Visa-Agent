@@ -1,0 +1,533 @@
+{
+  "date": "2026-10-07",
+  "scope": "Bilingual preparation worksheets and language-following email collection; not a UKVI application or authenticity assessment.",
+  "batches": [
+    {
+      "name": "live-v1",
+      "cases": 10,
+      "passed": 7,
+      "http_requests": 44,
+      "usage": {
+        "requests": 44,
+        "input_tokens": 208905,
+        "output_tokens": 11615
+      },
+      "results": [
+        {
+          "id": "visitor",
+          "passed": false,
+          "failures": [
+            "turn1:BLOCKED:None"
+          ],
+          "seconds": 10.391,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "student",
+          "passed": true,
+          "failures": [],
+          "seconds": 10.938,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "skilled_worker",
+          "passed": true,
+          "failures": [],
+          "seconds": 10.64,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "missing-birthday",
+          "passed": false,
+          "failures": [
+            "turn2:BLOCKED:None"
+          ],
+          "seconds": 15.203,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "invalid-email",
+          "passed": false,
+          "failures": [
+            "turn2:BLOCKED:None"
+          ],
+          "seconds": 14.344,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "formula",
+          "passed": true,
+          "failures": [],
+          "seconds": 15.313,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "passport-conflict",
+          "passed": true,
+          "failures": [],
+          "seconds": 10.5,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "prompt-injection",
+          "passed": true,
+          "failures": [],
+          "seconds": 6.656,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "sample-real-case",
+          "passed": true,
+          "failures": [],
+          "seconds": 9.234,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "language-switch",
+          "passed": true,
+          "failures": [],
+          "seconds": 12.938,
+          "models": [
+            "deepseek-flash"
+          ]
+        }
+      ],
+      "source_hashes": {
+        "src\\visa_agent\\agent.py": "27ea45533e8c8d3cdd30fae00ccb9137dbdaa558dc99c0fd52145c24bea57154",
+        "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+        "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+        "src\\visa_agent\\conversation.py": "8893b2c37f90dea7ca13f8c57fcc95c66ac951e2f49fcc1283995b0edbc713ff",
+        "src\\visa_agent\\delivery.py": "5c9347344a84ada8eca47f5d0cd1e574d1c8cb3354d9eb744f4045429c40fbdb",
+        "src\\visa_agent\\diagnostics.py": "501b62fb523ca7605b87a9822a4756ab493c6bb9f24be0ff60c0e318de2c6e31",
+        "src\\visa_agent\\documents.py": "725de541ad0b31912e9b8f6793a52327559dcde2d211773754153ab01eb454e7",
+        "src\\visa_agent\\evidence.py": "75931ecc5a1b3704b29adf213b56abd38286b3691d3ce77a37d9b8acec07d41d",
+        "src\\visa_agent\\guidance.py": "887375cfa6f5ea30927a28b1dcaa139a68e5c3feb179b89a807fd971c341eb37",
+        "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+        "src\\visa_agent\\intake.py": "37207f017ee9ca82134e154f93be812b748e139215a3cb46a247adc4320f9461",
+        "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+        "src\\visa_agent\\mail_outbox.py": "03c1ddeffb293991e727f2f939eabe2e8d8cc3a02e8b55b949fa768bb7bdb84b",
+        "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+        "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+        "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+        "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+        "src\\visa_agent\\qq_mail.py": "29ec27b878fda4269a232d2f08504fed5b4ab2ba6073df3b335de25fea46132b",
+        "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+        "src\\visa_agent\\rules.py": "1e3a1d51bc656c8ab140363c4a98f37c4ee3c9154d9eea7d71f6448b9430c3fa",
+        "src\\visa_agent\\service.py": "7ee7e839e286583e1e18e4f61b9302cdb56e43cbf97a8f778e5dff371ded11a8",
+        "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+        "src\\visa_agent\\types.py": "38e15ff369d4e0ee95c31638361a29765a205015dd5533281e60cabb07c4a19c",
+        "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+        "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+        "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+        "src\\visa_agent\\prompts\\SOUL.md": "1b29a2a62248008facb5554a5bd22b9fbf94222a21ba6f9274a5e6ec9e63d49e"
+      },
+      "dataset_sha256": "3de004912da1e3374f1ba90314365a48613661c2fabca2db8cf27257cbafc440"
+    },
+    {
+      "name": "live-v2",
+      "cases": 10,
+      "passed": 10,
+      "http_requests": 41,
+      "usage": {
+        "requests": 41,
+        "input_tokens": 193341,
+        "output_tokens": 11843
+      },
+      "results": [
+        {
+          "id": "visitor",
+          "passed": true,
+          "failures": [],
+          "seconds": 9.985,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "student",
+          "passed": true,
+          "failures": [],
+          "seconds": 9.875,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "skilled_worker",
+          "passed": true,
+          "failures": [],
+          "seconds": 12.546,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "missing-birthday",
+          "passed": true,
+          "failures": [],
+          "seconds": 12.672,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "invalid-email",
+          "passed": true,
+          "failures": [],
+          "seconds": 15.922,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "formula",
+          "passed": true,
+          "failures": [],
+          "seconds": 10.25,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "passport-conflict",
+          "passed": true,
+          "failures": [],
+          "seconds": 9.25,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "prompt-injection",
+          "passed": true,
+          "failures": [],
+          "seconds": 11.14,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "sample-real-case",
+          "passed": true,
+          "failures": [],
+          "seconds": 10.016,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "language-switch",
+          "passed": true,
+          "failures": [],
+          "seconds": 7.671,
+          "models": [
+            "deepseek-flash"
+          ]
+        }
+      ],
+      "source_hashes": {
+        "src\\visa_agent\\agent.py": "27ea45533e8c8d3cdd30fae00ccb9137dbdaa558dc99c0fd52145c24bea57154",
+        "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+        "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+        "src\\visa_agent\\conversation.py": "8893b2c37f90dea7ca13f8c57fcc95c66ac951e2f49fcc1283995b0edbc713ff",
+        "src\\visa_agent\\delivery.py": "5c9347344a84ada8eca47f5d0cd1e574d1c8cb3354d9eb744f4045429c40fbdb",
+        "src\\visa_agent\\diagnostics.py": "501b62fb523ca7605b87a9822a4756ab493c6bb9f24be0ff60c0e318de2c6e31",
+        "src\\visa_agent\\documents.py": "725de541ad0b31912e9b8f6793a52327559dcde2d211773754153ab01eb454e7",
+        "src\\visa_agent\\evidence.py": "6375405aaace84f7150c7f7ce8bb97203fb8a63413c900ed2f6b11377a3bdaaa",
+        "src\\visa_agent\\guidance.py": "887375cfa6f5ea30927a28b1dcaa139a68e5c3feb179b89a807fd971c341eb37",
+        "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+        "src\\visa_agent\\intake.py": "37207f017ee9ca82134e154f93be812b748e139215a3cb46a247adc4320f9461",
+        "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+        "src\\visa_agent\\mail_outbox.py": "03c1ddeffb293991e727f2f939eabe2e8d8cc3a02e8b55b949fa768bb7bdb84b",
+        "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+        "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+        "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+        "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+        "src\\visa_agent\\qq_mail.py": "29ec27b878fda4269a232d2f08504fed5b4ab2ba6073df3b335de25fea46132b",
+        "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+        "src\\visa_agent\\rules.py": "dfef1341cb03b7e39c3ba39d5338dc6e4eb40e2b12d638488d2187ac5d5875ba",
+        "src\\visa_agent\\service.py": "7ee7e839e286583e1e18e4f61b9302cdb56e43cbf97a8f778e5dff371ded11a8",
+        "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+        "src\\visa_agent\\types.py": "38e15ff369d4e0ee95c31638361a29765a205015dd5533281e60cabb07c4a19c",
+        "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+        "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+        "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+        "src\\visa_agent\\prompts\\SOUL.md": "1b29a2a62248008facb5554a5bd22b9fbf94222a21ba6f9274a5e6ec9e63d49e"
+      },
+      "dataset_sha256": "3de004912da1e3374f1ba90314365a48613661c2fabca2db8cf27257cbafc440"
+    },
+    {
+      "name": "live-v3",
+      "cases": 3,
+      "passed": 3,
+      "http_requests": 13,
+      "usage": {
+        "requests": 13,
+        "input_tokens": 52095,
+        "output_tokens": 3079
+      },
+      "results": [
+        {
+          "id": "visitor",
+          "passed": true,
+          "failures": [],
+          "seconds": 8.187,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "passport-conflict",
+          "passed": true,
+          "failures": [],
+          "seconds": 10.172,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "language-switch",
+          "passed": true,
+          "failures": [],
+          "seconds": 11.0,
+          "models": [
+            "deepseek-flash"
+          ]
+        }
+      ],
+      "source_hashes": {
+        "src\\visa_agent\\agent.py": "27ea45533e8c8d3cdd30fae00ccb9137dbdaa558dc99c0fd52145c24bea57154",
+        "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+        "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+        "src\\visa_agent\\conversation.py": "c6ae8dfe9b2e1cc3ef712c41f2c72d7afae479f6619ed2b80948955c592e5642",
+        "src\\visa_agent\\delivery.py": "5c9347344a84ada8eca47f5d0cd1e574d1c8cb3354d9eb744f4045429c40fbdb",
+        "src\\visa_agent\\diagnostics.py": "501b62fb523ca7605b87a9822a4756ab493c6bb9f24be0ff60c0e318de2c6e31",
+        "src\\visa_agent\\documents.py": "725de541ad0b31912e9b8f6793a52327559dcde2d211773754153ab01eb454e7",
+        "src\\visa_agent\\evidence.py": "6375405aaace84f7150c7f7ce8bb97203fb8a63413c900ed2f6b11377a3bdaaa",
+        "src\\visa_agent\\guidance.py": "00885d3ae3ce4e03d0c9a606193b305d3b6e629ec43715efb6fd0b8abc0e9d01",
+        "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+        "src\\visa_agent\\intake.py": "37207f017ee9ca82134e154f93be812b748e139215a3cb46a247adc4320f9461",
+        "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+        "src\\visa_agent\\mail_outbox.py": "03c1ddeffb293991e727f2f939eabe2e8d8cc3a02e8b55b949fa768bb7bdb84b",
+        "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+        "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+        "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+        "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+        "src\\visa_agent\\qq_mail.py": "29ec27b878fda4269a232d2f08504fed5b4ab2ba6073df3b335de25fea46132b",
+        "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+        "src\\visa_agent\\rules.py": "dfef1341cb03b7e39c3ba39d5338dc6e4eb40e2b12d638488d2187ac5d5875ba",
+        "src\\visa_agent\\service.py": "7ee7e839e286583e1e18e4f61b9302cdb56e43cbf97a8f778e5dff371ded11a8",
+        "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+        "src\\visa_agent\\types.py": "38e15ff369d4e0ee95c31638361a29765a205015dd5533281e60cabb07c4a19c",
+        "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+        "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+        "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+        "src\\visa_agent\\prompts\\SOUL.md": "1b29a2a62248008facb5554a5bd22b9fbf94222a21ba6f9274a5e6ec9e63d49e"
+      },
+      "dataset_sha256": "3de004912da1e3374f1ba90314365a48613661c2fabca2db8cf27257cbafc440"
+    },
+    {
+      "name": "live-v4",
+      "cases": 2,
+      "passed": 2,
+      "http_requests": 7,
+      "usage": {
+        "requests": 7,
+        "input_tokens": 34625,
+        "output_tokens": 2636
+      },
+      "results": [
+        {
+          "id": "visitor",
+          "passed": true,
+          "failures": [],
+          "seconds": 8.86,
+          "models": [
+            "deepseek-flash"
+          ]
+        },
+        {
+          "id": "injection-with-documents",
+          "passed": true,
+          "failures": [],
+          "seconds": 9.156,
+          "models": [
+            "deepseek-flash"
+          ]
+        }
+      ],
+      "source_hashes": {
+        "src\\visa_agent\\agent.py": "27ea45533e8c8d3cdd30fae00ccb9137dbdaa558dc99c0fd52145c24bea57154",
+        "src\\visa_agent\\cli.py": "88377dffded7992dbfa66c7f1732a7f6f26d2501c866f39fdaedbb56b68458bb",
+        "src\\visa_agent\\config.py": "ba7d278bca8006606ac61ae657a8b874a015cf333100303a24fc4bf5a9e7e262",
+        "src\\visa_agent\\conversation.py": "c6ae8dfe9b2e1cc3ef712c41f2c72d7afae479f6619ed2b80948955c592e5642",
+        "src\\visa_agent\\delivery.py": "5c9347344a84ada8eca47f5d0cd1e574d1c8cb3354d9eb744f4045429c40fbdb",
+        "src\\visa_agent\\diagnostics.py": "501b62fb523ca7605b87a9822a4756ab493c6bb9f24be0ff60c0e318de2c6e31",
+        "src\\visa_agent\\documents.py": "725de541ad0b31912e9b8f6793a52327559dcde2d211773754153ab01eb454e7",
+        "src\\visa_agent\\evidence.py": "6375405aaace84f7150c7f7ce8bb97203fb8a63413c900ed2f6b11377a3bdaaa",
+        "src\\visa_agent\\guidance.py": "00885d3ae3ce4e03d0c9a606193b305d3b6e629ec43715efb6fd0b8abc0e9d01",
+        "src\\visa_agent\\inbox.py": "45248f6d4d392d0981a529bd32288d00d7fe9cfb9e3ff555e57f1f589254de5e",
+        "src\\visa_agent\\intake.py": "3392d7384332cdbf6ce533c08545759d8ba88887941497ceb686dea6f907b39b",
+        "src\\visa_agent\\intake_schema.py": "8162574328dac24eecd8180bbdec517fbb90459c8e34f0bf598941cd38682eab",
+        "src\\visa_agent\\mail_outbox.py": "03c1ddeffb293991e727f2f939eabe2e8d8cc3a02e8b55b949fa768bb7bdb84b",
+        "src\\visa_agent\\mime_mail.py": "cf995aab1ec90ff57682ea8f3fe0b9c1c89d5ec88495c198ae99c5eee884cade",
+        "src\\visa_agent\\outlook.py": "7fb79ffc92f91f329e948282ec71eff1868d635b169cedf741b1ec6117be0667",
+        "src\\visa_agent\\outlook_auth.py": "bdd56883421a99904c10411ef52e0c22b4586199525ce6d2ad83fab9e4397743",
+        "src\\visa_agent\\persona.py": "900b7bca72145c27498c96704bb0a67b5404fab9b4cb62640dbe39343749a161",
+        "src\\visa_agent\\qq_mail.py": "29ec27b878fda4269a232d2f08504fed5b4ab2ba6073df3b335de25fea46132b",
+        "src\\visa_agent\\replay.py": "85a734762047b861d92ca5a53b9ad9bfd923095dc6522f3ffbd46ec1804c69ae",
+        "src\\visa_agent\\rules.py": "dfef1341cb03b7e39c3ba39d5338dc6e4eb40e2b12d638488d2187ac5d5875ba",
+        "src\\visa_agent\\service.py": "7ee7e839e286583e1e18e4f61b9302cdb56e43cbf97a8f778e5dff371ded11a8",
+        "src\\visa_agent\\store.py": "ce98a7608d2ceefddd4d597400ca46c3a67822adfd0d96d884f87bdb55e4d612",
+        "src\\visa_agent\\types.py": "38e15ff369d4e0ee95c31638361a29765a205015dd5533281e60cabb07c4a19c",
+        "src\\visa_agent\\vision.py": "cb230f2aef86f73b22d2c38f896b471d6f8f5fb79773a4a0ea1c7868157dbc05",
+        "src\\visa_agent\\web.py": "57451fb5dea66abc5d5ea383785a567e119c84e57b1086661f7b2f7b0784247c",
+        "src\\visa_agent\\__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de",
+        "src\\visa_agent\\prompts\\SOUL.md": "1b29a2a62248008facb5554a5bd22b9fbf94222a21ba6f9274a5e6ec9e63d49e"
+      },
+      "dataset_sha256": "3de004912da1e3374f1ba90314365a48613661c2fabca2db8cf27257cbafc440"
+    }
+  ],
+  "mail": [
+    {
+      "case_id": "case-6481e16704dd43ab880fc45a546d94f4",
+      "version": 1,
+      "status": "WAIT_USER",
+      "reply": "Hello! I'm your visa document assistant 😊 I'll keep track and help you gather what is needed, step by step.\n\nNoted: UK Student visa\n\n📝 The attached worksheet is bilingual (Chinese/English). Fill column C, save it and reply with the file. Start with what you know; we can complete the rest step by step. It prepares your information and does not replace the GOV.UK application.\n\nStill needed or to clarify: Passport、Funding evidence、School evidence、TB evidence\n\n📌 Next, please help with:\n1. What is your full name as shown on your passport? This helps us match your documents.\n2. Which country will you apply from? If you are already in the UK, what visa do you hold?\n3. Which country's passport do you hold? Nationality affects visa and evidence requirements.\n\nMaterials ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/4 categories collected\nSome details still need clarification; the checklist may change.\nInformation ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/36\n\nJust reply here. If a document isn't available yet, let me know and we'll start with what you have.\n\nPlease use genuine, complete documents. This service helps collect them; it does not authenticate them.",
+      "run_id": "4d3cbdf5dbdf4d8595a9238f8a237c6f",
+      "error": null,
+      "send_status": "sent",
+      "sent_eml_sha256": "dacd740c6e9fb51fc8996e84aa63ffb5cb3fa5b49e662eb3898351bde0d7170f",
+      "attachment": "application-information.xlsx",
+      "outlook_ui_confirmed": true
+    },
+    {
+      "case_id": "case-6481e16704dd43ab880fc45a546d94f4",
+      "version": 2,
+      "status": "WAIT_USER",
+      "reply": "收到，谢谢您 😊\n\n📥 本次已收到 1 个文件：mail-return-missing-birthday.xlsx\n\n已了解：英国学生签证；姓名：Bilingual Test Applicant\n\n📝 附件是中英双语信息表：填写 C 列，保存后直接作为附件回复。可先填会填的，其余我们逐步补齐。它是准备表，不能替代 GOV.UK 在线申请。\n\n待补齐或确认：护照、资金证明、学校材料、结核检查\n\n材料说明：https://www.gov.uk/student-visa/documents-you-must-provide\n\n📌 下一步，先补充这几项：\n1. 请检查信息表的“联系邮箱”：答案或格式未通过检查，原有材料仍保留。请按表内提示修改并回传。\n2. 请填写附件信息表的 C 列并回传，目前还缺 出生日期、出生城市、出生国家 等信息；不清楚的可以先留空。\n3. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/4 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 1/36\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。",
+      "run_id": "f35a64de3b834a52b56523807c2f1d83",
+      "error": null,
+      "send_status": "sent",
+      "sent_eml_sha256": "7ef8f698ee2531465e2123b9035eaa94942200250374e2cfe8b55772eb3c8d12",
+      "attachment": "application-information.xlsx",
+      "outlook_ui_confirmed": true
+    }
+  ],
+  "mail_usage": {
+    "requests": 4,
+    "input_tokens": 15781,
+    "output_tokens": 407
+  },
+  "offline": [
+    {
+      "file": "offline-initial.xml",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "8",
+      "skipped": "0",
+      "tests": "174",
+      "time": "112.354",
+      "timestamp": "2026-10-07T00:58:02.904965+08:00",
+      "hostname": "LAPTOP-0E9PGF4N"
+    },
+    {
+      "file": "offline-final.xml",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "198",
+      "time": "98.938",
+      "timestamp": "2026-10-07T01:07:10.309804+08:00",
+      "hostname": "LAPTOP-0E9PGF4N"
+    },
+    {
+      "file": "offline-focused-final.xml",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "72",
+      "time": "8.937",
+      "timestamp": "2026-10-07T01:15:19.198700+08:00",
+      "hostname": "LAPTOP-0E9PGF4N"
+    },
+    {
+      "file": "offline-release.xml",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "199",
+      "time": "100.065",
+      "timestamp": "2026-10-07T01:16:51.273220+08:00",
+      "hostname": "LAPTOP-0E9PGF4N"
+    }
+  ],
+  "total_http_requests": 109,
+  "total_usage": {
+    "requests": 109,
+    "input_tokens": 504747,
+    "output_tokens": 29580
+  },
+  "price_configured": false,
+  "worker": {
+    "hitl": false,
+    "application_forms": true,
+    "cumulative_request_cap": null
+  },
+  "limitations": [
+    "Successful end-to-end packs use labelled fictional materials in explicit demo mode.",
+    "Real Outlook/QQ roundtrip verifies worksheet delivery, returned-cell validation, same-case routing and language switch; it is not a completed real application.",
+    "Initial batch retained three failures: Chinese tourism and English tourism treated as conflicting. Fixed with explicit equivalence; identity conflicts still block.",
+    "No concurrent throughput benchmark. Free-text presence and format checks do not establish truth or substantive legal sufficiency.",
+    "Old frozen CLI/web scenarios retain document-only scope. QQ enables application_forms."
+  ],
+  "example_replies": [
+    {
+      "case_id": "visitor",
+      "version": 1,
+      "status": "WAIT_USER",
+      "reply": "您好！我是签证材料助手 😊 我会帮您记好进度，一步步补齐材料。\n\n演示案件：测试材料仅供体验，不用于真实申请。\n\n已了解：英国访问签证\n\n📝 附件是中英双语信息表：填写 C 列，保存后直接作为附件回复。可先填会填的，其余我们逐步补齐。它是准备表，不能替代 GOV.UK 在线申请。\n\n待补齐或确认：护照、资金证明、工作证明\n\n申请顺序：确认类型 → 收集材料 → 在线申请及付款 → 按指引核验身份 → 等待决定。\nhttps://www.gov.uk/apply-to-come-to-the-uk\n\n📌 下一步，先补充这几项：\n1. 请填写附件信息表的 C 列并回传，目前还缺 护照姓名、出生日期、出生城市 等信息；不清楚的可以先留空。\n2. 请上传护照个人信息页，确保姓名、号码和有效期清晰可见，用于核对身份和有效期。\n3. 请提供能看清持有人、银行、币种、余额及覆盖日期的资金证明，例如银行流水或银行信，方便核对费用是否有来源。\n\n材料进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0/3 项已收齐\n另有信息待确认；清单会随申请情况更新。\n信息进度 ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 1/41\n\n直接回复即可；暂时没有的材料告诉我一声，我们先处理手头有的。\n\n小提醒：请提供真实、完整的材料；这里协助收集，不进行真伪鉴定。",
+      "run_id": "f512b2a0014c462c968e15635027f948",
+      "error": null,
+      "duplicate": false,
+      "pack_path": null,
+      "form_path": "E:\\GPTProject2\\Visa-Agent\\output\\intake\\live-v4\\visitor\\forms\\visitor\\v1\\application-information.xlsx",
+      "expected": "WAIT_USER",
+      "passed": true
+    },
+    {
+      "case_id": "visitor",
+      "version": 2,
+      "status": "COMPLETE",
+      "reply": "材料收集完成！✅ 感谢您配合整理。\n\n演示案件：测试材料仅供体验，不用于真实申请。\n\n📥 本次已收到 4 个文件：visitor-example-TEST-ONLY.xlsx、funds.pdf、identity.pdf、work.pdf\n\n已了解：英国访问签证；姓名：Lin Example；国籍：中国\n\n✅ 已收齐：护照、资金证明、工作证明\n\n当前清单需要的材料和信息已收齐，暂时不用补充。后续有变化，直接回复这封邮件即可。\n\n这里只确认收集完成，不代表签证获批，也未替您提交申请。\n\n材料进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 3/3 项已收齐\n按当前申请情况统计。\n信息进度 🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩 36/36",
+      "run_id": "8e38df8550c84d23bf97a3ec5cbef7df",
+      "error": null,
+      "duplicate": false,
+      "pack_path": "E:\\GPTProject2\\Visa-Agent\\output\\intake\\live-v4\\visitor\\packs\\visitor\\v2-170fd9835cf6.zip",
+      "form_path": null,
+      "expected": "COMPLETE",
+      "passed": true
+    }
+  ]
+}

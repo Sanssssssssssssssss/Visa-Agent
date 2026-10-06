@@ -95,7 +95,7 @@ class NoProgress(RuntimeError):
 
 class LiveBudget:
     """Reserve BEFORE every HTTP request, including retries; survives process restarts."""
-    def __init__(self, path: Path, limit: int = 60):
+    def __init__(self, path: Path, limit: int | None = None):
         path.parent.mkdir(parents=True, exist_ok=True)
         self.path, self.limit = path, limit
         with closing(sqlite3.connect(path)) as db, db:
@@ -104,7 +104,7 @@ class LiveBudget:
     def reserve(self, model: str):
         with closing(sqlite3.connect(self.path, timeout=30)) as db, db:
             db.execute("BEGIN IMMEDIATE")
-            if db.execute("SELECT count(*) FROM calls").fetchone()[0] >= self.limit:
+            if self.limit is not None and db.execute("SELECT count(*) FROM calls").fetchone()[0] >= self.limit:
                 raise BudgetExceeded(f"Live batch request budget exhausted ({self.limit})")
             db.execute("INSERT INTO calls(at,model) VALUES (datetime('now'),?)", (model,))
 

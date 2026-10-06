@@ -13,6 +13,13 @@ def normalized(text: str) -> str:
     return re.sub(r"\s+", "", unicodedata.normalize("NFKC", text)).casefold()
 
 
+def comparable_value(key: str, value: str) -> str:
+    """A small explicit bilingual equivalence, never fuzzy identity matching."""
+    if key == "purpose" and normalized(value) in {"旅游", "旅游观光", "观光", "tourism", "sightseeing"}:
+        return "tourism"
+    return value
+
+
 def validate_value(key: str, value: str, quote: str) -> str:
     value = value.strip()
     if key not in FIELDS or not value or value.lower() in {"unknown", "null", "none", "n/a"}:
@@ -123,6 +130,8 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
         if tag.document_id not in docs:
             raise ValueError("Model referenced a document outside this case")
         doc = docs[tag.document_id]
+        if doc.kind == "intake":
+            raise ValueError("The model cannot reclassify a self-report worksheet as evidence")
         if not doc.rejected:
             doc.kind, doc.language = tag.kind, tag.language
             # A visible test watermark cannot be overruled by a model tag.
@@ -143,6 +152,9 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
                 doc = docs.get(candidate.source_id)
                 if doc is None or doc.rejected:
                     raise ValueError("Unknown or rejected source")
+                if doc.kind == "intake":
+                    # Cells are already parsed and typed by application code.
+                    continue
                 page = next((p for p in doc.pages if p.number == candidate.page), None)
                 text = page.text if page else ""
                 if candidate.key == "bank_minimum" and any(
@@ -228,7 +240,7 @@ class Evidence:
         return result
 
     def get(self, key: str, kinds: set[str] | None = None) -> str | None:
-        values = {f.value for f in self.facts(key, kinds)}
+        values = {comparable_value(key, f.value) for f in self.facts(key, kinds)}
         return next(iter(values)) if len(values) == 1 else None
 
     def number(self, key: str, kinds: set[str] | None = None) -> Decimal | None:

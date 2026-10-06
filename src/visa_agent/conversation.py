@@ -26,7 +26,8 @@ def language_for(text, previous="zh"):
         return "zh"
     if re.search(r"[\u4e00-\u9fff]", text):
         return "zh"
-    return "en" if len(re.findall(r"\b[A-Za-z]+\b", text)) >= 3 else previous
+    words = re.findall(r"\b[A-Za-z]+\b", text)
+    return "en" if len(words) >= 3 or text.strip().lower().strip("!.?") in {"hello", "hi", "thanks", "thank you", "yes", "no", "okay", "ok"} else previous
 
 
 def material_progress(case):
@@ -67,18 +68,26 @@ def progress_text(case):
     p = material_progress(case)
     zh = case.language == "zh"
     complete = int(10 * p["checked"] / p["total"]) if p["total"] and p["route_known"] else 0
-    bar = "[" + "■" * complete + "□" * (10 - complete) + "]"
+    bar = "🟩" * complete + "⬜" * (10 - complete)
     if not p["route_known"]:
         return ("材料进度 " if zh else "Materials ") + bar + (
             " 清单待确认；先了解您的申请情况。" if zh else " Checklist pending; we need your circumstances first.")
     counts = (f"{p['checked']}/{p['total']} 项已收齐" if zh else f"{p['checked']}/{p['total']} categories collected")
     unresolved = any(c.status in {"fail", "unknown"} for c in case.checks) or bool(case.pending_error)
     if unresolved and complete == 10:
-        bar = "[" + "■" * 9 + "□]"
+        bar = "🟩" * 9 + "⬜"
     suffix = ("另有信息待确认；清单会随申请情况更新。" if zh else
               "Some details still need clarification; the checklist may change.") if unresolved else (
               "按当前申请情况统计。" if zh else "Based on your current circumstances.")
-    return f"{'材料进度' if zh else 'Materials'} {bar} {counts}\n{suffix}"
+    result = f"{'材料进度' if zh else 'Materials'} {bar} {counts}\n{suffix}"
+    if case.application_forms:
+        info = [c for c in case.checks if c.id.startswith("info:") and c.status != "not_applicable"]
+        done = sum(c.status == "pass" for c in info)
+        filled = int(10 * done / len(info)) if info else 0
+        if any(c.id.startswith("form:") and c.status != "pass" for c in case.checks):
+            filled = min(filled, 9)
+        result += f"\n{'信息进度' if zh else 'Information'} {'🟩' * filled}{'⬜' * (10-filled)} {done}/{len(info)}"
+    return result
 
 
 def preparation_step(case):
@@ -125,6 +134,19 @@ QUESTIONS = {
 def action_for(check, case):
     zh = case.language == "zh"
     family = check.id.split(":")[0]
+    if family == "form":
+        from .intake_schema import ALL_QUESTIONS
+        question = ALL_QUESTIONS.get(check.id.split(":", 1)[1])
+        label = question.label.split(" / ")[0 if zh else -1] if question else ("信息表" if zh else "worksheet")
+        return check.id, (f"请检查信息表的“{label}”：答案或格式未通过检查，原有材料仍保留。请按表内提示修改并回传。" if zh else
+                          f"Please check {label} in the worksheet: the answer or format could not be accepted. Your other documents are saved. Correct it using the cell instructions and return the file.")
+    if family == "info":
+        missing = [c.message.split(" / ")[0 if zh else -1] for c in case.checks if c.id.startswith("info:") and c.status in {"unknown", "fail"}]
+        labels = ("、" if zh else ", ").join(missing[:3])
+        return "information", (f"请填写附件信息表的 C 列并回传，目前还缺 {labels} 等信息；不清楚的可以先留空。" if zh else
+                               f"Please fill column C of the attached worksheet and reply with the file. Missing details include {labels}; leave anything uncertain blank for now.")
+    if check.id in {"sponsor_consent", "worker_atas"}:
+        return check.id, check.message.split(" / ")[0 if zh else -1]
     if check.id == "application_location" and check.status == "fail" and case.hitl_enabled:
         return check.id, ("本清单覆盖英国境外申请，境内续签或转换需要顾问另行确认。请说明现有签证类型和到期日。" if zh else
                           "This checklist covers applications from outside the UK. An adviser needs to assess extensions or switching; please tell me your current visa type and expiry date.")
@@ -244,6 +266,17 @@ def reply_for(case, *, text="", intent="continue", received_count=None, received
     else:
         opening = "收到，谢谢您 😊" if zh else "Thanks, I've received your update 😊"
     paragraphs = [opening]
+    if not case.route and case.application_forms:
+        # Resolve purpose before requesting personal information or documents.
+        paragraphs.append(QUESTIONS["route"][0 if zh else 1])
+        if count:
+            paragraphs.append("附件已经保存，确认类型后会继续检查。" if zh else "Your attachments are saved; we will continue checking them once your visa type is clear.")
+        paragraphs.append(progress_text(case))
+        if first:
+            paragraphs.append("小提醒：请提供真实、完整的信息和材料；这里不进行真伪鉴定。" if zh else "Please use genuine, complete information and documents. This service does not authenticate them.")
+        if re.search(r"伪造|造假|改.*余额|forge|falsify", text, re.I):
+            paragraphs.append("虚假材料可能导致拒签并影响未来申请。" if zh else "False documents can lead to refusal and affect future applications.")
+        return "\n\n".join(paragraphs)
     if case.test_mode:
         paragraphs.append("演示案件：测试材料仅供体验，不用于真实申请。" if zh else "Demo case: these test documents are for practice only.")
     if count:
@@ -254,14 +287,17 @@ def reply_for(case, *, text="", intent="continue", received_count=None, received
     details = known_details(case)
     if details:
         paragraphs.append(details)
+    if case.form_path and case.status not in {Status.COMPLETE, Status.READY}:
+        paragraphs.append("📝 附件是中英双语信息表：填写 C 列，保存后直接作为附件回复。可先填会填的，其余我们逐步补齐。它是准备表，不能替代 GOV.UK 在线申请。" if zh else
+                          "📝 The attached worksheet is bilingual (Chinese/English). Fill column C, save it and reply with the file. Start with what you know; we can complete the rest step by step. It prepares your information and does not replace the GOV.UK application.")
 
     progress = material_progress(case)
     done = [i["label"] for i in progress["items"] if i["status"] == "checked"]
     pending = [i["label"] for i in progress["items"] if i["status"] != "checked"]
     if done:
-        paragraphs.append(("✅ 已收齐：" if zh else "✅ Collected: ") + "、".join(done))
+        paragraphs.append(("✅ 已收齐：" if zh else "✅ Collected: ") + ("、" if zh else ", ").join(done))
     if pending:
-        paragraphs.append(("待补齐或确认：" if zh else "Still needed or to clarify: ") + "、".join(pending))
+        paragraphs.append(("待补齐或确认：" if zh else "Still needed or to clarify: ") + ("、" if zh else ", ").join(pending))
     if count and not case.test_mode:
         samples = [d.name for d in case.documents if not d.rejected and d.content_role == "sample"]
         action_ids = guidance.actions if guidance else [c.id for c in case.checks if c.status in {"fail", "unknown"}]

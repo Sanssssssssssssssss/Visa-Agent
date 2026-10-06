@@ -228,6 +228,20 @@ class QQInbox:
             message["Date"] = format_datetime(datetime.now(timezone.utc))
             message["Auto-Submitted"] = "auto-replied"
             message.set_content(result["reply"])
+            if result.get("form_path"):
+                form = Path(result["form_path"])
+                message.add_attachment(form.read_bytes(), maintype="application",
+                    subtype="vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename="application-information.xlsx")
+            if result.get("pack_path") and result["status"] == "COMPLETE":
+                from .delivery import verify_pack
+                case = self.service.store.get(result["case_id"])
+                verify_pack(case)
+                pack = Path(case.pack_path)
+                if pack.stat().st_size <= 18_000_000:
+                    message.add_attachment(pack.read_bytes(), maintype="application", subtype="zip", filename="visa-materials.zip")
+                else:
+                    body = message.get_body(preferencelist=("plain",))
+                    body.set_content(result["reply"] + ("\n材料包超过邮件附件上限，已保存在本地，尚未通过邮件发送。" if case.language == "zh" else "\nThe pack exceeds the email attachment limit. It is saved locally and has not been emailed."))
             self.connection.send(message, result["mail_sender"])
             (self.service.store.root / "qq-previews" / (receipt_id + ".sent.eml")).write_bytes(message.as_bytes())
         allowed = self.allowed if self.allowed is not None else {result["mail_sender"]}
@@ -239,7 +253,7 @@ def receive_once(args, config, secret, budget):
         if args.action == "probe":
             connection.probe_smtp()
             return {"imap_login": True, "smtp_login": True, "sent": 0}
-        service = VisaService(args.data, "live", hitl=args.hitl, budget=budget)
+        service = VisaService(args.data, "live", hitl=args.hitl, budget=budget, application_forms=True)
         allowed = None if config.get("accept_all") else config["allowed_senders"]
         result = QQInbox(service, connection, config["mailbox"], allowed,
                          require_tag=config.get("require_tag", True)).poll(
@@ -255,11 +269,11 @@ def main():
     parser.add_argument("--hitl", choices=["on", "off"], default="off")
     parser.add_argument("--since")
     parser.add_argument("--max-messages", type=int, default=5)
-    parser.add_argument("--request-cap", type=int, default=12)
+    parser.add_argument("--request-cap", type=int, default=None, help="Optional batch cap; unset means no cumulative limit")
     parser.add_argument("--send-replies", action="store_true")
     parser.add_argument("--interval", type=int, default=15, help="Polling interval for watch, minimum 10 seconds")
     args = parser.parse_args()
-    if args.interval < 10 or args.request_cap < 1:
+    if args.interval < 10 or (args.request_cap is not None and args.request_cap < 1):
         parser.error("interval must be >=10 seconds and request-cap must be positive")
     stage = "local_configuration"
     try:
@@ -278,7 +292,7 @@ def main():
             if args.action == "watch" and stop_file.exists():
                 print("Mail worker stopped", flush=True)
                 break
-            if args.action != "probe" and budget.count() >= budget.limit:
+            if args.action != "probe" and budget.limit is not None and budget.count() >= budget.limit:
                 result = {"paused": "model_request_budget", "model_requests": budget.count(), "limit": budget.limit}
                 write_json(args.data / "qq-watch-last.json", result)
                 print(json.dumps(result), flush=True)

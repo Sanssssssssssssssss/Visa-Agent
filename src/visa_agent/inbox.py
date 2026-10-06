@@ -123,7 +123,8 @@ class Inbox:
             else:
                 if not session:
                     case_id = "case-" + uuid.uuid4().hex
-                    case = Case(id=case_id, test_mode=test_mode, hitl_enabled=self.service.hitl_enabled)
+                    case = Case(id=case_id, test_mode=test_mode, hitl_enabled=self.service.hitl_enabled,
+                                application_forms=self.service.application_forms)
                     db.execute("INSERT INTO cases VALUES (?,?)", (case_id, case.model_dump_json()))
                     db.execute("INSERT INTO inbox_sessions VALUES (?,?,?,?,?,'active',?)",
                                (sid, incoming.channel, incoming.account, incoming.thread, sender, case_id))
@@ -139,7 +140,7 @@ class Inbox:
                     case.conversation_closed = True
                     self.store.save(case, db)
                     case = Case(id="case-" + uuid.uuid4().hex, language=case.language, test_mode=test_mode,
-                                hitl_enabled=self.service.hitl_enabled)
+                                hitl_enabled=self.service.hitl_enabled, application_forms=self.service.application_forms)
                     db.execute("INSERT INTO cases VALUES (?,?)", (case.id, case.model_dump_json()))
                 db.execute("UPDATE inbox_sessions SET case_id=?,state='active' WHERE id=?", (case.id, sid))
                 db.execute("UPDATE inbox_deliveries SET case_id=? WHERE id=?", (case.id, delivery_id))

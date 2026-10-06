@@ -115,7 +115,7 @@ def parse_mail(raw, mailbox, allowed, *, require_tag=True):
                 raise ValueError("Attached emails are unsupported; send original PDF or images")
             if any(c in name for c in '/\\<>:"|?*') or any(ord(c) < 32 for c in name) or len(name) > 180:
                 raise ValueError("Unsafe attachment filename")
-            if Path(name).suffix.lower() not in {".pdf", ".png", ".jpg", ".jpeg"}:
+            if Path(name).suffix.lower() not in {".pdf", ".png", ".jpg", ".jpeg", ".xlsx"}:
                 raise ValueError("Unsupported attachment type")
             content = part.get_payload(decode=True)
             if content is None or len(content) > MAX_BYTES or part.defects:

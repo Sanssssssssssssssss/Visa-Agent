@@ -1,0 +1,23 @@
+{
+  "version": "application-info-2026-10-07-v1",
+  "synthetic": true,
+  "files": {
+    "bad-formula.xlsx": "5858832f432ce242c9ba7873239c9e154d814041bb9a0068ede4a0345478a9ab",
+    "bad-future-birthday.xlsx": "5fdea1d32005a3a7ed18f8282c174a846cf6ad3ba593bc6dad82172896f4f550",
+    "bad-invalid-birthday.xlsx": "3624a0e41db636b2a30d3b595ed5386c08e836db8747cbef73434fa2609e72cb",
+    "bad-invalid-email.xlsx": "ced1afd895c70191d1587727aaf549c1993192cc3ad6bba6c3de4fca80f8eca8",
+    "bad-missing-birthday.xlsx": "4e5271c3ef64c7ca4e1ddf04b6757f20b2a7c1f541f265a1f9eb5dcc81d5988c",
+    "bad-passport-conflict.xlsx": "d6e66c1d70ee5c3044d2e1474bae70c9c398a87a1431710d61d114388adf8815",
+    "bad-prompt-injection.xlsx": "62bf002ace4b24b9cf184373bc32ed58ff8a37bb7101a9de91b147bc20d49b06",
+    "bad-unknown-is-not-no.xlsx": "f13bd93ed80b0dac2c1d7eb18e685ec972c3fd31d3fead1c185f09d663853280",
+    "skilled_worker-answers.json": "3835239626c80ea2f733bac66dda8c95bfbba6c26269b633e4ebad6a4a6de2ac",
+    "skilled_worker-blank-zh-en.xlsx": "a272664181c6ebdd78f5c3b7a889c7bc615e9f95b83977d321dfc81d3af208b1",
+    "skilled_worker-example-TEST-ONLY.xlsx": "7a9a87fed8e33a9ca5f753633750a06d3de716dde6dffe1e4f08f0be4497f654",
+    "student-answers.json": "4ef93004b1bfa2a6a57fdbb8dd6a183f209941ee1b359a8882c785efce8e3db4",
+    "student-blank-zh-en.xlsx": "b3ed9174b3e522db2ca9b61b7b9096b0317b7af1425ba25a6cd395a7180df89e",
+    "student-example-TEST-ONLY.xlsx": "bff4efcedad74e1baad68483d0f937f2851f0f11d4be37e532275091b461440e",
+    "visitor-answers.json": "dc9a7e3f11dbf45bc0669bec200e8a8fd580a68e08852c47d1e16d8457469f7f",
+    "visitor-blank-zh-en.xlsx": "8dca54549cd2d7bffb31c71983825c2c1cc3b7f1d8519281c3d499c16bcf7992",
+    "visitor-example-TEST-ONLY.xlsx": "0f9e4eb78812701a61f5116d59730e7aa9a73b2d61a2f2c8e9b196d500b72a1c"
+  }
+}

@@ -36,6 +36,26 @@ def guide(case, event, trace, mode, budget, *, model_override=None):
     context, _ = build_context(case, event, [])
     context = json.loads(context)
     actions = {c.id: action_for(c, case)[1] for c in case.checks if c.status in {"fail", "unknown"}}
+    if not case.route and case.application_forms:
+        actions = {key: value for key, value in actions.items() if key == "route"}
+    elif case.application_forms:
+        # One form action represents missing self-reported fields. Do not fill
+        # the model's action menu with forty copies of the same instruction.
+        grouped, seen = {}, set()
+        # These self-report answers already have cells in the attached form.
+        # Keep failed scope/identity checks and document-backed checks visible.
+        form_answers = {"applicant_name", "application_location", "nationality", "adult", "dependants",
+                        "previous_refusal", "application_date", "funding", "purpose", "travel_start",
+                        "travel_end", "return_reason", "trip_budget", "financial_evidence_requested"}
+        for key, value in actions.items():
+            check = next(c for c in case.checks if c.id == key)
+            if key in form_answers and check.status == "unknown" and not check.human:
+                continue
+            family = action_for(check, case)[0]
+            if family not in seen:
+                grouped[key] = value
+                seen.add(family)
+        actions = grouped
     context.update(allowed_actions=actions, checked_status=case.status.value, language=case.language,
                    hitl_enabled=case.hitl_enabled)
     prompt = json.dumps(context, ensure_ascii=False)
@@ -48,7 +68,7 @@ def guide(case, event, trace, mode, budget, *, model_override=None):
         from .agent import BudgetExceeded
         raise BudgetExceeded("Guidance context cannot fit safely")
     trace["guidance_context"] = context
-    trace["guidance_prompt_version"] = "guidance-v4-collection"
+    trace["guidance_prompt_version"] = "guidance-v5-bilingual-intake"
     trace["soul_sha256"] = SOUL_HASH
 
     def factory(model):

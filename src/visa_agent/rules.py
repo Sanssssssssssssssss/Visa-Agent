@@ -9,7 +9,7 @@ from decimal import Decimal
 import hashlib
 from pathlib import Path
 
-from .evidence import Evidence, normalized
+from .evidence import Evidence, comparable_value, normalized
 from .types import Case, Check, Route, Status
 
 SOURCES = {
@@ -23,8 +23,10 @@ SOURCES = {
     "tb": "https://www.gov.uk/tb-test-visa",
     "scope": "project:adult-outside-uk-material-preparation-v1",
 }
-CHECKED_AT = "2026-10-05"
-RULE_VERSION = "2026-10-05-" + hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:12]
+CHECKED_AT = "2026-10-07"
+RULE_VERSION = "2026-10-07-" + hashlib.sha256(b"".join(
+    Path(__file__).with_name(name).read_bytes() for name in ("rules.py", "intake.py", "intake_schema.py")
+)).hexdigest()[:12]
 
 # Freeze the published rates rather than fetching policy during a customer conversation.
 STUDENT_MONTHLY = {"london": Decimal("1529"), "outside_london": Decimal("1171")}
@@ -86,11 +88,11 @@ def evaluate(case: Case) -> list[Check]:
 
     # Conflicts are never resolved by last-write-wins, including changed funding assertions.
     for key in sorted({f.key for f in case.facts if f.active}):
-        if len({normalized(f.value) for f in e.facts(key)}) > 1:
+        if len({normalized(comparable_value(key, f.value)) for f in e.facts(key)}) > 1:
             add(f"conflict:{key}", "fail", f"{key} 存在多个不一致的值，请核对来源。",
                 human=True, keys=(key,))
     for doc in case.documents:
-        if doc.rejected:
+        if doc.rejected or doc.kind == "intake":
             continue
         if doc.content_role == "unrelated" or (doc.content_role == "sample" and not case.test_mode):
             add(f"{doc.content_role}:{doc.id}", "fail", "此文件不能作为本人的申请证据，请补充实际材料。")
@@ -122,6 +124,9 @@ def evaluate(case: Case) -> list[Check]:
 
     if case.route is None:
         return checks
+    if case.application_forms:
+        from .intake import information_checks
+        checks.extend(information_checks(case))
     source = "worker" if case.route == Route.WORKER else case.route.value
     need("passport_name", "请上传有效护照/旅行证件的个人信息页。", source, {"passport"})
     need("passport_number", "证件号码缺失或不可读，请补充。", source, {"passport"})

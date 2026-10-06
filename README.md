@@ -52,6 +52,8 @@ uv run visa-agent trace <case_id>
 
 ## 实际调用模型
 
+当前 QQ 流程还收集申请信息：客户收到中英双语 XLSX，填 C 列后回复邮件，系统检查缺项和格式，完成后发送材料 ZIP。回复跟随本轮中文或英文，进度使用 emoji。见 [双语信息收集说明](docs/application-information.md) 和 [可直接打开的测试表](datasets/intake/README.md)。旧冻结 CLI/页面回放保留文件收集 V1 范围。
+
 程序从环境变量取配置，不自动读取 `.env`。参见 [.env.example](.env.example)。已有 `DEEPSEEK_API_KEY` 可以直接使用；也可设置 `VISA_API_KEY`。不要把密钥写进命令历史或 Git。
 
 ```powershell
@@ -62,7 +64,7 @@ uv run visa-agent --mode live accept --only dev_visitor --output output/my-smoke
 uv run visa-agent --mode live accept --output output/my-live
 ```
 
-`accept` 自动执行合成场景的独立审批动作。六案包含三条正常路线和三个冻结验收场景。每次模型 HTTP 请求都在 `data/live-budget.sqlite3` 预记账，默认累计 60 次，重试也计入。重复运行不会重置额度。独立新实验应明确使用新的 `VISA_DATA_DIR`，保留旧记录。
+`accept` 自动执行合成场景的独立审批动作。六案包含三条正常路线和三个冻结验收场景。每次模型 HTTP 请求都在 `data/live-budget.sqlite3` 预记账，重试也计入。当前默认不设累计上限，保留单事件停止保护。历史冻结脚本显式设置的额度仍属于相应实验条件。独立新实验使用新的 `VISA_DATA_DIR`，保留旧记录。
 
 DeepSeek 当前默认思考模式与强制结构化输出工具不兼容，本项目对 `deepseek*` 模型显式关闭思考模式。其他兼容接口仍须先跑兼容性检查。费用单价未配置时报告 token 用量，金额留空。
 

@@ -18,6 +18,7 @@ def manifest(case: Case) -> dict:
         "rule_version": case.rule_version,
         "test_mode": case.test_mode,
         "hitl_enabled": case.hitl_enabled,
+        "application_forms": case.application_forms,
         "documents": [{"id": d.id, "name": d.name, "sha256": d.sha256, "kind": d.kind,
                        "language": d.language, "content_role": d.content_role} for d in case.documents if not d.rejected],
         "facts": [f.model_dump() for f in case.facts if f.active],
@@ -38,6 +39,9 @@ def build_pack(case: Case, root: Path) -> str:
             raise ValueError(f"Stored evidence was modified: {doc.id}")
         shutil.copyfile(source, originals / (doc.id + source.suffix))
     write_json(directory / "manifest.json", content)
+    if case.application_forms:
+        from .intake import write_form
+        write_form(case, directory / "application-information.xlsx")
     write_json(directory / "review.json", {"approval": case.approval.model_dump() if case.approval else None,
                                             "automatic_completion": case.automatic_completion.model_dump() if case.automatic_completion else None,
                                             "review_history": case.reviews})
@@ -90,6 +94,18 @@ def verify_pack(case: Case) -> None:
         if digest(json.loads(archive.read("manifest.json"))) != digest(manifest(case)):
             raise ValueError("Review pack manifest was modified")
         expected = {"manifest.json", "review.json", "report.html"}
+        if case.application_forms:
+            expected.add("application-information.xlsx")
+            from .intake import read_rows
+            from .intake_schema import VERSION, questions
+            from .evidence import Evidence
+            from io import BytesIO
+            meta, rows = read_rows(BytesIO(archive.read("application-information.xlsx")))
+            e = Evidence(case)
+            if (meta.get("case_id") != case.id or meta.get("route") != case.route or meta.get("version") != VERSION
+                    or [key for key, _, _ in rows] != [q.key for q in questions(case.route)]
+                    or any(value != (e.get(key) or "") for key, value, _ in rows)):
+                raise ValueError("Pack information worksheet was modified")
         for doc in case.documents:
             if not doc.rejected:
                 name = f"originals/{doc.id}{Path(doc.path).suffix}"

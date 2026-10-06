@@ -18,24 +18,27 @@ from .conversation import language_for, material_progress, progress_text
 from .diagnostics import turn_diagnostics
 from .documents import read_document, stage_file
 from .evidence import apply_proposal
+from .intake import apply_form, write_form
 from .rules import RULE_VERSION, evaluate, reply_for, status_for
 from .store import Store, digest
-from .types import Approval, AutomaticCompletion, CaseEvent, Check, Status, TurnResult, now_utc
+from .types import Approval, AutomaticCompletion, CaseEvent, Check, Route, Status, TurnResult, now_utc
 
 
 class VisaService:
-    def __init__(self, root="data", mode="live", *, model_override=None, guidance_model_override=None, budget=None, hitl=None):
+    def __init__(self, root="data", mode="live", *, model_override=None, guidance_model_override=None, budget=None, hitl=None, application_forms=False):
         if mode not in {"live", "offline"}:
             raise ValueError("mode must be live or offline")
         self.store = Store(root)
         self.mode = mode
         self.hitl_enabled = resolve_hitl(hitl)
+        self.application_forms = application_forms
         self.model_override = model_override
         self.guidance_model_override = guidance_model_override
         self.budget = budget or LiveBudget(self.store.root / "live-budget.sqlite3")
 
     def create_case(self, case_id, *, test_mode=False):
-        return self.store.create(case_id, test_mode=test_mode, hitl_enabled=self.hitl_enabled)
+        return self.store.create(case_id, test_mode=test_mode, hitl_enabled=self.hitl_enabled,
+                                 application_forms=self.application_forms)
 
     @staticmethod
     def checked_status(case):
@@ -91,6 +94,12 @@ class VisaService:
                 if case.conversation_closed:
                     raise ValueError("Conversation closed before processing started")
                 trace["before"] = case.model_dump()
+                if self.application_forms and not case.application_forms:
+                    case.application_forms = True
+                    case.version += 1
+                    case.approval, case.automatic_completion, case.pack_path = None, None, None
+                    case.checks = evaluate(case)
+                    case.status = self.checked_status(case)
                 case.language = language_for(event.text, case.language)
                 if case.rule_version and case.rule_version != RULE_VERSION:
                     case.version += 1
@@ -112,7 +121,7 @@ class VisaService:
                         new_docs.append(doc)
                     trace["documents_read"] = [d.model_dump() for d in new_docs]
                     if event.text.strip() or new_docs:
-                        proposal = extract(case, event, new_docs, trace, self.mode, self.budget,
+                        proposal = extract(case, event, [d for d in new_docs if d.kind != "intake"], trace, self.mode, self.budget,
                                            self.model_override)
                         intent = proposal.intent
                         for item in trace.get("visual_inputs", []):
@@ -139,6 +148,14 @@ class VisaService:
                         trace["rejected_candidates"] = rejected
                         if rejected:
                             case.extraction_issues[event.event_id] = rejected
+                        form_docs = [d for d in new_docs if d.kind == "intake"]
+                        if form_docs:
+                            from .evidence import Evidence
+                            route = Evidence(case).get("route")
+                            case.route = Route(route) if route in set(Route) else None
+                            case.application_forms = True
+                            for doc in form_docs:
+                                apply_form(case, doc, trace)
                         case.approval = None
                         case.automatic_completion = None
                         case.rule_version = RULE_VERSION
@@ -164,6 +181,9 @@ class VisaService:
                                              self.budget, model_override=self.guidance_model_override)
                         if case.status in {Status.READY, Status.COMPLETE}:
                             case.pack_path = build_pack(case, self.store.root)
+                        case.form_path = None
+                        if case.application_forms and case.route and case.status not in {Status.COMPLETE, Status.READY}:
+                            case.form_path = write_form(case, self.store.root / "forms" / case.id / f"v{case.version}" / "application-information.xlsx")
                     reply = reply_for(case, text=event.text, intent=intent, received_count=len(staged),
                                       received_names=[Path(original).name for original, _, _ in staged], guidance=guidance)
                     case.last_contact = max(case.last_contact, event.at.isoformat())
@@ -174,7 +194,7 @@ class VisaService:
                                          "reply": reply, "at": event.at.isoformat()})
                     case.history = case.history[-HISTORY_TURNS:]
                 result = TurnResult(case_id=case.id, version=case.version, status=case.status,
-                                    reply=reply, run_id=run_id, pack_path=case.pack_path)
+                                    reply=reply, run_id=run_id, pack_path=case.pack_path, form_path=case.form_path)
                 self.store.save(case, db)
                 db.execute("UPDATE events SET status='done',result=?,error=NULL WHERE case_id=? AND event_id=?",
                            (result.model_dump_json(), case.id, event.event_id))

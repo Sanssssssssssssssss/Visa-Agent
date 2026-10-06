@@ -5,6 +5,7 @@ from enum import StrEnum
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
+from .intake_schema import ALL_QUESTIONS, NEW_KEYS
 
 
 def now_utc() -> str:
@@ -56,7 +57,7 @@ class CaseEvent(StrictModel):
 class Page(StrictModel):
     number: int
     text: str
-    method: Literal["pdf_text", "ocr"]
+    method: Literal["pdf_text", "ocr", "form"]
     confidence: float | None = None
 
 
@@ -165,6 +166,9 @@ class Case(StrictModel):
     test_mode: bool = False
     conversation_closed: bool = False
     history_count: int = 0
+    application_forms: bool = False  # Old frozen cases retain their original document-only scope.
+    intake_errors: dict[str, str] = Field(default_factory=dict)
+    form_path: str | None = None
 
 
 class TurnResult(StrictModel):
@@ -176,6 +180,7 @@ class TurnResult(StrictModel):
     error: str | None = None
     duplicate: bool = False
     pack_path: str | None = None
+    form_path: str | None = None
 
 
 # A deliberately finite vocabulary: extracted text cannot invent workflow controls.
@@ -201,3 +206,8 @@ BOOL_FIELDS = {"dependants", "previous_refusal", "atas_required", "english_confi
                "translator_signed", "financial_evidence_requested"}
 NUMBER_FIELDS = {"age", "residence_months", "stay_months", "bank_minimum", "trip_budget",
                  "salary", "tuition_due", "study_months"}
+
+FIELDS |= NEW_KEYS
+DATE_FIELDS |= {key for key, q in ALL_QUESTIONS.items() if q.kind == "date"}
+BOOL_FIELDS |= {key for key, q in ALL_QUESTIONS.items() if q.kind == "bool"} | {"sponsor_consent_confirmed"}
+NUMBER_FIELDS |= {key for key, q in ALL_QUESTIONS.items() if q.kind == "number"}

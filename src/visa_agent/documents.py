@@ -65,8 +65,8 @@ def stage_file(source: str | Path, root: Path) -> tuple[str, Path]:
     if source.stat().st_size > MAX_BYTES:
         raise ValueError("File exceeds 10 MB; split it before uploading")
     suffix = source.suffix.lower()
-    if suffix not in {".pdf", ".png", ".jpg", ".jpeg"}:
-        raise ValueError("Only PDF, PNG and JPEG files are supported")
+    if suffix not in {".pdf", ".png", ".jpg", ".jpeg", ".xlsx"}:
+        raise ValueError("Only PDF, PNG, JPEG and the supplied XLSX worksheet are supported")
     sha = hashlib.sha256(source.read_bytes()).hexdigest()
     dest = root / "files" / f"{sha}{suffix}"
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -79,6 +79,9 @@ def stage_file(source: str | Path, root: Path) -> tuple[str, Path]:
 
 def read_document(path: Path, sha: str, original_name: str) -> Document:
     doc = Document(id=sha[:20], sha256=sha, path=str(path), name=original_name)
+    if path.suffix == ".xlsx":
+        from .intake import read_form
+        return read_form(doc)
     try:
         if path.suffix == ".pdf":
             reader = PdfReader(path)
