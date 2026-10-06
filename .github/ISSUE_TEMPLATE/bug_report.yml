@@ -1,0 +1,27 @@
+name: Bug report / 问题反馈
+description: Reproduce a workflow or deployment failure without private applicant data.
+body:
+  - type: markdown
+    attributes:
+      value: Do not attach credentials, real applicant documents, raw emails or private traces. Use synthetic fixtures. / 请使用合成样例，不上传密钥、客户材料或原始邮件。
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior / 预期与实际
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction / 复现步骤
+      description: Include commands, synthetic fixture paths, case state and sanitized error category.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commit, OS and model / 版本与环境
+  - type: input
+    id: mode
+    attributes:
+      label: HITL and sample mode / 开关状态

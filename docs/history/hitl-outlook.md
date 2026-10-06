@@ -51,7 +51,7 @@ flowchart TD
 
 应用注册需要可用的 Entra 租户和注册权限；只有个人邮箱并不保证可以直接创建应用。如果你还没有应用，我们先完成这一步。
 
-本次现场接入：个人 Microsoft 账户已在浏览器登录；Entra 和 Azure 管理入口均出现 `PageLoadTimeout`，未创建应用，未执行本应用 OAuth 或 Graph 邮件收发。用户确认尚未开通 Azure。继续此方案需先完成 Azure/目录设置；[微软开户说明](https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account)要求手机和银行卡验证。用户随后选择 QQ 作为 Agent 邮箱，Outlook 网页作为客户发件端；[QQ 接入](qq-mail.md)已实现并单独记录真实收发结果。
+本次现场接入：个人 Microsoft 账户已在浏览器登录；Entra 和 Azure 管理入口均出现 `PageLoadTimeout`，未创建应用，未执行本应用 OAuth 或 Graph 邮件收发。用户确认尚未开通 Azure。继续此方案需先完成 Azure/目录设置；[微软开户说明](https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account)要求手机和银行卡验证。用户随后选择 QQ 作为 Agent 邮箱，Outlook 网页作为客户发件端；[QQ 接入](../qq-mail.md)已实现并单独记录真实收发结果。
 
 在仓库 PowerShell 中配置以下**非密码**信息，填实际值：
 
@@ -89,7 +89,7 @@ uv run python -m visa_agent.outlook poll --hitl off --since $since --max-message
 - 回复保存在持久化发送记录中。断线导致是否发送不明确时标记 `uncertain`，需检查 Outlook“已发送邮件”，不会自动重发。旧版本回复标记 `superseded`；模型运行失败保留 `failed`，不替换成成功。
 - 本版通过邮件回文字，最终 ZIP 保存在本机；尚未实现邮件附件发送。没有部署长期轮询或验证生产吞吐。
 
-实现入口：[outlook.py](../src/visa_agent/outlook.py)、[outlook_auth.py](../src/visa_agent/outlook_auth.py)、[service.py](../src/visa_agent/service.py)、[test_outlook.py](../tests/test_outlook.py)。Graph 的[收件](https://learn.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0)和[回复](https://learn.microsoft.com/en-us/graph/api/message-reply?view=graph-rest-1.0)使用官方接口。
+实现入口：[outlook.py](../../src/visa_agent/outlook.py)、[outlook_auth.py](../../src/visa_agent/outlook_auth.py)、[service.py](../../src/visa_agent/service.py)、[test_outlook.py](../../tests/test_outlook.py)。Graph 的[收件](https://learn.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0)和[回复](https://learn.microsoft.com/en-us/graph/api/message-reply?view=graph-rest-1.0)使用官方接口。
 
 ## 验证命令
 
@@ -110,4 +110,4 @@ uv run python scripts/show_case_replies.py output/hitl-outlook/live --output out
 
 `tests/test_hitl.py` 覆盖三路线 × 开关、自动完成记录、材料变化失效、模型不能跳过检查；`tests/test_inbox.py` 重复运行多发件人交错、重启、重复事件与 20 轮压缩；`tests/test_outlook.py` 用模拟 Graph 边界验证真实本地状态流。模拟 Graph 不代表真实 Outlook 已联通。
 
-本轮实际结果见 [validation/hitl-outlook.json](validation/hitl-outlook.json)。本机原始真实模型回复位于 `output/hitl-outlook/live/`，含每轮回复、模型输出、来源和用量。真实 Outlook OAuth、收信及发信需在用户完成账户配置后单独验收。
+本轮实际结果见 [validation/hitl-outlook.json](../validation/hitl-outlook.json)。本机原始真实模型回复位于 `output/hitl-outlook/live/`，含每轮回复、模型输出、来源和用量。真实 Outlook OAuth、收信及发信需在用户完成账户配置后单独验收。

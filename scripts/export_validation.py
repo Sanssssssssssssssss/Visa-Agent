@@ -1,5 +1,6 @@
 """Export this synthetic experiment only; never export arbitrary local cases."""
 import hashlib
+import argparse
 import json
 from pathlib import Path
 import shutil
@@ -12,7 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
-    out = ROOT / "docs" / "validation"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=ROOT / "output/legacy-validation")
+    out = parser.parse_args().output
     out.mkdir(parents=True, exist_ok=True)
     store = Store(ROOT / "data")
     case_ids = []

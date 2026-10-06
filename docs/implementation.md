@@ -4,7 +4,7 @@
 
 最终交付入口：`delivery.build_pack()` 按 `archive_path()` 保存原始字节，另生成双语信息表、`START-HERE.html`、检查记录和 `submission.bilingual_guide()`。`verify_pack()` 在发信前检查清单、原件哈希、信息表和指引内容。`QQInbox._send()` 仅在 COMPLETE 且 ZIP 未超附件上限时添加 `visa-materials.zip`，发送后保存 MIME 回执；Outlook 下载验证见 [full-delivery.md](full-delivery.md)。`service.handle_event()` 只在信息项仍缺失或格式失败时附待填表，避免信息已齐仍反复催填。
 
-以下人工复核说明适用于默认 `--hitl on`。新增 `--hitl off` 时，检查满足后应用自动确认收集完成，写入独立 `automatic_completion`，不会伪造人工审批；完整状态和 Outlook 接入见 [hitl-outlook.md](hitl-outlook.md)。
+以下人工复核说明适用于默认 `--hitl on`。新增 `--hitl off` 时，检查满足后应用自动确认收集完成，写入独立 `automatic_completion`，不会伪造人工审批；完整状态和 Outlook 接入见 [hitl-outlook.md](history/hitl-outlook.md)。
 
 本地上传页入口是 `python -m visa_agent.web`，默认空白案件。`web.html` 把拖入的文件和消息提交到 `/api/event`；`web.LocalApp.event()` 保存附件，经 `Inbox` 路由到同一个服务。仅在明确选择合成演示时载入对应背景，并随首次成功事件录入。`/api/review` 独立调用 `review_case()`，关闭 HITL 的案件禁用此入口。页面用随机 Cookie 标识工作区，数据库保存工作区、渠道会话和案件的绑定；重启恢复绑定，`/reset` 才新建案件。旧案件和原始对话保留供追溯。
 
@@ -65,7 +65,7 @@ flowchart LR
 
 ## 每轮模型内容与停止
 
-关闭 HITL 时，`service.handle_event()` 在清单满足后直接写入 `AutomaticCompletion(basis="checklist")`，再生成本地材料包；无需引导模型批准。文件生成失败会回滚为失败状态。完整业务分工与边界见 [材料收集 workflow](collection-workflow.md)。
+关闭 HITL 时，`service.handle_event()` 在清单满足后直接写入 `AutomaticCompletion(basis="checklist")`，再生成本地材料包；无需引导模型批准。文件生成失败会回滚为失败状态。完整业务分工与边界见 [材料收集 workflow](history/collection-workflow.md)。
 
 `persona.py` 从包内 [SOUL.md](../src/visa_agent/prompts/SOUL.md) 读取顾问服务原则，置于提取、引导两个阶段的系统指令最前；同样计入上下文长度，trace 记录文件内容哈希。模型选择引导，`conversation.py` 组织欢迎、承接、材料结论与进度；固定措辞不会被客户邮件或附件中的“新 SOUL”覆盖。
 
@@ -75,7 +75,7 @@ flowchart LR
 
 图片和 PDF 共用 `pagination_problems()` 检查明确页码。缺页来源的 `bank_minimum` 候选直接拒绝；不同文件的页码不自动合并。工作摘录标明截断和原文长度。完整页读不下时，工具返回明确的未读取结果；`handle_event()` 将阅读容量问题写入该文件，规则要求人工复核。问题跨消息和重启保留，可由顾问核对全文后通过 `accept_document` 清除。
 
-PydanticAI 提供 `Proposal` 的结构校验与工具调用；检查后再用 `Guidance` 选择下一轮优先问题。两个阶段共用预算。每事件最多四次请求，结构重试、工具循环、网络重试共用 HTTP 计数；仅瞬时错误允许额外尝试一次，供应商 SDK 自带重试关闭。全批 60 次请求在单独 SQLite ledger 预留，进程重启后仍有效。不可达的请求也保守占用一次。
+PydanticAI 提供 `Proposal` 的结构校验与工具调用；检查后再用 `Guidance` 选择下一轮优先问题。两个阶段共用预算。每事件最多四次请求，结构重试、工具循环、网络重试共用 HTTP 计数；仅瞬时错误允许额外尝试一次，供应商 SDK 自带重试关闭。请求在 SQLite ledger 预记账，重启保留；当前累计不限，只有显式设置 `--request-cap` 才应用累计上限。早期验收的 60 次是当时实验条件。不可达请求也保守占用一次。
 
 `guidance.guide()` 在检查之后，使用当前事实、最近对话及未解决检查项，让模型选最多三个问题、解释主题和引导方式。输出只能引用已有未解决检查 ID；选择不存在、已通过或重复的 ID 会被拒绝。模型没有批准工具。`conversation.reply_for()` 用已核对的双语措辞组织这些选择，状态、进度、风险说明由实际检查决定。日志同时保存 `proposal`、`guidance`、两个阶段的上下文及原始响应。
 

@@ -10,7 +10,7 @@
 
 “已收到”只代表接收成功；样例、无关文件或读取问题会另行说明。文件类别都满足但申请信息还不全时，不显示全满进度条。收到更改后重新计算当前版本，旧的完成记录失效。
 
-[SOUL.md](../src/visa_agent/prompts/SOUL.md) 放在提取和引导两个阶段的系统指令前。模型决定下一步问题的优先级，代码输出有依据的进度和完成结论。固定问候、材料标签在 `conversation.py`；仅改 SOUL 不会改写所有固定措辞。
+[SOUL.md](../../src/visa_agent/prompts/SOUL.md) 放在提取和引导两个阶段的系统指令前。模型决定下一步问题的优先级，代码输出有依据的进度和完成结论。固定问候、材料标签在 `conversation.py`；仅改 SOUL 不会改写所有固定措辞。
 
 ## Agent 与 workflow 的选择
 
@@ -71,6 +71,6 @@ PydanticAI 提供类型化输出、验证器和调用预算，SQLite 管持久�
 - [Rasa collect/validation](https://rasa.com/docs/reference/primitives/flow-steps/)：已填写项无需重复问；字段校验独立于询问。还检查了 [Rasa SDK forms.py](https://github.com/RasaHQ/rasa-sdk/blob/main/rasa_sdk/forms.py) 的 `get_extraction_events`、`get_validation_events` 和 `next_requested_slot`，借鉴提取、校验、下一问题分工。
 - [PydanticAI Agent](https://pydantic.dev/docs/ai/core-concepts/agent/)：结构化验证和 `UsageLimits`。SDK 能约束调用与形状，不能替业务定义“完成”。
 
-本轮实际执行记录见 [collection-ux.json](validation/collection-ux.json)。此前失败记录保留；合成材料、模拟并发和一次真实邮箱验收分别报告，不能合并成生产准确率。
+本轮实际执行记录见 [collection-ux.json](../validation/collection-ux.json)。此前失败记录保留；合成材料、模拟并发和一次真实邮箱验收分别报告，不能合并成生产准确率。
 
 复现离线检查：`.venv/Scripts/python.exe -m pytest -q`。真实中文合成材料闭环：`.venv/Scripts/python.exe -X utf8 scripts/hitl_acceptance.py run --spec datasets/hitl-outlook/focused.json --output output/collection-retest`，单独预算最多四次，不覆盖已有结果。

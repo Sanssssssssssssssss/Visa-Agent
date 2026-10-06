@@ -9,7 +9,7 @@
 | before | 8 | 7 | 9 | 0 | 17 |
 | after | 8 | 8 | 9 | 9 | 18 |
 
-本轮使用同一组公开扫描图片/PDF，未修改材料和原有字段预期。[冻结配置](../datasets/public-replies-stress.json)新增四项回复检查：确认收到文件、解释材料阻塞、合并重复补页要求、最多三个行动项。它们是机械检查，不代表顾问交互质量合格。全部案件仍为 WAIT_USER/NEEDS_HUMAN，没有完整交付或人工批准。
+本轮使用同一组公开扫描图片/PDF，未修改材料和原有字段预期。[冻结配置](../../datasets/public-replies-stress.json)新增四项回复检查：确认收到文件、解释材料阻塞、合并重复补页要求、最多三个行动项。它们是机械检查，不代表顾问交互质量合格。全部案件仍为 WAIT_USER/NEEDS_HUMAN，没有完整交付或人工批准。
 
 修复后，回复先确认当前文件数量，优先解释阅读/页面问题，同类补页要求只出现一次。**仍有三轮模型提案被拒绝**：不完整流水的最低余额、引用不足的流水日期、在原文中找不到的家属信息。来源校验阻止了这些字段进入有效判断；不能称为模型已稳定提取正确。每种场景在最终版本只跑一次。
 
@@ -35,6 +35,6 @@ uv run python scripts/show_case_replies.py output/public-replies-v1 output/publi
 - 真实调用 **35/36** 次，输入 **109,812 token**、输出 **9,596 token**；未配置价格，不估算费用。案件耗时中位数 9.461 秒，最大 19.469 秒。
 - **65 项离线测试通过**，另有 18 次服务重建后重复投递检查通过，未增加模型请求。
 - Playwright 检查了阶段筛选、原文展开、5 张图片加载及桌面宽度布局。截图在本地 `output/playwright/reply-review.png`。
-- [机器可读结果与逐轮客户回复](validation/public-replies.json)、[离线日志](validation/pytest-public-replies.txt)。完整原始提案和工具记录在 `output/public-replies-v1/traces/`。
+- [机器可读结果与逐轮客户回复](../validation/public-replies.json)、[离线日志](../validation/pytest-public-replies.txt)。完整原始提案和工具记录在 `output/public-replies-v1/traces/`。
 
 当前仍是需要顾问复核的材料检查原型。页面归属、OCR 置信度和翻译判断仍有保守限制；真实客户完整交付、顾问式沟通质量尚未验收通过。

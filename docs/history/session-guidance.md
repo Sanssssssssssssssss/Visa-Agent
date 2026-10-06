@@ -34,7 +34,7 @@ uv run python -m visa_agent.web --data data/my-trial --port 8765
 uv run python scripts/show_case_replies.py output/session-guidance-v1 --output output/session-guidance-replies
 ```
 
-普通空白案件可上传 `datasets/customer-service/blank.jpg`、`damaged.pdf`，或把上述合成 PDF 当作自己的材料上传：应保留缺项/不可用原因，不能因此完成。公开原版图片获取方法见 [公开图片](public-images.md)，也是样例用途。
+普通空白案件可上传 `datasets/customer-service/blank.jpg`、`damaged.pdf`，或把上述合成 PDF 当作自己的材料上传：应保留缺项/不可用原因，不能因此完成。公开原版图片获取方法见 [公开图片](../public-images.md)，也是样例用途。
 
 ## 清空、关闭和身份隔离
 
@@ -62,7 +62,7 @@ uv run python scripts/show_case_replies.py output/session-guidance-v1 --output o
 - 离线测试还覆盖四个身份交错发送、30 个逻辑日、每条重复投递及重建服务恢复；该场景重复三次，共 360 条新输入和 360 次重投。此测试不能证明连续运行 30 天，也不代表生产吞吐。
 - 当前 Windows 离线结果：103 passed，61.39 秒；Ruff 通过。
 
-可提交的精简结果在 [validation/session-guidance.json](validation/session-guidance.json)；实际客户回复、原始模型响应及失败原因保存在本地输出中。
+可提交的精简结果在 [validation/session-guidance.json](../validation/session-guidance.json)；实际客户回复、原始模型响应及失败原因保存在本地输出中。
 
 ```powershell
 uv run pytest -q
@@ -71,4 +71,4 @@ uv run ruff check src tests scripts
 uv run python scripts/session_acceptance.py run --label manual --only chinese-email --output output/my-acceptance
 ```
 
-本批已接近请求上限；新验收应另设明确预算和输出目录，不要删预算数据库来继续。核心函数及写入位置见 [implementation.md](implementation.md)。SQLite 当前在模型调用期间持有写事务，多个案件写入串行，适用本机 MVP。
+本批已接近请求上限；新验收应另设明确预算和输出目录，不要删预算数据库来继续。核心函数及写入位置见 [implementation.md](../implementation.md)。SQLite 当前在模型调用期间持有写事务，多个案件写入串行，适用本机 MVP。

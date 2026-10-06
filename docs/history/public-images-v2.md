@@ -2,11 +2,11 @@
 
 2026-10-06，使用 `deepseek-flash` 完成 **12 次案件运行、24 次真实请求**。八种场景首轮 **4/8** 满足冻结检查；修复后针对四个失败场景各复测一次，**4/4** 满足检查。跨版本共 8/12，不能作为最终版本的稳定通过率。
 
-本轮附件全部来自大学公开脱敏扫描件：5 张原页 PNG，以及 Warwick 原 PDF。没有使用自制申请人附件。新增 [Warwick 中国银行存款证明](https://warwick.ac.uk/study/international/visa/applying-for-a-visa/visas-for-studying/student-visa/certofdeposit.pdf)，保留部分遮盖的姓名、银行印章、旧日期及批注。来源公开不等于原始客户真实性已核实。[图片与来源](public-images.md)列出本地文件。
+本轮附件全部来自大学公开脱敏扫描件：5 张原页 PNG，以及 Warwick 原 PDF。没有使用自制申请人附件。新增 [Warwick 中国银行存款证明](https://warwick.ac.uk/study/international/visa/applying-for-a-visa/visas-for-studying/student-visa/certofdeposit.pdf)，保留部分遮盖的姓名、银行印章、旧日期及批注。来源公开不等于原始客户真实性已核实。[图片与来源](../public-images.md)列出本地文件。
 
 ## 输入与结果
 
-[预期及文件哈希](../datasets/public-images-stress.json)在模型调用前冻结。每个案件使用独立 SQLite 状态，实际读取图片/PDF、OCR、调用模型并执行规则；成功事件重建服务后再重复投递。每轮保留候选事实、拒绝原因、工具结果、状态和源码哈希。
+[预期及文件哈希](../../datasets/public-images-stress.json)在模型调用前冻结。每个案件使用独立 SQLite 状态，实际读取图片/PDF、OCR、调用模型并执行规则；成功事件重建服务后再重复投递。每轮保留候选事实、拒绝原因、工具结果、状态和源码哈希。
 
 | 场景 | 首轮发现 | 修复后 |
 |---|---|---|
@@ -38,7 +38,7 @@
 - 请求账本为 `output/public-images-v2/live-budget.sqlite3`；原手动测试账本没有重置。
 - 原有 15 场景冻结数据哈希保持 `778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2`。
 
-[逐轮摘要](validation/public-images-v2.json)、[离线日志](validation/pytest-public-images-v2.txt)。原始记录在本地 `output/public-images-v2/runs/` 和 `traces/`。用对应 run 的 `failures`、`rejected_candidates`、`raw_proposals` 对照 trace 的 `documents_read`，可追踪错误来自读取、提取还是规则。
+[逐轮摘要](../validation/public-images-v2.json)、[离线日志](../validation/pytest-public-images-v2.txt)。原始记录在本地 `output/public-images-v2/runs/` 和 `traces/`。用对应 run 的 `failures`、`rejected_candidates`、`raw_proposals` 对照 trace 的 `documents_read`，可追踪错误来自读取、提取还是规则。
 
 复现需要按来源说明准备同字节输入。新实验使用独立输出目录，仍受冻结的 24 次请求限制：
 

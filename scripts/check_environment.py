@@ -1,4 +1,4 @@
-"""Explicit real SDK capability checks; consumes the SAME 60-request ledger."""
+"""Real plain-reply/structured-tool probes, charged to the persistent usage ledger."""
 import asyncio
 from dataclasses import asdict
 import importlib.metadata

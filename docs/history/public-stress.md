@@ -12,9 +12,9 @@
 
 ## 输入与预期
 
-三份[大学公开文件](public-materials.md)，每份原始 PDF 重复 3 次；另加 Lloyds 扫描 PDF、CAS 扫描 PDF和中国银行倾斜 2° JPEG，各 1 次。每轮建立独立案件，调用实际 OCR、真实 `deepseek-flash`、SQLite 和业务检查。客户消息采用普通英文，没有自制字段标签。
+三份[大学公开文件](../public-materials.md)，每份原始 PDF 重复 3 次；另加 Lloyds 扫描 PDF、CAS 扫描 PDF和中国银行倾斜 2° JPEG，各 1 次。每轮建立独立案件，调用实际 OCR、真实 `deepseek-flash`、SQLite 和业务检查。客户消息采用普通英文，没有自制字段标签。
 
-[预期答案](../datasets/public-stress.json)在模型试跑前编写。测试先冻结原件与变体 SHA-256；原始冻结清单保留在本地 `output/public-stress/frozen.json`。断言覆盖正文标记、材料分类、已接收字段值、禁止错误就绪/审批，以及重建服务后的同事件去重。原始姓名、CAS 号码等被遮盖或未填写，必须保持未知。
+[预期答案](../../datasets/public-stress.json)在模型试跑前编写。测试先冻结原件与变体 SHA-256；原始冻结清单保留在本地 `output/public-stress/frozen.json`。断言覆盖正文标记、材料分类、已接收字段值、禁止错误就绪/审批，以及重建服务后的同事件去重。原始姓名、CAS 号码等被遮盖或未填写，必须保持未知。
 
 检查允许正确省略未知字段，因此「通过」不能解释为所有字段都提取齐全。存款证明的可见金额也不能证明资金可用或覆盖期合规。
 
@@ -38,13 +38,13 @@
 - 真实请求 **23** 次：输入 **67,827 token**，输出 **5,274 token**；全部请求有用量记录。原先累计 32 次，本轮后为 **55/60**。
 - 每轮端到端耗时中位数 **7.515 秒**，最慢 **12.391 秒**，包含 OCR、API 和状态写入。模型单价未配置，不估算费用。
 - 本轮上限 24 次新增请求，包含工具循环和重试，使用原持久化请求账本；没有重置额度。
-- [逐轮结果](validation/public-stress.json)、[离线测试日志](validation/pytest-public-stress.txt)。完整 OCR、模型工具记录和前后状态保存在本地 `output/public-stress/traces/`；第三方 PDF 与完整原文不上传仓库。
+- [逐轮结果](../validation/public-stress.json)、[离线测试日志](../validation/pytest-public-stress.txt)。完整 OCR、模型工具记录和前后状态保存在本地 `output/public-stress/traces/`；第三方 PDF 与完整原文不上传仓库。
 - [Linux CI](https://github.com/Sanssssssssssssssss/Visa-Agent/actions/runs/37453902398)已通过，验证代码提交 `600c454`。
 - 原有 15 场景冻结哈希保持 `778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2`。
 
 ## 复现
 
-先按[来源说明](public-materials.md)准备同字节原件，运行以下命令；输出目录必须是未使用的新实验目录，脚本仍受原累计 60 次请求上限约束。
+先按[来源说明](../public-materials.md)准备同字节原件，运行以下命令；输出目录必须是未使用的新实验目录，脚本仍受原累计 60 次请求上限约束。
 
 ```powershell
 uv run pytest -q

@@ -1,6 +1,6 @@
 # 实际验收记录
 
-最新结果见[材料接受条件复测](document-quality.md)：复现了普通案件的文字附件误通过，修复后五个真实反例等待补件；离线 210 项及新增旧回复检查通过。此前[三条路线最终邮箱交付](full-delivery.md)各经过三轮真实邮件并下载 ZIP，属于合成材料演示。以下保留历史记录，不代表全部历史真实场景已重新执行。
+最新结果见[材料接受条件复测](../document-quality.md)：复现了普通案件的文字附件误通过，修复后五个真实反例等待补件；离线 210 项及新增旧回复检查通过。此前[三条路线最终邮箱交付](../full-delivery.md)各经过三轮真实邮件并下载 ZIP，属于合成材料演示。以下保留历史记录，不代表全部历史真实场景已重新执行。
 
 执行时间：2026-10-05 UTC / 2026-10-06 新加坡时间。环境：Windows、Python 3.12.3，依赖见 `uv.lock`。
 
@@ -14,12 +14,12 @@
 
 ## 运行证据
 
-- [真实六案完整断言](validation/live.json)，[最初 Visitor 试跑](validation/smoke.json)。
-- [12 场景离线回放](validation/offline.json)，[Windows 最终测试日志](validation/pytest-windows.txt)：`uv run pytest -q`，41 passed，19.11 秒。
+- [真实六案完整断言](../validation/live.json)，[最初 Visitor 试跑](../validation/smoke.json)。
+- [12 场景离线回放](../validation/offline.json)，[Windows 最终测试日志](../validation/pytest-windows.txt)：`uv run pytest -q`，41 passed，19.11 秒。
 - [Linux CI 成功记录](https://github.com/Sanssssssssssssssss/Visa-Agent/actions/runs/37342503848)：提交 `ebd33b7`，锁文件安装、Ruff、数据哈希校验、pytest 全部通过。
-- [SDK 兼容性](validation/compatibility.json)，[中英文图片实际 OCR + 模型提取](validation/materials.json)。
-- [完整请求账本与用量](validation/usage.json)，[源码、锁文件与数据哈希](validation/code-and-data-hashes.json)。
-- [可解压的 Visitor 材料包](validation/sample-visitor.zip)。每个 live/smoke 案件的完整运行 JSON 以 `validation/trace-<case_id>.json` 保存，含真实提取和工具记录。`<REPO>` 替换了本机绝对路径。
+- [SDK 兼容性](../validation/compatibility.json)，[中英文图片实际 OCR + 模型提取](../validation/materials.json)。
+- [完整请求账本与用量](../validation/usage.json)，[源码、锁文件与数据哈希](../validation/code-and-data-hashes.json)。
+- [可解压的 Visitor 材料包](../validation/sample-visitor.zip)。本次原始 trace 含真实提取和工具记录；公开整理时已备份至本机并移出提交目录。上面的精简 JSON 保留当时断言、失败和用量。
 
 ## 六案结果
 

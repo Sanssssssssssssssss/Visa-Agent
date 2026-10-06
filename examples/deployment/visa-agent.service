@@ -1,0 +1,23 @@
+[Unit]
+Description=Visa Agent QQ mailbox worker
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=visa-agent
+Group=visa-agent
+WorkingDirectory=/opt/visa-agent
+EnvironmentFile=/etc/visa-agent.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/visa-agent/.venv/bin/python -m visa_agent.qq_mail watch --data /var/lib/visa-agent --hitl off --send-replies
+ExecStop=/opt/visa-agent/.venv/bin/python /opt/visa-agent/scripts/mail_service.py stop --data /var/lib/visa-agent --wait 540
+Restart=on-failure
+RestartSec=30
+TimeoutStopSec=600
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

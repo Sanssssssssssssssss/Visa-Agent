@@ -1,5 +1,6 @@
 """QQ IMAP/SMTP intake with configured sender policy and bounded polls."""
 import argparse
+from contextlib import ExitStack
 from datetime import datetime, timezone
 from email import policy
 from email.message import EmailMessage
@@ -8,6 +9,7 @@ from email.utils import format_datetime
 import hashlib
 import imaplib
 import json
+import os
 from pathlib import Path
 import re
 import smtplib
@@ -22,6 +24,7 @@ from .mail_outbox import send_prepared_reply
 from .mime_mail import MAX_MAIL_BYTES, SYSTEM_SENDERS, addresses, parse_mail
 from .service import VisaService
 from .store import digest, write_json
+from .worker import mail_worker_lock, worker_status
 
 
 class QQConnection:
@@ -270,7 +273,7 @@ def receive_once(args, config, secret, budget):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=["probe", "poll", "watch", "stop", "samples"])
+    parser.add_argument("action", choices=["probe", "poll", "watch", "stop", "samples", "status"])
     parser.add_argument("--data", type=Path, default=Path("data/qq-test"))
     parser.add_argument("--hitl", choices=["on", "off"], default="off")
     parser.add_argument("--since")
@@ -283,9 +286,14 @@ def main():
     if args.interval < 10 or (args.request_cap is not None and args.request_cap < 1):
         parser.error("interval must be >=10 seconds and request-cap must be positive")
     stage = "local_configuration"
+    worker_scope = ExitStack()
     try:
         stop_file = args.data / "qq-stop"
+        if args.action == "status":
+            print(json.dumps(worker_status(args.data), ensure_ascii=False))
+            return
         if args.action == "stop":
+            args.data.mkdir(parents=True, exist_ok=True)
             stop_file.touch()
             print("Stop requested; current event may finish before the worker exits")
             return
@@ -300,7 +308,11 @@ def main():
             return
         if args.allow_samples is not None:
             parser.error("Use the samples action to persist this setting")
-        secret = build_encrypted_persistence(str(args.data / "qq-auth.bin")).load()
+        # Headless servers may supply a private environment file. Desktop setup
+        # continues to use OS-encrypted persistence when no variable is supplied.
+        secret = os.getenv("VISA_QQ_AUTH_CODE") or build_encrypted_persistence(str(args.data / "qq-auth.bin")).load()
+        if args.action in {"poll", "watch"}:
+            worker_scope.enter_context(mail_worker_lock(args.data))
         budget = LiveBudget(args.data / "live-budget.sqlite3", args.request_cap)
         failures = 0
         if args.action == "watch":
@@ -322,23 +334,25 @@ def main():
                 failures = 0
             except (OSError, imaplib.IMAP4.abort) as exc:
                 failures += 1
-                if args.action != "watch" or failures >= 3:
+                if args.action != "watch":
                     raise
                 result = {"error_type": type(exc).__name__, "network_failures": failures,
-                          "retry_after_seconds": args.interval, "model_requests": budget.count()}
+                          "retry_after_seconds": min(60, args.interval * 2 ** min(failures - 1, 3)), "model_requests": budget.count()}
             result["at"] = datetime.now(timezone.utc).isoformat()
             write_json(args.data / ("qq-" + args.action + "-last.json"), result)
             if args.action != "watch" or result.get("messages") or result.get("error_type"):
                 print(json.dumps(result, ensure_ascii=False), flush=True)
             if args.action != "watch":
                 break
-            time.sleep(args.interval)
+            time.sleep(result.get("retry_after_seconds", args.interval))
     except Exception as exc:
         # No traceback/provider error payload can expose authorization credentials.
         print(json.dumps({"error_type": type(exc).__name__, "stage": stage,
                           "smtp_code": getattr(exc, "smtp_code", None),
                           "error": "QQ operation failed; check local configuration, authorization and network. Sending is never retried automatically."}))
         raise SystemExit(1)
+    finally:
+        worker_scope.close()
 
 
 if __name__ == "__main__":

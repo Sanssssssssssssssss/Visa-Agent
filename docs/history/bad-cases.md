@@ -4,7 +4,7 @@
 
 ## 怎样测试
 
-[冻结场景与预期](../datasets/bad-cases/manifest.json)在调用模型前编写，包含 12 类场景、13 份 PDF。10 类为自制自然语言材料，每案尽量只改变一个问题；不是内部字段标签 PDF。另 2 类使用之前下载的大学公开 CAS、存款证明样例。材料、事件和预期的哈希保持不变，没有改答案来匹配输出。
+[冻结场景与预期](../../datasets/bad-cases/manifest.json)在调用模型前编写，包含 12 类场景、13 份 PDF。10 类为自制自然语言材料，每案尽量只改变一个问题；不是内部字段标签 PDF。另 2 类使用之前下载的大学公开 CAS、存款证明样例。材料、事件和预期的哈希保持不变，没有改答案来匹配输出。
 
 每类先在同一版本跑两次，共 24 次；发现问题后再跑 11 次针对性复测。实际经过 PDF/OCR、模型、来源校验、SQLite 和规则检查。不同阶段保留独立案件、原始模型提案、拒绝原因和源码哈希。测试全程没有调用人工批准入口。
 
@@ -50,13 +50,13 @@
 - 本批账本独立保存：`output/bad-cases-v1/live-budget.sqlite3`，**48/48**；原手动测试账本仍为 **55/60**。
 - 输入 **126,198 token**，输出 **46,785 token**；每案耗时中位数 **5.203 秒**，最大 **14.594 秒**。未配置单价，不估算费用。
 - **56 项离线测试通过**，包含真实遮盖 OCR、明示缺页、姓名角色、布尔值/国籍/资助归一化、无效页工具结果；原 15 场景冻结哈希未改变。
-- [机器可读结果](validation/bad-cases.json)、[离线日志](validation/pytest-bad-cases.txt)。完整提案、来源摘录和状态在本地 `output/bad-cases-v1/runs/` 与 `traces/`。
+- [机器可读结果](../validation/bad-cases.json)、[离线日志](../validation/pytest-bad-cases.txt)。完整提案、来源摘录和状态在本地 `output/bad-cases-v1/runs/` 与 `traces/`。
 
 异常定位顺序：打开对应 run 的 `failures` → `raw_proposals` → `rejected_candidates` → `check_results`；再到 trace 的 `documents_read` 核对模型实际看到的文本。失败调用的完整模型消息并非全部可用，错误和用量仍保留。
 
 ## 手动试坏材料
 
-文件在 `datasets/bad-cases/materials/`，[场景清单](../datasets/bad-cases/README.md)列出组合。先在空白案件发送 manifest 对应的首条消息，再上传该场景列出的材料。每种坏例单独建案，避免把不同问题混在一起。
+文件在 `datasets/bad-cases/materials/`，[场景清单](../../datasets/bad-cases/README.md)列出组合。先在空白案件发送 manifest 对应的首条消息，再上传该场景列出的材料。每种坏例单独建案，避免把不同问题混在一起。
 
 ```powershell
 uv run pytest -q
