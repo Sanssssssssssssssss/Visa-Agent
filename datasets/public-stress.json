@@ -1,0 +1,54 @@
+{
+  "version": "public-documents-2026-10-06-v1",
+  "message": "I am preparing a Student visa application from outside the UK. Please read the attached document and tell me what is missing.",
+  "note": "Answers set from visible public source pages before model runs. Unknown fields are safe omissions, reported separately from extraction coverage. These are incomplete old/redacted examples, never successful visa cases.",
+  "common_allowed_facts": {"route": ["student"], "application_location": ["outside_uk"]},
+  "documents": [
+    {
+      "id": "lloyds",
+      "path": "external-materials/try-these/01-Lloyds-statement-redacted.pdf",
+      "sha256": "3430d8351a7e12ea850ec69f6f067d6664e24f1413e18e841ca6c6ea82eb8276",
+      "markers": ["LLOYDS BANK", "822.52", "0.84", "STATEMENT OPENING BALANCE"],
+      "allowed_kinds": ["bank_statement"],
+      "allowed_facts": {
+        "bank_name": ["Lloyds Bank", "Lloyds Bank plc"],
+        "bank_currency": ["GBP", "£"],
+        "bank_start": ["2014-04-30"],
+        "bank_end": ["2015-04-30"],
+        "bank_minimum": ["0"]
+      }
+    },
+    {
+      "id": "boc",
+      "path": "external-materials/try-these/02-BOC-deposit-redacted.pdf",
+      "sha256": "fe30a0da5e30f9a1c62e3eb02f7b31b0de184728209d448caf655a7d0b926f0b",
+      "markers": ["BANK OF CHINA", "300,000.00", "2016/08/25"],
+      "allowed_kinds": ["bank_letter", "unknown"],
+      "allowed_facts": {
+        "bank_name": ["Bank of China", "Bank of China Limited", "中国银行", "中國銀行", "中国银行股份有限公司"],
+        "bank_currency": ["CNY"],
+        "bank_start": ["2016-08-25"],
+        "bank_end": ["2016-09-23"],
+        "bank_minimum": ["300000"]
+      },
+      "note": "300000 is the visible deposit amount; accepting its numeric transcription here does not establish accessible funds or a qualifying minimum balance. The redacted certificate still requires human review."
+    },
+    {
+      "id": "cas",
+      "path": "external-materials/try-these/03-CAS-Swansea-sample.pdf",
+      "sha256": "24739fe7d308927ea33efa7899a3295eff262a8ea42783b26c0e7f06f87c71d1",
+      "markers": ["CAS NUMBER", "TUITION FEES", "SWANSEA UNIVERSITY SPONSOR"],
+      "allowed_kinds": ["cas"],
+      "allowed_facts": {"sponsor_name": ["Swansea University"]},
+      "note": "Applicant identity, CAS reference, fees and course dates are unfilled placeholders, so none may become a fact."
+    }
+  ],
+  "runs": [
+    {"document": "lloyds", "variant": "original", "repeats": 3},
+    {"document": "boc", "variant": "original", "repeats": 3},
+    {"document": "cas", "variant": "original", "repeats": 3},
+    {"document": "lloyds", "variant": "scan", "repeats": 1},
+    {"document": "boc", "variant": "tilted_jpeg", "repeats": 1},
+    {"document": "cas", "variant": "scan", "repeats": 1}
+  ]
+}

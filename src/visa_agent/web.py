@@ -22,11 +22,11 @@ SAMPLES = {"visitor": "dev_visitor", "student": "dev_student", "skilled_worker":
 
 
 class LocalApp:
-    def __init__(self, root="data", mode="live"):
+    def __init__(self, root="data", mode="live", *, sample="visitor"):
         self.service = VisaService(root, mode)
         self.token = secrets.token_urlsafe(32)
         self.lock = threading.Lock()
-        self.new_case("visitor")
+        self.new_case(sample)
 
     def new_case(self, sample):
         if sample not in {*SAMPLES, "blank"}:
@@ -181,8 +181,9 @@ def main():
     parser.add_argument("--data", default="data")
     parser.add_argument("--mode", choices=["live", "offline"], default="live")
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--sample", choices=[*SAMPLES, "blank"], default="visitor")
     args = parser.parse_args()
-    server = make_server(LocalApp(args.data, args.mode), args.port)
+    server = make_server(LocalApp(args.data, args.mode, sample=args.sample), args.port)
     print(f"Visa Agent: http://127.0.0.1:{server.server_port} ({args.mode})", flush=True)
     try:
         server.serve_forever()

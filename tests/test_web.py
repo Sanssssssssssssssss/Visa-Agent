@@ -1,4 +1,5 @@
 import base64
+from concurrent.futures import ThreadPoolExecutor
 import http.client
 import json
 from pathlib import Path
@@ -70,3 +71,19 @@ def test_web_approval_cannot_skip_material_checks(web):
     status, _ = request(web, "/api/review", {"version": 0, "notes": "Should be rejected"})
     assert status == 400
     assert web[0].service.store.get(web[0].case_id).approval is None
+
+
+def test_concurrent_redelivery_only_processes_event_once(web):
+    body = {"event_id": "concurrent-upload", "files": [{
+        "name": "identity.pdf",
+        "content": base64.b64encode((MATERIALS / "identity.pdf").read_bytes()).decode(),
+    }]}
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        responses = list(pool.map(lambda _: request(web, "/api/event", body), range(12)))
+    assert all(status == 200 for status, _ in responses)
+    results = [json.loads(raw) for _, raw in responses]
+    assert sum(not r["result"]["duplicate"] for r in results) == 1
+    assert {r["case"]["version"] for r in results} == {1}
+    app = web[0]
+    assert len(app.service.store.get(app.case_id).documents) == 1
+    assert len(app.service.store.traces(app.case_id)) == 1

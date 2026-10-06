@@ -17,6 +17,31 @@ def validate_value(key: str, value: str, quote: str) -> str:
     value = value.strip()
     if key not in FIELDS or not value or value.lower() in {"unknown", "null", "none", "n/a"}:
         raise ValueError(f"Unsupported or empty field: {key}")
+    if re.search(r"\*{2,}|\b[xX]{3,}\b|\b(?:your|name|number|date)\b.*\bhere\b", value, re.I):
+        raise ValueError(f"Placeholder is not an applicant fact: {key}")
+    # Normalize only explicit equivalent phrases; do not geocode an address or infer a region.
+    enums = {
+        "application_location": {
+            "outside_uk": ["outside_uk", "outside UK", "outside the UK", "英国境外"],
+            "inside_uk": ["inside_uk", "inside UK", "inside the UK", "英国境内"],
+        },
+        "study_location": {
+            "london": ["london", "伦敦"],
+            "outside_london": ["outside_london", "outside London", "伦敦以外"],
+        },
+        "bank_currency": {"GBP": ["GBP", "£", "pounds sterling"],
+                          "CNY": ["CNY", "RMB", "人民币"],
+                          "USD": ["USD", "US dollars"], "EUR": ["EUR", "€"]},
+    }
+    if key in enums:
+        for canonical, aliases in enums[key].items():
+            if any(normalized(value) == normalized(alias) for alias in aliases):
+                if not any(normalized(alias) in normalized(quote) for alias in aliases):
+                    raise ValueError(f"Value not grounded in quote: {key}")
+                return canonical
+        # Other ISO currency codes remain explicit values, with no conversion inference.
+        if key != "bank_currency":
+            raise ValueError(f"Unsupported location value: {key}")
     if key in DATE_FIELDS:
         parsed = date.fromisoformat(value)
         formats = [parsed.isoformat(), parsed.strftime("%d/%m/%Y"),

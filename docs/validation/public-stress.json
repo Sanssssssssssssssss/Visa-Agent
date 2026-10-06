@@ -1,0 +1,811 @@
+{
+  "requested_runs": 12,
+  "completed_runs": 12,
+  "contract_passes": 9,
+  "requests": 23,
+  "input_tokens": 67827,
+  "output_tokens": 5274,
+  "usage_incomplete": false,
+  "median_seconds": 7.515,
+  "max_seconds": 12.391,
+  "distinct_field_sets_per_original": {
+    "boc": 2,
+    "cas": 2,
+    "lloyds": 3
+  },
+  "note": "Contract pass allows safe omissions; see each row's extracted and omitted fields. No approval is performed. Serial robustness experiment, not a production throughput benchmark.",
+  "reports": [
+    {
+      "id": "boc-original-1",
+      "document": "boc",
+      "variant": "original",
+      "path": "external-materials\\try-these\\02-BOC-deposit-redacted.pdf",
+      "sha256": "fe30a0da5e30f9a1c62e3eb02f7b31b0de184728209d448caf655a7d0b926f0b",
+      "case_id": "public-boc-original-1",
+      "seconds": 7.5,
+      "result": {
+        "case_id": "public-boc-original-1",
+        "version": 1,
+        "status": "WAIT_USER",
+        "reply": "我们先补齐以下信息：\n1. 请提供与身份证件一致的申请人姓名。\n2. 请确认在英国境外申请；境内申请需要顾问处理。\n3. 请确认是否有随行家属；家属申请需要顾问处理。",
+        "run_id": "a69d3e0d35c04a8699a49141d1ee2063",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": false,
+        "no_wrong_accepted_fields": false,
+        "restart_duplicate": true
+      },
+      "passed": false,
+      "accepted_fields": {
+        "bank_currency": [
+          "CNY"
+        ],
+        "bank_end": [
+          "2016-12-23"
+        ],
+        "bank_name": [
+          "Bank of China Limited"
+        ],
+        "bank_start": [
+          "2016-09-23"
+        ],
+        "route": [
+          "student"
+        ]
+      },
+      "wrong_fields": {
+        "bank_end": [
+          "2016-12-23"
+        ],
+        "bank_start": [
+          "2016-09-23"
+        ]
+      },
+      "missing_markers": [],
+      "omitted_fields": [
+        "bank_minimum"
+      ],
+      "problems": [
+        "page 1: low OCR confidence"
+      ],
+      "rejected_candidates": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 4980,
+        "output_tokens": 453
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "cas-original-1",
+      "document": "cas",
+      "variant": "original",
+      "path": "external-materials\\try-these\\03-CAS-Swansea-sample.pdf",
+      "sha256": "24739fe7d308927ea33efa7899a3295eff262a8ea42783b26c0e7f06f87c71d1",
+      "case_id": "public-cas-original-1",
+      "seconds": 8.11,
+      "result": {
+        "case_id": "public-cas-original-1",
+        "version": 1,
+        "status": "NEEDS_HUMAN",
+        "reply": "这部分需要顾问核对：\n1. 请确认在英国境外申请；境内申请需要顾问处理。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认是否有随行家属；家属申请需要顾问处理。",
+        "run_id": "f7f113d5f2654713a92c1e45dbc12b7d",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": true,
+        "no_wrong_accepted_fields": false,
+        "restart_duplicate": true
+      },
+      "passed": false,
+      "accepted_fields": {
+        "application_location": [
+          "outside the UK"
+        ],
+        "route": [
+          "student"
+        ],
+        "sponsor_name": [
+          "Swansea University"
+        ],
+        "study_location": [
+          "Swansea University, Bay Campus, Swansea, SA1 8EN"
+        ]
+      },
+      "wrong_fields": {
+        "application_location": [
+          "outside the UK"
+        ],
+        "study_location": [
+          "Swansea University, Bay Campus, Swansea, SA1 8EN"
+        ]
+      },
+      "missing_markers": [],
+      "omitted_fields": [],
+      "problems": [
+        "page 1: low OCR confidence"
+      ],
+      "rejected_candidates": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5695,
+        "output_tokens": 375
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "lloyds-original-1",
+      "document": "lloyds",
+      "variant": "original",
+      "path": "external-materials\\try-these\\01-Lloyds-statement-redacted.pdf",
+      "sha256": "3430d8351a7e12ea850ec69f6f067d6664e24f1413e18e841ca6c6ea82eb8276",
+      "case_id": "public-lloyds-original-1",
+      "seconds": 11.25,
+      "result": {
+        "case_id": "public-lloyds-original-1",
+        "version": 1,
+        "status": "NEEDS_HUMAN",
+        "reply": "这部分需要顾问核对：\n1. 部分字段无法核对来源，请顾问检查提取结果。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认在英国境外申请；境内申请需要顾问处理。",
+        "run_id": "348e5d0b6de2423592880b37f15fd9aa",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": true,
+        "no_wrong_accepted_fields": true,
+        "restart_duplicate": true
+      },
+      "passed": true,
+      "accepted_fields": {
+        "bank_end": [
+          "2015-04-30"
+        ],
+        "bank_minimum": [
+          "0"
+        ],
+        "bank_name": [
+          "Lloyds Bank"
+        ],
+        "bank_start": [
+          "2014-04-30"
+        ],
+        "route": [
+          "student"
+        ]
+      },
+      "wrong_fields": {},
+      "missing_markers": [],
+      "omitted_fields": [
+        "bank_currency"
+      ],
+      "problems": [
+        "page 2: low OCR confidence"
+      ],
+      "rejected_candidates": [
+        "bank_currency: Value not grounded in quote: bank_currency"
+      ],
+      "usage": {
+        "requests": 1,
+        "input_tokens": 2787,
+        "output_tokens": 440
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "boc-original-2",
+      "document": "boc",
+      "variant": "original",
+      "path": "external-materials\\try-these\\02-BOC-deposit-redacted.pdf",
+      "sha256": "fe30a0da5e30f9a1c62e3eb02f7b31b0de184728209d448caf655a7d0b926f0b",
+      "case_id": "public-boc-original-2",
+      "seconds": 7.531,
+      "prompt_version": "extract-v2-field-roles",
+      "source_hashes": {
+        "src/visa_agent/documents.py": "eabb772479c1b2df8426c1297cd18a3fba22a874346a6eee097cd3f7d6f1db5a",
+        "src/visa_agent/agent.py": "b5097d9ba99a22fbe161ebe962dc1859fe0cd84ab4f64c73f8979d253f9bb845",
+        "src/visa_agent/evidence.py": "9282991c3978abd6db4f9b423fe79de7687a0c0dd7fdd90ccf52d9812f18b872"
+      },
+      "result": {
+        "case_id": "public-boc-original-2",
+        "version": 1,
+        "status": "WAIT_USER",
+        "reply": "我们先补齐以下信息：\n1. 请提供与身份证件一致的申请人姓名。\n2. 请确认是否有随行家属；家属申请需要顾问处理。\n3. 请说明是否有拒签记录；相关解释需要顾问处理。",
+        "run_id": "e220193fd2fe4f748aa8927f5ba93edf",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": true,
+        "no_wrong_accepted_fields": true,
+        "restart_duplicate": true
+      },
+      "passed": true,
+      "accepted_fields": {
+        "application_location": [
+          "outside_uk"
+        ],
+        "bank_currency": [
+          "CNY"
+        ],
+        "bank_end": [
+          "2016-09-23"
+        ],
+        "bank_name": [
+          "Bank of China Limited"
+        ],
+        "bank_start": [
+          "2016-08-25"
+        ],
+        "route": [
+          "student"
+        ]
+      },
+      "wrong_fields": {},
+      "missing_markers": [],
+      "omitted_fields": [
+        "bank_minimum"
+      ],
+      "problems": [
+        "page 1: low OCR confidence"
+      ],
+      "rejected_candidates": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5414,
+        "output_tokens": 490
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "boc-original-3",
+      "document": "boc",
+      "variant": "original",
+      "path": "external-materials\\try-these\\02-BOC-deposit-redacted.pdf",
+      "sha256": "fe30a0da5e30f9a1c62e3eb02f7b31b0de184728209d448caf655a7d0b926f0b",
+      "case_id": "public-boc-original-3",
+      "seconds": 5.922,
+      "prompt_version": "extract-v2-field-roles",
+      "source_hashes": {
+        "src/visa_agent/documents.py": "eabb772479c1b2df8426c1297cd18a3fba22a874346a6eee097cd3f7d6f1db5a",
+        "src/visa_agent/agent.py": "b5097d9ba99a22fbe161ebe962dc1859fe0cd84ab4f64c73f8979d253f9bb845",
+        "src/visa_agent/evidence.py": "9282991c3978abd6db4f9b423fe79de7687a0c0dd7fdd90ccf52d9812f18b872"
+      },
+      "result": {
+        "case_id": "public-boc-original-3",
+        "version": 1,
+        "status": "WAIT_USER",
+        "reply": "我们先补齐以下信息：\n1. 请提供与身份证件一致的申请人姓名。\n2. 请确认是否有随行家属；家属申请需要顾问处理。\n3. 请说明是否有拒签记录；相关解释需要顾问处理。",
+        "run_id": "6e136b3ac1ab4c8d91560a82576e9334",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": true,
+        "no_wrong_accepted_fields": true,
+        "restart_duplicate": true
+      },
+      "passed": true,
+      "accepted_fields": {
+        "application_location": [
+          "outside_uk"
+        ],
+        "bank_currency": [
+          "CNY"
+        ],
+        "bank_end": [
+          "2016-09-23"
+        ],
+        "bank_name": [
+          "Bank of China Limited"
+        ],
+        "bank_start": [
+          "2016-08-25"
+        ],
+        "route": [
+          "student"
+        ]
+      },
+      "wrong_fields": {},
+      "missing_markers": [],
+      "omitted_fields": [
+        "bank_minimum"
+      ],
+      "problems": [
+        "page 1: low OCR confidence"
+      ],
+      "rejected_candidates": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5414,
+        "output_tokens": 501
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "boc-tilted_jpeg-1",
+      "document": "boc",
+      "variant": "tilted_jpeg",
+      "path": "output\\public-stress\\inputs\\boc-tilted_jpeg.jpg",
+      "sha256": "ab1abe0ae5c84991a3bf01f26ecab5fc55e7e63fb71dc72ab13da4dc0988f16d",
+      "case_id": "public-boc-tilted_jpeg-1",
+      "seconds": 6.704,
+      "prompt_version": "extract-v2-field-roles",
+      "source_hashes": {
+        "src/visa_agent/documents.py": "eabb772479c1b2df8426c1297cd18a3fba22a874346a6eee097cd3f7d6f1db5a",
+        "src/visa_agent/agent.py": "b5097d9ba99a22fbe161ebe962dc1859fe0cd84ab4f64c73f8979d253f9bb845",
+        "src/visa_agent/evidence.py": "9282991c3978abd6db4f9b423fe79de7687a0c0dd7fdd90ccf52d9812f18b872"
+      },
+      "result": {
+        "case_id": "public-boc-tilted_jpeg-1",
+        "version": 1,
+        "status": "NEEDS_HUMAN",
+        "reply": "这部分需要顾问核对：\n1. 部分字段无法核对来源，请顾问检查提取结果。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认是否有随行家属；家属申请需要顾问处理。",
+        "run_id": "50fbe8265f00495faf1f302b90f8c94b",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": false,
+        "classification": true,
+        "no_wrong_accepted_fields": true,
+        "restart_duplicate": true
+      },
+      "passed": false,
+      "accepted_fields": {
+        "application_location": [
+          "outside_uk"
+        ],
+        "bank_end": [
+          "2016-09-23"
+        ],
+        "bank_name": [
+          "Bank of China Limited"
+        ],
+        "bank_start": [
+          "2016-08-25"
+        ],
+        "route": [
+          "student"
+        ]
+      },
+      "wrong_fields": {},
+      "missing_markers": [
+        "300,000.00"
+      ],
+      "omitted_fields": [
+        "bank_currency",
+        "bank_minimum"
+      ],
+      "problems": [
+        "page 1: low OCR confidence"
+      ],
+      "rejected_candidates": [
+        "bank_currency: Value not grounded in quote: bank_currency"
+      ],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5379,
+        "output_tokens": 477
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "cas-original-2",
+      "document": "cas",
+      "variant": "original",
+      "path": "external-materials\\try-these\\03-CAS-Swansea-sample.pdf",
+      "sha256": "24739fe7d308927ea33efa7899a3295eff262a8ea42783b26c0e7f06f87c71d1",
+      "case_id": "public-cas-original-2",
+      "seconds": 7.344,
+      "prompt_version": "extract-v2-field-roles",
+      "source_hashes": {
+        "src/visa_agent/documents.py": "eabb772479c1b2df8426c1297cd18a3fba22a874346a6eee097cd3f7d6f1db5a",
+        "src/visa_agent/agent.py": "b5097d9ba99a22fbe161ebe962dc1859fe0cd84ab4f64c73f8979d253f9bb845",
+        "src/visa_agent/evidence.py": "9282991c3978abd6db4f9b423fe79de7687a0c0dd7fdd90ccf52d9812f18b872"
+      },
+      "result": {
+        "case_id": "public-cas-original-2",
+        "version": 1,
+        "status": "WAIT_USER",
+        "reply": "我们先补齐以下信息：\n1. 请说明来英国的主要目的，以确认签证路线。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认是否有随行家属；家属申请需要顾问处理。",
+        "run_id": "19a1ba49428049f5be2a6be2d64762a9",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": true,
+        "no_wrong_accepted_fields": true,
+        "restart_duplicate": true
+      },
+      "passed": true,
+      "accepted_fields": {
+        "application_location": [
+          "outside_uk"
+        ],
+        "route": [
+          "student"
+        ],
+        "sponsor_name": [
+          "Swansea University"
+        ]
+      },
+      "wrong_fields": {},
+      "missing_markers": [],
+      "omitted_fields": [],
+      "problems": [
+        "page 1: low OCR confidence"
+      ],
+      "rejected_candidates": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 6129,
+        "output_tokens": 314
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "cas-original-3",
+      "document": "cas",
+      "variant": "original",
+      "path": "external-materials\\try-these\\03-CAS-Swansea-sample.pdf",
+      "sha256": "24739fe7d308927ea33efa7899a3295eff262a8ea42783b26c0e7f06f87c71d1",
+      "case_id": "public-cas-original-3",
+      "seconds": 5.984,
+      "prompt_version": "extract-v2-field-roles",
+      "source_hashes": {
+        "src/visa_agent/documents.py": "eabb772479c1b2df8426c1297cd18a3fba22a874346a6eee097cd3f7d6f1db5a",
+        "src/visa_agent/agent.py": "b5097d9ba99a22fbe161ebe962dc1859fe0cd84ab4f64c73f8979d253f9bb845",
+        "src/visa_agent/evidence.py": "9282991c3978abd6db4f9b423fe79de7687a0c0dd7fdd90ccf52d9812f18b872"
+      },
+      "result": {
+        "case_id": "public-cas-original-3",
+        "version": 1,
+        "status": "WAIT_USER",
+        "reply": "我们先补齐以下信息：\n1. 请说明来英国的主要目的，以确认签证路线。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认是否有随行家属；家属申请需要顾问处理。",
+        "run_id": "98408d00b4ec49e5a30ef1fc6c092588",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": true,
+        "no_wrong_accepted_fields": true,
+        "restart_duplicate": true
+      },
+      "passed": true,
+      "accepted_fields": {
+        "application_location": [
+          "outside_uk"
+        ],
+        "route": [
+          "student"
+        ],
+        "sponsor_name": [
+          "Swansea University"
+        ]
+      },
+      "wrong_fields": {},
+      "missing_markers": [],
+      "omitted_fields": [],
+      "problems": [
+        "page 1: low OCR confidence"
+      ],
+      "rejected_candidates": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 6129,
+        "output_tokens": 300
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "cas-scan-1",
+      "document": "cas",
+      "variant": "scan",
+      "path": "output\\public-stress\\inputs\\cas-scan.pdf",
+      "sha256": "a5ad53c4a2725429bce7477a2466d7ebfdfb0a8b268e032e6f93c72c0514f77c",
+      "case_id": "public-cas-scan-1",
+      "seconds": 6.812,
+      "prompt_version": "extract-v2-field-roles",
+      "source_hashes": {
+        "src/visa_agent/documents.py": "eabb772479c1b2df8426c1297cd18a3fba22a874346a6eee097cd3f7d6f1db5a",
+        "src/visa_agent/agent.py": "b5097d9ba99a22fbe161ebe962dc1859fe0cd84ab4f64c73f8979d253f9bb845",
+        "src/visa_agent/evidence.py": "9282991c3978abd6db4f9b423fe79de7687a0c0dd7fdd90ccf52d9812f18b872"
+      },
+      "result": {
+        "case_id": "public-cas-scan-1",
+        "version": 1,
+        "status": "WAIT_USER",
+        "reply": "我们先补齐以下信息：\n1. 请说明来英国的主要目的，以确认签证路线。\n2. 请提供与身份证件一致的申请人姓名。\n3. 请确认是否有随行家属；家属申请需要顾问处理。",
+        "run_id": "26de55af35f34b219b56f728b1437d6b",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": true,
+        "no_wrong_accepted_fields": true,
+        "restart_duplicate": true
+      },
+      "passed": true,
+      "accepted_fields": {
+        "application_location": [
+          "outside_uk"
+        ],
+        "route": [
+          "student"
+        ]
+      },
+      "wrong_fields": {},
+      "missing_markers": [],
+      "omitted_fields": [
+        "sponsor_name"
+      ],
+      "problems": [
+        "page 1: low OCR confidence"
+      ],
+      "rejected_candidates": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 6051,
+        "output_tokens": 243
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "lloyds-original-2",
+      "document": "lloyds",
+      "variant": "original",
+      "path": "external-materials\\try-these\\01-Lloyds-statement-redacted.pdf",
+      "sha256": "3430d8351a7e12ea850ec69f6f067d6664e24f1413e18e841ca6c6ea82eb8276",
+      "case_id": "public-lloyds-original-2",
+      "seconds": 12.391,
+      "prompt_version": "extract-v2-field-roles",
+      "source_hashes": {
+        "src/visa_agent/documents.py": "eabb772479c1b2df8426c1297cd18a3fba22a874346a6eee097cd3f7d6f1db5a",
+        "src/visa_agent/agent.py": "b5097d9ba99a22fbe161ebe962dc1859fe0cd84ab4f64c73f8979d253f9bb845",
+        "src/visa_agent/evidence.py": "9282991c3978abd6db4f9b423fe79de7687a0c0dd7fdd90ccf52d9812f18b872"
+      },
+      "result": {
+        "case_id": "public-lloyds-original-2",
+        "version": 1,
+        "status": "WAIT_USER",
+        "reply": "我们先补齐以下信息：\n1. 请提供与身份证件一致的申请人姓名。\n2. 请确认是否有随行家属；家属申请需要顾问处理。\n3. 请说明是否有拒签记录；相关解释需要顾问处理。",
+        "run_id": "e7027ec538af450b9dce522bdedfc052",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": true,
+        "no_wrong_accepted_fields": true,
+        "restart_duplicate": true
+      },
+      "passed": true,
+      "accepted_fields": {
+        "application_location": [
+          "outside_uk"
+        ],
+        "bank_currency": [
+          "GBP"
+        ],
+        "bank_end": [
+          "2015-04-30"
+        ],
+        "bank_name": [
+          "LLOYDS BANK"
+        ],
+        "bank_start": [
+          "2014-04-30"
+        ],
+        "route": [
+          "student"
+        ]
+      },
+      "wrong_fields": {},
+      "missing_markers": [],
+      "omitted_fields": [
+        "bank_minimum"
+      ],
+      "problems": [
+        "page 2: low OCR confidence"
+      ],
+      "rejected_candidates": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 6349,
+        "output_tokens": 482
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "lloyds-original-3",
+      "document": "lloyds",
+      "variant": "original",
+      "path": "external-materials\\try-these\\01-Lloyds-statement-redacted.pdf",
+      "sha256": "3430d8351a7e12ea850ec69f6f067d6664e24f1413e18e841ca6c6ea82eb8276",
+      "case_id": "public-lloyds-original-3",
+      "seconds": 10.938,
+      "prompt_version": "extract-v2-field-roles",
+      "source_hashes": {
+        "src/visa_agent/documents.py": "eabb772479c1b2df8426c1297cd18a3fba22a874346a6eee097cd3f7d6f1db5a",
+        "src/visa_agent/agent.py": "b5097d9ba99a22fbe161ebe962dc1859fe0cd84ab4f64c73f8979d253f9bb845",
+        "src/visa_agent/evidence.py": "9282991c3978abd6db4f9b423fe79de7687a0c0dd7fdd90ccf52d9812f18b872"
+      },
+      "result": {
+        "case_id": "public-lloyds-original-3",
+        "version": 1,
+        "status": "WAIT_USER",
+        "reply": "我们先补齐以下信息：\n1. 请提供与身份证件一致的申请人姓名。\n2. 请确认是否有随行家属；家属申请需要顾问处理。\n3. 请说明是否有拒签记录；相关解释需要顾问处理。",
+        "run_id": "a015ddc75a764ae3a03b229bdafb12ca",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": true,
+        "no_wrong_accepted_fields": true,
+        "restart_duplicate": true
+      },
+      "passed": true,
+      "accepted_fields": {
+        "application_location": [
+          "outside_uk"
+        ],
+        "bank_currency": [
+          "GBP"
+        ],
+        "bank_end": [
+          "2015-04-30"
+        ],
+        "bank_minimum": [
+          "0"
+        ],
+        "bank_name": [
+          "LLOYDS BANK"
+        ],
+        "bank_start": [
+          "2014-04-30"
+        ],
+        "route": [
+          "student"
+        ]
+      },
+      "wrong_fields": {},
+      "missing_markers": [],
+      "omitted_fields": [],
+      "problems": [
+        "page 2: low OCR confidence"
+      ],
+      "rejected_candidates": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 6349,
+        "output_tokens": 547
+      },
+      "usage_incomplete": false
+    },
+    {
+      "id": "lloyds-scan-1",
+      "document": "lloyds",
+      "variant": "scan",
+      "path": "output\\public-stress\\inputs\\lloyds-scan.pdf",
+      "sha256": "65ecefcbf67dc8fe4b35167529f418c96a41f33dd4c5501849a33489d44de858",
+      "case_id": "public-lloyds-scan-1",
+      "seconds": 12.297,
+      "prompt_version": "extract-v2-field-roles",
+      "source_hashes": {
+        "src/visa_agent/documents.py": "eabb772479c1b2df8426c1297cd18a3fba22a874346a6eee097cd3f7d6f1db5a",
+        "src/visa_agent/agent.py": "b5097d9ba99a22fbe161ebe962dc1859fe0cd84ab4f64c73f8979d253f9bb845",
+        "src/visa_agent/evidence.py": "9282991c3978abd6db4f9b423fe79de7687a0c0dd7fdd90ccf52d9812f18b872"
+      },
+      "result": {
+        "case_id": "public-lloyds-scan-1",
+        "version": 1,
+        "status": "WAIT_USER",
+        "reply": "我们先补齐以下信息：\n1. 请提供与身份证件一致的申请人姓名。\n2. 请确认是否有随行家属；家属申请需要顾问处理。\n3. 请说明是否有拒签记录；相关解释需要顾问处理。",
+        "run_id": "6dd1516798834b39acead0700d6333b7",
+        "error": null,
+        "duplicate": false,
+        "pack_path": null
+      },
+      "checks": {
+        "no_service_error": true,
+        "no_false_readiness": true,
+        "no_approval_or_pack": true,
+        "body_read": true,
+        "classification": true,
+        "no_wrong_accepted_fields": true,
+        "restart_duplicate": true
+      },
+      "passed": true,
+      "accepted_fields": {
+        "application_location": [
+          "outside_uk"
+        ],
+        "bank_currency": [
+          "GBP"
+        ],
+        "bank_end": [
+          "2015-04-30"
+        ],
+        "bank_minimum": [
+          "0"
+        ],
+        "bank_name": [
+          "LLOYDS BANK"
+        ],
+        "bank_start": [
+          "2014-04-30"
+        ],
+        "route": [
+          "student"
+        ]
+      },
+      "wrong_fields": {},
+      "missing_markers": [],
+      "omitted_fields": [],
+      "problems": [],
+      "rejected_candidates": [],
+      "usage": {
+        "requests": 2,
+        "input_tokens": 7151,
+        "output_tokens": 652
+      },
+      "usage_incomplete": false
+    }
+  ]
+}

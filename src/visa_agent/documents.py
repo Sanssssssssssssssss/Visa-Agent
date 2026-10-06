@@ -59,32 +59,31 @@ def read_document(path: Path, sha: str, original_name: str) -> Document:
                 raise ValueError("Encrypted PDF: upload an unlocked copy")
             if not 1 <= len(reader.pages) <= MAX_PAGES:
                 raise ValueError("PDF must contain 1-20 pages")
-            rendered = None
-            try:
+            with pdfium.PdfDocument(path) as rendered:
                 for index, source in enumerate(reader.pages):
                     text = source.extract_text() or ""
-                    # Sparse or damaged text layers fall back to actual page OCR.
-                    if len(text.strip()) >= 40 and text.count("\ufffd") < 3:
-                        page = Page(number=index + 1, text=text, method="pdf_text")
-                    else:
-                        if rendered is None:
-                            rendered = pdfium.PdfDocument(path)
-                        pdf_page = rendered[index]
-                        try:
+                    pdf_page = rendered[index]
+                    try:
+                        # A long text layer can be only captions beside a scanned document.
+                        # Render every image-bearing page (including images inside Forms),
+                        # so OCR sees the visible evidence and redactions, not hidden text.
+                        has_images = next(pdf_page.get_objects(
+                            filter=[pdfium.raw.FPDF_PAGEOBJ_IMAGE]), None) is not None
+                        if not has_images and len(text.strip()) >= 40 and text.count("\ufffd") < 3:
+                            page = Page(number=index + 1, text=text, method="pdf_text")
+                        else:
                             width, height = pdf_page.get_size()
                             if width * height * 4 > Image.MAX_IMAGE_PIXELS:
                                 raise ValueError("PDF page exceeds rendering pixel limit")
                             bitmap = pdf_page.render(scale=2)
                             try:
-                                page = image_text(bitmap.to_pil(), index + 1)
+                                with bitmap.to_pil() as pixels:
+                                    page = image_text(pixels, index + 1)
                             finally:
                                 bitmap.close()
-                        finally:
-                            pdf_page.close()
+                    finally:
+                        pdf_page.close()
                     doc.pages.append(page)
-            finally:
-                if rendered is not None:
-                    rendered.close()
         else:
             with Image.open(path) as im:
                 if im.width * im.height > Image.MAX_IMAGE_PIXELS:

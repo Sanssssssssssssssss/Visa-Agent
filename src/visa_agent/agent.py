@@ -29,6 +29,17 @@ Copy values faithfully. Dates use YYYY-MM-DD, boolean values true/false, numbers
 without commas, route one of visitor/student/skilled_worker. Other values must appear in quotes.
 Document language is en/zh/other/unknown; classify by content. A test/specimen label is intentional
 in this demo and does not replace the human authenticity review. Do not output specimen as a name.
+Blank templates, masked values (XXXX, ****), labels such as 'Your full name here', and example
+reference numbers are unknown, never applicant facts. A signer is not the applicant.
+Classify a certificate of deposit as bank_letter, not a transaction bank_statement.
+application_location uses outside_uk or inside_uk; study_location uses london or outside_london,
+only when explicitly stated. Do not put a postal address in either field or infer a city region.
+Bank statement bank_start/bank_end refer to the statement period, not interest-rate periods.
+On a deposit certificate, bank_start is the deposit date and bank_end is the issue date of the
+evidence. A future validity/freeze period is NOT a historical funding period. If those dates cannot
+be identified unambiguously, omit them. Do not infer a historical minimum from a deposit amount.
+General instructions, conditional examples (e.g. 'if Y, ATAS required') and form headings are not
+facts about this applicant. A document's sample date is not the intended application date.
 Use read_evidence when previews are incomplete. Do not read the same page twice.
 Extract bank_minimum ONLY if explicitly stated or unambiguously calculable from ALL balances in
 the covered period, never use the closing balance as an assumed minimum. Missing stays missing.
@@ -175,7 +186,7 @@ def extract(case: Case, event: CaseEvent, new_docs: list[Document], trace: dict,
             mode="live", budget: LiveBudget | None = None, model_override=None) -> Proposal:
     prompt, remaining = build_context(case, event, new_docs)
     trace["working_context"] = json.loads(prompt)
-    trace["prompt_version"] = "extract-v1"
+    trace["prompt_version"] = "extract-v2-field-roles"
     trace["context_chars"] = len(prompt) + len(INSTRUCTIONS)
     ctx = ReadContext({d.id: d for d in case.documents}, trace, remaining)
     started = time.monotonic()

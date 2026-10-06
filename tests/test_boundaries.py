@@ -182,6 +182,19 @@ def test_negation_and_decimal_normalization():
     assert validate_value("bank_minimum", "40000.00", "Minimum: 40,000") == "40000"
 
 
+def test_location_and_currency_normalization_requires_direct_evidence():
+    assert validate_value("application_location", "outside the UK", "I apply outside the UK") == "outside_uk"
+    assert validate_value("bank_currency", "GBP", "Balance: £0.84") == "GBP"
+    with pytest.raises(ValueError):
+        validate_value("study_location", "Swansea University, Bay Campus", "Swansea University, Bay Campus")
+    with pytest.raises(ValueError):
+        validate_value("study_location", "outside_london", "Swansea University, Bay Campus")
+    for key, value in [("cas_name", "Your full name here"), ("bank_holder", "XXXX"),
+                       ("cas_reference", "E4G************")]:
+        with pytest.raises(ValueError, match="Placeholder"):
+            validate_value(key, value, value)
+
+
 def test_twenty_page_limit(tmp_path):
     from pypdf import PdfWriter
     writer = PdfWriter()
