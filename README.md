@@ -18,6 +18,8 @@ uv run pytest -q
 
 ## 两分钟体验
 
+想亲手分批上传、查看补件并自行审批，请按 [手动测试指南](docs/manual-testing.md) 操作，内含现成材料索引和真实模型测试步骤。
+
 ```powershell
 uv run visa-agent --mode offline replay datasets/cases/dev_visitor.json
 ```
