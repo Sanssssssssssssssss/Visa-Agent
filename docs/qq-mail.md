@@ -31,7 +31,7 @@ uv run python -m visa_agent.qq_mail samples --allow-samples off
 
 完整 Visitor 样例可用 `datasets/intake/visitor-example-TEST-ONLY.xlsx` 加 `datasets/formatted-materials-v2/visitor/` 中的 `identity.jpg`、`funds-scan.pdf`、`work.jpg`。四个附件一起发，正文说明要去英国旅游。本机已把这四个文件放到 `external-materials/sample-debug/visitor/`，便于全选附加。开关实测见 [sample-switch.md](sample-switch.md)。
 
-本次按用户要求启用**开放收件、任意主题、关闭 HITL、自动回信**。每个新邮件线程建一个案件，同线程回复继续处理。当前进程每 15 秒轮询一次；关机后需要重新启动命令。首轮真实验证用了 12 次模型请求，随后将累计上限调至 24 次供用户亲测，计数跨重启保留；SOUL 更新复验又用了 4 次，当时累计 16/24。最新用量见本机 `qq-watch-last.json`。需要更多测试时由操作者明确修改 `--request-cap`，历史使用量不清零。
+部署示例默认**开放收件、任意主题、关闭 HITL、自动回信**。每个新邮件线程建一个案件，同线程回复继续处理；每 15 秒轮询一次，关机后需重新启动。累计调用默认不限，只有显式传入 `--request-cap` 才设置上限；历史用量跨重启保留。最新用量见本机 `qq-watch-last.json`，早期限定额度的实验记录保留在[收发验收](validation/qq-mail.json)。已有收件策略与新 `.env` 的生效区别见[配置参考](configuration.zh-CN.md)。
 
 ```powershell
 # 查看最新扫描、最近回信、模型与规则记录

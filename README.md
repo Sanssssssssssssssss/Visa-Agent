@@ -2,7 +2,7 @@
 <h1 align="center">Visa Agent</h1>
 <p align="center"><strong>From the first email to an organised application pack.</strong></p>
 <p align="center">A UK visa document assistant that remembers the case, asks what is missing, and replies where the customer already is.</p>
-<p align="center"><a href="#see-it-work">Demo</a> · <a href="#try-it">Try it</a> · <a href="docs/deployment.md">Deploy</a> · <a href="TESTING.md">Tests</a> · <a href="README.zh-CN.md">简体中文</a></p>
+<p align="center"><a href="#see-it-work">Demo</a> · <a href="#try-it">Try it</a> · <a href="docs/README.md">Documentation</a> · <a href="docs/docker.md">Deploy</a> · <a href="TESTING.md">Tests</a> · <a href="README.zh-CN.md">简体中文</a></p>
 <p align="center"><a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-16776b" alt="MIT" /></a> <a href="https://github.com/Sanssssssssssssssss/Visa-Agent/actions/workflows/ci.yml"><img src="https://github.com/Sanssssssssssssssss/Visa-Agent/actions/workflows/ci.yml/badge.svg?branch=master" alt="Offline checks" /></a> <img src="https://img.shields.io/badge/Python-3.12-3776ab" alt="Python 3.12" /> <img src="https://img.shields.io/badge/QQ_email-live_tested-16776b" alt="QQ email tested live" /></p>
 
 ## See it work
@@ -29,13 +29,15 @@ Download recorded demo packs: [Visitor](examples/packs/visitor-demo.zip) · [Stu
 ### Docker email service
 
 ```sh
+git clone https://github.com/Sanssssssssssssssss/Visa-Agent.git
+cd Visa-Agent
 cp .env.example .env
-# Fill your model key, QQ/Foxmail inbox, authorization code and sender policy.
+# Fill VISA_API_KEY, VISA_QQ_MAILBOX and VISA_QQ_AUTH_CODE in the private .env.
 docker compose up -d --build
 docker compose ps
 ```
 
-The container initializes a new inbox once and preserves case data on restart. [Complete Docker setup, secrets, backups, restore and upgrades](docs/docker.md) · [Container validation](docs/container-acceptance.md).
+Requires Linux containers and Compose 2.24+. Windows: `Copy-Item .env.example .env`. **Any customer address and subject are accepted by default.** Set `VISA_QQ_ALLOW_SAMPLES=1` to try the labelled fixtures; normal evidence mode defaults to `0`. The container initializes intake once and preserves cases on restart. [Docker setup and backups](docs/docker.md) · [Configuration reference](docs/configuration.md) · [Container validation](docs/container-acceptance.md).
 
 ### Local CLI demo
 
@@ -53,7 +55,7 @@ The replay prints its case ID and ZIP path. Expected final status: `COMPLETE`, w
 
 ### Test through your own email
 
-Use a dedicated QQ/Foxmail inbox for the agent. Customers can send from Outlook, Gmail or another mailbox; they need no Microsoft application registration or project UI.
+Use a dedicated QQ/Foxmail inbox for the agent. Customers can send from Outlook, Gmail or any other provider, without registration, an allowlist, a special subject or project UI. There is no shared hosted inbox; deploy your own address.
 
 1. Configure the model and QQ authorization code using the [deployment guide](docs/deployment.md).
 2. Run `uv run python scripts/mail_service.py start`. The worker stays in the background while the computer is awake.
@@ -80,7 +82,7 @@ flowchart LR
 
 **Why a small harness?** This task needs a durable case more than an agent running continuously. PydanticAI handles semantic interpretation, tools and model-written customer replies; Python owns evidence checks and transitions; SQLite retains the case, inbox and outbox. Waiting for a customer costs no model requests.
 
-**How is delivery kept stable?** Extracted facts need sources; unknown checks cannot pass; conflicts remain visible; the model cannot approve a case. Each event shares a four-request budget and bounded retries. Context is rebuilt from the case plus up to 20 recent turns. Sending checks the current version; failed or ambiguous sends are retried from the persistent outbox; SMTP can deliver duplicates. [Architecture and tradeoffs](docs/architecture.md) · [Function walkthrough (中文)](docs/implementation.md).
+**How is delivery kept stable?** Extracted facts need sources; unknown checks cannot pass; conflicts remain visible; the model cannot approve a case. Each event shares a four-request budget and bounded retries. Context is rebuilt from the case plus up to 20 recent turns. Sending checks the current version; failed or ambiguous sends are retried from the persistent outbox; SMTP can deliver duplicates. [Architecture and tradeoffs](docs/architecture.md) · [Code walkthrough](docs/implementation.en.md).
 
 ## Coverage and limits
 

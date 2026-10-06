@@ -18,6 +18,8 @@ uv run python scripts/check_docs.py
 
 `tests/conftest.py` disables real model requests and local `.env` loading. CI runs these checks on Windows and Linux. Latest model replies, fault delivery and configuration results: [conversation-repair.md](docs/conversation-repair.md). Earlier submission results are in [submission-checks.md](docs/submission-checks.md); counts belong to their recorded revisions.
 
+2026-10-07 documentation/intake update: **253 offline tests passed**; headless default intake, interactive setup, three unseen sender domains, restart and thread ownership were checked. The README Visitor quickstart reached `COMPLETE` with scripted review and zero HTTP model requests; live QQ IMAP/SMTP authentication also passed without sending mail. [Dated receipt and verification boundaries](docs/validation/documentation-intake.json).
+
 | Area / 能力 | Protection / 检查 | Test file |
 |---|---|---|
 | Route checks / 业务规则 | Three routes, unknown conditions, missing evidence, stale approvals | [cases](tests/test_cases.py), [boundaries](tests/test_boundaries.py), [HITL](tests/test_hitl.py) |

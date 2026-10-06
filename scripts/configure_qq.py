@@ -20,7 +20,7 @@ def main():
     parser.add_argument("--data", type=Path, default=ROOT)
     parser.add_argument("--from-env", action="store_true", help="Read VISA_QQ_MAILBOX/AUTH_CODE/ALLOWED_SENDERS; store no credential")
     parser.add_argument("--accept-all", action=argparse.BooleanOptionalAction,
-                        default=os.getenv("VISA_QQ_ACCEPT_ALL", "0") == "1", help="With --from-env, allow any sender")
+                        default=None, help="With --from-env, allow any sender (default); --no-accept-all restricts intake")
     parser.add_argument("--allow-samples", action=argparse.BooleanOptionalAction,
                         default=os.getenv("VISA_QQ_ALLOW_SAMPLES", "0") == "1", help="Enable synthetic demo documents for new cases")
     args = parser.parse_args()
@@ -30,11 +30,11 @@ def main():
         mailbox = normalize_sender("email", os.environ["VISA_QQ_MAILBOX"])
         senders = [normalize_sender("email", s.strip()) for s in os.getenv("VISA_QQ_ALLOWED_SENDERS", "").split(",") if s.strip()]
         code = os.environ["VISA_QQ_AUTH_CODE"]
-        accept_all = args.accept_all
+        accept_all = args.accept_all if args.accept_all is not None else os.getenv("VISA_QQ_ACCEPT_ALL", "1") == "1"
         if not accept_all and not senders:
             raise ValueError("Set VISA_QQ_ALLOWED_SENDERS or explicitly choose --accept-all")
     else:
-        if args.accept_all:
+        if args.accept_all is not None:
             parser.error("--accept-all is used with --from-env; interactive setup asks for sender policy")
         print("Visa Agent · QQ 邮箱本机配置 / local mailbox setup\n")
         mailbox = normalize_sender("email", input("Agent QQ/Foxmail address / 收件邮箱：").strip())

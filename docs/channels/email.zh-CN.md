@@ -1,8 +1,10 @@
 # 发邮件亲自测试
 
-[English](email.md) · [部署](../deployment.zh-CN.md) · [原始邮件记录](../full-delivery-transcripts.md)
+[English](email.md) · [部署](../deployment.zh-CN.md) · [配置](../configuration.zh-CN.md) · [排查](../troubleshooting.zh-CN.md)
 
 先完成部署，确认 `scripts/mail_service.py status` 显示运行中。收件地址填**你配置的 Agent QQ 邮箱**，发件地址使用自己的其他邮箱。项目不提供公共托管邮箱。样例模式开启、HITL 关闭时，可用下面的虚构材料体验交付。
+
+新部署默认接受任意客户邮箱和主题，无需登记地址或带 `[VisaTest]`。已有部署请核对[保留的收件策略](../configuration.zh-CN.md#修改何时生效)，它不会因重启自动被新 `.env` 覆盖。
 
 ## 第一次咨询
 
@@ -26,7 +28,9 @@
 
 第二轮正文可写“表填好了，先发护照给你”；第三轮写“剩下的材料也整理好了，请看看还缺什么”。英文可写 “Here are the remaining documents. Is anything still missing?”。不要把三种签证、不同申请人的文件混在同一案件；一份材料的 PDF/JPEG 是不同格式变体，选一种即可。
 
-预期状态从 `WAIT_USER` 继续到 `COMPLETE`，最终邮件附 `visa-materials.zip`。解压后看 `START-HERE.html`，核对原件、表格、缺项说明、来源和官网操作指引。模型可能提取失败或提出待确认问题；如未完成，应保存本轮记录，不能把预期结果当作实测结果。上述图片版 Visitor/Worker 已有真实 API 验收；Student 同内容第一版已验，第二版未单独重跑。三条真实邮箱完整验收使用的是较早的文字 PDF，详见[记录](../full-delivery.md)。
+预期状态从 `WAIT_USER` 继续到 `COMPLETE`，最终邮件附 `visa-materials.zip`。解压后看 `START-HERE.html`，核对原件、表格、缺项说明、来源和官网操作指引。模型可能提取失败或提出待确认问题；如未完成，应保存记录，不能把预期结果当作实测结果。
+
+三路线的 v2 图片/扫描件均已完成三轮真实 API 回放，[记录](../conversation-repair.md)保留失败与用量。三条真实邮箱完整验收使用较早的文字 PDF，见[邮箱交付](../full-delivery.md)；两类实验不能混成三次新的图片邮件投递。
 
 最快的 Visitor 检查：新邮件一次附上 Visitor 表、`identity.jpg`、`funds-scan.pdf`、`work.jpg` 四个文件。相同字节曾验证样例开关 ON 完成、OFF 等待补件，见[开关实测](../sample-switch.md)。
 

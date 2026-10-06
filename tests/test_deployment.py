@@ -1,5 +1,6 @@
 """Test secret loading, first boot, safe backups and stop boundaries."""
 import io
+import json
 import os
 from pathlib import Path
 import runpy
@@ -47,6 +48,42 @@ def test_container_setup_preserves_scan_start_on_second_boot(tmp_path, monkeypat
     second = subprocess.run(command, capture_output=True, text=True)
     assert second.returncode == 0 and before == (tmp_path / "qq-config.json").read_bytes()
     assert b"abcdefghijklmnop" not in before and "test-model-key" not in first.stdout
+
+
+@pytest.mark.parametrize("restricted", [False, True])
+def test_headless_setup_defaults_to_open_intake_and_supports_explicit_restriction(tmp_path, monkeypatch, restricted):
+    monkeypatch.setenv("VISA_QQ_AUTH_CODE", "abcdefghijklmnop")
+    monkeypatch.setenv("VISA_QQ_MAILBOX", "12345@qq.com")
+    monkeypatch.setenv("VISA_QQ_ALLOWED_SENDERS", "lin@example.org" if restricted else "")
+    monkeypatch.delenv("VISA_QQ_ACCEPT_ALL", raising=False)
+    command = [sys.executable, str(ROOT / "scripts/configure_qq.py"), "--from-env", "--data", str(tmp_path)]
+    if restricted:
+        command.append("--no-accept-all")
+    result = subprocess.run(command, capture_output=True, text=True)
+    assert result.returncode == 0, result.stdout + result.stderr
+    config = json.loads((tmp_path / "qq-config.json").read_text(encoding="utf-8"))
+    assert config["accept_all"] is not restricted
+    assert config["require_tag"] is False
+    assert config["allowed_senders"] == (["lin@example.org"] if restricted else [])
+    assert b"abcdefghijklmnop" not in (tmp_path / "qq-config.json").read_bytes()
+
+
+def test_interactive_setup_with_open_default_does_not_require_headless_mode(tmp_path, monkeypatch):
+    monkeypatch.setenv("VISA_QQ_ACCEPT_ALL", "1")
+    monkeypatch.setattr(sys, "argv", ["configure_qq", "--data", str(tmp_path)])
+    setup = runpy.run_path(str(ROOT / "scripts/configure_qq.py"))
+    answers = iter(["12345@qq.com", ""])
+    monkeypatch.setattr("builtins.input", lambda _: next(answers))
+    setup["main"].__globals__["getpass"] = lambda _: "abcdefghijklmnop"
+
+    class Persistence:
+        def save(self, value):
+            assert value == "abcdefghijklmnop"
+
+    setup["main"].__globals__["build_encrypted_persistence"] = lambda _: Persistence()
+    setup["main"]()
+    config = json.loads((tmp_path / "qq-config.json").read_text(encoding="utf-8"))
+    assert config["accept_all"] and not config["allowed_senders"] and not config["require_tag"]
 
 
 def test_backup_restores_persisted_case_and_refuses_active_worker(tmp_path):

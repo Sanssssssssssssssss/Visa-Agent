@@ -1,6 +1,6 @@
 # 部署与日常运行
 
-[English](deployment.md) · [邮件测试](channels/email.zh-CN.md) · [WhatsApp](channels/whatsapp.zh-CN.md)
+[English](deployment.md) · [邮件测试](channels/email.zh-CN.md) · [配置参考](configuration.zh-CN.md) · [故障排查](troubleshooting.zh-CN.md)
 
 推荐先在 Windows 跑 QQ 收件 worker。只需出站网络访问模型、IMAP 993、SMTP 465，无需公网域名、回调地址或产品页面。客户使用自己的邮箱发信。
 
@@ -42,7 +42,7 @@ uv run python -m visa_agent.qq_mail probe
 
 交互输入 Agent QQ/Foxmail 地址、允许的发件地址和授权码。**允许地址留空 = 接受所有发件人**，适合多邮箱试用。授权码通过 Windows DPAPI 加密保存；配置位于 `data/qq-test/qq-config.json`，不要提交此目录。配置时间前的邮件不自动导入，配好后再发测试邮件。
 
-已有配置时脚本拒绝覆盖，避免重置扫描起点。要改收件策略，编辑本地 JSON 的 `accept_all` 和 `allowed_senders`；保留 `since`。切换 Agent 邮箱请用独立数据目录。
+已有配置时脚本拒绝覆盖，避免重置扫描起点。新的无交互部署也默认开放收件；已有邮箱按[配置参考](configuration.zh-CN.md#修改何时生效)修改保存的策略，保留 `since`。切换 Agent 邮箱请用独立数据目录。
 
 ## 4. 启动、样例模式和停止
 
@@ -88,7 +88,7 @@ cd /opt/visa-agent
 .venv/bin/python -m visa_agent.qq_mail probe --data /var/lib/visa-agent
 ```
 
-`--from-env` 不依赖桌面密钥环，也不把授权码写进配置 JSON。若只接受指定测试者，删掉 `--accept-all` 并填写 `VISA_QQ_ALLOWED_SENDERS`。正式材料模式删掉 `--allow-samples`；已有配置通过 `samples` 命令切换。
+`--from-env` 不依赖桌面密钥环，也不把授权码写进配置 JSON。若只接受指定测试者，改用 `--no-accept-all` 并填写 `VISA_QQ_ALLOWED_SENDERS`。正式材料模式删掉 `--allow-samples`；已有样例配置通过 `samples` 命令切换。
 
 4. 管理员安装 service 文件，执行 `sudo systemctl daemon-reload`、`sudo systemctl enable --now visa-agent`。查看 `systemctl status visa-agent` 和 `journalctl -u visa-agent -n 30`。它会随服务器启动，异常退出后重启；人工维护使用 `sudo systemctl stop visa-agent`。
 

@@ -2,7 +2,7 @@
 <h1 align="center">Visa Agent</h1>
 <p align="center"><strong>从第一封咨询邮件，到整理好的申请材料包。</strong></p>
 <p align="center">记住案件进度，一步步询问信息、收集材料，直接在客户的邮箱里继续办理。</p>
-<p align="center"><a href="#演示">演示</a> · <a href="#开始使用">开始使用</a> · <a href="docs/deployment.zh-CN.md">部署</a> · <a href="TESTING.md">测试</a> · <a href="README.md">English</a></p>
+<p align="center"><a href="#演示">演示</a> · <a href="#开始使用">开始使用</a> · <a href="docs/README.md">文档</a> · <a href="docs/docker.zh-CN.md">部署</a> · <a href="TESTING.md">测试</a> · <a href="README.md">English</a></p>
 <p align="center"><a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-16776b" alt="MIT" /></a> <a href="https://github.com/Sanssssssssssssssss/Visa-Agent/actions/workflows/ci.yml"><img src="https://github.com/Sanssssssssssssssss/Visa-Agent/actions/workflows/ci.yml/badge.svg?branch=master" alt="离线检查" /></a> <img src="https://img.shields.io/badge/Python-3.12-3776ab" alt="Python 3.12" /> <img src="https://img.shields.io/badge/QQ_email-live_tested-16776b" alt="QQ 邮件已实测" /></p>
 
 ## 演示
@@ -29,13 +29,15 @@
 ### Docker 邮箱服务
 
 ```sh
+git clone https://github.com/Sanssssssssssssssss/Visa-Agent.git
+cd Visa-Agent
 cp .env.example .env
-# 填好自己的模型密钥、QQ/Foxmail 邮箱、授权码和收件策略。
+# 在私有 .env 填 VISA_API_KEY、VISA_QQ_MAILBOX、VISA_QQ_AUTH_CODE。
 docker compose up -d --build
 docker compose ps
 ```
 
-首次启动初始化收件配置，重启保留案件和游标。[Docker 配置、secrets、启停、备份恢复和升级](docs/docker.zh-CN.md) · [容器验收](docs/container-acceptance.md)。
+需 Linux 容器和 Compose 2.24+；Windows 复制命令为 `Copy-Item .env.example .env`。**默认接受任意客户地址和邮件主题。** 测样例时设 `VISA_QQ_ALLOW_SAMPLES=1`，普通材料模式默认 `0`。首次启动初始化配置，重启保留案件和游标。[Docker 部署与备份](docs/docker.zh-CN.md) · [配置参考](docs/configuration.zh-CN.md) · [容器验收](docs/container-acceptance.md)。
 
 ### 本机 CLI 回放
 
@@ -53,7 +55,7 @@ uv run visa-agent --mode offline --hitl on replay datasets/cases/dev_visitor.jso
 
 ### 用自己的邮箱测试
 
-为 Agent 准备独立 QQ/Foxmail 邮箱。客户可以从 Outlook、Gmail 或其他邮箱发信，不需要注册微软应用，也不需要打开项目页面。
+为 Agent 准备独立 QQ/Foxmail 邮箱。客户可从 Outlook、Gmail 或任意其他邮箱发信，不需要登记地址、特殊主题或项目页面。仓库不提供共享托管邮箱，部署时填写自己的收件地址。
 
 1. 按[部署指南](docs/deployment.zh-CN.md)配置模型环境和 QQ 授权码。
 2. 执行 `uv run python scripts/mail_service.py start`，收件进程在后台运行。

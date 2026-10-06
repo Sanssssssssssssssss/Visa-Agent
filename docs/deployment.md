@@ -1,6 +1,6 @@
 # Deploy and operate
 
-[简体中文](deployment.zh-CN.md) · [Email test walkthrough](channels/email.md) · [WhatsApp](channels/whatsapp.md)
+[简体中文](deployment.zh-CN.md) · [Email test walkthrough](channels/email.md) · [Configuration](configuration.md) · [Troubleshooting](troubleshooting.md)
 
 The verified channel is a QQ/Foxmail inbox on Windows. It needs outbound access to the model API, IMAP 993 and SMTP 465. Customers send email; no public web server or customer UI is needed.
 
@@ -40,7 +40,7 @@ uv run python -m visa_agent.qq_mail probe
 
 Enter the agent mailbox, allowed customer address, and code. Leave the customer address blank to accept any sender. Windows stores the code using DPAPI; local settings are in `data/qq-test/qq-config.json`. Send test messages **after setup**; earlier messages are excluded by its start timestamp. `probe` verifies IMAP/SMTP login without sending a message.
 
-Setup refuses to overwrite existing configuration. Edit `accept_all` and `allowed_senders` locally without resetting `since`; use a separate data directory for another agent mailbox.
+Setup refuses to overwrite existing configuration. New headless setup also accepts all senders by default. For an existing inbox, follow the [saved policy instructions](configuration.md#what-takes-effect-when), preserving `since`; use a separate data directory for another mailbox.
 
 ## Run in the background
 
@@ -83,7 +83,7 @@ cd /opt/visa-agent
 .venv/bin/python -m visa_agent.qq_mail probe --data /var/lib/visa-agent
 ```
 
-Environment mode avoids a desktop keyring and does not save credentials into JSON. For restricted intake, omit `--accept-all` and configure `VISA_QQ_ALLOWED_SENDERS`. Omit `--allow-samples` for normal material checks. Existing settings can be changed with the `samples` command.
+Environment mode avoids a desktop keyring and does not save credentials into JSON. For restricted intake, use `--no-accept-all` and configure `VISA_QQ_ALLOWED_SENDERS`. Omit `--allow-samples` for normal material checks. Existing sample settings can be changed with the `samples` command.
 
 4. As administrator, install the service file, then run `sudo systemctl daemon-reload` and `sudo systemctl enable --now visa-agent`. Inspect `systemctl status visa-agent` and `journalctl -u visa-agent -n 30`. Stop for maintenance with `sudo systemctl stop visa-agent`.
 

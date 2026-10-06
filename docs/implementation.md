@@ -1,5 +1,7 @@
 # 实现与调试
 
+[English](implementation.en.md) · [文档导航](README.md) · [配置参考](configuration.zh-CN.md) · [故障排查](troubleshooting.zh-CN.md)
+
 入口是 `VisaService.handle_event(CaseEvent) -> TurnResult`。没有通用工作流引擎。一次调用处理一次外部事件，返回后停止；下一条消息或定时事件继续案件。
 
 最终交付入口：`delivery.build_pack()` 按 `archive_path()` 保存原始字节，另生成双语信息表、`START-HERE.html`、检查记录和 `submission.bilingual_guide()`。`verify_pack()` 在发信前检查清单、原件哈希、信息表和指引内容。`QQInbox._send()` 仅在 COMPLETE 且 ZIP 未超附件上限时添加 `visa-materials.zip`，发送后保存 MIME 回执；Outlook 下载验证见 [full-delivery.md](full-delivery.md)。`service.handle_event()` 只在信息项仍缺失或格式失败时附待填表，避免信息已齐仍反复催填。
@@ -25,6 +27,14 @@ flowchart LR
 
 ## 一条消息如何落库
 
+| 顺序 | 源码入口 | 结果 |
+|---|---|---|
+| 收件与线程 | [QQInbox](../src/visa_agent/qq_mail.py)、[Inbox](../src/visa_agent/inbox.py) | 游标、引用链、发件人绑定与案件 ID |
+| 读取与视觉输入 | [documents](../src/visa_agent/documents.py)、[vision](../src/visa_agent/vision.py) | 原始文件、页文字、OCR、原图与读取问题 |
+| 提取与写入 | [agent](../src/visa_agent/agent.py)、[evidence](../src/visa_agent/evidence.py)、[service](../src/visa_agent/service.py) | 候选字段、来源校验与事务 |
+| 检查与回复 | [rules](../src/visa_agent/rules.py)、[guidance](../src/visa_agent/guidance.py) | 规则结果、模型正文与进度 |
+| 交付与发送 | [delivery](../src/visa_agent/delivery.py)、[mail_outbox](../src/visa_agent/mail_outbox.py) | ZIP、版本检查与持久发送队列 |
+
 1. `documents.stage_file()` 检查类型、大小，计算 SHA-256，把字节保存到 `data/files/`。数据库只记录引用。相同字节只保留一份；单文件最多 10 MB、PDF 最多 20 页、图片最多 2500 万像素、每事件最多五个附件。
 2. `service.handle_event()` 第一个事务写入 inbox。唯一键是 `(case_id,event_id)`。输入内容哈希不包含普通事件的接收时间，便于渠道重投。新业务输入先递增版本、清除审批并标记待处理；因此中途退出也不能继续沿用旧审批。
 3. 第二个写事务重新检查事件状态，读取当前 Case，处理新增文件、调用模型、校验候选值、执行 `rules.evaluate()`。成功后一次提交 Case、事件回复和 trace。
@@ -39,6 +49,8 @@ flowchart LR
 材料规则指纹包含 `evidence.py` 和 `documents.py`；规则变化时既有批准失效，`mail_outbox.send_prepared_reply()` 也拒发旧规则下排队的回复。
 
 `documents.read_document()` 对每页先用 pypdf 提取文字，并检查 PDFium 图片和填充矢量图形（含嵌套 Form）。含图片或填充图形、文字过少、字符损坏的页面整页渲染后交给 RapidOCR；这样可以覆盖本次出现的扫描材料和黑条遮盖情形。纯文字页继续直接提取。独立的 `Page X of Y` 行用于发现明确声明的缺页；没有页码的缺页不保证能检出。OCR 最低行置信度低于 0.8 时，该文件不能直接作为通过检查的证据。阈值未做真实证件校准，logo/背景色块也会触发 OCR，增加耗时。
+
+`extract()` 另调用 `vision.visual_inputs()`：图片保留原始字节，PDF 用 PDFium 转逐页图片，和 OCR 一起发给配置的模型。`visual_inputs` 记录发送页码和图片哈希，不写 base64；被遮盖内容不能从隐藏文字层恢复。材料角色和视觉差异标志参与证据检查，客户文字或模型工具不能开启 `Case.test_mode`。
 
 `Proposal` 只包含材料分类和候选事实。事实形状示例：
 
@@ -112,6 +124,8 @@ Student 月生活费冻结为伦敦 GBP 1529、伦敦外 GBP 1171（官方核对
 
 资金证明支持银行流水或银行信替代，但一份证据必须提供银行、持有人、币种、最低余额、起止日期。不能用缺字段的替代文件放行，也不能拼几份残缺文件伪装成一份完整证明。当前检查显式最低余额和日期，尚未对任意银行逐笔交易做余额重算。
 
+`finance_document` 表示文件收到且必需字段可读；`finance` 另判断资金条件。缺 CAS、预算或申请日期时后者为 unknown，已收银行材料保留。模型漏银行字段时，`make_agent()` 的 output validator 有一次重查机会，结合 `ReadContext.known_fields` 读取已有页；`bank_extraction_recheck` 记录前后缺项，不能强制编造。仍缺什么只提示什么。[实际问题与回放](finance-receipt.md)。
+
 国家分支仅覆盖源码中列出的少量国家；TB 历史只自动处理已覆盖国家的连续居住条件。Skilled Worker 的自动职业分支只有 2134。未实现的情况进入人工状态，人工无法直接跳过业务阻塞批准：需补充材料、确认事实，或在实现新的规则分支后重新检查。
 
 CAS/CoS 必须有可核对的学校/雇主来源信息，不要求所谓“官方 CAS/CoS PDF 原件”。CLI 当前承载形式是 PDF/图片，后续渠道可把受信任的学校/雇主消息接成证据；普通申请人自述目前不能替代文件来源。
@@ -137,15 +151,8 @@ CAS/CoS 必须有可核对的学校/雇主来源信息，不要求所谓“官�
 
 每个事件有 `run_id`，trace 保存输入、读取结果、候选提取、工具输出、Case 前后快照、命中规则、模型和提示词版本、用量。保留可观察结果，不保存模型隐藏推理。API 密钥不会主动写入日志。
 
+`diagnostics.turn_diagnostics()` 按读取、分类、工具、字段来源、规则和运行错误记录问题类别、文件/页码、检查项与恢复动作。`material_progress()` 分别统计已收与已核对类别，信息表独立计数；不能因等待 CAS 而把银行文件说成丢失。
+
 ## 为什么选择这些组件
 
 PydanticAI 只承担模型适配、类型输出和工具限制；SQLite 提供事务与唯一约束；PDF/OCR 使用已有库。复用 Camunda KYC 的异步补件流程、DocProof 的提取/确定性检查分离、LangChain 邮件例子的 HITL/评测思路，未复制其运行时代码或引入 Camunda/LangGraph/Chatwoot 服务。Chatwoot 留作后续渠道层；运行时无 agent-reach 和 Codex skill 依赖。
-# 2026-10-06：视觉输入与客户回复
-
-`handle_event()` 仍是唯一业务写入入口。`extract()` 在原有文字上下文外调用 `vision.visual_inputs()`：保留图片原始字节，PDF 用 PDFium 逐页渲染，连同页码和 OCR 发给 `deepseek-flash`。发送结果和图片哈希保存在 `visual_inputs`；日志不写 base64。被遮盖内容不会从 PDF 隐藏文字层恢复。
-
-模型输出新增材料 `content_role`、视觉差异标志和客户 `intent`。`apply_proposal()` 保留样例标记并校验引用；`Evidence.admissible()` 决定字段能否参与检查。普通案件中的样例/无关材料不能用于满足要求。`Case.test_mode` 只能在本地创建演示案件时明确设置，模型工具、客户文本和切换离线传输都不能打开它。
-
-`conversation.reply_for()` 接收已检查的 Case，使用官方步骤、材料说明和三条以内的下一步组织回复；`language_for()` 只看客户消息，附件不会改变回复语言。`material_progress()` 按材料类别汇总，未知、姓名冲突和未适用要求不算通过。初始路线未知时不显示虚假的百分比；人工审批单独显示。客户回复本身不由第二次自由生成调用产生。
-
-`diagnostics.turn_diagnostics()` 保存问题阶段、类别、源文件/页码、检查项和恢复动作。`agent.py` 保留实际 HTTP 响应中的可观察输出，包含失败重试，排除隐藏推理；`scripts/show_case_replies.py` 展示原话、视觉发送记录与分类详情。规则版本变化仍会使旧审批失效。

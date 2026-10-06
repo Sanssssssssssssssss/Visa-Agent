@@ -1,6 +1,6 @@
 # Docker 部署
 
-[English](docker.md) · [Windows 原生启动](deployment.zh-CN.md) · [发邮件亲测](channels/email.zh-CN.md)
+[English](docker.md) · [Windows 原生启动](deployment.zh-CN.md) · [配置参考](configuration.zh-CN.md) · [故障排查](troubleshooting.zh-CN.md)
 
 使用 Docker Engine/Desktop、Compose **2.24+** 和 Linux 容器。已验证镜像面向 amd64。服务只需访问模型 HTTPS、IMAP 993、SMTP 465，不开放网页端口。可先分配 2 核/4 GB，再按实际材料页数和延迟调整。
 
@@ -34,7 +34,7 @@ docker compose ps
 docker compose logs --tail 30 agent
 ```
 
-首次启动创建 `/data/qq-config.json`，重启保留原扫描起点、收件策略和游标；配置启动后再发测试邮件。新邮件线程建案，回复沿用原线程。[两步补件的已填表格及附件](channels/email.zh-CN.md)可以直接用。
+首次启动创建 `/data/qq-config.json`，重启保留原扫描起点、收件策略和游标；新 `.env` 不会覆盖已有白名单，修改见[配置参考](configuration.zh-CN.md#修改何时生效)。启动后再发测试邮件，新线程建案，回复沿用原线程。[两步补件的已填表格及附件](channels/email.zh-CN.md)可以直接用。
 
 进程使用 UID `10001`；案件、SQLite、原始附件、邮件和 ZIP 放在持久数据卷，`/backups` 使用独立卷。镜像不包含本机 `.env`、客户资料和私有 trace；根文件系统只读。运行日志含客户内容，应留在授权机器。
 

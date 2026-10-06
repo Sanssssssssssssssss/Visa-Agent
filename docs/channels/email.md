@@ -1,8 +1,10 @@
 # Test by sending email
 
-[简体中文](email.zh-CN.md) · [Deployment](../deployment.md) · [Actual transcripts](../full-delivery-transcripts.md)
+[简体中文](email.zh-CN.md) · [Deployment](../deployment.md) · [Configuration](../configuration.md) · [Troubleshooting](../troubleshooting.md)
 
 Complete setup and check worker status first. Send from a separate customer mailbox to **your configured agent QQ address**. There is no hosted public inbox. Enable sample mode and disable HITL for the synthetic walkthrough.
+
+New inboxes accept every customer address and any subject by default. Customers need no registration or `[VisaTest]` tag. For an existing deployment, verify its [saved intake policy](../configuration.md#what-takes-effect-when), which is retained across restarts.
 
 ## First contact
 
@@ -28,7 +30,7 @@ For Student, introduce the course offer in the first email. For Skilled Worker, 
 
 Expected progression: `WAIT_USER` to `COMPLETE`, followed by a `visa-materials.zip` attachment. Unzip it, open `START-HERE.html`, and inspect originals, worksheet, provenance and the GOV.UK handover. A live model can still fail extraction; retain the actual failure rather than treating this expected result as a pass.
 
-Visitor/Worker image fixtures have real API receipts; Student was verified against the same content in the first layout version, not rerun in v2. The three complete **real mailbox** journeys used earlier text PDFs. [Coverage details](../full-delivery.md).
+All three v2 image/scan routes completed a three-turn **real API replay**; the [receipt](../conversation-repair.md) retains failures and usage. The three complete **real mailbox** journeys used earlier text PDFs. [Mailbox coverage](../full-delivery.md). These are distinct runs, not three new image deliveries through email.
 
 For a quick Visitor test, send the worksheet and its three image/scan attachments in one new message. The same four files were tested through real mail with sample mode ON (complete) and OFF (waiting). [Receipt](../sample-switch.md).
 

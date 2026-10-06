@@ -8,4 +8,4 @@
 uv run python scripts/full_delivery_acceptance.py --output output/my-images --formatted --materials datasets/formatted-materials-v2
 ```
 
-运行需要真实 API。Visitor/Worker 本轮已用此目录完成；Student 在第一版同内容输入上已完成，第二版未重复运行。第一版失败不覆盖。`manifest.json` 保存冻结哈希；生成器拒绝覆盖已有清单，另设 `--output` 才能重新生成。
+运行需要真实 API。Visitor、Student、Skilled Worker 的 v2 材料已分别完成三轮模型回放并通过 ZIP 校验，见[实际结果与失败](../../docs/conversation-repair.md)；该回放不发送真实邮件。旧版失败不覆盖。`manifest.json` 保存冻结哈希；生成器拒绝覆盖已有清单，另设 `--output` 才能重新生成。

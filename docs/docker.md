@@ -1,6 +1,6 @@
 # Docker deployment
 
-[简体中文](docker.zh-CN.md) · [Native Windows setup](deployment.md) · [Send test emails](channels/email.md)
+[简体中文](docker.zh-CN.md) · [Native Windows setup](deployment.md) · [Configuration](configuration.md) · [Troubleshooting](troubleshooting.md)
 
 Use Docker Engine/Desktop with Compose **2.24 or newer**, Linux containers, and an amd64 CPU for the verified image. The worker needs outbound model HTTPS, IMAP 993 and SMTP 465. It exposes no public application port. A 2-core/4 GB machine is a practical starting allocation; actual document workload affects memory and latency.
 
@@ -34,7 +34,7 @@ docker compose ps
 docker compose logs --tail 30 agent
 ```
 
-First boot creates `/data/qq-config.json`; later boots preserve its original scan start, sender settings and cursor. Send your first email after startup. New threads create cases; Reply continues the existing case. [Pre-filled worksheets and attachments](channels/email.md#complete-each-route) let you test without filling the form again.
+First boot creates `/data/qq-config.json`; later boots preserve its original scan start, sender settings and cursor. Changing `.env` does not overwrite an existing allowlist; use the [saved policy instructions](configuration.md#what-takes-effect-when). Send your first email after startup. New threads create cases; Reply continues the existing case. [Pre-filled worksheets and attachments](channels/email.md#complete-each-route) let you test without filling the form again.
 
 The process runs as UID `10001`. Named volumes persist SQLite, raw messages, attachments, traces and packs; `/backups` has a separate volume. Image builds exclude `.env`, local customer data and private traces. The root filesystem is read-only. Logs may contain customer content and belong on the operator's machine.
 

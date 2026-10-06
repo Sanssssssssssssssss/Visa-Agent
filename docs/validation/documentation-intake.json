@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-07",
+  "scope": "Documentation refresh and default open customer email intake",
+  "offline": {
+    "targeted_tests": 43,
+    "full_suite": {"passed": 253, "seconds": 87.01},
+    "ruff": "passed",
+    "dataset_verified": true,
+    "dataset_hash": "778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2",
+    "quickstart_replay": {
+      "scenario": "dev_visitor",
+      "passed": true,
+      "final_status": "COMPLETE",
+      "scripted_review": true,
+      "http_requests": 0
+    }
+  },
+  "intake_checks": [
+    "Headless initialization without an allowlist defaults to accept_all=true and require_tag=false",
+    "Interactive setup remains usable with VISA_QQ_ACCEPT_ALL=1",
+    "Previously unseen senders on three distinct domains receive independent cases and replies",
+    "Open intake preserves sender/thread binding across restart",
+    "Explicit restricted operator mode remains available"
+  ],
+  "local_mail_worker": {
+    "running": true,
+    "accept_all": true,
+    "allowed_senders": [],
+    "require_tag": false,
+    "hitl": false,
+    "allow_samples": true,
+    "customer_data_changed": false,
+    "imap_probe": true,
+    "smtp_probe": true,
+    "probe_sent_emails": 0
+  },
+  "new_real_model_requests": 0,
+  "limits": [
+    "Multi-sender regression uses offline models and simulated transport; the live probe only checks authentication",
+    "Sender syntax and thread binding do not authenticate human identity",
+    "Provider spam filtering, network failures and SMTP duplicate delivery remain possible",
+    "This dated receipt does not promise continuous future uptime"
+  ]
+}

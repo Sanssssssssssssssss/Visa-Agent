@@ -289,7 +289,7 @@ def test_thirty_messages_restart_and_bound_history(tmp_path):
 def test_open_intake_accepts_new_senders_and_subjects_but_keeps_cases_separate(tmp_path):
     first = mail(sender="newperson@example.com")
     first.replace_header("Subject", "英国签证咨询")
-    second = mail("2", sender="another@example.com")
+    second = mail("2", sender="another@different.example.org")
     second.replace_header("Subject", "材料")
     own = mail("3", sender="12345@qq.com")
     auto = mail("4", sender="newperson@example.com")
@@ -299,8 +299,17 @@ def test_open_intake_accepts_new_senders_and_subjects_but_keeps_cases_separate(t
     rows = app.poll(AT.isoformat(), send_replies=True)["messages"]
     assert [r["send_status"] for r in rows] == ["sent", "sent", "rejected"]
     assert rows[0]["result"]["case_id"] != rows[1]["result"]["case_id"]
-    assert {to for _, to in conn.sent} == {"newperson@example.com", "another@example.com"}
+    assert {to for _, to in conn.sent} == {"newperson@example.com", "another@different.example.org"}
     assert 3 not in conn.downloads
+    # Open intake still binds references to the original sender after a restart.
+    conn.messages[5] = mail("5", sender="third@unseen.example.net", parent="<1@example.com>")
+    conn.messages[6] = mail("6", sender="third@unseen.example.net")
+    conn.messages[6].replace_header("Subject", "Hello")
+    restarted = QQInbox(VisaService(tmp_path, "offline", hitl=False), conn, "12345@qq.com", require_tag=False)
+    next_rows = restarted.poll(AT.isoformat(), send_replies=True)["messages"]
+    assert [r["send_status"] for r in next_rows] == ["rejected", "sent"]
+    assert next_rows[1]["result"]["case_id"] not in {r["result"]["case_id"] for r in rows if "result" in r}
+    assert len(conn.sent) == 3 and conn.sent[-1][1] == "third@unseen.example.net"
 
 
 @pytest.mark.parametrize("day", ["6", "06", " 6"])
