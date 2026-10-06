@@ -105,6 +105,29 @@ def test_uncertain_smtp_delivery_is_not_retried(tmp_path):
     assert rows[0]["send_status"] == "uncertain" and len(conn.sent) == 1
 
 
+@pytest.mark.parametrize("text,explanation", [("我想申请签证", "抱歉"), ("I want to apply for a visa", "Sorry")])
+def test_failed_model_check_emails_explanation_without_claiming_success_or_resending(tmp_path, text, explanation):
+    from pydantic_ai.models.function import FunctionModel
+    from visa_agent.types import Status
+
+    def unavailable(messages, info):
+        raise RuntimeError("Test provider unavailable; internal diagnostic must not enter email")
+
+    conn = Connection({1: mail(text=text)})
+    service = VisaService(tmp_path, "offline", hitl=False, model_override=FunctionModel(unavailable))
+    inbox = QQInbox(service, conn, "12345@qq.com", ["lin@example.com"])
+    row = inbox.poll(AT.isoformat(), send_replies=True)["messages"][0]
+    result = row["result"]
+    assert result["error"] and result["status"] == "BLOCKED" and not result["pack_path"]
+    assert row["send_status"] == "sent" and len(conn.sent) == 1
+    body = conn.sent[0][0].get_content()
+    assert explanation in body and "internal diagnostic" not in body
+    assert service.store.get(result["case_id"]).status == Status.BLOCKED
+    assert service.store.events(result["case_id"])[0]["status"] == "failed"
+    assert not inbox.poll(AT.isoformat(), send_replies=True)["messages"]
+    assert len(conn.sent) == 1
+
+
 def test_stale_prepared_reply_not_sent_after_exit(tmp_path):
     conn = Connection({1: mail()})
     adapter(tmp_path, conn).poll(AT.isoformat())

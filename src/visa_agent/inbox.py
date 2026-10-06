@@ -143,15 +143,15 @@ class Inbox:
                     db.execute("INSERT INTO cases VALUES (?,?)", (case.id, case.model_dump_json()))
                 db.execute("UPDATE inbox_sessions SET case_id=?,state='active' WHERE id=?", (case.id, sid))
                 db.execute("UPDATE inbox_deliveries SET case_id=? WHERE id=?", (case.id, delivery_id))
-                reply = ("已新建空白案件，旧对话和材料不会进入本次上下文。先告诉我：来英国的目的、国籍和准备从哪里申请。" if case.language == "zh" else
-                         "A new empty case is ready. Previous messages and documents will not enter its context. Tell me your purpose, nationality and where you will apply from.")
+                reply = ("好的，我们重新开始！已新建空白案件，旧资料仍保留供查阅，本次会从头了解您的情况。先告诉我：来英国的目的、国籍和准备从哪里申请。" if case.language == "zh" else
+                         "Of course, let's start fresh! A new empty case is ready; your earlier records are kept separately. Tell me your purpose, nationality and where you will apply from.")
             elif command == "/exit":
                 case.conversation_closed = True
                 self.store.save(case, db)
                 db.execute("UPDATE inbox_sessions SET state='closed' WHERE id=?", (sid,))
-                reply = "本次会话已结束。发送 /start 开始空白案件；旧记录保留供追溯。" if case.language == "zh" else "This conversation is closed. Send /start for an empty case. Earlier records are retained for audit."
+                reply = "好的，本次会话已结束。等您准备好了，发送 /start 就能开始空白案件；旧记录仍保留供查阅。" if case.language == "zh" else "Of course, this conversation is now closed. When you're ready, send /start for a fresh case. Your earlier records are kept."
             elif case.conversation_closed:
-                reply = "会话已结束，尚未处理这条输入。发送 /start 或点击新建案件再继续。" if case.language == "zh" else "This conversation is closed; this input was not processed. Send /start or start a new case to continue."
+                reply = "之前的会话已结束，这条输入尚未处理。如果想继续准备，回复 /start 就可以重新开始。" if case.language == "zh" else "Your earlier conversation is closed, so this message hasn't been processed. Reply with /start whenever you're ready to begin again."
             elif command == "/help":
                 reply = ("/status 查看材料进度；/exit 结束会话；/reset 清空工作上下文并新建案件；/start 开始新案件。先说明目的、国籍、申请地点，再按提示补件。" if case.language == "zh" else
                          "/status shows progress; /exit closes this conversation; /reset clears working context and starts a new case; /start opens a new case. Start with your purpose, nationality and application location.")

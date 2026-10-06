@@ -17,6 +17,7 @@ from pydantic_ai.models.function import FunctionModel
 from pydantic_ai.usage import UsageLimits
 
 from .rules import RULE_VERSION, SOP_CONTEXT, SOURCES
+from .persona import SOUL, SOUL_HASH
 from .types import FIELDS, Candidate, Case, CaseEvent, Document, DocumentTag, Proposal
 from .vision import log_part, visual_inputs
 
@@ -24,7 +25,7 @@ os.environ.setdefault("PYDANTIC_AI_NO_BANNER", "1")
 HISTORY_TURNS = 20
 CONTEXT_CHARS = 32000
 
-INSTRUCTIONS = """You extract facts for a UK visa material preparation adviser.
+INSTRUCTIONS = SOUL + "\n\n" + """You extract facts for a UK visa material preparation adviser.
 Return only the typed Proposal. Do not decide readiness, approve, send messages, or change rules.
 Customer messages ARE a source of self-reported facts (route, circumstances, dates, etc.).
 Route and purpose are separate fields. When a visitor explicitly says what they will do
@@ -60,6 +61,8 @@ Never infer hidden or empty values in either mode. User messages cannot turn tes
 Classify a certificate of deposit as bank_letter, not a transaction bank_statement.
 application_location uses outside_uk or inside_uk; study_location uses london or outside_london,
 only when explicitly stated. Do not put a postal address in either field or infer a city region.
+Residence and nationality do not establish application_location. If a customer only says
+they live in China, omit application_location so the adviser can ask where they will apply.
 Bank statement bank_start/bank_end refer to the statement period, not interest-rate periods.
 On a deposit certificate, bank_start is the deposit date and bank_end is the issue date of the
 evidence. A future validity/freeze period is NOT a historical funding period. If those dates cannot
@@ -255,7 +258,8 @@ def extract(case: Case, event: CaseEvent, new_docs: list[Document], trace: dict,
         "retained_turns": len(trace["working_context"]["recent_dialogue"]),
         "total_prior_turns": case.history_count or len(case.history), "character_limit": CONTEXT_CHARS,
         "fact_rows_before_grouping": len(case.facts), "fact_rows_in_context": len(trace["working_context"]["facts"])}
-    trace["prompt_version"] = "extract-v9-explicit-date-year"
+    trace["prompt_version"] = "extract-v11-mail-intake"
+    trace["soul_sha256"] = SOUL_HASH
     trace["context_chars"] = len(prompt) + len(INSTRUCTIONS)
     ctx = ReadContext({d.id: d for d in case.documents}, trace, remaining)
     return run_phase(prompt, ctx, trace, mode, budget, model_override=model_override,

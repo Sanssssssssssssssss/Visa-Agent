@@ -116,6 +116,41 @@ def test_partial_date_exception_cannot_bypass_documents_mismatch_or_existing_dat
         assert not pending and len(case.facts) == (1 if previous else 0)
 
 
+def test_initial_application_location_guessed_from_residence_remains_a_question(tmp_path):
+    from visa_agent.service import VisaService
+    from visa_agent.evidence import Evidence
+    model = TestModel(call_tools=[], custom_output_args={"facts": [
+        {"key": "residence_country", "value": "China", "source_id": "message:first", "quote": "住在中国"},
+        {"key": "application_location", "value": "outside_uk", "source_id": "message:first", "quote": "住在中国"},
+    ]})
+    app = VisaService(tmp_path, "offline", hitl=False, model_override=model)
+    app.create_case("c")
+    result = app.handle_event(CaseEvent(case_id="c", event_id="first", text="我住在中国，怎么准备签证？"))
+    case = app.store.get("c")
+    assert result.status == Status.WAIT_USER and not case.extraction_issues
+    assert Evidence(case).get("residence_country") == "China"
+    assert Evidence(case).get("application_location") is None
+    assert any(c.id == "application_location" and c.status == "unknown" for c in case.checks)
+    trace = app.store.traces("c")[-1]
+    assert any(d["next_action"] == "confirm_application_location" for d in trace["diagnostics"])
+
+
+def test_location_question_exception_cannot_override_previous_answer_or_document():
+    from visa_agent.evidence import apply_proposal
+    from visa_agent.types import Candidate, Document, Page, Proposal
+    for source in ("message:m", "file"):
+        case = Case(id="c", documents=[Document(id="file", path="unused", name="doc.pdf", sha256="a"*64,
+                                               pages=[Page(number=1, text="住在中国", method="pdf_text")])])
+        if source.startswith("message:"):
+            case.facts.append(Fact(id="old", key="application_location", value="inside_uk",
+                                   source_id="message:old", quote="英国境内"))
+        proposal = Proposal(facts=[Candidate(key="application_location", value="outside_uk", source_id=source,
+                                             page=1 if source == "file" else None, quote="住在中国")])
+        pending = []
+        assert apply_proposal(case, proposal, {"message:m": "住在中国"}, unconfirmed=pending)
+        assert not pending and not any(f.value == "outside_uk" for f in case.facts)
+
+
 @pytest.mark.parametrize("language", ["zh", "en"])
 def test_sample_disclosure_survives_model_choosing_only_intake_questions(language):
     from visa_agent.types import Document

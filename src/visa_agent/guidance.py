@@ -8,9 +8,10 @@ from pydantic_ai.models.function import FunctionModel
 
 from .agent import CONTEXT_CHARS, build_context, run_phase
 from .conversation import action_for
+from .persona import SOUL, SOUL_HASH
 from .types import Guidance
 
-INSTRUCTIONS = """You guide a novice through UK visa material preparation, one turn at a time.
+INSTRUCTIONS = SOUL + "\n\n" + """You guide a novice through UK visa material preparation, one turn at a time.
 The application has ALREADY checked this turn. Select up to three existing unresolved check IDs
 from allowed_actions, ordered by usefulness now. Prefer answering the customer's current concern,
 then missing intake facts, then documents. Avoid asking the same question if the customer already
@@ -46,7 +47,8 @@ def guide(case, event, trace, mode, budget, *, model_override=None):
         from .agent import BudgetExceeded
         raise BudgetExceeded("Guidance context cannot fit safely")
     trace["guidance_context"] = context
-    trace["guidance_prompt_version"] = "guidance-v2-optional-hitl"
+    trace["guidance_prompt_version"] = "guidance-v3-service-soul"
+    trace["soul_sha256"] = SOUL_HASH
 
     def factory(model):
         settings = {"temperature": 0}

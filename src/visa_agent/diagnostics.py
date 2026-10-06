@@ -47,7 +47,8 @@ def turn_diagnostics(case, trace):
         rows.append({"code": code, "stage": "grounding", "detail": rejected,
                      "next_action": "compare_quote_and_original"})
     rows.extend({"code": row["reason"], "stage": "grounding", "field": row["key"],
-                 "source_id": row["source_id"], "quote": row["quote"], "next_action": "confirm_full_date"}
+                 "source_id": row["source_id"], "quote": row["quote"],
+                 "next_action": "confirm_application_location" if row["reason"] == "application_location_unconfirmed" else "confirm_full_date"}
                 for row in trace.get("unconfirmed_candidates", []))
     for check in case.checks:
         if check.status in {"fail", "unknown"}:

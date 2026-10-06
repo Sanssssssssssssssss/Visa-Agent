@@ -151,6 +151,18 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
                     raise ValueError("Incomplete statement cannot establish the full-period minimum")
             if not text or normalized(candidate.quote) not in normalized(text):
                 raise ValueError("Supporting quote not found in source")
+            # Where someone lives does not establish where they will apply.
+            # For an initial self-report, ask instead of storing that inference.
+            # Updates to an existing answer and document extraction stay strict.
+            if (candidate.source_id.startswith("message:") and candidate.key == "application_location"
+                and candidate.value in {"inside_uk", "outside_uk"}
+                and not any(f.active and f.key == candidate.key for f in case.facts)):
+                try:
+                    validate_value(candidate.key, candidate.value, candidate.quote)
+                except ValueError:
+                    if unconfirmed is not None:
+                        unconfirmed.append({**candidate.model_dump(), "reason": "application_location_unconfirmed"})
+                    continue
             # An initial customer date without a year is a missing answer, not
             # document evidence. Ignore an invented year and ask through the
             # existing missing-date check. Changes to an existing date still

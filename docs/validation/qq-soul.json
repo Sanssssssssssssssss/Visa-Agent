@@ -1,0 +1,74 @@
+{
+  "local_date": "2026-10-07",
+  "timezone": "Asia/Singapore",
+  "soul_sha256": "623c73bddf5a90f7a7a0d01f21377c5246a55b49cd9c326443fe275b6162b97b",
+  "packaged_soul_verified": true,
+  "offline": {
+    "tests": 170,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 87.278,
+    "log": "output/qq-soul/offline-final-170.xml",
+    "new_failure_delivery_tests": "Chinese and English model failures send a clear explanation exactly once, keep BLOCKED/failed event, and exclude internal exception details"
+  },
+  "live": {
+    "transport": "Outlook web -> QQ IMAP -> actual model -> QQ SMTP -> Outlook web",
+    "model": "deepseek-flash",
+    "cases": 2,
+    "checks_after_repair": {
+      "new_case_created": true,
+      "smtp_accepted": true,
+      "welcoming_reply": true,
+      "no_client_developer_instructions": true,
+      "progress_present": true,
+      "next_actions_bounded": true,
+      "location_not_inferred": true,
+      "location_asked": true,
+      "wait_user_no_false_delivery": true,
+      "soul_version_recorded": true
+    },
+    "usage": {
+      "requests": 4,
+      "input_tokens": 11760,
+      "output_tokens": 1066
+    },
+    "model_duration_seconds": 12.423,
+    "price_configured": false,
+    "cost": null,
+    "outlook_receipt_confirmed": true,
+    "results": [
+      {
+        "case_id": "case-f3abcc5d93804f9f964baa00076b90f5",
+        "run_id": "3fe3e2e506864818b883deabe650d3bb",
+        "status": "BLOCKED",
+        "send_status": "sent",
+        "source_rejections": [
+          "application_location: Value not grounded in quote: application_location"
+        ],
+        "unconfirmed": []
+      },
+      {
+        "case_id": "case-62f8705a607f43f28fd47f733c18ea45",
+        "run_id": "0b63879118ed41f4a84fb1ba26504516",
+        "status": "WAIT_USER",
+        "send_status": "sent",
+        "source_rejections": [],
+        "unconfirmed": []
+      }
+    ]
+  },
+  "preserved_failure": "Initial warm reply was delivered, but model inferred application location from residence; source guard caused BLOCKED. Initial ambiguous self-reports now remain unconfirmed and generate a question. Document and existing-answer changes keep strict rejection.",
+  "runtime": {
+    "open_intake": true,
+    "hitl": false,
+    "poll_seconds": 15,
+    "cumulative_request_cap": 24,
+    "cumulative_used_after_this_experiment": 16
+  },
+  "boundaries": [
+    "Live check covers two initial inquiries; same-thread attachments/reset were verified in qq-mail.json.",
+    "Failure notifications were tested with a simulated provider failure and real local state; no deliberate production provider outage was caused.",
+    "No production uptime or zero model error claim; customer wording still uses a controlled bilingual catalogue selected by model guidance."
+  ],
+  "raw_logs": "output/qq-soul"
+}

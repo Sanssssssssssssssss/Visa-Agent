@@ -2,7 +2,7 @@
 
 一个可回放、可检查的英国签证材料准备 Agent。支持 Visitor、Student、Skilled Worker 的有限基础分支：接收消息和附件，保存有来源的事实，检查缺项与冲突，等待补件，生成材料包。部署时可选择人工复核或模型决定自动交付。
 
-最新版本支持 **HITL 开关与 QQ 真实邮件接入**，166 项离线测试通过。QQ 已完成 Outlook 客户发信 → 自动建案 → 中文回复 → 客户收件箱确认；开放收件支持任意发件人、任意主题，同线程继续原案件。见 [QQ 操作与实测](docs/qq-mail.md)、[邮件验收记录](docs/validation/qq-mail.json)。Outlook Graph 适配器也已实现，但本机尚无应用 Client ID，未验证 Graph 收发。
+最新版本支持 **HITL 开关与 QQ 真实邮件接入**，170 项离线测试通过。客户只需发邮件，系统自动建案并邮件回复；同线程继续原案件，无需使用项目页面。[SOUL.md](src/visa_agent/prompts/SOUL.md) 定义热情、耐心的服务原则，并前置于模型系统指令。见 [QQ 操作与实测](docs/qq-mail.md)、[邮件验收记录](docs/validation/qq-mail.json)、[SOUL 更新验证](docs/validation/qq-soul.json)。Outlook Graph 适配器也已实现，但本机尚无应用 Client ID，未验证 Graph 收发。
 
 此前 HITL 真实模型实验共 25 次请求、5 案中 4 案通过。中文完整输入已自动生成演示材料包；八轮渐进案例漏提取目的，原失败保留。见[开关与工作流](docs/hitl-outlook.md)、[该轮记录](docs/validation/hitl-outlook.json)及[历史验收](docs/acceptance.md)。
 

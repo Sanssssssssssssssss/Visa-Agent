@@ -199,7 +199,10 @@ class QQInbox:
         result = Inbox(self.service).receive_connector(incoming, files, provider="imap")
         result.update(mail_sender=mail["sender"], mail_subject=mail["subject"], mail_parent=mail["message_id"],
                       mail_reply_id=f"<visa-{receipt_id}@{self.mailbox.split('@')[1]}>", mail_thread=thread)
-        status = "failed" if result.get("error") else "prepared"
+        # A failed check still has a safe customer explanation from VisaService.
+        # Deliver that explanation while retaining result.error and the failed
+        # business event; SMTP delivery must not be confused with case success.
+        status = "prepared"
         with self.service.store.transaction() as db:
             db.execute("INSERT OR IGNORE INTO qq_receipts VALUES (?,?,?,?,?,NULL,?)",
                        (receipt_id, self.account, mail["message_id"], json.dumps(result, ensure_ascii=False), status, fingerprint))
