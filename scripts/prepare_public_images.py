@@ -30,6 +30,12 @@ SOURCES = [
             (3, "04-Lloyds-statement-page3.png"),
         ],
     },
+    {
+        "file": "06-deposit-certificate-Warwick.pdf",
+        "url": "https://warwick.ac.uk/study/international/visa/applying-for-a-visa/visas-for-studying/student-visa/certofdeposit.pdf",
+        "sha256": "a9b209802904f34eb45131c206314ca777fd26bb5c2f2fc9102af1095099a882",
+        "pages": [(0, "05-BOC-Warwick-partially-redacted.png")],
+    },
 ]
 
 
@@ -67,9 +73,10 @@ def main() -> None:
         json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     (destination / "README.txt").write_text(
-        "这里的 4 张图片来自大学公开 PDF 的原页渲染，不是本项目生成的虚构材料。\n"
+        "这里的 5 张图片来自大学公开 PDF 的原页渲染，不是本项目生成的虚构材料。\n"
         "01：Sussex 发布的中国银行存款证明脱敏扫描样例。\n"
         "02、03、04：Bournemouth 发布的 Lloyds 流水脱敏扫描样例，连续三页。\n"
+        "05：Warwick 发布的中国银行存款证明扫描样例，姓名只露出姓氏。\n"
         "保留原有遮盖、批注、金额和日期。原始客户真实性未经独立核实。\n"
         "用法：新建空白案件，三张 Lloyds 图片一起上传；BOC 图片另建案件上传。\n"
         "可测试中文、英文、扫描读取、遮盖字段和过旧日期；这些资料不能直接用于当前签证申请。\n"

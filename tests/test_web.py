@@ -14,7 +14,7 @@ MATERIALS = Path(__file__).resolve().parents[1] / "datasets/materials/dev_visito
 
 @pytest.fixture
 def web(tmp_path):
-    app = LocalApp(tmp_path, "offline")
+    app = LocalApp(tmp_path, "offline", sample="visitor")
     server = make_server(app, 0)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
@@ -57,6 +57,14 @@ def test_web_upload_review_and_retry_after_lost_response(web):
     status, raw = request(web, "/api/review", {"version": case["version"], "notes": "Synthetic web test review"})
     assert status == 200 and json.loads(raw)["case"]["status"] == "COMPLETE"
     assert request(web, "/pack/download")[1].startswith(b"PK")
+
+
+def test_default_blank_does_not_inject_demo_background(tmp_path):
+    app = LocalApp(tmp_path, "offline")
+    assert app.sample == "blank" and app.initial_text == ""
+    state = app.event({"event_id": "own-input", "text": "route: student"})
+    assert state["case"]["history"][0]["text"] == "route: student"
+    assert [(f["key"], f["value"]) for f in state["case"]["facts"]] == [("route", "student")]
 
 
 def test_web_rejects_cross_origin_and_bad_upload_names(web):

@@ -91,6 +91,11 @@ class VisaService:
                     if event.text.strip() or new_docs:
                         proposal = extract(case, event, new_docs, trace, self.mode, self.budget,
                                            self.model_override)
+                        for doc in case.documents:
+                            if doc.id in trace.get("context_limited_documents", []):
+                                problem = "Model context capacity exceeded; full-page review required"
+                                if problem not in doc.problems:
+                                    doc.problems.append(problem)
                         sources = {f"message:{h['event_id']}": h["text"] for h in case.history}
                         sources[f"message:{event.event_id}"] = event.text
                         rejected = apply_proposal(case, proposal, sources)

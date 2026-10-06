@@ -91,6 +91,12 @@ def evaluate(case: Case) -> list[Check]:
             continue
         if doc.problems:
             add(f"read:{doc.id}", "fail", f"{doc.name} 无法可靠读取，请上传清晰完整文件。")
+        if any(p.startswith("Declared pagination incomplete") for p in doc.problems):
+            add(f"pagination:{doc.id}", "unknown",
+                f"{doc.name} 声明还有其他页。请将同一份文件的完整页面按顺序合成 PDF 上传，或交顾问确认页面归属。",
+                human=True)
+        if any(p.startswith("Model context capacity exceeded") for p in doc.problems):
+            add(f"context:{doc.id}", "unknown", f"{doc.name} 超出本轮完整阅读容量，请顾问复核全文。", human=True)
         if doc.kind == "unknown":
             add(f"kind:{doc.id}", "unknown", f"请确认 {doc.name} 是什么材料。")
         if doc.language not in {"en", "cy"}:

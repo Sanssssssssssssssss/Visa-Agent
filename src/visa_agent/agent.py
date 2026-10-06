@@ -47,6 +47,8 @@ For narrative fields such as return_reason, purpose and job_title, copy an EXACT
 substring of the supporting quote as the value. Do not paraphrase, shorten by removing words,
 or summarize it: semantic similarity alone fails the deterministic source check.
 Use read_evidence when previews are incomplete. Do not read the same page twice.
+If a tool says the page exceeds context capacity, omit facts that need its unread content.
+Incomplete pagination cannot establish a statement-wide minimum; an opening balance is not a minimum.
 Extract bank_minimum ONLY if explicitly stated or unambiguously calculable from ALL balances in
 the covered period, never use the closing balance as an assumed minimum. Missing stays missing.
 Extract ALL relevant fields from the new inputs, not merely those already in the case.
@@ -109,7 +111,8 @@ def build_context(case: Case, event: CaseEvent, new_docs: list[Document], limit=
     core["new_documents"] = []
     for doc in new_docs:
         core["new_documents"].append({"id": doc.id, "name": doc.name, "problems": doc.problems,
-                                      "pages": [{"page": p.number, "text": p.text[:2500]}
+                                      "pages": [{"page": p.number, "text": p.text[:2500],
+                                                 "total_chars": len(p.text), "truncated": len(p.text) > 2500}
                                                 for p in doc.pages]})
     def size():
         return len(INSTRUCTIONS) + len(json.dumps(core, ensure_ascii=False))
@@ -119,6 +122,7 @@ def build_context(case: Case, event: CaseEvent, new_docs: list[Document], limit=
         if pages:
             page = max(pages, key=lambda p: len(p["text"]))
             page["text"] = page["text"][:max(150, len(page["text"]) // 2)]
+            page["truncated"] = True
         elif core["recent_dialogue"]:
             core["recent_dialogue"].pop(0)
         else:
@@ -153,7 +157,14 @@ def make_agent(model) -> Agent:
                                                           "page": page, "result": result})
             return result
         if len(selected.text) > ctx.deps.remaining_chars:
-            raise BudgetExceeded("Evidence page does not fit safely in working context")
+            result = "Page exceeds context capacity; full content was NOT supplied. Omit facts requiring it; adviser review is required."
+            if len(result) > ctx.deps.remaining_chars:
+                raise BudgetExceeded("No room for a safe tool result")
+            ctx.deps.remaining_chars -= len(result)
+            ctx.deps.trace.setdefault("context_limited_documents", []).append(document_id)
+            ctx.deps.trace.setdefault("tools", []).append({"name": "read_evidence", "document_id": document_id,
+                                                          "page": page, "result": result})
+            return result
         ctx.deps.remaining_chars -= len(selected.text)
         ctx.deps.trace.setdefault("tools", []).append({"name": "read_evidence", "document_id": document_id,
                                                       "page": page, "result": selected.text})
@@ -195,7 +206,7 @@ def extract(case: Case, event: CaseEvent, new_docs: list[Document], trace: dict,
             mode="live", budget: LiveBudget | None = None, model_override=None) -> Proposal:
     prompt, remaining = build_context(case, event, new_docs)
     trace["working_context"] = json.loads(prompt)
-    trace["prompt_version"] = "extract-v4-verbatim-narratives"
+    trace["prompt_version"] = "extract-v5-incomplete-pages"
     trace["context_chars"] = len(prompt) + len(INSTRUCTIONS)
     ctx = ReadContext({d.id: d for d in case.documents}, trace, remaining)
     started = time.monotonic()

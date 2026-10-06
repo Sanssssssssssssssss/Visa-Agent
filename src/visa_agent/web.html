@@ -354,10 +354,10 @@
         </div>
         <label for="sample" class="muted">测试场景</label
         ><select id="sample">
-          <option value="visitor">Visitor · Lin Example</option>
-          <option value="student">Student · Mei Example</option>
-          <option value="skilled_worker">Skilled Worker · Kai Example</option>
           <option value="blank">空白案件 · 自己填写情况</option>
+          <option value="visitor">合成演示 · Visitor · Lin Example</option>
+          <option value="student">合成演示 · Student · Mei Example</option>
+          <option value="skilled_worker">合成演示 · Skilled Worker · Kai Example</option>
         </select>
         <button id="new" class="secondary" style="margin-top: 12px">
           开始新案件
@@ -404,7 +404,7 @@
     </aside>
   </main>
   <footer>
-    本地测试工作台。示例为合成材料，准备完成后仍需你确认。<span
+    本地测试工作台。默认空白案件；演示场景使用合成材料。准备完成后仍需你确认。<span
       id="budget"
     ></span>
   </footer>
@@ -630,7 +630,7 @@
       try {
         await post("/api/review", {
           version: state.case.version,
-          notes: "用户在浏览器勾选确认，已核对当前合成测试材料与报告。",
+          notes: "用户在浏览器勾选确认，已核对当前版本的材料与报告。",
         });
       } catch (e) {
         showError(e.message);

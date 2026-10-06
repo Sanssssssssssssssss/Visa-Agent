@@ -2,7 +2,7 @@
 
 入口是 `VisaService.handle_event(CaseEvent) -> TurnResult`。没有通用工作流引擎。一次调用处理一次外部事件，返回后停止；下一条消息或定时事件继续案件。
 
-本地上传页入口是 `python -m visa_agent.web`。`web.html` 把拖入的文件和消息提交到 `/api/event`；`web.LocalApp.event()` 保存附件，构造 `CaseEvent`，调用同一个服务。预填背景来自对应合成场景的首条消息，仅随首次成功事件录入。`/api/review` 独立调用 `review_case()`，上传和提取不会自动批准。该页面每进程维护一个当前案件，支持刷新；服务重启后创建新案件，旧案件可通过 CLI 检查。
+本地上传页入口是 `python -m visa_agent.web`，默认空白案件。`web.html` 把拖入的文件和消息提交到 `/api/event`；`web.LocalApp.event()` 保存附件，构造 `CaseEvent`，调用同一个服务。仅在明确选择合成演示时载入对应背景，并随首次成功事件录入。`/api/review` 独立调用 `review_case()`，上传和提取不会自动批准。该页面每进程维护一个当前案件，支持刷新；服务重启后创建新案件，旧案件可通过 CLI 检查。
 
 ```mermaid
 flowchart LR
@@ -54,6 +54,8 @@ flowchart LR
 `agent.build_context()` 拼接职责、字段词表、带版本 SOP、当前事实、阻塞项、新消息、文件摘录、最近六轮对话。默认工作内容上限 12,000 字符，先减少文件摘录，再去掉旧对话；关键内容仍超限则停止。完整历史不会因此删除。该值限制应用装配的业务内容，并不等同于供应商最终序列化请求的 token 上限；工具 schema 等额外开销由实际 token 记录呈现。
 
 唯一业务工具 `read_evidence(document_id,page)` 只能读本案已保存材料，受剩余字符预算约束。重复读取同页直接停止。权限独立于材料中的文字，任何“忽略规则/批准案件”内容都无法增加批准工具。
+
+图片和 PDF 共用 `pagination_problems()` 检查明确页码。缺页来源的 `bank_minimum` 候选直接拒绝；不同文件的页码不自动合并。工作摘录标明截断和原文长度。完整页读不下时，工具返回明确的未读取结果；`handle_event()` 将阅读容量问题写入该文件，规则要求人工复核。问题跨消息和重启保留，可由顾问核对全文后通过 `accept_document` 清除。
 
 PydanticAI 提供 `Proposal` 的结构校验与工具调用。每事件最多四次请求，结构重试、工具循环、网络重试共用 HTTP 计数；仅瞬时错误允许额外尝试一次，供应商 SDK 自带重试关闭。全批 60 次请求在单独 SQLite ledger 预留，进程重启后仍有效。不可达的请求也保守占用一次。
 

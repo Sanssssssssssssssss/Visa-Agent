@@ -201,14 +201,14 @@ def assertions(case, results, traces, expected):
     return failures, fields, attempted_tools
 
 
-def run(out, count, only, label):
-    spec = json.loads((DATASET / "manifest.json").read_text(encoding="utf-8"))
+def run(out, count, only, label, spec_path=DATASET / "manifest.json"):
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
     for name, digest in spec["file_hashes"].items():
         if sha(ROOT / name) != digest:
             raise ValueError(f"Input changed: {name}")
     out.mkdir(parents=True, exist_ok=True)
     freeze = out / "experiment.json"
-    spec_hash = sha(DATASET / "manifest.json")
+    spec_hash = sha(spec_path)
     if freeze.exists():
         if json.loads(freeze.read_text(encoding="utf-8"))["spec_hash"] != spec_hash:
             raise ValueError("Expected answers changed after first call")
@@ -235,16 +235,34 @@ def run(out, count, only, label):
                 service.store.create(case_id)
             start = time.monotonic()
             results = []
+            event_failures, redeliveries = [], []
             for i, event in enumerate(scenario["events"]):
-                result = service.handle_event(CaseEvent(case_id=case_id, event_id=f"e{i}",
+                incoming = CaseEvent(case_id=case_id, event_id=f"e{i}",
                     text=event["text"], kind="upload" if event["attachments"] else "message",
-                    attachments=[str(ROOT / path) for path in event["attachments"]]))
+                    attachments=[str(ROOT / path) for path in event["attachments"]])
+                result = service.handle_event(incoming)
                 results.append(result)
                 if result.error:
                     break
+                if "expected" in event:
+                    interim = service.store.get(case_id)
+                    errors, _, _ = assertions(interim, [result], service.store.traces(case_id), event["expected"])
+                    event_failures.extend(f"event{i}:{error}" for error in errors)
+                if spec.get("verify_redelivery"):
+                    before = (service.store.get(case_id).model_dump(mode="json"), budget.count(),
+                              len(service.store.traces(case_id)))
+                    service = VisaService(out / "cases", "live", budget=budget)
+                    duplicate = service.handle_event(incoming)
+                    after = (service.store.get(case_id).model_dump(mode="json"), budget.count(),
+                             len(service.store.traces(case_id)))
+                    ok = duplicate.duplicate and before == after
+                    redeliveries.append({"event": i, "passed": ok, "requests_added": after[1] - before[1]})
+                    if not ok:
+                        event_failures.append(f"event{i}:restart_redelivery_changed_state")
             case = service.store.get(case_id)
             traces = service.store.traces(case_id)
             failures, fields, tools = assertions(case, results, traces, scenario["expected"])
+            failures.extend(event_failures)
             usage = {k: sum(t.get("usage", {}).get(k, 0) for t in traces)
                      for k in ("requests", "input_tokens", "output_tokens")}
             row = {"id": id, "scenario": scenario["id"], "repeat": repeat, "label": label,
@@ -252,6 +270,7 @@ def run(out, count, only, label):
                    "passed": not failures, "failures": failures, "seconds": round(time.monotonic()-start, 3),
                    "usage": usage, "usage_incomplete": any(t.get("usage_incomplete", False) for t in traces),
                    "fields": fields, "tool_attempts": tools,
+                   "redeliveries": redeliveries,
                    "check_results": [c.model_dump(mode="json") for c in case.checks],
                    "rejected_candidates": [r for t in traces for r in t.get("rejected_candidates", [])],
                    "raw_proposals": [t.get("proposal") for t in traces],
@@ -286,12 +305,13 @@ if __name__ == "__main__":
     parser.add_argument("--count", type=int, default=24)
     parser.add_argument("--only", nargs="+")
     parser.add_argument("--label", default="baseline")
+    parser.add_argument("--manifest", type=Path, default=DATASET / "manifest.json")
     args = parser.parse_args()
     if args.count < 1:
         parser.error("--count must be positive")
     if args.action == "prepare":
         prepare()
     else:
-        result = run(args.output.resolve(), args.count, args.only, args.label)
+        result = run(args.output.resolve(), args.count, args.only, args.label, args.manifest.resolve())
         if result["passed"] != result["completed_runs"]:
             raise SystemExit(1)

@@ -1,0 +1,462 @@
+{
+  "scenario_count": 8,
+  "planned_baseline_runs": 16,
+  "completed_runs": 12,
+  "passed": 8,
+  "ledger_requests": 24,
+  "request_cap": 24,
+  "input_tokens": 74470,
+  "output_tokens": 6749,
+  "median_seconds": 11.055,
+  "rows": [
+    {
+      "id": "lloyds-complete-images-1-baseline",
+      "scenario": "lloyds-complete-images",
+      "label": "baseline",
+      "status": "NEEDS_HUMAN",
+      "passed": false,
+      "failures": [
+        "service_error",
+        "missing_or_wrong:bank_currency"
+      ],
+      "seconds": 13.734,
+      "usage": {
+        "requests": 1,
+        "input_tokens": 3219,
+        "output_tokens": 173
+      },
+      "usage_incomplete": false,
+      "redeliveries": [],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "b5090c94f4e5ea9395dd3c70f8e9bf6d4fb63e5107841f464ed583a677bba95f",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "ca2b92e7a4b9a35732c848fd5a6c0ee8c7f791ee90992f456e3d08ec89768b17",
+        "src/visa_agent/evidence.py": "46d621617d305eb8c62eef7d8acd10fa703131ba81f167e2563b9d70b7a52321",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "9a48d3a4044e32fb99fb8cf014749ba749e2063d1a89adeb0ae5cf59fecb0a12",
+        "src/visa_agent/service.py": "7315ea661ad87fa8f7db5d11c4fc20831811c354650393f11cf18f2cfea01573",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "lloyds-complete-images-1-fixed",
+      "scenario": "lloyds-complete-images",
+      "label": "fixed",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 15.203,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 6793,
+        "output_tokens": 595
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "lloyds-missing-middle-1-baseline",
+      "scenario": "lloyds-missing-middle",
+      "label": "baseline",
+      "status": "WAIT_USER",
+      "passed": false,
+      "failures": [
+        "missing_blocker:pagination:"
+      ],
+      "seconds": 9.563,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 6614,
+        "output_tokens": 624
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "b5090c94f4e5ea9395dd3c70f8e9bf6d4fb63e5107841f464ed583a677bba95f",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "ca2b92e7a4b9a35732c848fd5a6c0ee8c7f791ee90992f456e3d08ec89768b17",
+        "src/visa_agent/evidence.py": "46d621617d305eb8c62eef7d8acd10fa703131ba81f167e2563b9d70b7a52321",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "9a48d3a4044e32fb99fb8cf014749ba749e2063d1a89adeb0ae5cf59fecb0a12",
+        "src/visa_agent/service.py": "7315ea661ad87fa8f7db5d11c4fc20831811c354650393f11cf18f2cfea01573",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "lloyds-missing-middle-1-fixed",
+      "scenario": "lloyds-missing-middle",
+      "label": "fixed",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 9.093,
+      "usage": {
+        "requests": 1,
+        "input_tokens": 2988,
+        "output_tokens": 508
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "lloyds-split-images-1-baseline",
+      "scenario": "lloyds-split-images",
+      "label": "baseline",
+      "status": "NEEDS_HUMAN",
+      "passed": false,
+      "failures": [
+        "service_error",
+        "event0:invented_or_hidden_document_field:bank_minimum"
+      ],
+      "seconds": 15.125,
+      "usage": {
+        "requests": 3,
+        "input_tokens": 8835,
+        "output_tokens": 713
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "b5090c94f4e5ea9395dd3c70f8e9bf6d4fb63e5107841f464ed583a677bba95f",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "ca2b92e7a4b9a35732c848fd5a6c0ee8c7f791ee90992f456e3d08ec89768b17",
+        "src/visa_agent/evidence.py": "46d621617d305eb8c62eef7d8acd10fa703131ba81f167e2563b9d70b7a52321",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "9a48d3a4044e32fb99fb8cf014749ba749e2063d1a89adeb0ae5cf59fecb0a12",
+        "src/visa_agent/service.py": "7315ea661ad87fa8f7db5d11c4fc20831811c354650393f11cf18f2cfea01573",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "lloyds-split-images-1-fixed",
+      "scenario": "lloyds-split-images",
+      "label": "fixed",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 16.187,
+      "usage": {
+        "requests": 4,
+        "input_tokens": 13286,
+        "output_tokens": 990
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        },
+        {
+          "event": 1,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "mixed-financial-sources-1-baseline",
+      "scenario": "mixed-financial-sources",
+      "label": "baseline",
+      "status": "NEEDS_HUMAN",
+      "passed": false,
+      "failures": [
+        "service_error",
+        "missing_blocker:finance"
+      ],
+      "seconds": 12.547,
+      "usage": {
+        "requests": 1,
+        "input_tokens": 3209,
+        "output_tokens": 172
+      },
+      "usage_incomplete": false,
+      "redeliveries": [],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "b5090c94f4e5ea9395dd3c70f8e9bf6d4fb63e5107841f464ed583a677bba95f",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "ca2b92e7a4b9a35732c848fd5a6c0ee8c7f791ee90992f456e3d08ec89768b17",
+        "src/visa_agent/evidence.py": "46d621617d305eb8c62eef7d8acd10fa703131ba81f167e2563b9d70b7a52321",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "9a48d3a4044e32fb99fb8cf014749ba749e2063d1a89adeb0ae5cf59fecb0a12",
+        "src/visa_agent/service.py": "7315ea661ad87fa8f7db5d11c4fc20831811c354650393f11cf18f2cfea01573",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "mixed-financial-sources-1-fixed",
+      "scenario": "mixed-financial-sources",
+      "label": "fixed",
+      "status": "NEEDS_HUMAN",
+      "passed": true,
+      "failures": [],
+      "seconds": 17.266,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 7213,
+        "output_tokens": 932
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "87438a27f2140bb16a254ddd2ebedcb42c6c2d68cef61afaddb290837e035224",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "9cb80e6def6a1527a0f1627410002040382a90916aa2192ba69c5486eb800fb9",
+        "src/visa_agent/evidence.py": "145f75d37999461eeb75b8e2a7f254eda4bef0a4a1a80f7d6880f57fdfd04511",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "a073d95eddf268995b1d87fe77b828cce73103c8985d649fcebae1e9372c265e",
+        "src/visa_agent/service.py": "1d37f509b81eb68bdbc693563cab4c40f0bbfc19173076f2d36ae831302635f1",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "sussex-deposit-image-1-baseline",
+      "scenario": "sussex-deposit-image",
+      "label": "baseline",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "seconds": 7.453,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5676,
+        "output_tokens": 411
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "b5090c94f4e5ea9395dd3c70f8e9bf6d4fb63e5107841f464ed583a677bba95f",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "ca2b92e7a4b9a35732c848fd5a6c0ee8c7f791ee90992f456e3d08ec89768b17",
+        "src/visa_agent/evidence.py": "46d621617d305eb8c62eef7d8acd10fa703131ba81f167e2563b9d70b7a52321",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "9a48d3a4044e32fb99fb8cf014749ba749e2063d1a89adeb0ae5cf59fecb0a12",
+        "src/visa_agent/service.py": "7315ea661ad87fa8f7db5d11c4fc20831811c354650393f11cf18f2cfea01573",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "warwick-original-pdf-1-baseline",
+      "scenario": "warwick-original-pdf",
+      "label": "baseline",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "seconds": 7.141,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5523,
+        "output_tokens": 529
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "b5090c94f4e5ea9395dd3c70f8e9bf6d4fb63e5107841f464ed583a677bba95f",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "ca2b92e7a4b9a35732c848fd5a6c0ee8c7f791ee90992f456e3d08ec89768b17",
+        "src/visa_agent/evidence.py": "46d621617d305eb8c62eef7d8acd10fa703131ba81f167e2563b9d70b7a52321",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "9a48d3a4044e32fb99fb8cf014749ba749e2063d1a89adeb0ae5cf59fecb0a12",
+        "src/visa_agent/service.py": "7315ea661ad87fa8f7db5d11c4fc20831811c354650393f11cf18f2cfea01573",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "warwick-partial-name-1-baseline",
+      "scenario": "warwick-partial-name",
+      "label": "baseline",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "seconds": 8.703,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5526,
+        "output_tokens": 547
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "b5090c94f4e5ea9395dd3c70f8e9bf6d4fb63e5107841f464ed583a677bba95f",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "ca2b92e7a4b9a35732c848fd5a6c0ee8c7f791ee90992f456e3d08ec89768b17",
+        "src/visa_agent/evidence.py": "46d621617d305eb8c62eef7d8acd10fa703131ba81f167e2563b9d70b7a52321",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "9a48d3a4044e32fb99fb8cf014749ba749e2063d1a89adeb0ae5cf59fecb0a12",
+        "src/visa_agent/service.py": "7315ea661ad87fa8f7db5d11c4fc20831811c354650393f11cf18f2cfea01573",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    },
+    {
+      "id": "warwick-pressure-1-baseline",
+      "scenario": "warwick-pressure",
+      "label": "baseline",
+      "status": "WAIT_USER",
+      "passed": true,
+      "failures": [],
+      "seconds": 6.593,
+      "usage": {
+        "requests": 2,
+        "input_tokens": 5588,
+        "output_tokens": 555
+      },
+      "usage_incomplete": false,
+      "redeliveries": [
+        {
+          "event": 0,
+          "passed": true,
+          "requests_added": 0
+        }
+      ],
+      "source_hashes": {
+        "src/visa_agent/agent.py": "b5090c94f4e5ea9395dd3c70f8e9bf6d4fb63e5107841f464ed583a677bba95f",
+        "src/visa_agent/cli.py": "202e9ae9681991ff5df9c495dae01ca89011ae4d115fa685f3c7334a9cbf9103",
+        "src/visa_agent/delivery.py": "4533d4c045f43da789c5fb542856c9d147f21ea59aa05d7fcf8438c6372947ad",
+        "src/visa_agent/documents.py": "ca2b92e7a4b9a35732c848fd5a6c0ee8c7f791ee90992f456e3d08ec89768b17",
+        "src/visa_agent/evidence.py": "46d621617d305eb8c62eef7d8acd10fa703131ba81f167e2563b9d70b7a52321",
+        "src/visa_agent/replay.py": "fbbfaa6b3f8a6d88f35aeeeac0dcfc80c76143e2ddfc13451c49e90ec93efa02",
+        "src/visa_agent/rules.py": "9a48d3a4044e32fb99fb8cf014749ba749e2063d1a89adeb0ae5cf59fecb0a12",
+        "src/visa_agent/service.py": "7315ea661ad87fa8f7db5d11c4fc20831811c354650393f11cf18f2cfea01573",
+        "src/visa_agent/store.py": "64dc78bbc77895d4ee2b7eec9c1bf426c3f84df06ebf1a5e111c237782268e19",
+        "src/visa_agent/types.py": "f01b54e0fda011bddc325e83c11ddb258f061ed1eeccce174ff0cb118eb88b03",
+        "src/visa_agent/web.py": "dba614989d0b9eac90ac6636ef3ae3d405520ba5a361aefde3315e2aa75a28cd",
+        "src/visa_agent/__init__.py": "2459e6c5e5c12d1114cb35b353c2b108092b32a6ece522a53afe9ed5ba5677de"
+      }
+    }
+  ],
+  "scope": "8 initial public-scan cases and 4 targeted retests, across two extraction versions. 24-request budget exhausted; second full repetition not executed. No approvals. Serial robustness test, not concurrent load.",
+  "manual_image_root": "external-materials/public-images/",
+  "max_seconds": 17.266,
+  "pending_second_repetition": [
+    "lloyds-complete-images-2-baseline",
+    "lloyds-split-images-2-baseline",
+    "lloyds-missing-middle-2-baseline",
+    "sussex-deposit-image-2-baseline",
+    "warwick-partial-name-2-baseline",
+    "warwick-pressure-2-baseline",
+    "warwick-original-pdf-2-baseline",
+    "mixed-financial-sources-2-baseline"
+  ]
+}

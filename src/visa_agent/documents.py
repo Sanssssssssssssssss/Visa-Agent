@@ -48,6 +48,18 @@ def image_text(image: Image.Image, page: int) -> Page:
                 confidence=float(min(scores)) if scores else 0.0)
 
 
+def pagination_problems(pages: list[Page]) -> list[str]:
+    """Check one uploaded document; unrelated image files cannot prove completeness."""
+    declared = {}
+    for page in pages:
+        for number, total in re.findall(r"^\s*Page\s+(\d+)\s*(?:of|/)\s*(\d+)\s*$",
+                                        page.text, re.I | re.M):
+            declared.setdefault(int(total), set()).add(int(number))
+    return [f"Declared pagination incomplete: missing pages (received {sorted(seen)} of {total})"
+            for total, seen in declared.items()
+            if total > MAX_PAGES or (total > 0 and seen != set(range(1, total + 1)))]
+
+
 def stage_file(source: str | Path, root: Path) -> tuple[str, Path]:
     source = Path(source).resolve(strict=True)
     if source.stat().st_size > MAX_BYTES:
@@ -96,21 +108,12 @@ def read_document(path: Path, sha: str, original_name: str) -> Document:
                     finally:
                         pdf_page.close()
                     doc.pages.append(page)
-            # Only explicit standalone page counters count; plain text like "10" in
-            # an excerpt is not enough to infer missing pages. Totals are bounded.
-            declared = {}
-            for page in doc.pages:
-                for number, total in re.findall(r"^\s*Page\s+(\d+)\s*(?:of|/)\s*(\d+)\s*$",
-                                                page.text, re.I | re.M):
-                    declared.setdefault(int(total), set()).add(int(number))
-            for total, seen in declared.items():
-                if total > MAX_PAGES or (total > 0 and seen != set(range(1, total + 1))):
-                    doc.problems.append(f"Declared pagination incomplete: missing pages (received {sorted(seen)} of {total})")
         else:
             with Image.open(path) as im:
                 if im.width * im.height > Image.MAX_IMAGE_PIXELS:
                     raise ValueError("Image exceeds pixel limit")
                 doc.pages.append(image_text(im, 1))
+        doc.problems.extend(pagination_problems(doc.pages))
         for page in doc.pages:
             if len(page.text.strip()) < 20:
                 doc.problems.append(f"page {page.number}: unreadable")

@@ -8,12 +8,15 @@
 | `02-Lloyds-statement-page1.png` | Lloyds 银行流水首页；[Bournemouth 原 PDF](https://www.bournemouth.ac.uk/sites/default/files/asset/document/TIER-4-GENERAL-BANK-STATEMENT-CHECKLIST-v11JUN2018-2.pdf)，第 2 页 |
 | `03-Lloyds-statement-page2.png` | 同一份流水的第 2 页，对应原 PDF 第 3 页 |
 | `04-Lloyds-statement-page3.png` | 同一份流水的第 3 页，对应原 PDF 第 4 页 |
+| `05-BOC-Warwick-partially-redacted.png` | 姓名部分遮盖的另一份中国银行证明；[Warwick 原 PDF](https://warwick.ac.uk/study/international/visa/applying-for-a-visa/visas-for-studying/student-visa/certofdeposit.pdf)，第 1 页 |
 
 启动 `uv run python -m visa_agent.web --sample blank`，按终端地址打开页面。新建空白案件，先说清申请路线和目的；三张 Lloyds 图片一起上传。BOC 图片用另一个空白案件测试。被遮盖的姓名应保持未知或待确认，旧材料不能直接被当作本次申请的完整资金证明。这些样例适合检验读取和补件，不构成一套可以交付的完整申请材料。
 
+单独上传的图片即使页码连续，也不能证明属于同一个账户或同一份文件。当前会要求顾问确认归属，或让客户将同一份文件按顺序合成 PDF。已有同源三页 PDF 可用本地 `external-materials/try-these/01-Lloyds-statement-redacted.pdf` 对照。不要靠文件名或相同页数自动拼接不同人的材料。
+
 图片由 `scripts/prepare_public_images.py` 渲染，180 DPI；整页渲染保留原有遮盖，不直接提取可能含隐藏信息的底图。来源页码及原 PDF、输出图片的 SHA-256 保存在本地 `SOURCES.json`。已人工查看 BOC 原页及 Lloyds 首页，未修改内容。
 
-第三方文件再分发许可未确认，PDF 和图片只保存在被 Git 忽略的 `external-materials/`。复现时从上述链接下载 PDF，分别保存为 `external-materials/public-samples/02-deposit-certificate-Sussex.pdf` 和 `05-bank-statements-Bournemouth.pdf`，然后执行：
+第三方文件再分发许可未确认，PDF 和图片只保存在被 Git 忽略的 `external-materials/`。复现时从上述链接下载 PDF，分别保存为 `external-materials/public-samples/02-deposit-certificate-Sussex.pdf`、`05-bank-statements-Bournemouth.pdf` 和 `06-deposit-certificate-Warwick.pdf`，然后执行：
 
 ```powershell
 uv run python scripts/prepare_public_images.py

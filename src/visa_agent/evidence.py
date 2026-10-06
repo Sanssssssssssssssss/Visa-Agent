@@ -126,6 +126,10 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
                     raise ValueError("Unknown or rejected source")
                 page = next((p for p in doc.pages if p.number == candidate.page), None)
                 text = page.text if page else ""
+                if candidate.key == "bank_minimum" and any(
+                    p.startswith("Declared pagination incomplete") for p in doc.problems
+                ):
+                    raise ValueError("Incomplete statement cannot establish the full-period minimum")
             if not text or normalized(candidate.quote) not in normalized(text):
                 raise ValueError("Supporting quote not found in source")
             if candidate.key in {"applicant_name", "passport_name", "employment_name", "bank_holder", "cas_name", "cos_name", "tb_name"}:
