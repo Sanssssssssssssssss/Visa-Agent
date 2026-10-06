@@ -145,5 +145,10 @@
   "logs": "data/qq-test",
   "reply_export": "output/qq-mail",
   "repair_expectations_sha256": "938e39d43c1cf8d88e1c95d7620c29bad2828344c0263c265bae84ca941840cc",
-  "reply_viewer": "http://127.0.0.1:62114/"
+  "reply_viewer": "http://127.0.0.1:62114/",
+  "ci": {
+    "commit": "7d373c6db4fd836e78847b2832db53402f7f0f45",
+    "conclusion": "success",
+    "url": "https://github.com/Sanssssssssssssssss/Visa-Agent/actions/runs/37490643029"
+  }
 }
