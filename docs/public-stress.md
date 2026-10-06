@@ -39,6 +39,7 @@
 - 每轮端到端耗时中位数 **7.515 秒**，最慢 **12.391 秒**，包含 OCR、API 和状态写入。模型单价未配置，不估算费用。
 - 本轮上限 24 次新增请求，包含工具循环和重试，使用原持久化请求账本；没有重置额度。
 - [逐轮结果](validation/public-stress.json)、[离线测试日志](validation/pytest-public-stress.txt)。完整 OCR、模型工具记录和前后状态保存在本地 `output/public-stress/traces/`；第三方 PDF 与完整原文不上传仓库。
+- [Linux CI](https://github.com/Sanssssssssssssssss/Visa-Agent/actions/runs/37453902398)已通过，验证代码提交 `600c454`。
 - 原有 15 场景冻结哈希保持 `778242984890a6c7314eb52a3f84cfdbf7d94b1e7bf3afd1ba32802768ebf9a2`。
 
 ## 复现
