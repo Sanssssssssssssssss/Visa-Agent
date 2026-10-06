@@ -1,8 +1,10 @@
 """Read real bytes. OCR failure is explicit; no fixture text or mock fallback."""
 
+import ctypes
 from functools import lru_cache
 import hashlib
 from pathlib import Path
+import re
 import shutil
 
 from PIL import Image
@@ -14,6 +16,19 @@ from .types import Document, Page
 MAX_BYTES = 10 * 1024 * 1024
 MAX_PAGES = 20
 Image.MAX_IMAGE_PIXELS = 25_000_000
+
+
+def needs_visible_page_ocr(page) -> bool:
+    """Images or filled vector shapes may conceal/replace text-layer content."""
+    for obj in page.get_objects(filter=[pdfium.raw.FPDF_PAGEOBJ_IMAGE, pdfium.raw.FPDF_PAGEOBJ_PATH]):
+        if obj.type == pdfium.raw.FPDF_PAGEOBJ_IMAGE:
+            return True
+        fill, stroke = ctypes.c_int(), ctypes.c_int()
+        if not pdfium.raw.FPDFPath_GetDrawMode(obj, fill, stroke):
+            raise ValueError("Cannot inspect PDF drawing mode")
+        if fill.value != pdfium.raw.FPDF_FILLMODE_NONE:
+            return True
+    return False
 
 
 @lru_cache(maxsize=1)
@@ -65,11 +80,8 @@ def read_document(path: Path, sha: str, original_name: str) -> Document:
                     pdf_page = rendered[index]
                     try:
                         # A long text layer can be only captions beside a scanned document.
-                        # Render every image-bearing page (including images inside Forms),
-                        # so OCR sees the visible evidence and redactions, not hidden text.
-                        has_images = next(pdf_page.get_objects(
-                            filter=[pdfium.raw.FPDF_PAGEOBJ_IMAGE]), None) is not None
-                        if not has_images and len(text.strip()) >= 40 and text.count("\ufffd") < 3:
+                        # Filled vector boxes can hide personal data even without images.
+                        if not needs_visible_page_ocr(pdf_page) and len(text.strip()) >= 40 and text.count("\ufffd") < 3:
                             page = Page(number=index + 1, text=text, method="pdf_text")
                         else:
                             width, height = pdf_page.get_size()
@@ -84,6 +96,16 @@ def read_document(path: Path, sha: str, original_name: str) -> Document:
                     finally:
                         pdf_page.close()
                     doc.pages.append(page)
+            # Only explicit standalone page counters count; plain text like "10" in
+            # an excerpt is not enough to infer missing pages. Totals are bounded.
+            declared = {}
+            for page in doc.pages:
+                for number, total in re.findall(r"^\s*Page\s+(\d+)\s*(?:of|/)\s*(\d+)\s*$",
+                                                page.text, re.I | re.M):
+                    declared.setdefault(int(total), set()).add(int(number))
+            for total, seen in declared.items():
+                if total > MAX_PAGES or (total > 0 and seen != set(range(1, total + 1))):
+                    doc.problems.append(f"Declared pagination incomplete: missing pages (received {sorted(seen)} of {total})")
         else:
             with Image.open(path) as im:
                 if im.width * im.height > Image.MAX_IMAGE_PIXELS:

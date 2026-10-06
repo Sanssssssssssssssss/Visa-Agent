@@ -20,7 +20,15 @@ def validate_value(key: str, value: str, quote: str) -> str:
     if re.search(r"\*{2,}|\b[xX]{3,}\b|\b(?:your|name|number|date)\b.*\bhere\b", value, re.I):
         raise ValueError(f"Placeholder is not an applicant fact: {key}")
     # Normalize only explicit equivalent phrases; do not geocode an address or infer a region.
+    countries = {
+        "India": ["India", "Indian"], "China": ["China", "Chinese", "中国"],
+        "Japan": ["Japan", "Japanese", "日本"], "Singapore": ["Singapore", "Singaporean"],
+        "United States": ["United States", "USA", "American"],
+        "Canada": ["Canada", "Canadian"], "Australia": ["Australia", "Australian"],
+    }
     enums = {
+        "nationality": countries,
+        "residence_country": countries,
         "application_location": {
             "outside_uk": ["outside_uk", "outside UK", "outside the UK", "英国境外"],
             "inside_uk": ["inside_uk", "inside UK", "inside the UK", "英国境内"],
@@ -40,8 +48,19 @@ def validate_value(key: str, value: str, quote: str) -> str:
                     raise ValueError(f"Value not grounded in quote: {key}")
                 return canonical
         # Other ISO currency codes remain explicit values, with no conversion inference.
-        if key != "bank_currency":
+        if key in {"application_location", "study_location"}:
             raise ValueError(f"Unsupported location value: {key}")
+    if key == "funding":
+        patterns = {"self": r"\b(self(?:[- ]funded)?|my own (?:money|funds)|my savings|myself)\b|自费|本人出资",
+                    "employer": r"\bemployer(?:[- ]funded)?\b|雇主"}
+        matches = [kind for kind, pattern in patterns.items() if re.search(pattern, value, re.I)]
+        if len(matches) == 1:
+            pattern = patterns[matches[0]]
+            quote_kinds = [kind for kind, pat in patterns.items() if re.search(pat, quote, re.I)]
+            if (quote_kinds != matches or re.search(r"\b(not|parents?|loan|scholarship|sponsor)\b", quote, re.I)):
+                raise ValueError("Funding source is negative or ambiguous; adviser review needed")
+            if re.search(pattern, quote, re.I):
+                return matches[0]
     if key in DATE_FIELDS:
         parsed = date.fromisoformat(value)
         formats = [parsed.isoformat(), parsed.strftime("%d/%m/%Y"),
@@ -60,6 +79,7 @@ def validate_value(key: str, value: str, quote: str) -> str:
             raise ValueError(f"Number not grounded in quote: {key}")
         value = format(number.normalize(), "f")
     elif key in BOOL_FIELDS:
+        value = {"0": "false", "1": "true", "no": "false", "yes": "true"}.get(value.lower(), value)
         if value not in {"true", "false"}:
             raise ValueError(f"Boolean must be true/false: {key}")
         negative = bool(re.search(r"\b(false|no|not|none)\b|否|不需要|没有", quote, re.I))
@@ -108,6 +128,13 @@ def apply_proposal(case: Case, proposal: Proposal, message_sources: dict[str, st
                 text = page.text if page else ""
             if not text or normalized(candidate.quote) not in normalized(text):
                 raise ValueError("Supporting quote not found in source")
+            if candidate.key in {"applicant_name", "passport_name", "employment_name", "bank_holder", "cas_name", "cos_name", "tb_name"}:
+                if re.search(r"\b(?:university|college|ltd|limited|plc|inc)\b|^bank\s+of\b", candidate.value, re.I):
+                    raise ValueError("Organisation is not a personal applicant name; review the subject")
+                signature = re.search(r"\b(?:yours sincerely|yours faithfully|signed by|authorised signatory)\b", text, re.I)
+                if (signature and normalized(candidate.value) not in normalized(text[:signature.start()])
+                        and normalized(candidate.value) in normalized(text[signature.start():])):
+                    raise ValueError("Signatory is not an applicant identity")
             candidate.value = validate_value(candidate.key, candidate.value, candidate.quote)
             fact_id = digest(candidate.model_dump())[:20]
             if not any(f.id == fact_id for f in case.facts):

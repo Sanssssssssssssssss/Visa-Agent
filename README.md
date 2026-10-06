@@ -2,7 +2,7 @@
 
 一个可回放、可检查的英国签证材料准备 CLI。支持 Visitor、Student、Skilled Worker 的有限基础分支：接收消息和附件，保存有来源的事实，检查缺项与冲突，等待补件，生成材料包，最后通过独立顾问入口确认。
 
-合成案件真实模型验收 **6/6**，离线测试 **49 项通过**。另用公开材料完成 [12 轮真实压力测试](docs/public-stress.md)：修正字段后 8/9 满足检查，倾斜图金额仍有漏读。真实签证规则覆盖、文件真实性和专业判断仍需顾问。详细结果见 [验收记录](docs/acceptance.md)。
+合成案件真实模型验收 **6/6**，离线测试 **56 项通过**。另有 [12 轮公开材料测试](docs/public-stress.md)和[35 次负例诊断与复测](docs/bad-cases.md)：实际发现并修复遮盖内容读取、缺页异常和字段角色/取值问题，失败记录完整保留。最终版本尚未重复全部真实场景；真实规则覆盖、文件真实性和专业判断仍需顾问。详细结果见 [验收记录](docs/acceptance.md)。
 
 ## 安装
 
@@ -17,6 +17,8 @@ uv run pytest -q
 依赖安装进项目 `.venv`，版本固定在 `uv.lock`。锁定的 RapidOCR wheel 自带中英文 OCR 模型；运行不要求另装 GPU、Tesseract 或 OCR 服务。第一次安装需要下载依赖，离线测试不访问模型 API。
 
 ## 两分钟体验
+
+想直接测试公开扫描图片：按[图片与来源说明](docs/public-images.md)准备中国银行存款证明、Lloyds 三页流水，然后运行 `uv run python -m visa_agent.web --sample blank`。在空白案件里输入自己的测试背景并上传图片。这些公开脱敏样例用于检验真实版式、OCR 和补件，仍需区分公开样例与已核验的客户材料。
 
 直接拖文件体验：启动 `uv run python -m visa_agent.web`，打开 <http://127.0.0.1:8765>，从 `datasets/materials/dev_visitor/` 拖入三份 PDF。默认调用真实模型并载入该合成申请人的背景，页面会显示补件回复、材料包及独立确认按钮。切换右侧场景可测试 Student/Skilled Worker，或选空白案件自己输入情况。服务仅监听本机；需要离线演示时加 `--mode offline --data data/web-offline`。
 

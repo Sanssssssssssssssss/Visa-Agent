@@ -40,6 +40,12 @@ evidence. A future validity/freeze period is NOT a historical funding period. If
 be identified unambiguously, omit them. Do not infer a historical minimum from a deposit amount.
 General instructions, conditional examples (e.g. 'if Y, ATAS required') and form headings are not
 facts about this applicant. A document's sample date is not the intended application date.
+employment_name is the EMPLOYEE'S personal name; employer is the COMPANY'S name. cas_name is
+the STUDENT'S name, not the university or signatory. cos_name is the WORKER'S name, not the sponsor.
+All boolean fields (including dependants) require the strings true/false, never counts like 0.
+For narrative fields such as return_reason, purpose and job_title, copy an EXACT CONTIGUOUS
+substring of the supporting quote as the value. Do not paraphrase, shorten by removing words,
+or summarize it: semantic similarity alone fails the deterministic source check.
 Use read_evidence when previews are incomplete. Do not read the same page twice.
 Extract bank_minimum ONLY if explicitly stated or unambiguously calculable from ALL balances in
 the covered period, never use the closing balance as an assumed minimum. Missing stays missing.
@@ -142,7 +148,10 @@ def make_agent(model) -> Agent:
             raise ValueError("Document does not belong to this case or was rejected")
         selected = next((p for p in doc.pages if p.number == page), None)
         if selected is None:
-            raise ValueError("Page not found")
+            result = f"Page {page} was not supplied. Available pages: {[p.number for p in doc.pages]}. Do not infer its contents."
+            ctx.deps.trace.setdefault("tools", []).append({"name": "read_evidence", "document_id": document_id,
+                                                          "page": page, "result": result})
+            return result
         if len(selected.text) > ctx.deps.remaining_chars:
             raise BudgetExceeded("Evidence page does not fit safely in working context")
         ctx.deps.remaining_chars -= len(selected.text)
@@ -186,7 +195,7 @@ def extract(case: Case, event: CaseEvent, new_docs: list[Document], trace: dict,
             mode="live", budget: LiveBudget | None = None, model_override=None) -> Proposal:
     prompt, remaining = build_context(case, event, new_docs)
     trace["working_context"] = json.loads(prompt)
-    trace["prompt_version"] = "extract-v2-field-roles"
+    trace["prompt_version"] = "extract-v4-verbatim-narratives"
     trace["context_chars"] = len(prompt) + len(INSTRUCTIONS)
     ctx = ReadContext({d.id: d for d in case.documents}, trace, remaining)
     started = time.monotonic()
