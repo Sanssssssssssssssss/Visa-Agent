@@ -45,7 +45,7 @@ jobs:
         run: docker build --target test -t visa-agent:test .
       - name: Run container regression suite
         run: docker run --rm visa-agent:test
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: container-validation
